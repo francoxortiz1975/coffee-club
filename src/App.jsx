@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { FavoritosProvider } from './context/FavoritosContext'
 import BottomNav from './components/BottomNav'
 import Descubrir from './pages/Descubrir'
 import Shuffle from './pages/Shuffle'
@@ -7,6 +8,7 @@ import CafeDetalle from './pages/CafeDetalle'
 
 export default function App() {
   return (
+    <FavoritosProvider>
     <BrowserRouter>
       <div className="min-h-screen bg-beige max-w-md mx-auto relative">
         <main className="pb-16">
@@ -20,5 +22,6 @@ export default function App() {
         <BottomNav />
       </div>
     </BrowserRouter>
+    </FavoritosProvider>
   )
 }

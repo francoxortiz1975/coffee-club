@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import cafes from '../data/cafes.json'
 import StarRating from '../components/StarRating'
+import { useFavoritos } from '../context/FavoritosContext'
 
 const PLACEHOLDER_FOTOS = [null, null, null]
 
@@ -10,6 +11,8 @@ export default function CafeDetalle() {
   const navigate = useNavigate()
   const cafe = cafes.find((c) => c.id === id)
   const [copied, setCopied] = useState(false)
+  const { favoritos, toggleFavorito } = useFavoritos()
+  const esFavorito = cafe ? favoritos.includes(cafe.id) : false
 
   async function handleShare() {
     const url = window.location.href
@@ -49,6 +52,13 @@ export default function CafeDetalle() {
           className="absolute top-4 left-4 bg-white/80 backdrop-blur-sm text-cafe-dark rounded-full w-9 h-9 flex items-center justify-center shadow text-lg"
         >
           ←
+        </button>
+        {/* Botón favorito */}
+        <button
+          onClick={() => toggleFavorito(cafe.id)}
+          className="absolute top-4 right-16 bg-white/80 backdrop-blur-sm rounded-full w-9 h-9 flex items-center justify-center shadow text-lg"
+        >
+          {esFavorito ? '❤️' : '🤍'}
         </button>
         {/* Botón compartir */}
         <button

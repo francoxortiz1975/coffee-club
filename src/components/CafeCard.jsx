@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 const OCASION_LABELS = {
   pareja: '💑 Pareja',
   amigos: '👯 Amigos',
@@ -7,10 +9,10 @@ const OCASION_LABELS = {
 }
 
 export default function CafeCard({ cafe }) {
-  const { nombre, barrio, ocasiones, especialidad, historia, precio } = cafe
+  const { id, nombre, barrio, ocasiones, especialidad, historia, precio } = cafe
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+    <Link to={`/cafe/${id}`} className="block bg-white rounded-2xl shadow-sm overflow-hidden active:scale-[0.98] transition-transform">
       {/* Foto placeholder */}
       <div className="w-full h-48 bg-cafe-accent/20 flex items-center justify-center">
         <span className="text-4xl">☕</span>
@@ -42,6 +44,6 @@ export default function CafeCard({ cafe }) {
           ))}
         </div>
       </div>
-    </div>
+    </Link>
   )
 }

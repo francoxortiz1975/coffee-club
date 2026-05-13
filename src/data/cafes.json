@@ -3,12 +3,15 @@
     "id": "cafe-placeholder",
     "nombre": "Café del Centro",
     "barrio": "Centro Histórico",
+    "tipo": "Café de especialidad",
     "ocasiones": ["pareja", "turístico"],
     "especialidad": "Café de altura con panela",
     "historia": "Un rincón auténtico en el corazón del Quito colonial, donde cada taza cuenta la historia de los Andes.",
+    "descripcion": "Ambiente cálido y tranquilo, ideal para tomarse un descanso del ruido de la ciudad. Su café de altura viene directamente de productores de Loja.",
     "fotos": [],
     "coordenadas": { "lat": -0.2201641, "lng": -78.5123274 },
     "instagram": "@cafedelcentro",
-    "precio": "$$"
+    "precio": "$$",
+    "rating": 4.5
   }
 ]

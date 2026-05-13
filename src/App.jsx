@@ -3,6 +3,7 @@ import BottomNav from './components/BottomNav'
 import Descubrir from './pages/Descubrir'
 import Shuffle from './pages/Shuffle'
 import Perfil from './pages/Perfil'
+import CafeDetalle from './pages/CafeDetalle'
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
         <main className="pb-16">
           <Routes>
             <Route path="/" element={<Descubrir />} />
+            <Route path="/cafe/:id" element={<CafeDetalle />} />
             <Route path="/shuffle" element={<Shuffle />} />
             <Route path="/perfil" element={<Perfil />} />
           </Routes>

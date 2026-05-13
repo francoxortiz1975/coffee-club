@@ -10,6 +10,7 @@
     "descripcion": "Ambiente cálido y tranquilo, ideal para tomarse un descanso del ruido de la ciudad. Su café de altura viene directamente de productores de Loja.",
     "fotos": [],
     "coordenadas": { "lat": -0.2201641, "lng": -78.5123274 },
+    "googleMaps": "https://maps.app.goo.gl/placeholder",
     "instagram": "@cafedelcentro",
     "precio": "$$",
     "rating": 4.5

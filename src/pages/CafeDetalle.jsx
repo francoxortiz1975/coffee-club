@@ -99,9 +99,21 @@ export default function CafeDetalle() {
           ))}
         </div>
 
+        {/* Ubicación */}
+        {cafe.googleMaps && (
+          <a
+            href={cafe.googleMaps}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 flex items-center justify-center gap-2 w-full bg-cafe-dark text-beige text-sm font-semibold py-3 rounded-2xl active:scale-95 transition-transform"
+          >
+            <span>📍</span> Cómo llegar
+          </a>
+        )}
+
         {/* Instagram */}
         {cafe.instagram && (
-          <p className="mt-6 text-xs text-cafe-accent/60 text-center">{cafe.instagram}</p>
+          <p className="mt-4 text-xs text-cafe-accent/60 text-center">{cafe.instagram}</p>
         )}
       </div>
     </div>

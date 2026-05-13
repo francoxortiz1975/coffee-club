@@ -11,7 +11,7 @@ export default function App() {
     <FavoritosProvider>
     <BrowserRouter>
       <div className="min-h-screen bg-beige max-w-md mx-auto relative">
-        <main className="pb-16">
+        <main className="pb-24">
           <Routes>
             <Route path="/" element={<Descubrir />} />
             <Route path="/cafe/:id" element={<CafeDetalle />} />

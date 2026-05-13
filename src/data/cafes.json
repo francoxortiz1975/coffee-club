@@ -1,6 +1,6 @@
 [
   {
-    "id": "cafe-placeholder",
+    "id": "cafe-del-centro",
     "nombre": "Café del Centro",
     "barrio": "Centro Histórico",
     "tipo": "Café de especialidad",
@@ -14,5 +14,53 @@
     "instagram": "@cafedelcentro",
     "precio": "$$",
     "rating": 4.5
+  },
+  {
+    "id": "la-guarida",
+    "nombre": "La Guarida",
+    "barrio": "La Ronda",
+    "tipo": "Café cultural",
+    "ocasiones": ["amigos", "turístico"],
+    "especialidad": "Espresso con aguardiente de caña",
+    "historia": "Escondida en el callejón más antiguo de Quito, La Guarida mezcla la bohemia quiteña con el ritual del café.",
+    "descripcion": "Paredes de adobe, música andina en vivo los fines de semana y un menú que celebra los sabores del Ecuador profundo.",
+    "fotos": [],
+    "coordenadas": { "lat": -0.2218, "lng": -78.5141 },
+    "googleMaps": "https://maps.app.goo.gl/placeholder",
+    "instagram": "@laguarida.quito",
+    "precio": "$",
+    "rating": 4.7
+  },
+  {
+    "id": "taller-cafe",
+    "nombre": "Taller Café",
+    "barrio": "San Marcos",
+    "tipo": "Café de trabajo",
+    "ocasiones": ["work", "reunión"],
+    "especialidad": "Pour over de Pichincha",
+    "historia": "Nació como taller de diseño y terminó siendo el lugar favorito de freelancers y creativos del barrio San Marcos.",
+    "descripcion": "Mesas largas de madera, buena conexión wifi y el mejor pour over de la ciudad preparado con granos del Noroccidente de Pichincha.",
+    "fotos": [],
+    "coordenadas": { "lat": -0.2189, "lng": -78.5098 },
+    "googleMaps": "https://maps.app.goo.gl/placeholder",
+    "instagram": "@tallercafe.ec",
+    "precio": "$$",
+    "rating": 4.3
+  },
+  {
+    "id": "mirador-coffee",
+    "nombre": "Mirador Coffee",
+    "barrio": "El Panecillo",
+    "tipo": "Café con vista",
+    "ocasiones": ["pareja", "turístico", "amigos"],
+    "especialidad": "Café negro de Zamora con vista al volcán",
+    "historia": "A los pies del Panecillo, este café ofrece la vista más dramática de Quito mientras sirves el mejor café negro de Zamora Chinchipe.",
+    "descripcion": "Terraza abierta con vista panorámica al centro histórico y al Pichincha. Ideal para atardeceres y primeras citas.",
+    "fotos": [],
+    "coordenadas": { "lat": -0.2312, "lng": -78.5167 },
+    "googleMaps": "https://maps.app.goo.gl/placeholder",
+    "instagram": "@miradorcoffee",
+    "precio": "$$$",
+    "rating": 4.8
   }
 ]

@@ -8,7 +8,7 @@ export default function EspecialidadModal({ especialidades, activa, onChange, on
       />
 
       {/* Bottom sheet */}
-      <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-beige rounded-t-3xl z-50 px-5 pt-5 pb-10">
+      <div className="fixed bottom-16 left-0 right-0 max-w-md mx-auto bg-beige rounded-t-3xl z-50 px-5 pt-5 pb-8">
         <div className="w-10 h-1 bg-cafe-dark/20 rounded-full mx-auto mb-5" />
         <h2 className="text-base font-serif font-bold text-cafe-dark mb-4">Especialidad de café</h2>
 

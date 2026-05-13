@@ -1,0 +1,47 @@
+const OCASION_LABELS = {
+  pareja: '💑 Pareja',
+  amigos: '👯 Amigos',
+  reunión: '💼 Reunión',
+  turístico: '🗺️ Turístico',
+  work: '💻 Work',
+}
+
+export default function CafeCard({ cafe }) {
+  const { nombre, barrio, ocasiones, especialidad, historia, precio } = cafe
+
+  return (
+    <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+      {/* Foto placeholder */}
+      <div className="w-full h-48 bg-cafe-accent/20 flex items-center justify-center">
+        <span className="text-4xl">☕</span>
+      </div>
+
+      <div className="p-4">
+        {/* Header */}
+        <div className="flex items-start justify-between mb-1">
+          <h2 className="text-lg font-serif font-bold text-cafe-dark leading-tight">{nombre}</h2>
+          <span className="text-sm text-cafe-accent font-medium ml-2 shrink-0">{precio}</span>
+        </div>
+        <p className="text-xs text-cafe-accent/70 mb-3">{barrio}</p>
+
+        {/* Especialidad */}
+        <p className="text-sm text-cafe-dark/80 mb-3">{especialidad}</p>
+
+        {/* Historia */}
+        <p className="text-xs text-gray-400 leading-relaxed mb-4 line-clamp-2">{historia}</p>
+
+        {/* Tags de ocasión */}
+        <div className="flex flex-wrap gap-1.5">
+          {ocasiones.map((o) => (
+            <span
+              key={o}
+              className="text-xs bg-beige text-cafe-accent border border-cafe-accent/20 rounded-full px-2.5 py-0.5"
+            >
+              {OCASION_LABELS[o] ?? o}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}

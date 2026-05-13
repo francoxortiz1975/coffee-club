@@ -1,0 +1,14 @@
+[
+  {
+    "id": "cafe-placeholder",
+    "nombre": "Café del Centro",
+    "barrio": "Centro Histórico",
+    "ocasiones": ["pareja", "turístico"],
+    "especialidad": "Café de altura con panela",
+    "historia": "Un rincón auténtico en el corazón del Quito colonial, donde cada taza cuenta la historia de los Andes.",
+    "fotos": [],
+    "coordenadas": { "lat": -0.2201641, "lng": -78.5123274 },
+    "instagram": "@cafedelcentro",
+    "precio": "$$"
+  }
+]

@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@theme {
+  --color-beige: #f5f0e8;
+  --color-cafe-dark: #3d2b1f;
+  --color-cafe-accent: #6b4c3b;
+  --font-serif: Georgia, 'Times New Roman', serif;
+}
+
+body {
+  margin: 0;
+  background-color: #f5f0e8;
+  -webkit-font-smoothing: antialiased;
+}

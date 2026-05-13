@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samayñan · Plan 35 días</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F5F0E8; color: #2C2C2A; min-height: 100vh; }
+  header { background: #2C2C2A; color: #F5F0E8; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+  header h1 { font-size: 18px; font-weight: 500; letter-spacing: 0.5px; }
+  header span { font-size: 13px; opacity: 0.7; }
+  .progress-bar { height: 3px; background: #444; }
+  .progress-fill { height: 3px; background: #C0DD97; transition: width 0.3s; }
+  .container { max-width: 800px; margin: 0 auto; padding: 24px 16px; }
+
+  .phase { margin-bottom: 24px; }
+  .phase-header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #2C2C2A; color: #F5F0E8; border-radius: 10px; cursor: pointer; user-select: none; margin-bottom: 8px; }
+  .phase-header h2 { font-size: 14px; font-weight: 500; flex: 1; }
+  .phase-header .range { font-size: 11px; opacity: 0.6; }
+  .phase-header .ph-count { font-size: 11px; opacity: 0.7; }
+  .phase-header .chevron { font-size: 12px; opacity: 0.6; transition: transform 0.2s; }
+  .phase-header.open .chevron { transform: rotate(180deg); }
+  .phase-body { display: none; flex-direction: column; gap: 6px; }
+  .phase-body.open { display: flex; }
+
+  .day { background: #fff; border-radius: 10px; border: 0.5px solid #D3D1C7; overflow: hidden; }
+  .day-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; }
+  .day-num { font-size: 12px; font-weight: 500; color: #5F5E5A; min-width: 44px; }
+  .day-label { font-size: 12px; color: #888780; flex: 1; }
+  .day-prog { font-size: 11px; color: #888780; }
+  .day-tasks { display: none; padding: 0 14px 12px; flex-direction: column; gap: 6px; }
+  .day-tasks.open { display: flex; }
+
+  .task { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; border-bottom: 0.5px solid #F1EFE8; }
+  .task:last-child { border-bottom: none; }
+  .task input[type=checkbox] { margin-top: 3px; flex-shrink: 0; width: 15px; height: 15px; cursor: pointer; accent-color: #639922; }
+  .task label { font-size: 13px; line-height: 1.5; cursor: pointer; flex: 1; }
+  .task.done label { text-decoration: line-through; color: #B4B2A9; }
+  .badge { display: inline-block; font-size: 9px; font-weight: 500; padding: 2px 6px; border-radius: 20px; margin-right: 5px; vertical-align: 1px; flex-shrink: 0; }
+  .badge-DEV { background: #EEEDFE; color: #3C3489; }
+  .badge-TIK { background: #FAECE7; color: #712B13; }
+  .badge-DES { background: #FAEEDA; color: #633806; }
+  .badge-KEY { background: #2C2C2A; color: #F5F0E8; }
+
+  .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+  .sum-card { background: #fff; border-radius: 10px; border: 0.5px solid #D3D1C7; padding: 14px; text-align: center; }
+  .sum-card .num { font-size: 24px; font-weight: 500; color: #2C2C2A; }
+  .sum-card .lbl { font-size: 11px; color: #888780; margin-top: 2px; }
+
+  .reset-btn { background: none; border: 0.5px solid #D3D1C7; border-radius: 6px; padding: 6px 12px; font-size: 12px; color: #888780; cursor: pointer; margin-top: 24px; }
+  .reset-btn:hover { background: #F1EFE8; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Samayñan · 35 días</h1>
+  <span id="header-prog">0 / 0 tareas</span>
+</header>
+<div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+
+<div class="container">
+  <div class="summary">
+    <div class="sum-card"><div class="num" id="s-done">0</div><div class="lbl">completadas</div></div>
+    <div class="sum-card"><div class="num" id="s-total">0</div><div class="lbl">total tareas</div></div>
+    <div class="sum-card"><div class="num" id="s-pct">0%</div><div class="lbl">progreso</div></div>
+  </div>
+  <div id="plan"></div>
+  <button class="reset-btn" onclick="resetAll()">Reiniciar progreso</button>
+</div>
+
+<script>
+const PHASES = [
+  {
+    id:'pre', label:'Pre-lanzamiento', range:'Días -5 → -1',
+    days:[
+      { d:'Día -5', label:'Setup base', tasks:[
+        {r:'DEV',t:'Instalar Node.js (nodejs.org) si no lo tienes'},
+        {r:'DEV',t:'npm create vite@latest samaynan -- --template react'},
+        {r:'TIK',t:'Crear cuenta TikTok @samaynan (o @samaynanapp)'},
+        {r:'TIK',t:'Crear cuenta Instagram con el mismo handle'},
+      ]},
+      { d:'Día -4', label:'Config técnica + bio', tasks:[
+        {r:'DEV',t:'cd samaynan · npm install · npm run dev — verificar que corre'},
+        {r:'DEV',t:'npm install -D tailwindcss postcss autoprefixer + init'},
+        {r:'TIK',t:'Escribir bio de TikTok e Instagram — clara, directa'},
+        {r:'DES',t:'Buscar 20 referencias en Pinterest: cafés, apps latinas, Ecuador'},
+      ]},
+      { d:'Día -3', label:'Vercel + moodboard', tasks:[
+        {r:'DEV',t:'Crear cuenta Vercel + conectar repo GitHub + primer deploy'},
+        {r:'DEV',t:'npm install vite-plugin-pwa — configurar en vite.config.js'},
+        {r:'DES',t:'Abrir Figma — crear archivo "Samayñan Design System"'},
+        {r:'DES',t:'Definir paleta: primario, secundario, grises, blanco, negro'},
+      ]},
+      { d:'Día -2', label:'Logo', tasks:[
+        {r:'DES',t:'Diseñar 3 opciones de logo Samayñan en Figma'},
+        {r:'DES',t:'Elegir tipografía: display (títulos) + body (Google Fonts)'},
+        {r:'TIK',t:'Ver 5 videos de build-in-public en TikTok — anotar sus hooks'},
+      ]},
+      { d:'Día -1', label:'Waitlist live + guion listo', tasks:[
+        {r:'DES',t:'Elegir logo final · exportar SVG + PNG (32, 192, 512px)'},
+        {r:'DEV',t:'Crear página waitlist: nombre + email + "avisame" — deploy'},
+        {r:'DEV',t:'Verificar que el link funciona en iPhone y Android'},
+        {r:'TIK',t:'Filmar teaser de 15 seg (no publicar) — probar luz y encuadre'},
+        {r:'KEY',t:'Escribir guion completo del Día 1 — hook incluido'},
+      ]},
+    ]
+  },
+  {
+    id:'s1', label:'Semana 1 — La idea', range:'Días 1 → 7',
+    days:[
+      { d:'Día 1', label:'"La gente dice que el café en Ecuador es malo..."', tasks:[
+        {r:'KEY',t:'PUBLICAR video 1 — el hook del café malo en Ecuador'},
+        {r:'DEV',t:'Crear estructura de carpetas: /components /pages /data /assets'},
+        {r:'DEV',t:'npm install react-router-dom — configurar rutas base'},
+        {r:'DES',t:'Empezar diseño CafeCard en Figma — mobile first 390px'},
+      ]},
+      { d:'Día 2', label:'"No existe una app para esto"', tasks:[
+        {r:'KEY',t:'PUBLICAR video 2 — el problema, por qué nadie lo hizo'},
+        {r:'DEV',t:'Crear App.jsx con Router: ruta / y ruta /cafe/:id'},
+        {r:'DES',t:'Continuar CafeCard: foto, nombre, tags de ocasión, rating'},
+      ]},
+      { d:'Día 3', label:'Primera visita al Centro Histórico', tasks:[
+        {r:'KEY',t:'IR al Centro Histórico — filmar video 3 en persona'},
+        {r:'TIK',t:'Mientras estás ahí: fotografiar primera cafetería para la app'},
+        {r:'DES',t:'Terminar diseño CafeCard — listo para que Developer lo implemente'},
+        {r:'DEV',t:'Crear cafes.json — definir estructura de datos de cada café'},
+      ]},
+      { d:'Día 4', label:'"Por qué se llama Samayñan"', tasks:[
+        {r:'KEY',t:'PUBLICAR video 4 — el nombre en quichua, la historia'},
+        {r:'DEV',t:'Implementar componente CafeCard.jsx con Tailwind'},
+        {r:'DES',t:'Diseñar HomeScreen: grid de cards, header, nav bottom'},
+      ]},
+      { d:'Día 5', label:'Poll de features', tasks:[
+        {r:'KEY',t:'PUBLICAR video 5 — poll ¿qué feature quieres primero?'},
+        {r:'DEV',t:'Agregar 5 cafeterías en cafes.json (nombre, desc, tags, foto)'},
+        {r:'DEV',t:'Renderizar grid de CafeCards en HomeScreen con datos reales'},
+      ]},
+      { d:'Día 6', label:'Tour primera cafetería', tasks:[
+        {r:'KEY',t:'PUBLICAR video 6 — tour de la cafetería del Día 3'},
+        {r:'DEV',t:'Completar hasta 10 fichas en cafes.json'},
+        {r:'DES',t:'Diseñar pantalla de detalle de cafetería (CafeDetail)'},
+      ]},
+      { d:'Día 7', label:'Recap + batch filmación', tasks:[
+        {r:'KEY',t:'PUBLICAR video 7 — recap semana 1 + "esto viene"'},
+        {r:'TIK',t:'BATCH: filmar 4-5 videos para la semana 2 de una vez'},
+        {r:'DEV',t:'Implementar navegación: tap en card → pantalla de detalle'},
+      ]},
+    ]
+  },
+  {
+    id:'s2', label:'Semana 2 — La identidad', range:'Días 8 → 14',
+    days:[
+      { d:'Día 8', label:'Reveal del logo', tasks:[
+        {r:'KEY',t:'PUBLICAR video 8 — reveal del logo con proceso de decisión'},
+        {r:'DEV',t:'Implementar CafeDetail con toda la info del JSON'},
+        {r:'DES',t:'Exportar logo para TikTok en versión animada si puedes'},
+      ]},
+      { d:'Día 9', label:'Colores y diseño', tasks:[
+        {r:'KEY',t:'PUBLICAR video 9 — proceso de elección de colores'},
+        {r:'DEV',t:'Refinar estilos Tailwind para que se parezque al diseño de Figma'},
+        {r:'DES',t:'Curar fotos de cafeterías: webs, Google Maps, Instagram de cada lugar'},
+      ]},
+      { d:'Día 10', label:'Segunda cafetería', tasks:[
+        {r:'KEY',t:'IR al Centro Histórico — segunda cafetería, historia del edificio'},
+        {r:'TIK',t:'Filmar video 10 en la cafetería — más narrativo que el primero'},
+        {r:'DEV',t:'Completar hasta 15 fichas en cafes.json con fotos curadas'},
+      ]},
+      { d:'Día 11', label:'La tipografía', tasks:[
+        {r:'KEY',t:'PUBLICAR video 11 — la tipografía elegida y por qué'},
+        {r:'DEV',t:'Implementar filtros por ocasión: pareja / amigos / reunión / turístico'},
+        {r:'DES',t:'Diseñar pantalla de filtros y búsqueda'},
+      ]},
+      { d:'Día 12', label:'Antes / después pantallas', tasks:[
+        {r:'KEY',t:'PUBLICAR video 12 — antes/después de las primeras pantallas'},
+        {r:'DEV',t:'Conectar filtros con el JSON — que el grid se actualice'},
+        {r:'DES',t:'Revisar todos los diseños vs. lo implementado — lista de ajustes'},
+      ]},
+      { d:'Día 13', label:'Poll paleta + batch', tasks:[
+        {r:'KEY',t:'PUBLICAR video 13 — "¿cuál paleta prefieren?" con poll'},
+        {r:'TIK',t:'BATCH: filmar 4-5 videos para la semana 3'},
+        {r:'DEV',t:'Implementar pantalla de filtros completa'},
+      ]},
+      { d:'Día 14', label:'Identidad completa + PWA', tasks:[
+        {r:'KEY',t:'PUBLICAR video 14 — identidad visual completa revelada'},
+        {r:'DEV',t:'Configurar manifest.json: nombre, iconos, colores, display standalone'},
+        {r:'DEV',t:'Probar "Agregar a pantalla de inicio" en iPhone y Android real'},
+      ]},
+    ]
+  },
+  {
+    id:'s3', label:'Semana 3 — El producto', range:'Días 15 → 21',
+    days:[
+      { d:'Día 15', label:'"Hoy empiezo a construir la app"', tasks:[
+        {r:'KEY',t:'PUBLICAR video 15 — primer prototipo real en pantalla'},
+        {r:'DEV',t:'Completar todas las fichas de cafeterías — objetivo mínimo 20'},
+        {r:'DES',t:'Diseñar pantalla de perfil V2 (para después de launch)'},
+      ]},
+      { d:'Día 16', label:'Tercera cafetería — historia larga', tasks:[
+        {r:'KEY',t:'IR al Centro Histórico — tercera cafetería, contexto histórico profundo'},
+        {r:'TIK',t:'Filmar video 16 ahí: más narrativo, historia del barrio o edificio'},
+        {r:'DEV',t:'Lazy loading de imágenes — la app carga rápido con muchas fotos'},
+      ]},
+      { d:'Día 17', label:'Demo de la ficha en la app', tasks:[
+        {r:'KEY',t:'PUBLICAR video 17 — "así funciona la ficha de cada cafetería"'},
+        {r:'DEV',t:'Testing exhaustivo en móvil: iPhone SE, iPhone 14, Android'},
+        {r:'DES',t:'Diseñar iconos de la app + splash screen'},
+      ]},
+      { d:'Día 18', label:'"El error que cometí hoy"', tasks:[
+        {r:'KEY',t:'PUBLICAR video 18 — el error real del día, sin filtro'},
+        {r:'DEV',t:'Corregir los bugs encontrados en el testing del Día 17'},
+        {r:'DEV',t:'Correr Lighthouse — apuntar score performance y PWA'},
+      ]},
+      { d:'Día 19', label:'"Así se ve la app en mi teléfono"', tasks:[
+        {r:'KEY',t:'PUBLICAR video 19 — demo real de la app instalada en el teléfono'},
+        {r:'DEV',t:'Deploy V1 final en Vercel — URL limpia y estable'},
+        {r:'DES',t:'Verificar que todo se ve bien en producción desde el móvil'},
+      ]},
+      { d:'Día 20', label:'Cuarta cafetería + Supabase', tasks:[
+        {r:'KEY',t:'IR al Centro Histórico — cuarta cafetería'},
+        {r:'TIK',t:'Filmar video 20 con más soltura — ya tienes ritmo'},
+        {r:'DEV',t:'Crear cuenta en Supabase — explorar dashboard, crear proyecto'},
+      ]},
+      { d:'Día 21', label:'"La beta abre pronto"', tasks:[
+        {r:'KEY',t:'PUBLICAR video 21 — "la beta abre en una semana"'},
+        {r:'DEV',t:'Actualizar link en bio de TikTok e Instagram con link directo a la app'},
+        {r:'DES',t:'Revisar V1 completo — lista de ajustes finales antes del launch'},
+      ]},
+    ]
+  },
+  {
+    id:'s4', label:'Semana 4 — El lanzamiento', range:'Días 22 → 28',
+    days:[
+      { d:'Día 22', label:'Quinta cafetería + bugs', tasks:[
+        {r:'KEY',t:'IR al Centro Histórico — quinta cafetería'},
+        {r:'DEV',t:'Bug fixes de V1 — testing propio exhaustivo'},
+        {r:'TIK',t:'BATCH: filmar videos 22-26 de una sola vez si puedes'},
+      ]},
+      { d:'Día 23', label:'Supabase: estructura de datos', tasks:[
+        {r:'KEY',t:'PUBLICAR video 23 — quinta cafetería tour'},
+        {r:'DEV',t:'Crear tablas en Supabase: users, cafes, visits'},
+        {r:'DES',t:'Pulir diseños V2 con los coleccionables'},
+      ]},
+      { d:'Día 24', label:'Google OAuth', tasks:[
+        {r:'KEY',t:'PUBLICAR video 24 — "ya casi está, mañana abre la beta"'},
+        {r:'DEV',t:'npm install @supabase/supabase-js — conectar al proyecto'},
+        {r:'DEV',t:'Implementar Google OAuth: supabase.auth.signInWithOAuth'},
+      ]},
+      { d:'Día 25', label:'BETA ABIERTA', tasks:[
+        {r:'KEY',t:'PUBLICAR video 25 — "la beta está abierta" · link en bio'},
+        {r:'DEV',t:'Pantalla de perfil básica: mostrar foto y nombre de Google'},
+        {r:'DES',t:'Preparar assets de launch: imagen anuncio + story de countdown'},
+      ]},
+      { d:'Día 26', label:'Primeros usuarios reales', tasks:[
+        {r:'KEY',t:'PUBLICAR video 26 — primeros usuarios usando la app · sus reacciones'},
+        {r:'DEV',t:'Implementar "marcar como visitado" — primera colección funcionando'},
+        {r:'DEV',t:'Guardar visitas en tabla visits de Supabase'},
+      ]},
+      { d:'Día 27', label:'Feedback real', tasks:[
+        {r:'KEY',t:'PUBLICAR video 27 — feedback real + qué cambiarías con honestidad'},
+        {r:'DEV',t:'Fix de bugs encontrados por usuarios beta reales'},
+        {r:'DES',t:'Ajustes de diseño basados en feedback — solo los críticos'},
+      ]},
+      { d:'Día 28', label:'"Mañana es el día"', tasks:[
+        {r:'KEY',t:'PUBLICAR video 28 — máxima anticipación "mañana lanzamos"'},
+        {r:'DEV',t:'Último deploy — V1 + auth + colección funcionando'},
+        {r:'DES',t:'Story + post de lanzamiento preparados y listos para publicar'},
+      ]},
+    ]
+  },
+  {
+    id:'launch', label:'Lanzamiento', range:'Días 29 → 30',
+    days:[
+      { d:'Día 29', label:'Pre-launch', tasks:[
+        {r:'KEY',t:'PUBLICAR video 29 — el video de anticipación más importante'},
+        {r:'DEV',t:'Monitorear Supabase + Vercel activamente — nada debe caerse'},
+        {r:'DES',t:'Último repaso de todo lo visual — nada roto en producción'},
+      ]},
+      { d:'Día 30', label:'LAUNCH DAY 🚀', tasks:[
+        {r:'KEY',t:'PUBLICAR el video más importante de los 30 días — LAUNCH'},
+        {r:'TIK',t:'Publicar también en Instagram Reels y Stories simultáneamente'},
+        {r:'DEV',t:'V1 live, monitoring activo todo el día'},
+        {r:'DES',t:'Documentar el sistema de diseño final — base para V2'},
+      ]},
+    ]
+  }
+];
+
+const STORAGE_KEY = 'samaynan_35dias_v1';
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { return {}; }
+}
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+let state = loadState();
+let openPhases = { pre:true, s1:false, s2:false, s3:false, s4:false, launch:false };
+let openDays = {};
+
+function allTasks() {
+  let all = [];
+  PHASES.forEach(function(ph) {
+    ph.days.forEach(function(day) {
+      day.tasks.forEach(function(t, ti) {
+        all.push(ph.id + '_' + day.d + '_' + ti);
+      });
+    });
+  });
+  return all;
+}
+
+function updateSummary() {
+  const all = allTasks();
+  const done = all.filter(function(k){ return state[k]; }).length;
+  const pct = all.length > 0 ? Math.round((done/all.length)*100) : 0;
+  document.getElementById('s-done').textContent = done;
+  document.getElementById('s-total').textContent = all.length;
+  document.getElementById('s-pct').textContent = pct + '%';
+  document.getElementById('header-prog').textContent = done + ' / ' + all.length + ' tareas';
+  document.getElementById('prog-fill').style.width = pct + '%';
+}
+
+function toggleTask(key) {
+  state[key] = !state[key];
+  saveState(state);
+  const lbl = document.querySelector('label[for="' + key + '"]');
+  const cb = document.getElementById(key);
+  if (lbl) lbl.parentElement.classList.toggle('done', state[key]);
+  if (cb) cb.checked = state[key];
+  updateDayProg(key.split('_').slice(0,2).join('_'));
+  updateSummary();
+}
+
+function updateDayProg(dayKey) {
+  const el = document.getElementById('dp_' + dayKey.replace(/[^a-zA-Z0-9]/g,'_'));
+  if (!el) return;
+  const all = Object.keys(state).filter(function(k){ return k.startsWith(dayKey) && !k.includes('undefined'); });
+  const done = all.filter(function(k){ return state[k]; }).length;
+  el.textContent = done + '/' + all.length;
+}
+
+function togglePhase(id) {
+  openPhases[id] = !openPhases[id];
+  const body = document.getElementById('pb_' + id);
+  const hdr = document.getElementById('ph_' + id);
+  if (body) body.classList.toggle('open', openPhases[id]);
+  if (hdr) hdr.classList.toggle('open', openPhases[id]);
+  const ch = document.getElementById('ch_' + id);
+  if (ch) ch.textContent = openPhases[id] ? '▲' : '▼';
+}
+
+function toggleDay(key) {
+  openDays[key] = !openDays[key];
+  const body = document.getElementById('db_' + key.replace(/[^a-zA-Z0-9]/g,'_'));
+  if (body) body.classList.toggle('open', openDays[key]);
+}
+
+function resetAll() {
+  if (!confirm('¿Reiniciar todo el progreso?')) return;
+  state = {};
+  saveState(state);
+  document.querySelectorAll('input[type=checkbox]').forEach(function(cb){ cb.checked = false; });
+  document.querySelectorAll('.task').forEach(function(t){ t.classList.remove('done'); });
+  document.querySelectorAll('[id^=dp_]').forEach(function(el){
+    const parts = el.id.replace('dp_','').split('_');
+    el.textContent = '0/' + el.dataset.total;
+  });
+  updateSummary();
+}
+
+function render() {
+  const container = document.getElementById('plan');
+  let html = '';
+
+  PHASES.forEach(function(ph) {
+    let phTotal = 0, phDone = 0;
+    ph.days.forEach(function(day) {
+      day.tasks.forEach(function(t, ti) {
+        const key = ph.id + '_' + day.d + '_' + ti;
+        phTotal++;
+        if (state[key]) phDone++;
+      });
+    });
+
+    html += '<div class="phase">';
+    html += '<div class="phase-header' + (openPhases[ph.id] ? ' open' : '') + '" id="ph_' + ph.id + '" onclick="togglePhase(\'' + ph.id + '\')">';
+    html += '<h2>' + ph.label + '</h2>';
+    html += '<span class="range">' + ph.range + '</span>';
+    html += '<span class="ph-count">' + phDone + '/' + phTotal + '</span>';
+    html += '<span class="chevron" id="ch_' + ph.id + '">' + (openPhases[ph.id] ? '▲' : '▼') + '</span>';
+    html += '</div>';
+    html += '<div class="phase-body' + (openPhases[ph.id] ? ' open' : '') + '" id="pb_' + ph.id + '">';
+
+    ph.days.forEach(function(day) {
+      const dayKey = ph.id + '_' + day.d;
+      const safeKey = dayKey.replace(/[^a-zA-Z0-9]/g,'_');
+      const dayDone = day.tasks.filter(function(t,ti){ return state[ph.id + '_' + day.d + '_' + ti]; }).length;
+
+      html += '<div class="day">';
+      html += '<div class="day-header" onclick="toggleDay(\'' + dayKey + '\')">';
+      html += '<span class="day-num">' + day.d + '</span>';
+      html += '<span class="day-label">' + day.label + '</span>';
+      html += '<span class="day-prog" id="dp_' + safeKey + '" data-total="' + day.tasks.length + '">' + dayDone + '/' + day.tasks.length + '</span>';
+      html += '</div>';
+      html += '<div class="day-tasks' + (openDays[dayKey] ? ' open' : '') + '" id="db_' + safeKey + '">';
+
+      day.tasks.forEach(function(task, ti) {
+        const key = ph.id + '_' + day.d + '_' + ti;
+        const done = state[key] || false;
+        html += '<div class="task' + (done ? ' done' : '') + '">';
+        html += '<input type="checkbox" id="' + key + '"' + (done ? ' checked' : '') + ' onchange="toggleTask(\'' + key + '\')">';
+        html += '<label for="' + key + '"><span class="badge badge-' + task.r + '">' + task.r + '</span>' + task.t + '</label>';
+        html += '</div>';
+      });
+
+      html += '</div></div>';
+    });
+
+    html += '</div></div>';
+  });
+
+  container.innerHTML = html;
+  updateSummary();
+}
+
+render();
+</script>
+</body>
+</html>

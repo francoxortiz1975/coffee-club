@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import cafes from '../data/cafes.json'
 import StarRating from '../components/StarRating'
@@ -8,6 +9,20 @@ export default function CafeDetalle() {
   const { id } = useParams()
   const navigate = useNavigate()
   const cafe = cafes.find((c) => c.id === id)
+  const [copied, setCopied] = useState(false)
+
+  async function handleShare() {
+    const url = window.location.href
+    const text = `☕ ${cafe.nombre} — ${cafe.especialidad}. Lo encontré en Samay Coffee Club:`
+
+    if (navigator.share) {
+      await navigator.share({ title: cafe.nombre, text, url })
+    } else {
+      await navigator.clipboard.writeText(`${text} ${url}`)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
 
   if (!cafe) {
     return (
@@ -34,6 +49,13 @@ export default function CafeDetalle() {
           className="absolute top-4 left-4 bg-white/80 backdrop-blur-sm text-cafe-dark rounded-full w-9 h-9 flex items-center justify-center shadow text-lg"
         >
           ←
+        </button>
+        {/* Botón compartir */}
+        <button
+          onClick={handleShare}
+          className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm text-cafe-dark rounded-full w-9 h-9 flex items-center justify-center shadow text-lg"
+        >
+          {copied ? '✓' : '↑'}
         </button>
       </div>
 

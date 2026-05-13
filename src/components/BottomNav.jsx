@@ -3,7 +3,7 @@ import { MapIcon, DiceIcon, CoffeeCupIcon } from './Icons'
 
 const tabs = [
   { to: '/', label: 'Descubrir', Icon: MapIcon },
-  { to: '/shuffle', label: 'Shuffle', Icon: DiceIcon },
+  { to: '/decidir', label: 'Decidir', Icon: DiceIcon },
   { to: '/perfil', label: 'Perfil', Icon: CoffeeCupIcon },
 ]
 

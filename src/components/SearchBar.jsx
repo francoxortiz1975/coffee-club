@@ -1,7 +1,11 @@
+import { SearchIcon } from './Icons'
+
 export default function SearchBar({ value, onChange }) {
   return (
     <div className="relative mb-4">
-      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-cafe-accent/50 text-sm">🔍</span>
+      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-cafe-accent/40">
+        <SearchIcon size={16} />
+      </span>
       <input
         type="text"
         value={value}

@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom'
+import { CoffeeCupIcon, HeartIcon, PinIcon } from './Icons'
 import { useFavoritos } from '../context/FavoritosContext'
 
 const OCASION_LABELS = {
-  pareja: '💑 Pareja',
-  amigos: '👯 Amigos',
-  reunión: '💼 Reunión',
-  turístico: '🗺️ Turístico',
-  work: '💻 Work',
+  pareja: 'Pareja',
+  amigos: 'Amigos',
+  reunión: 'Reunión',
+  turístico: 'Turístico',
+  work: 'Work',
 }
 
 export default function CafeCardSmall({ cafe }) {
@@ -25,18 +26,17 @@ export default function CafeCardSmall({ cafe }) {
       to={`/cafe/${id}`}
       className="shrink-0 w-64 bg-white rounded-2xl overflow-hidden shadow-sm snap-start block active:scale-[0.98] transition-transform"
     >
-      {/* Foto */}
-      <div className="w-full h-36 bg-cafe-accent/20 flex items-center justify-center relative">
+      <div className="w-full h-36 bg-cafe-accent/10 flex items-center justify-center relative">
         {fotos?.[0] ? (
           <img src={fotos[0]} alt={nombre} className="w-full h-full object-cover" />
         ) : (
-          <span className="text-4xl">☕</span>
+          <CoffeeCupIcon size={36} className="text-cafe-accent/30" />
         )}
         <button
           onClick={handleHeart}
-          className="absolute top-2 right-2 text-xl leading-none drop-shadow"
+          className={`absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm transition-colors ${esFavorito ? 'text-red-400' : 'text-cafe-accent/40'}`}
         >
-          {esFavorito ? '❤️' : '🤍'}
+          <HeartIcon size={14} filled={esFavorito} />
         </button>
       </div>
 
@@ -45,7 +45,9 @@ export default function CafeCardSmall({ cafe }) {
           <h3 className="text-sm font-serif font-bold text-cafe-dark leading-tight">{nombre}</h3>
           <span className="text-xs text-cafe-accent font-semibold ml-2 shrink-0">{precio}</span>
         </div>
-        <p className="text-[11px] text-cafe-accent/60 mb-2">📍 {barrio}</p>
+        <p className="text-[11px] text-cafe-accent/60 mb-2 flex items-center gap-1">
+          <PinIcon size={11} className="shrink-0" />{barrio}
+        </p>
         <p className="text-[11px] text-cafe-dark/70 mb-2 line-clamp-1">{especialidad}</p>
         <div className="flex gap-1.5">
           {ocasiones.slice(0, 2).map((o) => (

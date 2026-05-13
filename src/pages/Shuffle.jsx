@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import cafes from '../data/cafes.json'
 import { useFavoritos } from '../context/FavoritosContext'
+import { CoffeeCupIcon, HeartIcon, XIcon, PinIcon } from '../components/Icons'
 
 // ─── Shuffle Mode ────────────────────────────────────────────────
 function ShuffleMode() {
@@ -43,12 +44,12 @@ function ShuffleCard({ cafe, onReshuffle }) {
       <div className="w-full h-52 bg-cafe-accent/20 flex items-center justify-center relative">
         {cafe.fotos?.[0]
           ? <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
-          : <span className="text-6xl">☕</span>}
+          : <CoffeeCupIcon size={48} className="text-cafe-accent/25" />}
         <button
           onClick={() => toggleFavorito(cafe.id)}
-          className="absolute top-3 right-3 text-2xl drop-shadow"
+          className={`absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow transition-colors ${esFavorito ? 'text-red-400' : 'text-cafe-accent/40'}`}
         >
-          {esFavorito ? '❤️' : '🤍'}
+          <HeartIcon size={15} filled={esFavorito} />
         </button>
       </div>
 
@@ -174,7 +175,7 @@ function SwipeMode() {
           <div className="w-full h-64 bg-cafe-accent/20 flex items-center justify-center">
             {cafe.fotos?.[0]
               ? <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
-              : <span className="text-7xl">☕</span>}
+              : <CoffeeCupIcon size={56} className="text-cafe-accent/25" />}
           </div>
           <div className="p-4">
             <div className="flex items-start justify-between mb-0.5">
@@ -192,9 +193,9 @@ function SwipeMode() {
       <div className="flex gap-6 items-center">
         <button
           onClick={() => doSwipe('left')}
-          className="w-14 h-14 rounded-full border-2 border-red-300 text-red-400 text-2xl flex items-center justify-center shadow active:scale-90 transition-transform"
+          className="w-14 h-14 rounded-full border-2 border-red-300 text-red-400 flex items-center justify-center shadow active:scale-90 transition-transform"
         >
-          ✕
+          <XIcon size={22} />
         </button>
         <Link
           to={`/cafe/${cafe.id}`}
@@ -204,9 +205,9 @@ function SwipeMode() {
         </Link>
         <button
           onClick={() => doSwipe('right')}
-          className="w-14 h-14 rounded-full border-2 border-green-300 text-green-500 text-2xl flex items-center justify-center shadow active:scale-90 transition-transform"
+          className="w-14 h-14 rounded-full border-2 border-green-300 text-green-500 flex items-center justify-center shadow active:scale-90 transition-transform"
         >
-          ❤️
+          <HeartIcon size={22} />
         </button>
       </div>
     </div>

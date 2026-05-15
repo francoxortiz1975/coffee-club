@@ -2,6 +2,15 @@ const defaults = { width: 24, height: 24, strokeWidth: 1.5, stroke: 'currentColo
 
 const s = (props) => ({ ...defaults, ...props })
 
+export function CoffeeBeanIcon({ size = 16, className = '' }) {
+  return (
+    <svg {...s({ width: size, height: size })} className={className} viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+      <ellipse cx="12" cy="12" rx="7" ry="10" transform="rotate(-30 12 12)" />
+      <path d="M12 4 Q16 8 16 12 Q16 16 12 20" />
+    </svg>
+  )
+}
+
 export function CoffeeCupIcon({ size = 24, className = '' }) {
   return (
     <svg {...s({ width: size, height: size })} className={className} viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">

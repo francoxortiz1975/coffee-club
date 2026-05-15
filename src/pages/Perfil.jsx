@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import cafes from '../data/cafes.json'
 import { useVisitas } from '../context/VisitasContext'
-import { CoffeeCupIcon } from '../components/Icons'
+import { CoffeeCupIcon, CoffeeBeanIcon } from '../components/Icons'
 
 const barrios = [...new Set(cafes.map((c) => c.barrio))]
 
@@ -73,8 +73,23 @@ export default function Perfil() {
 
   return (
     <div className="px-4 pt-8 pb-4">
-      <h1 className="text-2xl font-serif font-bold text-cafe-dark mb-1">Mi Colección</h1>
-      <p className="text-sm text-cafe-accent/60 mb-6">{visitas.length} cafeterías visitadas</p>
+      <h1 className="text-2xl font-serif font-bold text-cafe-dark mb-3">Mi Colección</h1>
+
+      {/* Coffee Beans */}
+      <div className="bg-white rounded-2xl px-4 py-3 shadow-sm mb-6">
+        <p className="text-xs text-cafe-accent/50 mb-2">
+          {visitas.length === 0
+            ? 'Aún no has visitado ninguna cafetería'
+            : `${visitas.length} coffee bean${visitas.length > 1 ? 's' : ''}`}
+        </p>
+        {visitas.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {Array.from({ length: visitas.length }).map((_, i) => (
+              <CoffeeBeanIcon key={i} size={20} className="text-cafe-dark" />
+            ))}
+          </div>
+        )}
+      </div>
 
       <div className="flex flex-col gap-3">
         {barrios.map((barrio) => (

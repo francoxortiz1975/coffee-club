@@ -15,7 +15,7 @@ export default defineConfig({
         short_name: 'Sumay',
         description: 'Las mejores cafeterías del Ecuador',
         theme_color: '#2a1510',
-        background_color: '#f5f0e8',
+        background_color: '#2a1510',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',

@@ -40,7 +40,7 @@ export default function Descubrir() {
           <img
             src="/logo.png"
             alt="Sumay Coffee Club"
-            className="h-14 w-auto object-contain"
+            className="h-28 w-auto object-contain"
           />
         </div>
 

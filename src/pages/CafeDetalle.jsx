@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import cafes from '../data/cafes.json'
 import StarRating from '../components/StarRating'
 import { useFavoritos } from '../context/FavoritosContext'
-import { ArrowLeftIcon, HeartIcon, ShareIcon, CoffeeCupIcon, PinIcon, ExternalLinkIcon } from '../components/Icons'
+import { ArrowLeftIcon, HeartIcon, ShareIcon, CoffeeCupIcon, PinIcon, ExternalLinkIcon, InviteIcon } from '../components/Icons'
 import { useVisitas } from '../context/VisitasContext'
 
 const PLACEHOLDER_FOTOS = [null, null, null]
@@ -113,6 +113,13 @@ export default function CafeDetalle() {
             <ExternalLinkIcon size={15} /> Instagram
           </a>
         )}
+
+        <Link
+          to={`/invitacion/${cafe.id}/setup`}
+          className="mt-3 flex items-center justify-center gap-2 w-full border border-cafe-accent/30 text-cafe-accent text-sm font-medium py-3 rounded-2xl active:scale-95 transition-transform"
+        >
+          <InviteIcon size={15} /> Invitar
+        </Link>
       </div>
     </div>
   )

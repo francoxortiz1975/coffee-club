@@ -30,7 +30,7 @@ export default function Seleccionados() {
             {cafesSeleccionados.map((cafe) => {
               const esFavorito = favoritos.includes(cafe.id)
               return (
-                <div key={cafe.id} className="bg-white rounded-2xl overflow-hidden shadow-sm">
+                <div key={cafe.id} className="bg-[#faf4ec] rounded-2xl overflow-hidden shadow-sm">
                   <Link to={`/cafe/${cafe.id}`} className="block">
                     <div className="w-full h-44 bg-cafe-accent/10 flex items-center justify-center">
                       {cafe.fotos?.[0]

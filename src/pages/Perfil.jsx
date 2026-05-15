@@ -13,7 +13,7 @@ function ColeccionBarrio({ barrio }) {
   const visitados = cafesBarrio.filter((c) => visitas.includes(c.id)).length
 
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-sm">
+    <div className="bg-[#faf4ec] rounded-2xl overflow-hidden shadow-sm">
       {/* Toggle header */}
       <button
         onClick={() => setAbierto((v) => !v)}
@@ -76,7 +76,7 @@ export default function Perfil() {
       <h1 className="text-2xl font-serif font-bold text-cafe-dark mb-3">Mi Colección</h1>
 
       {/* Coffee Beans */}
-      <div className="bg-white rounded-2xl px-4 py-3 shadow-sm mb-6">
+      <div className="bg-[#faf4ec] rounded-2xl px-4 py-3 shadow-sm mb-6">
         <p className="text-xs text-cafe-accent/50 mb-2">
           {visitas.length === 0
             ? 'Aún no has visitado ninguna cafetería'

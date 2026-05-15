@@ -24,7 +24,7 @@ export default function CafeCardSmall({ cafe }) {
   return (
     <Link
       to={`/cafe/${id}`}
-      className="shrink-0 w-64 bg-white rounded-2xl overflow-hidden shadow-sm snap-start block active:scale-[0.98] transition-transform"
+      className="shrink-0 w-64 bg-[#faf4ec] rounded-2xl overflow-hidden shadow-sm snap-start block active:scale-[0.98] transition-transform"
     >
       <div className="w-full h-36 bg-cafe-accent/10 flex items-center justify-center relative">
         {fotos?.[0] ? (
@@ -34,7 +34,7 @@ export default function CafeCardSmall({ cafe }) {
         )}
         <button
           onClick={handleHeart}
-          className={`absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm transition-colors ${esFavorito ? 'text-red-400' : 'text-cafe-accent/40'}`}
+          className={`absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm transition-colors ${esFavorito ? 'text-emerald-400' : 'text-cafe-accent/40'}`}
         >
           <HeartIcon size={14} filled={esFavorito} />
         </button>

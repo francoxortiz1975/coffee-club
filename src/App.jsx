@@ -20,7 +20,9 @@ function Layout() {
 
   return (
     <div className="min-h-screen max-w-md mx-auto relative bg-[url('/wood-bg.jpg')] bg-cover bg-top">
-      <main className={hideNav ? '' : 'pb-24'}>
+      {/* Filtro beige sobre la madera */}
+      <div className="absolute inset-0 bg-[#f5ece0]/50 pointer-events-none" />
+      <main className={`relative z-10 ${hideNav ? '' : 'pb-24'}`}>
         <Routes>
           <Route path="/" element={<Descubrir />} />
           <Route path="/cafe/:id" element={<CafeDetalle />} />

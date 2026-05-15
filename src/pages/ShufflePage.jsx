@@ -48,14 +48,14 @@ export default function ShufflePage() {
 
         {/* Card resultado */}
         {cafe && (
-          <div className={`w-full bg-white rounded-2xl overflow-hidden shadow-xl transition-all duration-300 ${cafe ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+          <div className={`w-full bg-[#faf4ec] rounded-2xl overflow-hidden shadow-xl transition-all duration-300 ${cafe ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
             <div className="w-full h-48 bg-cafe-accent/10 flex items-center justify-center relative">
               {cafe.fotos?.[0]
                 ? <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
                 : <CoffeeCupIcon size={48} className="text-cafe-accent/20" />}
               <button
                 onClick={() => toggleFavorito(cafe.id)}
-                className={`absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center shadow transition-colors ${esFavorito ? 'text-red-400' : 'text-cafe-accent/40'}`}
+                className={`absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center shadow transition-colors ${esFavorito ? 'text-emerald-400' : 'text-cafe-accent/40'}`}
               >
                 <HeartIcon size={15} filled={esFavorito} />
               </button>

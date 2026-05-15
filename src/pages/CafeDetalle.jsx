@@ -47,7 +47,7 @@ export default function CafeDetalle() {
         <button onClick={() => navigate(-1)} className="absolute top-4 left-4 bg-white/80 backdrop-blur-sm text-cafe-dark rounded-full w-9 h-9 flex items-center justify-center shadow">
           <ArrowLeftIcon size={18} />
         </button>
-        <button onClick={() => toggleFavorito(cafe.id)} className={`absolute top-4 right-16 bg-white/80 backdrop-blur-sm rounded-full w-9 h-9 flex items-center justify-center shadow transition-colors ${esFavorito ? 'text-red-400' : 'text-cafe-accent/50'}`}>
+        <button onClick={() => toggleFavorito(cafe.id)} className={`absolute top-4 right-16 bg-white/80 backdrop-blur-sm rounded-full w-9 h-9 flex items-center justify-center shadow transition-colors ${esFavorito ? 'text-emerald-400' : 'text-cafe-accent/50'}`}>
           <HeartIcon size={17} filled={esFavorito} />
         </button>
         <button onClick={handleShare} className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm text-cafe-dark rounded-full w-9 h-9 flex items-center justify-center shadow">

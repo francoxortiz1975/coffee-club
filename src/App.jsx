@@ -19,7 +19,7 @@ function Layout() {
   const hideNav = NO_NAV_PATHS.some((p) => pathname.startsWith(p))
 
   return (
-    <div className="min-h-screen max-w-md mx-auto relative">
+    <div className="min-h-screen max-w-md mx-auto relative bg-[url('/wood-bg.jpg')] bg-cover bg-top">
       <main className={hideNav ? '' : 'pb-24'}>
         <Routes>
           <Route path="/" element={<Descubrir />} />

@@ -19,12 +19,28 @@ function formatHora(horaStr) {
   return `${h12}:${m} ${suffix}`
 }
 
+async function srcToDataUrl(src) {
+  try {
+    const res = await fetch(src)
+    const blob = await res.blob()
+    return new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(reader.result)
+      reader.readAsDataURL(blob)
+    })
+  } catch {
+    return src
+  }
+}
+
 export default function InvitacionPage() {
   const { id } = useParams()
   const [params] = useSearchParams()
   const navigate = useNavigate()
   const cardRef = useRef(null)
   const [sharing, setSharing] = useState(false)
+  const [coverDataUrl, setCoverDataUrl] = useState(null)
+  const [logoDataUrl, setLogoDataUrl] = useState(null)
   const cafe = cafes.find((c) => c.id === id)
 
   const nombre = params.get('nombre')
@@ -47,13 +63,16 @@ export default function InvitacionPage() {
     return () => clearTimeout(timer)
   }, [])
 
+  // Preload images as data URLs so html-to-image can capture them
+  useEffect(() => {
+    if (cafe?.fotos?.[0]) srcToDataUrl(cafe.fotos[0]).then(setCoverDataUrl)
+    srcToDataUrl('/logo.png').then(setLogoDataUrl)
+  }, [cafe])
+
   async function handleShare() {
     setSharing(true)
     try {
-      const dataUrl = await toPng(cardRef.current, {
-        cacheBust: true,
-        pixelRatio: 2,
-      })
+      const dataUrl = await toPng(cardRef.current, { pixelRatio: 2 })
 
       const res = await fetch(dataUrl)
       const blob = await res.blob()
@@ -68,15 +87,14 @@ export default function InvitacionPage() {
       } else if (navigator.share) {
         await navigator.share({ title: `Invitación a ${cafe.nombre}`, text: mensaje })
       } else {
-        // Fallback: descargar imagen
         const a = document.createElement('a')
         a.href = dataUrl
         a.download = 'invitacion-sumay.png'
         a.click()
         await navigator.clipboard.writeText(mensaje)
       }
-    } catch (e) {
-      // usuario canceló o error — no hacer nada
+    } catch {
+      // usuario canceló
     } finally {
       setSharing(false)
     }
@@ -84,14 +102,12 @@ export default function InvitacionPage() {
 
   if (!cafe) return null
 
-  const coverFoto = cafe.fotos?.[0]
-
   return (
     <div ref={cardRef} className="min-h-screen relative flex flex-col overflow-hidden">
 
-      {/* Fondo — foto o degradado */}
-      {coverFoto ? (
-        <img src={coverFoto} alt={cafe.nombre} className="absolute inset-0 w-full h-full object-cover" crossOrigin="anonymous" />
+      {/* Fondo — foto (data URL) o degradado */}
+      {coverDataUrl ? (
+        <img src={coverDataUrl} alt={cafe.nombre} className="absolute inset-0 w-full h-full object-cover" />
       ) : (
         <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #1e0f0b 100%)' }} />
       )}
@@ -113,42 +129,34 @@ export default function InvitacionPage() {
         disabled={sharing}
         className="absolute top-12 right-5 z-20 text-white/60 hover:text-white transition-colors disabled:opacity-40"
       >
-        {sharing ? (
-          <span className="text-xs text-white/60">...</span>
-        ) : (
-          <ShareIcon size={20} />
-        )}
+        {sharing ? <span className="text-xs text-white/60">...</span> : <ShareIcon size={20} />}
       </button>
 
       {/* Contenido centrado */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-8 text-center gap-4">
 
-        {/* Logo pequeño */}
-        <img src="/logo.png" alt="Sumay" className="h-8 w-auto object-contain opacity-70 mb-2 animate-[fadeUp_0.8s_ease_0.2s_both]" crossOrigin="anonymous" />
+        {logoDataUrl && (
+          <img src={logoDataUrl} alt="Sumay" className="h-8 w-auto object-contain opacity-70 mb-2 animate-[fadeUp_0.8s_ease_0.2s_both]" />
+        )}
 
-        {/* "X te invita a" */}
-        {nombre && (
+        {nombre ? (
           <p className="text-white/70 text-sm font-light italic tracking-wide animate-[fadeUp_0.8s_ease_0.5s_both]">
             <span className="text-white font-medium">{nombre}</span> te invita a
           </p>
-        )}
-        {!nombre && (
+        ) : (
           <p className="text-white/60 text-sm font-light italic tracking-wide animate-[fadeUp_0.8s_ease_0.5s_both]">
             Tienes una invitación a
           </p>
         )}
 
-        {/* Nombre del café */}
         <h1 className="text-4xl font-serif font-bold text-white leading-tight tracking-tight animate-[fadeUp_0.8s_ease_0.8s_both]">
           {cafe.nombre}
         </h1>
 
-        {/* Barrio */}
         <p className="text-white/50 text-xs tracking-widest uppercase animate-[fadeUp_0.8s_ease_1s_both]">
           {cafe.barrio}
         </p>
 
-        {/* Fecha y hora */}
         {(fecha || hora) && (
           <div className="mt-2 border border-white/20 rounded-2xl px-6 py-3 animate-[fadeUp_0.8s_ease_1.2s_both]">
             {fecha && <p className="text-white text-sm font-medium capitalize">{formatFecha(fecha)}</p>}

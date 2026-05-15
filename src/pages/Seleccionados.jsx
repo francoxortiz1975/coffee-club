@@ -12,9 +12,10 @@ export default function Seleccionados() {
   const cafesSeleccionados = cafes.filter((c) => ids.includes(c.id))
 
   return (
-    <div className="min-h-screen bg-beige">
+    <div className="relative min-h-screen bg-[url('/wood-bg.JPG')] bg-[length:100%_100%] bg-no-repeat">
+      <div className="absolute inset-0 bg-[#f5ece0]/50 pointer-events-none z-0" />
       {/* Header */}
-      <div className="flex items-center gap-3 px-5 pt-12 pb-6">
+      <div className="relative z-10 flex items-center gap-3 px-5 pt-12 pb-6">
         <button onClick={() => navigate('/decidir/swipe')} className="text-cafe-accent/60">
           <ArrowLeftIcon size={20} />
         </button>
@@ -26,7 +27,7 @@ export default function Seleccionados() {
 
       <div className="px-4 pb-8">
         {cafesSeleccionados.length > 0 ? (
-          <div className="flex flex-col gap-4">
+          <div className="relative z-10 flex flex-col gap-4">
             {cafesSeleccionados.map((cafe) => {
               const esFavorito = favoritos.includes(cafe.id)
               return (

@@ -47,9 +47,10 @@ export default function SwipePage() {
   const noOpacity = Math.max(0, Math.min(-offsetX / 80, 1))
 
   return (
-    <div className="min-h-screen bg-beige flex flex-col">
+    <div className="relative min-h-screen bg-[url('/white-bg.JPG')] bg-[length:100%_100%] bg-no-repeat flex flex-col">
+      <div className="absolute inset-0 bg-[#f5ece0]/40 pointer-events-none z-0" />
       {/* Header */}
-      <div className="flex items-center justify-between px-5 pt-12 pb-4">
+      <div className="relative z-10 flex items-center justify-between px-5 pt-12 pb-4">
         <h1 className="text-xl font-serif font-bold text-cafe-dark">Swipe</h1>
         <button
           onClick={handleTerminar}
@@ -60,7 +61,7 @@ export default function SwipePage() {
       </div>
 
       {/* Contenido */}
-      <div className="flex-1 flex flex-col items-center px-4 gap-6 justify-center">
+      <div className="relative z-10 flex-1 flex flex-col items-center px-4 gap-6 justify-center">
         {cafe ? (
           <>
             <p className="text-xs text-cafe-accent/40">{index + 1} / {cafes.length}</p>

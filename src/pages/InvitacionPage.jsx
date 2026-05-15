@@ -1,5 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
+import { toPng } from 'html-to-image'
 import confetti from 'canvas-confetti'
 import cafes from '../data/cafes.json'
 import { PinIcon, ExternalLinkIcon, ShareIcon, ArrowLeftIcon } from '../components/Icons'
@@ -22,6 +23,8 @@ export default function InvitacionPage() {
   const { id } = useParams()
   const [params] = useSearchParams()
   const navigate = useNavigate()
+  const cardRef = useRef(null)
+  const [sharing, setSharing] = useState(false)
   const cafe = cafes.find((c) => c.id === id)
 
   const nombre = params.get('nombre')
@@ -45,11 +48,37 @@ export default function InvitacionPage() {
   }, [])
 
   async function handleShare() {
-    const url = window.location.href
-    if (navigator.share) {
-      await navigator.share({ title: `Invitación a ${cafe.nombre}`, url })
-    } else {
-      await navigator.clipboard.writeText(url)
+    setSharing(true)
+    try {
+      const dataUrl = await toPng(cardRef.current, {
+        cacheBust: true,
+        pixelRatio: 2,
+      })
+
+      const res = await fetch(dataUrl)
+      const blob = await res.blob()
+      const file = new File([blob], 'invitacion-sumay.png', { type: 'image/png' })
+
+      const mensaje = nombre
+        ? `${nombre} te invita a ${cafe.nombre} ☕\n${window.location.href}`
+        : `¡Estás invitado a ${cafe.nombre}! ☕\n${window.location.href}`
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], text: mensaje })
+      } else if (navigator.share) {
+        await navigator.share({ title: `Invitación a ${cafe.nombre}`, text: mensaje })
+      } else {
+        // Fallback: descargar imagen
+        const a = document.createElement('a')
+        a.href = dataUrl
+        a.download = 'invitacion-sumay.png'
+        a.click()
+        await navigator.clipboard.writeText(mensaje)
+      }
+    } catch (e) {
+      // usuario canceló o error — no hacer nada
+    } finally {
+      setSharing(false)
     }
   }
 
@@ -58,11 +87,11 @@ export default function InvitacionPage() {
   const coverFoto = cafe.fotos?.[0]
 
   return (
-    <div className="min-h-screen relative flex flex-col overflow-hidden">
+    <div ref={cardRef} className="min-h-screen relative flex flex-col overflow-hidden">
 
       {/* Fondo — foto o degradado */}
       {coverFoto ? (
-        <img src={coverFoto} alt={cafe.nombre} className="absolute inset-0 w-full h-full object-cover" />
+        <img src={coverFoto} alt={cafe.nombre} className="absolute inset-0 w-full h-full object-cover" crossOrigin="anonymous" />
       ) : (
         <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #1e0f0b 100%)' }} />
       )}
@@ -81,16 +110,21 @@ export default function InvitacionPage() {
       {/* Botón share */}
       <button
         onClick={handleShare}
-        className="absolute top-12 right-5 z-20 text-white/60 hover:text-white transition-colors"
+        disabled={sharing}
+        className="absolute top-12 right-5 z-20 text-white/60 hover:text-white transition-colors disabled:opacity-40"
       >
-        <ShareIcon size={20} />
+        {sharing ? (
+          <span className="text-xs text-white/60">...</span>
+        ) : (
+          <ShareIcon size={20} />
+        )}
       </button>
 
       {/* Contenido centrado */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-8 text-center gap-4">
 
         {/* Logo pequeño */}
-        <img src="/logo.png" alt="Sumay" className="h-8 w-auto object-contain opacity-70 mb-2 animate-[fadeUp_0.8s_ease_0.2s_both]" />
+        <img src="/logo.png" alt="Sumay" className="h-8 w-auto object-contain opacity-70 mb-2 animate-[fadeUp_0.8s_ease_0.2s_both]" crossOrigin="anonymous" />
 
         {/* "X te invita a" */}
         {nombre && (

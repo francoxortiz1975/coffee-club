@@ -27,7 +27,7 @@ export default function InvitacionSetup() {
   }
 
   return (
-    <div className="min-h-screen bg-beige flex flex-col px-5 pt-12 pb-8">
+    <div className="min-h-screen flex flex-col px-5 pt-12 pb-8">
       <button onClick={() => navigate(-1)} className="text-cafe-accent/50 mb-8 self-start">
         <ArrowLeftIcon size={20} />
       </button>

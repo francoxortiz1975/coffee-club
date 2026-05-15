@@ -25,7 +25,7 @@ export default function Decidir() {
       {/* Mitad inferior — Swipe */}
       <button
         onClick={() => navigate('/decidir/swipe')}
-        className="flex-1 flex flex-col items-center justify-center gap-4 bg-beige text-cafe-dark active:bg-cafe-accent/10 transition-colors"
+        className="flex-1 flex flex-col items-center justify-center gap-4 text-cafe-dark active:bg-white/20 transition-colors"
       >
         <div className="flex gap-4 items-center">
           <HeartIcon size={36} className="text-green-400" />

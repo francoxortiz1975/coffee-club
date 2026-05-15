@@ -11,6 +11,36 @@ export function InviteIcon({ size = 20, className = '' }) {
   )
 }
 
+export function LaptopIcon({ size = 16, className = '' }) {
+  return (
+    <svg {...s({ width: size, height: size })} className={className} viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="4" width="20" height="13" rx="2" />
+      <path d="M1 21h22" />
+    </svg>
+  )
+}
+
+export function UsersIcon({ size = 16, className = '' }) {
+  return (
+    <svg {...s({ width: size, height: size })} className={className} viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="9" cy="7" r="3.5" />
+      <path d="M2 21c0-3.5 3.1-6 7-6s7 2.5 7 6" />
+      <circle cx="18" cy="8" r="2.5" />
+      <path d="M22 21c0-2.5-2-4.5-4-4.5" />
+    </svg>
+  )
+}
+
+export function BriefcaseIcon({ size = 16, className = '' }) {
+  return (
+    <svg {...s({ width: size, height: size })} className={className} viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="8" width="20" height="13" rx="2" />
+      <path d="M16 8V6a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+      <line x1="2" y1="14" x2="22" y2="14" />
+    </svg>
+  )
+}
+
 export function CoffeeBeanIcon({ size = 16, className = '' }) {
   return (
     <svg {...s({ width: size, height: size })} className={className} viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import cafes from '../data/cafes.json'
 import historias from '../data/historias.js'
 import FilterBar from '../components/FilterBar'
@@ -18,6 +18,14 @@ export default function Descubrir() {
   const { favoritos } = useFavoritos()
   const cafesFavoritos = cafes.filter((c) => favoritos.includes(c.id))
 
+  // Pintar el html con el café oscuro mientras Descubrir está montado
+  // para que el rubber-band scroll hacia arriba muestre café, no wood.
+  useEffect(() => {
+    const prev = document.documentElement.style.backgroundColor
+    document.documentElement.style.backgroundColor = '#1e0f0b'
+    return () => { document.documentElement.style.backgroundColor = prev }
+  }, [])
+
   const cafesFiltrados = useMemo(() => {
     return cafes.filter((c) => {
       const pasaBusqueda = c.nombre.toLowerCase().includes(busqueda.toLowerCase())
@@ -28,11 +36,17 @@ export default function Descubrir() {
   }, [busqueda, filtro, especialidad])
 
   return (
-    <div className="pb-4">
+    <div className="pb-4 relative">
+
+      {/* Buffer café que se extiende hacia arriba (cubre el rubber-band scroll en iOS) */}
+      <div
+        className="absolute left-0 right-0 -top-[400px] h-[400px] pointer-events-none"
+        style={{ background: '#4a2c1a' }}
+      />
 
       {/* Header con degradado café */}
       <div
-        className="px-4 pt-10 pb-4 rounded-b-3xl"
+        className="relative px-4 pt-10 pb-4 rounded-b-3xl"
         style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #2a1510 60%, #1e0f0b 100%)' }}
       >
         <div className="flex justify-center mb-3">

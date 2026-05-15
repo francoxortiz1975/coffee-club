@@ -8,7 +8,7 @@ const barrios = [...new Set(cafes.map((c) => c.barrio))]
 
 function ColeccionBarrio({ barrio }) {
   const [abierto, setAbierto] = useState(false)
-  const { visitas } = useVisitas()
+  const { visitas, toggleVisita } = useVisitas()
   const cafesBarrio = cafes.filter((c) => c.barrio === barrio)
   const visitados = cafesBarrio.filter((c) => visitas.includes(c.id)).length
 
@@ -49,14 +49,19 @@ function ColeccionBarrio({ barrio }) {
                   )}
                   {/* Overlay si no visitado */}
                   {!visitado && (
-                    <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px]" />
+                    <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] pointer-events-none" />
                   )}
-                  {/* Check si visitado */}
-                  {visitado && (
-                    <div className="absolute bottom-1 right-1 w-5 h-5 bg-cafe-dark rounded-full flex items-center justify-center">
-                      <span className="text-beige text-[10px] font-bold">✓</span>
-                    </div>
-                  )}
+                  {/* Toggle visitado — botón sobre la imagen */}
+                  <button
+                    type="button"
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleVisita(cafe.id) }}
+                    aria-label={visitado ? 'Marcar como no visitada' : 'Marcar como visitada'}
+                    className={`absolute bottom-1 right-1 w-8 h-8 rounded-full flex items-center justify-center shadow-md active:scale-90 transition-all ${
+                      visitado ? 'bg-cafe-dark text-beige' : 'bg-white/90 text-cafe-dark/40 border border-cafe-dark/20'
+                    }`}
+                  >
+                    <span className="text-sm font-bold leading-none">✓</span>
+                  </button>
                 </div>
                 <p className="text-[10px] text-cafe-dark/70 text-center leading-tight line-clamp-2">{cafe.nombre}</p>
               </Link>

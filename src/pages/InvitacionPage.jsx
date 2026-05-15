@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import confetti from 'canvas-confetti'
 import cafes from '../data/cafes.json'
-import { PinIcon, ExternalLinkIcon, ShareIcon } from '../components/Icons'
+import { PinIcon, ExternalLinkIcon, ShareIcon, ArrowLeftIcon } from '../components/Icons'
 
 function formatFecha(fechaStr) {
   if (!fechaStr) return null
@@ -69,6 +69,14 @@ export default function InvitacionPage() {
 
       {/* Overlay oscuro elegante */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/80" />
+
+      {/* Botón regresar */}
+      <button
+        onClick={() => navigate(`/cafe/${id}`)}
+        className="absolute top-12 left-5 z-20 text-white/60 hover:text-white transition-colors"
+      >
+        <ArrowLeftIcon size={20} />
+      </button>
 
       {/* Botón share */}
       <button

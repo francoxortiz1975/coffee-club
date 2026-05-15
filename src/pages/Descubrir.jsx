@@ -65,7 +65,7 @@ export default function Descubrir() {
       <section className="mt-6 px-4">
         <h2 className="text-base font-serif font-bold text-cafe-dark mb-3">Cerca de ti</h2>
         {cafesFiltrados.length > 0 ? (
-          <div className="flex gap-3 overflow-x-auto -mx-4 px-4 pb-2 snap-x snap-mandatory no-scrollbar">
+          <div className="flex gap-3 overflow-x-auto -mx-4 px-4 scroll-pl-4 pb-2 snap-x snap-mandatory no-scrollbar">
             {cafesFiltrados.map((cafe) => (
               <CafeCardSmall key={cafe.id} cafe={cafe} />
             ))}
@@ -79,7 +79,7 @@ export default function Descubrir() {
       <section className="mt-8 px-4">
         <h2 className="text-base font-serif font-bold text-cafe-dark mb-3">Favoritos</h2>
         {cafesFavoritos.length > 0 ? (
-          <div className="flex gap-3 overflow-x-auto -mx-4 px-4 pb-2 snap-x snap-mandatory no-scrollbar">
+          <div className="flex gap-3 overflow-x-auto -mx-4 px-4 scroll-pl-4 pb-2 snap-x snap-mandatory no-scrollbar">
             {cafesFavoritos.map((cafe) => (
               <CafeCardSmall key={cafe.id} cafe={cafe} />
             ))}
@@ -92,7 +92,7 @@ export default function Descubrir() {
       {/* Sobre el café ecuatoriano */}
       <section className="mt-8 px-4">
         <h2 className="text-base font-serif font-bold text-cafe-dark mb-3">Sobre el café ecuatoriano</h2>
-        <div className="flex gap-3 overflow-x-auto -mx-4 px-4 pb-2 snap-x snap-mandatory no-scrollbar">
+        <div className="flex gap-3 overflow-x-auto -mx-4 px-4 scroll-pl-4 pb-2 snap-x snap-mandatory no-scrollbar">
           {historias.map((h) => (
             <CafeHistoriaCard key={h.id} historia={h} />
           ))}

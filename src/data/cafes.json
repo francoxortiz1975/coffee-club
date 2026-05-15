@@ -1,5 +1,26 @@
 [
   {
+    "id": "republica-del-cacao",
+    "nombre": "República del Cacao",
+    "barrio": "Centro Histórico",
+    "tipo": "Chocolate boutique & café",
+    "ocasiones": ["turístico", "pareja", "amigos"],
+    "especialidad": "Chocolate caliente de cacao fino de origen",
+    "historia": "Chocolate latinoamericano de origen fino, museo del cacao y boutique artesanal en el corazón del Centro Histórico.",
+    "descripcion": "Creamos el chocolate latinoamericano más auténtico de la mano de las comunidades locales, desarrollando la producción sostenible de cacao fino en su origen. Aquí encontrarás nuestro Museo del Cacao donde puedes aprender cómo se hace chocolate, nuestro Laboratorio de Chocolate donde se realizan todos nuestros postres y bombones, y nuestra Chocolate-Boutique que ofrece bebidas frías y calientes, productos horneados de alta calidad, nuestras famosas barras de chocolate y otros recuerdos.",
+    "fotos": [
+      "/images/republica-del-cacao/Cover.jpg",
+      "/images/republica-del-cacao/place.jpg",
+      "/images/republica-del-cacao/food.jpg",
+      "/images/republica-del-cacao/place2.jpg"
+    ],
+    "coordenadas": { "lat": -0.2201641, "lng": -78.5123274 },
+    "googleMaps": "https://maps.app.goo.gl/gusps5Wu3tpMn7ko6",
+    "instagram": "https://www.instagram.com/republicadelcacao?igsh=MWQzcmV3aDBoNjdhbw==",
+    "precio": "$$",
+    "rating": 4.7
+  },
+  {
     "id": "cafe-del-centro",
     "nombre": "Café del Centro",
     "barrio": "Centro Histórico",

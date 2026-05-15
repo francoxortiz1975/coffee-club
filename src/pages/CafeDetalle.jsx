@@ -93,7 +93,7 @@ export default function CafeDetalle() {
         )}
 
         {cafe.instagram && (
-          <a href={`https://instagram.com/${cafe.instagram.replace('@', '')}`} target="_blank" rel="noopener noreferrer"
+          <a href={cafe.instagram.startsWith('http') ? cafe.instagram : `https://instagram.com/${cafe.instagram.replace('@', '')}`} target="_blank" rel="noopener noreferrer"
             className="mt-3 flex items-center justify-center gap-2 w-full border border-cafe-accent/30 text-cafe-accent text-sm font-medium py-3 rounded-2xl active:scale-95 transition-transform">
             <ExternalLinkIcon size={15} /> {cafe.instagram}
           </a>

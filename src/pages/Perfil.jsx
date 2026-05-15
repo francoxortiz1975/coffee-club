@@ -72,7 +72,8 @@ export default function Perfil() {
   const { visitas } = useVisitas()
 
   return (
-    <div className="px-4 pt-8 pb-4">
+    <div className="min-h-screen bg-[url('/panama-bg.JPG')] bg-cover bg-top">
+      <div className="min-h-screen bg-[#faf4ec]/80 px-4 pt-8 pb-4">
       <h1 className="text-2xl font-serif font-bold text-cafe-dark mb-3">Mi Colección</h1>
 
       {/* Coffee Beans */}
@@ -96,6 +97,7 @@ export default function Perfil() {
           <ColeccionBarrio key={barrio} barrio={barrio} />
         ))}
       </div>
+    </div>
     </div>
   )
 }

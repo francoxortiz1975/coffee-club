@@ -30,9 +30,9 @@ export default function Descubrir() {
   return (
     <div className="pb-4">
 
-      {/* Header con degradado café */}
+      {/* Header con degradado café — se extiende 300px arriba del viewport */}
       <div
-        className="px-4 pt-24 pb-4 rounded-b-3xl"
+        className="px-4 pb-4 rounded-b-3xl -mt-[300px] pt-[340px]"
         style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #2a1510 60%, #1e0f0b 100%)' }}
       >
         <div className="flex justify-center mb-3">

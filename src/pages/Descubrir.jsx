@@ -1,11 +1,11 @@
 import { useState, useMemo } from 'react'
 import cafes from '../data/cafes.json'
 import historias from '../data/historias.js'
-import SearchBar from '../components/SearchBar'
 import FilterBar from '../components/FilterBar'
 import CafeCardSmall from '../components/CafeCardSmall'
 import CafeHistoriaCard from '../components/CafeHistoriaCard'
 import EspecialidadModal from '../components/EspecialidadModal'
+import { SearchIcon } from '../components/Icons'
 import { useFavoritos } from '../context/FavoritosContext'
 
 const especialidades = [...new Set(cafes.map((c) => c.especialidad))]
@@ -28,50 +28,83 @@ export default function Descubrir() {
   }, [busqueda, filtro, especialidad])
 
   return (
-    <div className="px-4 pt-6 pb-4">
-      <h1 className="text-2xl font-serif font-bold text-cafe-dark mb-1">Descubrir</h1>
-      <p className="text-sm text-cafe-accent/70 mb-4">Centro Histórico de Quito</p>
+    <div className="pb-4">
 
-      <SearchBar value={busqueda} onChange={setBusqueda} />
+      {/* Header con degradado café */}
+      <div
+        className="px-4 pt-12 pb-5 rounded-b-3xl"
+        style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #2a1510 60%, #1e0f0b 100%)' }}
+      >
+        {/* Logo */}
+        <div className="flex justify-center mb-4">
+          <img
+            src="/logo.png"
+            alt="Sumay Coffee Club"
+            className="h-14 w-auto object-contain"
+          />
+        </div>
 
-      <FilterBar
-        activo={filtro}
-        onChange={setFiltro}
-        onEspecialidad={() => setModalOpen(true)}
-      />
+        {/* Subtítulo */}
+        <p className="text-center text-beige/40 text-xs tracking-wide mb-4">
+          Centro Histórico · Quito
+        </p>
+
+        {/* Barra de búsqueda oscura */}
+        <div className="relative">
+          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-beige/30">
+            <SearchIcon size={15} />
+          </span>
+          <input
+            type="text"
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            placeholder="Buscar cafetería..."
+            className="w-full bg-white/10 text-beige placeholder-beige/30 rounded-2xl pl-9 pr-4 py-2.5 text-sm outline-none focus:bg-white/15 transition-colors"
+          />
+        </div>
+      </div>
+
+      {/* Filtros */}
+      <div className="px-4 mt-4">
+        <FilterBar
+          activo={filtro}
+          onChange={setFiltro}
+          onEspecialidad={() => setModalOpen(true)}
+        />
+      </div>
 
       {/* Cerca de ti */}
       <section className="mt-6">
-        <h2 className="text-base font-serif font-bold text-cafe-dark mb-3">Cerca de ti 📍</h2>
+        <h2 className="text-base font-serif font-bold text-cafe-dark mb-3 px-4">Cerca de ti</h2>
         {cafesFiltrados.length > 0 ? (
-          <div className="flex gap-3 overflow-x-auto -mx-4 pl-6 pr-4 pb-2 snap-x snap-mandatory no-scrollbar">
+          <div className="flex gap-3 overflow-x-auto -mx-0 pl-6 pr-4 pb-2 snap-x snap-mandatory no-scrollbar">
             {cafesFiltrados.map((cafe) => (
               <CafeCardSmall key={cafe.id} cafe={cafe} />
             ))}
           </div>
         ) : (
-          <p className="text-xs text-cafe-accent/40 py-2">No hay cafeterías con este filtro aún.</p>
+          <p className="text-xs text-cafe-accent/40 py-2 px-4">No hay cafeterías con este filtro aún.</p>
         )}
       </section>
 
       {/* Favoritos */}
       <section className="mt-8">
-        <h2 className="text-base font-serif font-bold text-cafe-dark mb-3">Favoritos ❤️</h2>
+        <h2 className="text-base font-serif font-bold text-cafe-dark mb-3 px-4">Favoritos</h2>
         {cafesFavoritos.length > 0 ? (
-          <div className="flex gap-3 overflow-x-auto -mx-4 pl-6 pr-4 pb-2 snap-x snap-mandatory no-scrollbar">
+          <div className="flex gap-3 overflow-x-auto pl-6 pr-4 pb-2 snap-x snap-mandatory no-scrollbar">
             {cafesFavoritos.map((cafe) => (
               <CafeCardSmall key={cafe.id} cafe={cafe} />
             ))}
           </div>
         ) : (
-          <p className="text-xs text-cafe-accent/40 py-2">Toca el 🤍 en una cafetería para guardarla aquí.</p>
+          <p className="text-xs text-cafe-accent/40 py-2 px-4">Guarda tus cafeterías favoritas con el corazón.</p>
         )}
       </section>
 
       {/* Sobre el café ecuatoriano */}
       <section className="mt-8">
-        <h2 className="text-base font-serif font-bold text-cafe-dark mb-3">Sobre el café ecuatoriano ☕</h2>
-        <div className="flex gap-3 overflow-x-auto -mx-4 pl-6 pr-4 pb-2 snap-x snap-mandatory no-scrollbar">
+        <h2 className="text-base font-serif font-bold text-cafe-dark mb-3 px-4">Sobre el café ecuatoriano</h2>
+        <div className="flex gap-3 overflow-x-auto pl-6 pr-4 pb-2 snap-x snap-mandatory no-scrollbar">
           {historias.map((h) => (
             <CafeHistoriaCard key={h.id} historia={h} />
           ))}

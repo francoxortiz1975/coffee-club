@@ -32,22 +32,17 @@ export default function Descubrir() {
 
       {/* Header con degradado café */}
       <div
-        className="px-4 pt-12 pb-5 rounded-b-3xl"
+        className="px-4 pt-10 pb-4 rounded-b-3xl"
         style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #2a1510 60%, #1e0f0b 100%)' }}
       >
         {/* Logo */}
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-center mb-3">
           <img
             src="/logo.png"
             alt="Sumay Coffee Club"
-            className="h-28 w-auto object-contain"
+            className="h-20 w-auto object-contain"
           />
         </div>
-
-        {/* Subtítulo */}
-        <p className="text-center text-beige/40 text-xs tracking-wide mb-4">
-          Centro Histórico · Quito
-        </p>
 
         {/* Barra de búsqueda oscura */}
         <div className="relative">

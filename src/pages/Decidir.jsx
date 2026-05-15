@@ -5,7 +5,7 @@ export default function Decidir() {
   const navigate = useNavigate()
 
   return (
-    <div className="flex flex-col h-[calc(100vh-96px)] bg-[url('/texture-bg.JPG')] bg-[length:100%_100%] bg-no-repeat">
+    <div className="flex flex-col h-[calc(100vh-96px)]">
 
       {/* Mitad superior — Shuffle */}
       <button

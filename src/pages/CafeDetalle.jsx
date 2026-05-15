@@ -37,8 +37,7 @@ export default function CafeDetalle() {
   const fotos = cafe.fotos.length > 0 ? cafe.fotos : PLACEHOLDER_FOTOS
 
   return (
-    <div className="relative min-h-screen bg-[url('/white-bg.JPG')] bg-[length:100%_100%] bg-no-repeat">
-      <div className="absolute inset-0 bg-[#f5ece0]/40 pointer-events-none z-0" />
+    <div className="relative min-h-screen">
       {/* Hero foto */}
       <div className="relative z-10 w-full h-64 bg-cafe-accent/10 flex items-center justify-center">
         {cafe.fotos[0]

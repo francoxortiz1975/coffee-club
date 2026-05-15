@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation, matchPath } from 'react-router-dom'
 import { FavoritosProvider } from './context/FavoritosContext'
 import { VisitasProvider } from './context/VisitasContext'
 import BottomNav from './components/BottomNav'
@@ -14,15 +14,49 @@ import InvitacionPage from './pages/InvitacionPage'
 
 const NO_NAV_PATHS = ['/invitacion']
 
+// pathname pattern → { bg, overlay opacity (0-100). null bg = sin imagen (la página pinta su fondo) }
+const BG_RULES = [
+  { path: '/decidir/aleatorio', bg: null,             overlay: 0  },
+  { path: '/decidir/swipe',     bg: '/white-bg.webp', overlay: 40 },
+  { path: '/decidir/seleccionados', bg: '/wood-bg.webp', overlay: 50 },
+  { path: '/decidir',           bg: '/texture-bg.webp', overlay: 0  },
+  { path: '/perfil',            bg: '/panama-bg.webp', overlay: 80 },
+  { path: '/cafe/:id',          bg: '/white-bg.webp', overlay: 40 },
+  { path: '/invitacion/:id/setup', bg: '/wood-bg.webp', overlay: 50 },
+  { path: '/invitacion/:id',    bg: '/wood-bg.webp', overlay: 50 },
+  { path: '/',                  bg: '/wood-bg.webp', overlay: 50 },
+]
+
+function resolveBg(pathname) {
+  for (const rule of BG_RULES) {
+    if (matchPath({ path: rule.path, end: true }, pathname)) return rule
+  }
+  return { bg: '/wood-bg.webp', overlay: 50 }
+}
+
 function Layout() {
   const { pathname } = useLocation()
   const hideNav = NO_NAV_PATHS.some((p) => pathname.startsWith(p))
+  const { bg, overlay } = resolveBg(pathname)
 
   return (
-    <div className="min-h-screen max-w-md mx-auto relative bg-[url('/wood-bg.jpg')] bg-cover bg-top">
-      {/* Filtro beige sobre la madera */}
-      <div className="absolute inset-0 bg-[#f5ece0]/50 pointer-events-none" />
-      <main className={`relative z-10 ${hideNav ? '' : 'pb-24'}`}>
+    <div className="min-h-screen max-w-md mx-auto relative">
+      {bg && (
+        <>
+          {/* Fondo fijo al viewport: nunca se acaba con el scroll */}
+          <div
+            className="fixed inset-0 max-w-md mx-auto bg-cover bg-center bg-no-repeat pointer-events-none -z-10"
+            style={{ backgroundImage: `url('${bg}')` }}
+          />
+          {overlay > 0 && (
+            <div
+              className="fixed inset-0 max-w-md mx-auto pointer-events-none -z-10"
+              style={{ backgroundColor: `rgba(245, 236, 224, ${overlay / 100})` }}
+            />
+          )}
+        </>
+      )}
+      <main className={`relative ${hideNav ? '' : 'pb-24'}`}>
         <Routes>
           <Route path="/" element={<Descubrir />} />
           <Route path="/cafe/:id" element={<CafeDetalle />} />

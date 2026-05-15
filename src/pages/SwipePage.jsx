@@ -47,8 +47,7 @@ export default function SwipePage() {
   const noOpacity = Math.max(0, Math.min(-offsetX / 80, 1))
 
   return (
-    <div className="relative min-h-screen bg-[url('/white-bg.JPG')] bg-[length:100%_100%] bg-no-repeat flex flex-col">
-      <div className="absolute inset-0 bg-[#f5ece0]/40 pointer-events-none z-0" />
+    <div className="relative min-h-screen flex flex-col">
       {/* Header */}
       <div className="relative z-10 flex items-center justify-between px-5 pt-12 pb-4">
         <h1 className="text-xl font-serif font-bold text-cafe-dark">Swipe</h1>

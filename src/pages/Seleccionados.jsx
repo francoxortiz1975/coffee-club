@@ -12,8 +12,7 @@ export default function Seleccionados() {
   const cafesSeleccionados = cafes.filter((c) => ids.includes(c.id))
 
   return (
-    <div className="relative min-h-screen bg-[url('/wood-bg.JPG')] bg-[length:100%_100%] bg-no-repeat">
-      <div className="absolute inset-0 bg-[#f5ece0]/50 pointer-events-none z-0" />
+    <div className="relative min-h-screen">
       {/* Header */}
       <div className="relative z-10 flex items-center gap-3 px-5 pt-12 pb-6">
         <button onClick={() => navigate('/decidir/swipe')} className="text-cafe-accent/60">

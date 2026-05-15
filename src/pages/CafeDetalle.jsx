@@ -37,9 +37,10 @@ export default function CafeDetalle() {
   const fotos = cafe.fotos.length > 0 ? cafe.fotos : PLACEHOLDER_FOTOS
 
   return (
-    <div className="min-h-screen bg-[url('/white-bg.JPG')] bg-cover bg-top">
+    <div className="relative min-h-screen bg-[url('/white-bg.JPG')] bg-[length:100%_100%] bg-no-repeat">
+      <div className="absolute inset-0 bg-[#f5ece0]/40 pointer-events-none z-0" />
       {/* Hero foto */}
-      <div className="relative w-full h-64 bg-cafe-accent/10 flex items-center justify-center">
+      <div className="relative z-10 w-full h-64 bg-cafe-accent/10 flex items-center justify-center">
         {cafe.fotos[0]
           ? <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
           : <CoffeeCupIcon size={56} className="text-cafe-accent/20" />
@@ -55,7 +56,7 @@ export default function CafeDetalle() {
         </button>
       </div>
 
-      <div className="px-5 py-5">
+      <div className="relative z-10 px-5 py-5">
         <div className="flex items-start justify-between mb-1">
           <h1 className="text-2xl font-serif font-bold text-cafe-dark leading-tight">{cafe.nombre}</h1>
           <span className="text-base text-cafe-accent font-semibold ml-3 shrink-0 mt-1">{cafe.precio}</span>

@@ -4,6 +4,7 @@ import cafes from '../data/cafes.json'
 import StarRating from '../components/StarRating'
 import { useFavoritos } from '../context/FavoritosContext'
 import { ArrowLeftIcon, HeartIcon, ShareIcon, CoffeeCupIcon, PinIcon, ExternalLinkIcon } from '../components/Icons'
+import { useVisitas } from '../context/VisitasContext'
 
 const PLACEHOLDER_FOTOS = [null, null, null]
 
@@ -14,6 +15,8 @@ export default function CafeDetalle() {
   const [copied, setCopied] = useState(false)
   const { favoritos, toggleFavorito } = useFavoritos()
   const esFavorito = cafe ? favoritos.includes(cafe.id) : false
+  const { visitas, toggleVisita } = useVisitas()
+  const yaVisitado = cafe ? visitas.includes(cafe.id) : false
 
   async function handleShare() {
     const url = window.location.href
@@ -62,8 +65,20 @@ export default function CafeDetalle() {
           <PinIcon size={12} />{cafe.barrio}
         </p>
 
-        <div className="text-amber-500 mb-3">
-          <StarRating rating={cafe.rating} />
+        <div className="flex items-center justify-between mb-3">
+          <div className="text-amber-500">
+            <StarRating rating={cafe.rating} />
+          </div>
+          <button
+            onClick={() => toggleVisita(cafe.id)}
+            className={`text-xs font-medium px-3 py-1.5 rounded-full border transition-colors ${
+              yaVisitado
+                ? 'bg-cafe-dark text-beige border-cafe-dark'
+                : 'border-cafe-accent/30 text-cafe-accent/70'
+            }`}
+          >
+            {yaVisitado ? '✓ Ya lo visité' : 'Me falta visitar'}
+          </button>
         </div>
 
         <span className="inline-block text-xs bg-beige border border-cafe-accent/30 text-cafe-accent rounded-full px-3 py-1 mb-4">

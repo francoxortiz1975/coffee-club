@@ -1,11 +1,85 @@
-export default function Perfil() {
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import cafes from '../data/cafes.json'
+import { useVisitas } from '../context/VisitasContext'
+import { CoffeeCupIcon } from '../components/Icons'
+
+const barrios = [...new Set(cafes.map((c) => c.barrio))]
+
+function ColeccionBarrio({ barrio }) {
+  const [abierto, setAbierto] = useState(false)
+  const { visitas } = useVisitas()
+  const cafesBarrio = cafes.filter((c) => c.barrio === barrio)
+  const visitados = cafesBarrio.filter((c) => visitas.includes(c.id)).length
+
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-serif font-bold text-cafe-dark mb-2">Mi Perfil</h1>
-      <div className="mt-6 bg-white rounded-2xl p-4 shadow-sm">
-        <p className="text-cafe-accent text-sm font-medium mb-1">Coffee Beans</p>
-        <p className="text-4xl font-serif font-bold text-cafe-dark">0 ☕</p>
-        <p className="text-xs text-gray-400 mt-1">Cafeterías visitadas</p>
+    <div className="bg-white rounded-2xl overflow-hidden shadow-sm">
+      {/* Toggle header */}
+      <button
+        onClick={() => setAbierto((v) => !v)}
+        className="w-full flex items-center justify-between px-4 py-3.5"
+      >
+        <div className="text-left">
+          <p className="text-sm font-serif font-bold text-cafe-dark">{barrio}</p>
+          <p className="text-xs text-cafe-accent/50 mt-0.5">{visitados} / {cafesBarrio.length} visitadas</p>
+        </div>
+        <span className={`text-cafe-accent/40 transition-transform text-xs ${abierto ? 'rotate-180' : ''}`}>▼</span>
+      </button>
+
+      {/* Barra de progreso */}
+      <div className="h-0.5 bg-beige mx-4">
+        <div
+          className="h-full bg-cafe-dark rounded-full transition-all"
+          style={{ width: `${cafesBarrio.length ? (visitados / cafesBarrio.length) * 100 : 0}%` }}
+        />
+      </div>
+
+      {/* Grid 3x3 */}
+      {abierto && (
+        <div className="grid grid-cols-3 gap-3 p-4">
+          {cafesBarrio.map((cafe) => {
+            const visitado = visitas.includes(cafe.id)
+            return (
+              <Link key={cafe.id} to={`/cafe/${cafe.id}`} className="flex flex-col items-center gap-1.5">
+                <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-cafe-accent/10 flex items-center justify-center">
+                  {cafe.fotos?.[0] ? (
+                    <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
+                  ) : (
+                    <CoffeeCupIcon size={24} className="text-cafe-accent/20" />
+                  )}
+                  {/* Overlay si no visitado */}
+                  {!visitado && (
+                    <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px]" />
+                  )}
+                  {/* Check si visitado */}
+                  {visitado && (
+                    <div className="absolute bottom-1 right-1 w-5 h-5 bg-cafe-dark rounded-full flex items-center justify-center">
+                      <span className="text-beige text-[10px] font-bold">✓</span>
+                    </div>
+                  )}
+                </div>
+                <p className="text-[10px] text-cafe-dark/70 text-center leading-tight line-clamp-2">{cafe.nombre}</p>
+              </Link>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default function Perfil() {
+  const { visitas } = useVisitas()
+
+  return (
+    <div className="px-4 pt-8 pb-4">
+      <h1 className="text-2xl font-serif font-bold text-cafe-dark mb-1">Mi Colección</h1>
+      <p className="text-sm text-cafe-accent/60 mb-6">{visitas.length} cafeterías visitadas</p>
+
+      <div className="flex flex-col gap-3">
+        {barrios.map((barrio) => (
+          <ColeccionBarrio key={barrio} barrio={barrio} />
+        ))}
       </div>
     </div>
   )

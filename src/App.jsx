@@ -14,6 +14,7 @@ import Perfil from './pages/Perfil'
 import CafeDetalle from './pages/CafeDetalle'
 import InvitacionSetup from './pages/InvitacionSetup'
 import InvitacionPage from './pages/InvitacionPage'
+import Landing from './pages/Landing'
 
 const NO_NAV_PATHS = ['/invitacion']
 
@@ -37,7 +38,7 @@ function resolveBg(pathname) {
   return { bg: '/wood-bg.webp', overlay: 50 }
 }
 
-function Layout() {
+function AppShell() {
   const { pathname } = useLocation()
   const hideNav = NO_NAV_PATHS.some((p) => pathname.startsWith(p))
   const { bg, overlay } = resolveBg(pathname)
@@ -78,6 +79,17 @@ function Layout() {
   )
 }
 
+function Root() {
+  return (
+    <Routes>
+      {/* Landing: full-width, sin Layout, sin BottomNav, sin bg images */}
+      <Route path="/landing" element={<Landing />} />
+      {/* Resto: app dentro del Layout mobile-only */}
+      <Route path="*" element={<AppShell />} />
+    </Routes>
+  )
+}
+
 export default function App() {
   return (
     <FavoritosProvider>
@@ -85,7 +97,7 @@ export default function App() {
         <InvitacionesProvider>
           <UsuarioProvider>
             <BrowserRouter>
-              <Layout />
+              <Root />
             </BrowserRouter>
           </UsuarioProvider>
         </InvitacionesProvider>

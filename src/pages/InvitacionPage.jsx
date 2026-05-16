@@ -186,7 +186,7 @@ export default function InvitacionPage() {
       <div className="relative z-10 px-6 pb-12 animate-[fadeUp_0.8s_ease_1.5s_both]">
         <button
           onClick={() => navigate(`/cafe/${id}`)}
-          className="w-full bg-white text-cafe-dark text-sm font-semibold py-3.5 rounded-2xl active:scale-95 transition-transform"
+          className="w-full bg-cafe-dark text-[#b8d04a] text-sm font-semibold py-3.5 rounded-2xl shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform"
         >
           Ver más...
         </button>

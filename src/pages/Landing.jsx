@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import cafes from '../data/cafes.json'
 import {
   CoffeeCupIcon, CoffeeBeanIcon, CoffeeMugIcon, HeartIcon,
@@ -26,6 +26,45 @@ function FeatureCard({ Icono, titulo, texto, accent }) {
       </div>
       <h3 className="text-lg font-serif font-bold text-cafe-dark mb-1.5">{titulo}</h3>
       <p className="text-sm text-cafe-dark/70 leading-relaxed">{texto}</p>
+    </div>
+  )
+}
+
+// Marco de iPhone que muestra el screenshot real. Si la imagen no existe
+// (404), cae a un placeholder simple para que la landing no se rompa.
+function PhoneMockup({ screenshot }) {
+  const [error, setError] = useState(false)
+
+  return (
+    <div className="relative flex justify-center md:justify-end">
+      <div className="relative w-[280px] sm:w-[320px] aspect-[9/19.5] rounded-[2.5rem] bg-cafe-dark p-3 shadow-2xl ring-8 ring-cafe-dark/10 rotate-2">
+        <div className="w-full h-full rounded-[2rem] overflow-hidden bg-[#faf4ec] relative">
+          {!error ? (
+            <img
+              src={screenshot}
+              alt="Sumay app preview"
+              className="w-full h-full object-cover object-top"
+              onError={() => setError(true)}
+            />
+          ) : (
+            <div
+              className="w-full h-full bg-cover bg-center flex items-center justify-center text-center px-6"
+              style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #2a1510 60%, #1e0f0b 100%)' }}
+            >
+              <div>
+                <img src="/logo.png" alt="" className="h-16 w-auto mx-auto mb-4 opacity-80" />
+                <p className="text-beige/50 text-xs">
+                  Agrega un screenshot en<br />
+                  <code className="text-[#b8d04a]">public/screenshots/hero.png</code>
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="absolute -top-4 -right-2 sm:-right-6 bg-[#b8d04a] text-cafe-dark text-xs font-black px-4 py-2 rounded-full shadow-lg rotate-12">
+        Beta
+      </div>
     </div>
   )
 }
@@ -159,48 +198,8 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Visual mockup (phone) */}
-          <div className="relative flex justify-center md:justify-end">
-            <div className="relative w-[280px] sm:w-[320px] aspect-[9/19.5] rounded-[2.5rem] bg-cafe-dark p-3 shadow-2xl ring-8 ring-cafe-dark/10 rotate-2">
-              <div
-                className="w-full h-full rounded-[2rem] overflow-hidden bg-cover bg-center"
-                style={{ backgroundImage: 'url(/wood-bg.webp)' }}
-              >
-                <div className="w-full h-full bg-[#f5ece0]/50 flex flex-col">
-                  {/* Header con degradado café — para que el logo beige se lea */}
-                  <div
-                    className="px-6 pt-8 pb-5 rounded-b-3xl"
-                    style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #2a1510 60%, #1e0f0b 100%)' }}
-                  >
-                    <img src="/logo.png" alt="" className="h-12 w-auto mx-auto" />
-                    <div className="mt-4 bg-white/10 rounded-xl px-3 py-2 text-[10px] text-beige/50">
-                      Buscar cafetería…
-                    </div>
-                  </div>
-                  <div className="p-4 flex-1 flex flex-col">
-                    <div className="bg-[#faf4ec] rounded-2xl overflow-hidden shadow-md flex-1">
-                      {cafesDestacados[0]?.fotos?.[0] && (
-                        <img src={cafesDestacados[0].fotos[0]} alt="" className="w-full h-1/2 object-cover" />
-                      )}
-                      <div className="p-3">
-                        <div className="h-3 w-32 bg-cafe-dark rounded-full mb-2" />
-                        <div className="h-2 w-20 bg-cafe-accent/40 rounded-full mb-3" />
-                        <div className="flex gap-1.5">
-                          <CoffeeBeanIcon size={14} />
-                          <CoffeeBeanIcon size={14} />
-                          <CoffeeBeanIcon size={14} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Sticker decorativo */}
-            <div className="absolute -top-4 -right-2 sm:-right-6 bg-[#b8d04a] text-cafe-dark text-xs font-black px-4 py-2 rounded-full shadow-lg rotate-12">
-              Beta
-            </div>
-          </div>
+          {/* Visual: screenshot real de la app dentro del marco del phone */}
+          <PhoneMockup screenshot="/screenshots/hero.png" />
         </div>
       </Section>
 

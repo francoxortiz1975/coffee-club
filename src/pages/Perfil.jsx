@@ -167,13 +167,15 @@ export default function Perfil() {
       <div className="flex flex-col items-center text-center mb-6">
         <button
           onClick={() => setEditandoPerfil(true)}
-          className="relative w-24 h-24 rounded-full bg-[#faf4ec] border-4 border-[#faf4ec] shadow-md overflow-hidden flex items-center justify-center mb-3 active:scale-95 transition-transform"
+          className="relative mb-3 active:scale-95 transition-transform"
           aria-label="Editar perfil"
         >
-          {usuario.foto
-            ? <img src={usuario.foto} alt={usuario.nombre} className="w-full h-full object-cover" />
-            : <UserIcon size={40} className="text-cafe-accent/40" />}
-          <div className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-cafe-dark text-beige text-xs flex items-center justify-center border-2 border-[#faf4ec]">
+          <div className="w-24 h-24 rounded-full bg-[#faf4ec] border-4 border-[#faf4ec] shadow-md overflow-hidden flex items-center justify-center">
+            {usuario.foto
+              ? <img src={usuario.foto} alt={usuario.nombre} className="w-full h-full object-cover" />
+              : <UserIcon size={40} className="text-cafe-accent/40" />}
+          </div>
+          <div className="absolute -bottom-0.5 -right-0.5 w-7 h-7 rounded-full bg-cafe-dark text-beige text-xs flex items-center justify-center border-2 border-[#faf4ec] shadow">
             ✎
           </div>
         </button>
@@ -377,12 +379,14 @@ function EditarPerfilModal({ usuario, onSave, onClose }) {
         <div className="flex justify-center mb-5">
           <button
             onClick={() => fileRef.current?.click()}
-            className="relative w-20 h-20 rounded-full bg-white border-2 border-cafe-accent/20 overflow-hidden flex items-center justify-center active:scale-95 transition-transform"
+            className="relative active:scale-95 transition-transform"
           >
-            {foto
-              ? <img src={foto} alt="" className="w-full h-full object-cover" />
-              : <UserIcon size={32} className="text-cafe-accent/40" />}
-            <div className="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-cafe-dark text-beige text-[10px] flex items-center justify-center border-2 border-[#faf4ec]">
+            <div className="w-20 h-20 rounded-full bg-white border-2 border-cafe-accent/20 overflow-hidden flex items-center justify-center">
+              {foto
+                ? <img src={foto} alt="" className="w-full h-full object-cover" />
+                : <UserIcon size={32} className="text-cafe-accent/40" />}
+            </div>
+            <div className="absolute -bottom-0.5 -right-0.5 w-6 h-6 rounded-full bg-cafe-dark text-beige text-[10px] flex items-center justify-center border-2 border-[#faf4ec] shadow">
               ✎
             </div>
           </button>

@@ -43,7 +43,7 @@ function PhoneMockup({ screenshot }) {
             <img
               src={screenshot}
               alt="Sumay app preview"
-              className="w-full h-full object-cover object-top"
+              className="absolute inset-2 w-[calc(100%-1rem)] h-[calc(100%-1rem)] object-contain object-top rounded-[1.5rem]"
               onError={() => setError(true)}
             />
           ) : (

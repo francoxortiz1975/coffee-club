@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import cafes from '../data/cafes.json'
 import {
   CoffeeCupIcon, CoffeeBeanIcon, CoffeeMugIcon, HeartIcon,
@@ -104,21 +103,21 @@ function WaitlistForm() {
 export default function Landing() {
   return (
     <div className="min-h-screen bg-beige text-cafe-dark overflow-x-hidden">
-      {/* ─── Nav top ─── */}
-      <nav className="w-full px-6 py-5 max-w-6xl mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <img src="/logo.png" alt="Sumay" className="h-9 w-auto" />
-        </div>
-        <div className="flex items-center gap-3">
-          <a href="#waitlist" className="text-xs sm:text-sm font-semibold text-cafe-dark/70 hover:text-cafe-dark transition-colors">
-            Waitlist
-          </a>
-          <Link
-            to="/"
-            className="text-xs sm:text-sm font-bold bg-cafe-dark text-beige px-4 py-2 rounded-full active:scale-95 transition-transform"
+      {/* ─── Nav top — fondo café para que el logo beige se vea ─── */}
+      <nav
+        className="w-full"
+        style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #2a1510 60%, #1e0f0b 100%)' }}
+      >
+        <div className="w-full px-6 py-5 max-w-6xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <img src="/logo.png" alt="Sumay" className="h-9 w-auto" />
+          </div>
+          <a
+            href="#waitlist"
+            className="text-xs sm:text-sm font-bold bg-[#b8d04a] text-cafe-dark px-4 py-2 rounded-full active:scale-95 transition-transform"
           >
-            Entrar
-          </Link>
+            Únete al waitlist
+          </a>
         </div>
       </nav>
 
@@ -131,28 +130,22 @@ export default function Landing() {
               Coffee club · Quito
             </p>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold leading-[1.05] tracking-tight mb-5">
-              El club secreto<br />
-              <span className="text-cafe-accent/80">de café</span><br />
+              El club del<br />
+              <span className="text-cafe-accent/80">buen café</span><br />
               en Quito.
             </h1>
             <p className="text-base sm:text-lg text-cafe-dark/70 leading-relaxed mb-8 max-w-md mx-auto md:mx-0">
-              Descubre, decide e invita a las mejores cafeterías de la ciudad.
-              Coleccioná coffee beans, compartí recuerdos y armá tu próxima
-              cita de un toque.
+              Descubre las cafeterías más chéveres de la ciudad, decide a dónde
+              ir sin estresarte y manda invitaciones bacanas a tus panas.
+              Coleccionas coffee beans con cada visita.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
               <a
                 href="#waitlist"
                 className="bg-cafe-dark text-[#b8d04a] text-sm font-bold px-7 py-3.5 rounded-2xl shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform"
               >
-                Reservar mi lugar
+                Quiero entrar al club
               </a>
-              <Link
-                to="/"
-                className="border border-cafe-dark/25 text-cafe-dark text-sm font-semibold px-7 py-3.5 rounded-2xl active:scale-95 transition-transform"
-              >
-                Ver la app
-              </Link>
             </div>
           </div>
 
@@ -193,7 +186,7 @@ export default function Landing() {
             </div>
             {/* Sticker decorativo */}
             <div className="absolute -top-4 -right-2 sm:-right-6 bg-[#b8d04a] text-cafe-dark text-xs font-black px-4 py-2 rounded-full shadow-lg rotate-12">
-              Beta · Solo Quito
+              Beta
             </div>
           </div>
         </div>
@@ -205,9 +198,9 @@ export default function Landing() {
           <SparkleIcon size={36} className="text-[#b8d04a] mx-auto mb-5" />
           <p className="text-xs uppercase tracking-[0.3em] text-beige/50 mb-4">¿Qué es Sumay?</p>
           <p className="text-2xl sm:text-3xl md:text-4xl font-serif leading-snug">
-            Tu compañero secreto para <span className="text-[#b8d04a]">descubrir cafés</span>,
+            Tu pana de confianza para <span className="text-[#b8d04a]">cachar buenos cafés</span>,
             <span className="italic"> coleccionarlos</span> y armar la próxima
-            <span className="text-[#b8d04a]"> cita perfecta</span> sin pensarlo dos veces.
+            <span className="text-[#b8d04a]"> salida bacán</span> sin pensarla mucho.
           </p>
         </div>
       </Section>
@@ -223,20 +216,20 @@ export default function Landing() {
         <div className="flex flex-col md:flex-row gap-5">
           <FeatureCard
             Icono={CoffeeCupIcon}
-            titulo="Descubrí"
-            texto="Cafeterías curadas por barrio, especialidad y ocasión. Filtros, favoritos y reseñas reales."
+            titulo="Descubre"
+            texto="Cafeterías curadas por barrio, especialidad y ocasión. Filtros, favoritas y reseñas reales."
             accent="bg-cafe-dark"
           />
           <FeatureCard
             Icono={DiceIcon}
-            titulo="Decidí"
-            texto="Aleatorio para los indecisos o swipe estilo Tinder para construir tu shortlist."
+            titulo="Decide"
+            texto="Aleatorio para los que no se deciden, o swipe estilo Tinder para armar tu shortlist."
             accent="bg-[#7d4f2f]"
           />
           <FeatureCard
             Icono={InviteIcon}
-            titulo="Invitá"
-            texto="Generá una invitación elegante con fecha y nombre. Compartila por WhatsApp en un tap."
+            titulo="Invita"
+            texto="Genera una invitación bacana con fecha y nombre. La mandas por WhatsApp en un toque."
             accent="bg-[#b8d04a]"
           />
         </div>
@@ -258,8 +251,9 @@ export default function Landing() {
                 Cada café = un coffee bean.
               </h2>
               <p className="text-base text-cafe-dark/70 leading-relaxed mb-6">
-                Cuando llegás a 10 beans, se convierten en una taza. Visualizás tu progreso por barrio
-                con stamps tipo loyalty card. Cuanto más explorás, más linda se pone tu colección.
+                Cuando llegas a 10 beans, se convierten en una taza. Tu progreso por
+                barrio se ve con stamps tipo loyalty card. Mientras más te das una
+                vuelta, más chévere se pone tu colección.
               </p>
               <div className="flex items-center gap-3 flex-wrap">
                 <span className="text-3xl font-serif font-bold text-cafe-dark tabular-nums">23</span>
@@ -302,12 +296,12 @@ export default function Landing() {
           ))}
         </div>
         <div className="text-center mt-10">
-          <Link
-            to="/"
+          <a
+            href="#waitlist"
             className="inline-block border border-cafe-dark/25 text-cafe-dark text-sm font-semibold px-7 py-3 rounded-2xl active:scale-95 transition-transform"
           >
-            Explorar todas →
-          </Link>
+            Entrar al club →
+          </a>
         </div>
       </Section>
 
@@ -320,9 +314,9 @@ export default function Landing() {
               No más <em className="text-[#b8d04a] not-italic">"¿dónde nos vemos?"</em>
             </h2>
             <p className="text-base text-beige/70 leading-relaxed mb-6">
-              Elegí el café, fecha y persona. Sumay arma una invitación visual
-              elegante con un link único que se comparte por WhatsApp, Instagram o
-              donde quieras. El otro abre el link y ya sabe a dónde ir.
+              Elige el café, la fecha y la persona. Sumay te arma una invitación
+              visual elegante con un link único para mandar por WhatsApp o donde
+              quieras. El otro abre el link y ya sabe a dónde ir.
             </p>
             <div className="flex flex-wrap gap-2">
               {['Café favorito', 'Fecha y hora', 'Quién invita', 'Link único'].map((t) => (
@@ -360,11 +354,11 @@ export default function Landing() {
           <HeartIcon size={32} filled className="text-[#b8d04a] mx-auto mb-4" />
           <p className="text-xs uppercase tracking-[0.3em] text-cafe-accent/60 mb-3">Únete</p>
           <h2 className="text-3xl sm:text-4xl font-serif font-bold text-cafe-dark mb-3 leading-tight">
-            Reservá tu lugar en el club.
+            Reserva tu lugar en el club.
           </h2>
           <p className="text-base text-cafe-dark/70 leading-relaxed mb-8">
-            Sumay está en beta cerrada para Quito. Dejá tu email y te avisamos
-            cuando abramos nuevos cupos. Sin spam, sin gente rara.
+            Sumay está en beta cerrada. Deja tu email y te avisamos cuando
+            abramos nuevos cupos. Sin spam, sin gente rara.
           </p>
           <WaitlistForm />
           <p className="text-[11px] text-cafe-accent/50 mt-5">
@@ -382,7 +376,6 @@ export default function Landing() {
           </div>
           <div className="flex items-center gap-5 text-xs">
             <a href="#waitlist" className="hover:text-beige transition-colors">Waitlist</a>
-            <Link to="/" className="hover:text-beige transition-colors">Abrir app</Link>
             <a href="mailto:hola@sumayclub.app" className="hover:text-beige transition-colors">Contacto</a>
           </div>
         </div>

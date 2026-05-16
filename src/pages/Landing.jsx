@@ -181,7 +181,7 @@ export default function Landing() {
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold leading-[1.05] tracking-tight mb-5">
               El club del<br />
               <span className="text-cafe-accent/80">buen café</span><br />
-              en Quito.
+              en Ecuador.
             </h1>
             <p className="text-base sm:text-lg text-cafe-dark/70 leading-relaxed mb-8 max-w-md mx-auto md:mx-0">
               Descubre las cafeterías más chéveres de la ciudad, decide a dónde
@@ -383,7 +383,7 @@ export default function Landing() {
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5">
           <div className="flex items-center gap-3">
             <img src="/logo.png" alt="Sumay" className="h-8 w-auto opacity-80" />
-            <span className="text-xs">Hecho con ☕ en Quito · {new Date().getFullYear()}</span>
+            <span className="text-xs">Hecho con el shungo en Quito · {new Date().getFullYear()}</span>
           </div>
           <div className="flex items-center gap-5 text-xs">
             <a href="#waitlist" className="hover:text-beige transition-colors">Waitlist</a>

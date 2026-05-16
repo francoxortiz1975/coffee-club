@@ -51,6 +51,7 @@ function CafeMiniCard({ cafe }) {
 
 function WaitlistForm() {
   const [email, setEmail] = useState('')
+  const [mensaje, setMensaje] = useState('')
   const [enviado, setEnviado] = useState(false)
   const [error, setError] = useState('')
 
@@ -64,7 +65,8 @@ function WaitlistForm() {
     }
     // Mock por ahora — se reemplaza por insert en Supabase mañana.
     const existentes = JSON.parse(localStorage.getItem(WAITLIST_KEY) || '[]')
-    if (!existentes.includes(limpio)) existentes.push(limpio)
+    const entrada = { email: limpio, mensaje: mensaje.trim(), at: Date.now() }
+    if (!existentes.some((e) => e.email === limpio)) existentes.push(entrada)
     localStorage.setItem(WAITLIST_KEY, JSON.stringify(existentes))
     setEnviado(true)
   }
@@ -80,22 +82,30 @@ function WaitlistForm() {
   }
 
   return (
-    <form onSubmit={submit} className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto">
+    <form onSubmit={submit} className="max-w-xl mx-auto flex flex-col gap-3 text-left">
       <input
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="tu@email.com"
-        className="flex-1 bg-white border border-cafe-accent/25 rounded-2xl px-5 py-3.5 text-sm text-cafe-dark outline-none focus:border-cafe-accent/60"
+        className="w-full bg-white border border-cafe-accent/25 rounded-2xl px-5 py-3.5 text-sm text-cafe-dark outline-none focus:border-cafe-accent/60"
         required
+      />
+      <textarea
+        value={mensaje}
+        onChange={(e) => setMensaje(e.target.value)}
+        placeholder="Recomiéndanos una cafetería, mándanos un mensaje o cuéntanos qué buscas (opcional)"
+        rows={3}
+        maxLength={400}
+        className="w-full bg-white border border-cafe-accent/25 rounded-2xl px-5 py-3 text-sm text-cafe-dark outline-none focus:border-cafe-accent/60 resize-none"
       />
       <button
         type="submit"
-        className="bg-cafe-dark text-[#b8d04a] text-sm font-bold px-6 py-3.5 rounded-2xl shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform"
+        className="bg-cafe-dark text-[#b8d04a] text-sm font-bold px-6 py-3.5 rounded-2xl shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform self-stretch sm:self-center sm:px-12"
       >
         Reservar mi lugar
       </button>
-      {error && <p className="text-xs text-red-600 mt-2 w-full text-center sm:text-left">{error}</p>}
+      {error && <p className="text-xs text-red-600 text-center">{error}</p>}
     </form>
   )
 }
@@ -200,9 +210,9 @@ export default function Landing() {
           <SparkleIcon size={36} className="text-[#b8d04a] mx-auto mb-5" />
           <p className="text-xs uppercase tracking-[0.3em] text-beige/50 mb-4">¿Qué es Sumay?</p>
           <p className="text-2xl sm:text-3xl md:text-4xl font-serif leading-snug">
-            Tu pana de confianza para <span className="text-[#b8d04a]">cachar buenos cafés</span>,
-            <span className="italic"> coleccionarlos</span> y armar la próxima
-            <span className="text-[#b8d04a]"> salida bacán</span> sin pensarla mucho.
+            Tu pana de confianza para <span className="text-[#b8d04a]">ubicar buenos cafés</span>,
+            <span className="italic"> coleccionarlos</span> y armar el próximo
+            <span className="text-[#b8d04a]"> cafecito</span> sin pensarlo mucho.
           </p>
         </div>
       </Section>
@@ -225,13 +235,13 @@ export default function Landing() {
           <FeatureCard
             Icono={DiceIcon}
             titulo="Decide"
-            texto="Aleatorio para los que no se deciden, o swipe estilo Tinder para armar tu shortlist."
+            texto="Aleatorio para los que no se deciden, o swipe estilo Tinder para armar tu lista de cafés por visitar."
             accent="bg-[#7d4f2f]"
           />
           <FeatureCard
             Icono={InviteIcon}
             titulo="Invita"
-            texto="Genera una invitación bacana con fecha y nombre. La mandas por WhatsApp en un toque."
+            texto="Genera una invitación bien elegante, con fecha y nombre. La mandas por WhatsApp ¡de una!"
             accent="bg-[#b8d04a]"
           />
         </div>
@@ -248,14 +258,14 @@ export default function Landing() {
         >
           <div className="bg-[#faf4ec]/85 backdrop-blur-sm rounded-2xl p-8 sm:p-12 grid md:grid-cols-2 gap-10 items-center">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-cafe-accent/60 mb-3">Coleccioná</p>
+              <p className="text-xs uppercase tracking-[0.3em] text-cafe-accent/60 mb-3">Colecciona</p>
               <h2 className="text-3xl sm:text-4xl font-serif font-bold text-cafe-dark leading-tight mb-4">
                 Cada café = un coffee bean.
               </h2>
               <p className="text-base text-cafe-dark/70 leading-relaxed mb-6">
-                Cuando llegas a 10 beans, se convierten en una taza. Tu progreso por
-                barrio se ve con stamps tipo loyalty card. Mientras más te das una
-                vuelta, más chévere se pone tu colección.
+                Cuando llegas a 10 beans, se convierten en una taza. Tu progreso
+                por barrio se ve con estampas tipo loyalty card. Mientras más te
+                das una vuelta, más chévere se pone tu colección.
               </p>
               <div className="flex items-center gap-3 flex-wrap">
                 <span className="text-3xl font-serif font-bold text-cafe-dark tabular-nums">23</span>

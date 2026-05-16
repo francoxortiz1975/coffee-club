@@ -3,7 +3,7 @@ import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import { toPng } from 'html-to-image'
 import confetti from 'canvas-confetti'
 import cafes from '../data/cafes.json'
-import { PinIcon, ExternalLinkIcon, ShareIcon, ArrowLeftIcon } from '../components/Icons'
+import { ShareIcon, ArrowLeftIcon } from '../components/Icons'
 import { useInvitaciones } from '../context/InvitacionesContext'
 
 function formatFecha(fechaStr) {
@@ -134,13 +134,14 @@ export default function InvitacionPage() {
         <ArrowLeftIcon size={20} />
       </button>
 
-      {/* Botón share */}
+      {/* Botón share — café con ícono lima */}
       <button
         onClick={handleShare}
         disabled={sharing}
-        className="absolute top-12 right-5 z-20 text-white/60 hover:text-white transition-colors disabled:opacity-40"
+        className="absolute top-12 right-5 z-20 bg-cafe-dark text-[#b8d04a] rounded-full w-10 h-10 flex items-center justify-center shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform disabled:opacity-40"
+        aria-label="Compartir"
       >
-        {sharing ? <span className="text-xs text-white/60">...</span> : <ShareIcon size={20} />}
+        {sharing ? <span className="text-xs font-bold">...</span> : <ShareIcon size={18} />}
       </button>
 
       {/* Contenido centrado */}
@@ -181,28 +182,14 @@ export default function InvitacionPage() {
         )}
       </div>
 
-      {/* Botones abajo */}
-      <div className="relative z-10 px-6 pb-12 flex flex-col gap-3 animate-[fadeUp_0.8s_ease_1.5s_both]">
-        {cafe.googleMaps && (
-          <a
-            href={cafe.googleMaps}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 bg-white text-cafe-dark text-sm font-semibold py-3.5 rounded-2xl active:scale-95 transition-transform"
-          >
-            <PinIcon size={15} /> Cómo llegar y horarios
-          </a>
-        )}
-        {cafe.instagram && (
-          <a
-            href={cafe.instagram.startsWith('http') ? cafe.instagram : `https://instagram.com/${cafe.instagram.replace('@', '')}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 bg-white/15 text-white text-sm font-medium py-3.5 rounded-2xl active:scale-95 transition-transform border border-white/20"
-          >
-            <ExternalLinkIcon size={15} /> Instagram
-          </a>
-        )}
+      {/* Botón Ver más — lleva al detalle del café */}
+      <div className="relative z-10 px-6 pb-12 animate-[fadeUp_0.8s_ease_1.5s_both]">
+        <button
+          onClick={() => navigate(`/cafe/${id}`)}
+          className="w-full bg-white text-cafe-dark text-sm font-semibold py-3.5 rounded-2xl active:scale-95 transition-transform"
+        >
+          Ver más...
+        </button>
       </div>
     </div>
   )

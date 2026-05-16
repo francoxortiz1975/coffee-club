@@ -53,6 +53,14 @@ export default function CafeDetalle() {
         <button onClick={handleShare} className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm text-cafe-dark rounded-full w-9 h-9 flex items-center justify-center shadow">
           {copied ? <span className="text-xs font-bold text-green-600">✓</span> : <ShareIcon size={17} />}
         </button>
+        {/* Invitar — destacado: café con ícono lima */}
+        <Link
+          to={`/invitacion/${cafe.id}/setup`}
+          className="absolute top-16 right-4 bg-cafe-dark text-[#b8d04a] rounded-full w-10 h-10 flex items-center justify-center shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform"
+          aria-label="Invitar"
+        >
+          <InviteIcon size={18} />
+        </Link>
       </div>
 
       <div className="relative z-10 px-5 py-5">
@@ -113,13 +121,6 @@ export default function CafeDetalle() {
             <ExternalLinkIcon size={15} /> Instagram
           </a>
         )}
-
-        <Link
-          to={`/invitacion/${cafe.id}/setup`}
-          className="mt-3 flex items-center justify-center gap-2 w-full border border-cafe-accent/30 text-cafe-accent text-sm font-medium py-3 rounded-2xl active:scale-95 transition-transform"
-        >
-          <InviteIcon size={15} /> Invitar
-        </Link>
       </div>
     </div>
   )

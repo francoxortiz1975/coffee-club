@@ -108,28 +108,28 @@ export default function InstallPrompt() {
           <img src="/icons/icon-180.png" alt="" className="w-16 h-16 rounded-2xl shadow" />
         </div>
         <h3 className="text-lg font-serif font-bold text-cafe-dark text-center mb-1">
-          Instalá Sumay en tu iPhone
+          Instala Sumay en tu iPhone
         </h3>
         <p className="text-xs text-cafe-accent/60 text-center mb-5">
-          Tenela siempre a un toque desde tu pantalla de inicio.
+          Tenla siempre a un toque desde tu pantalla de inicio.
         </p>
 
         <ol className="text-sm text-cafe-dark space-y-3 mb-5">
           <li className="flex items-start gap-3">
             <span className="w-6 h-6 rounded-full bg-cafe-dark text-beige text-xs font-bold flex items-center justify-center shrink-0">1</span>
             <span>
-              Tocá el ícono de <span className="font-semibold">Compartir</span>
+              Toca el ícono de <span className="font-semibold">Compartir</span>
               <span className="inline-block ml-1 align-middle text-base">⎙</span>
               {' '}en la barra de Safari.
             </span>
           </li>
           <li className="flex items-start gap-3">
             <span className="w-6 h-6 rounded-full bg-cafe-dark text-beige text-xs font-bold flex items-center justify-center shrink-0">2</span>
-            <span>Deslizá y elegí <span className="font-semibold">"Añadir a pantalla de inicio"</span>.</span>
+            <span>Desliza y elige <span className="font-semibold">"Añadir a pantalla de inicio"</span>.</span>
           </li>
           <li className="flex items-start gap-3">
             <span className="w-6 h-6 rounded-full bg-cafe-dark text-beige text-xs font-bold flex items-center justify-center shrink-0">3</span>
-            <span>Tocá <span className="font-semibold">Añadir</span>.</span>
+            <span>Toca <span className="font-semibold">Añadir</span>.</span>
           </li>
         </ol>
 

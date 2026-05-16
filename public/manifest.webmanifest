@@ -1,7 +1,7 @@
 {
   "name": "Sumay Coffee Club",
   "short_name": "Sumay",
-  "description": "Descubrí, decidí e invitá a las mejores cafeterías de Quito.",
+  "description": "Descubre, decide e invita a las mejores cafeterías de Quito.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

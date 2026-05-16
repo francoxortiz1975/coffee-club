@@ -41,13 +41,21 @@ export function BriefcaseIcon({ size = 16, className = '' }) {
   )
 }
 
+let beanIdCounter = 0
 export function CoffeeBeanIcon({ size = 16, className = '' }) {
+  // Mask para cortar la ranura central (queda transparente, se ve el fondo)
+  const maskId = `bean-mask-${beanIdCounter++}`
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" className={className}>
-      <g transform="rotate(-30 12 12)" fill="#5a341c">
-        <ellipse cx="12" cy="12" rx="6.5" ry="9.5" />
-        <path d="M12 3 Q14.5 7 14.5 12 Q14.5 17 12 21" stroke="#2a1510" strokeWidth="1.2" fill="none" strokeLinecap="round" />
-      </g>
+      <defs>
+        <mask id={maskId}>
+          <g transform="rotate(-30 12 12)">
+            <ellipse cx="12" cy="12" rx="6.5" ry="9.5" fill="white" />
+            <path d="M12 3 Q14.5 7 14.5 12 Q14.5 17 12 21" stroke="black" strokeWidth="1.4" fill="none" strokeLinecap="round" />
+          </g>
+        </mask>
+      </defs>
+      <rect width="24" height="24" fill="#5a341c" mask={`url(#${maskId})`} />
     </svg>
   )
 }

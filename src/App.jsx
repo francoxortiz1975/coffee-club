@@ -4,6 +4,7 @@ import { VisitasProvider } from './context/VisitasContext'
 import { InvitacionesProvider } from './context/InvitacionesContext'
 import { UsuarioProvider } from './context/UsuarioContext'
 import BottomNav from './components/BottomNav'
+import InstallPrompt from './components/InstallPrompt'
 import Descubrir from './pages/Descubrir'
 import Decidir from './pages/Decidir'
 import ShufflePage from './pages/ShufflePage'
@@ -72,6 +73,7 @@ function Layout() {
         </Routes>
       </main>
       {!hideNav && <BottomNav />}
+      <InstallPrompt />
     </div>
   )
 }

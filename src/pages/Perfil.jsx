@@ -225,7 +225,7 @@ export default function Perfil() {
 
       {/* Coffee Beans / Tazas */}
       <div className="bg-[#faf4ec] rounded-2xl px-4 py-4 shadow-sm mb-6">
-        <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-3">Tu colección</p>
+        <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-3">Coffee beans</p>
         <ColeccionBeans total={visitas.length} />
       </div>
 

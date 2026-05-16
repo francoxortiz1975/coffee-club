@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import cafes from '../data/cafes.json'
 import StarRating from '../components/StarRating'
@@ -17,6 +17,14 @@ export default function CafeDetalle() {
   const esFavorito = cafe ? favoritos.includes(cafe.id) : false
   const { visitas, toggleVisita } = useVisitas()
   const yaVisitado = cafe ? visitas.includes(cafe.id) : false
+
+  // Tracking de engagement para el banner de instalación
+  useEffect(() => {
+    if (!cafe) return
+    const actual = Number(localStorage.getItem('samay_cafe_opens') ?? 0)
+    localStorage.setItem('samay_cafe_opens', String(actual + 1))
+    window.dispatchEvent(new CustomEvent('samay:cafe-abierto'))
+  }, [cafe?.id])
 
   async function handleShare() {
     const url = window.location.href

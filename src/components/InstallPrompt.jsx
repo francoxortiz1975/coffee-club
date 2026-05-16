@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react'
 
 const KEY = 'samay_install_dismissed_at'
-const COOLDOWN_DIAS = 7
+const COUNTER_KEY = 'samay_cafe_opens'
+const COOLDOWN_DIAS = 14
+const UMBRAL_CAFES = 3
 
 function fueDescartadoRecientemente() {
   const ts = Number(localStorage.getItem(KEY))
   if (!ts) return false
   return Date.now() - ts < COOLDOWN_DIAS * 24 * 60 * 60 * 1000
+}
+
+function cafesAbiertos() {
+  return Number(localStorage.getItem(COUNTER_KEY) ?? 0)
 }
 
 function estaInstalada() {
@@ -33,28 +39,48 @@ export default function InstallPrompt() {
   useEffect(() => {
     if (estaInstalada() || fueDescartadoRecientemente()) return
 
-    // Android: capturar el evento beforeinstallprompt
+    function intentarMostrar() {
+      if (cafesAbiertos() < UMBRAL_CAFES) return
+      if (esIOS()) {
+        setTipo('ios')
+        setVisible(true)
+      }
+      // Android se maneja con beforeinstallprompt — el evento ya tiene
+      // su propia heurística del navegador para disparar.
+    }
+
+    // Android: capturar el evento beforeinstallprompt (cuando Chrome decide
+    // que es elegible). Solo mostramos si pasó el umbral de cafés.
     function handleBefore(e) {
       e.preventDefault()
       setDeferredEvent(e)
-      setTipo('android')
-      setVisible(true)
+      if (cafesAbiertos() >= UMBRAL_CAFES) {
+        setTipo('android')
+        setVisible(true)
+      }
     }
     window.addEventListener('beforeinstallprompt', handleBefore)
 
-    // iOS Safari: no dispara beforeinstallprompt — mostramos modal con instrucciones
-    if (esIOS()) {
-      const t = setTimeout(() => {
-        setTipo('ios')
+    // Evento custom: se dispara al abrir cada café. Revisa si toca mostrar.
+    function handleCafeAbierto() {
+      if (visible) return
+      if (deferredEvent && cafesAbiertos() >= UMBRAL_CAFES) {
+        setTipo('android')
         setVisible(true)
-      }, 1500)
-      return () => {
-        window.removeEventListener('beforeinstallprompt', handleBefore)
-        clearTimeout(t)
+      } else {
+        intentarMostrar()
       }
     }
+    window.addEventListener('samay:cafe-abierto', handleCafeAbierto)
 
-    return () => window.removeEventListener('beforeinstallprompt', handleBefore)
+    // Check inicial — si ya tiene >=3 cafés abiertos de sesiones previas
+    intentarMostrar()
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBefore)
+      window.removeEventListener('samay:cafe-abierto', handleCafeAbierto)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function descartar() {

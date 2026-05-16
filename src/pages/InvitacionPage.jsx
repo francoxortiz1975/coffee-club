@@ -126,9 +126,9 @@ export default function InvitacionPage() {
       {/* Overlay oscuro elegante */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/80" />
 
-      {/* Botón regresar */}
+      {/* Botón regresar — lleva a Descubrir (onboarding suave para receptores nuevos) */}
       <button
-        onClick={() => navigate(`/cafe/${id}`)}
+        onClick={() => navigate('/')}
         className="absolute top-12 left-5 z-20 text-white/60 hover:text-white transition-colors"
       >
         <ArrowLeftIcon size={20} />

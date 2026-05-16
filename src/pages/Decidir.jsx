@@ -32,8 +32,8 @@ export default function Decidir() {
           <HeartIcon size={36} className="text-red-300 opacity-60" />
         </div>
         <div className="text-center">
-          <p className="text-2xl font-serif font-bold text-cafe-dark tracking-tight">Swipe</p>
-          <p className="text-sm text-cafe-accent/60 mt-1">Me interesa · No me interesa</p>
+          <p className="text-2xl font-serif font-bold text-beige tracking-tight">Swipe</p>
+          <p className="text-sm text-beige/60 mt-1">Me interesa · No me interesa</p>
         </div>
       </button>
 

@@ -151,32 +151,32 @@ export default function InvitacionPage() {
         )}
 
         {receptor && (
-          <p className="text-white/60 text-xs font-light tracking-wide animate-[fadeUp_0.8s_ease_0.4s_both]">
-            Para <span className="text-white font-medium">{receptor}</span>
-          </p>
+          <h2 className="text-3xl font-serif font-bold text-white leading-tight tracking-tight animate-[fadeUp_0.8s_ease_0.4s_both]">
+            ¡{receptor.toUpperCase()}!
+          </h2>
         )}
         {nombre ? (
-          <p className="text-white/70 text-sm font-light italic tracking-wide animate-[fadeUp_0.8s_ease_0.5s_both]">
-            <span className="text-white font-medium">{nombre}</span> te invita a
+          <p className="text-white/85 text-lg font-light tracking-wide animate-[fadeUp_0.8s_ease_0.5s_both]">
+            <span className="text-white font-semibold">{nombre}</span> te invita a
           </p>
         ) : (
-          <p className="text-white/60 text-sm font-light italic tracking-wide animate-[fadeUp_0.8s_ease_0.5s_both]">
+          <p className="text-white/80 text-lg font-light tracking-wide animate-[fadeUp_0.8s_ease_0.5s_both]">
             Tienes una invitación a
           </p>
         )}
 
-        <h1 className="text-4xl font-serif font-bold text-white leading-tight tracking-tight animate-[fadeUp_0.8s_ease_0.8s_both]">
+        <h1 className="text-5xl font-serif font-bold text-white leading-tight tracking-tight animate-[fadeUp_0.8s_ease_0.8s_both]">
           {cafe.nombre}
         </h1>
 
-        <p className="text-white/50 text-xs tracking-widest uppercase animate-[fadeUp_0.8s_ease_1s_both]">
+        <p className="text-white/60 text-sm tracking-widest uppercase animate-[fadeUp_0.8s_ease_1s_both]">
           {cafe.barrio}
         </p>
 
         {(fecha || hora) && (
-          <div className="mt-2 border border-white/20 rounded-2xl px-6 py-3 animate-[fadeUp_0.8s_ease_1.2s_both]">
-            {fecha && <p className="text-white text-sm font-medium capitalize">{formatFecha(fecha)}</p>}
-            {hora && <p className="text-white/60 text-sm mt-0.5">{formatHora(hora)}</p>}
+          <div className="mt-3 border border-white/25 rounded-2xl px-7 py-4 animate-[fadeUp_0.8s_ease_1.2s_both]">
+            {fecha && <p className="text-white text-base font-semibold capitalize">{formatFecha(fecha)}</p>}
+            {hora && <p className="text-white/75 text-base mt-1">{formatHora(hora)}</p>}
           </div>
         )}
       </div>

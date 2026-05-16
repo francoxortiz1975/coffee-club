@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import cafes from '../data/cafes.json'
+import InAppBrowserBanner from '../components/InAppBrowserBanner'
 import {
   CoffeeCupIcon, CoffeeBeanIcon, CoffeeMugIcon, HeartIcon,
   DiceIcon, InviteIcon, PinIcon, SparkleIcon,
@@ -158,6 +159,7 @@ function WaitlistForm() {
 export default function Landing() {
   return (
     <div className="min-h-screen bg-beige text-cafe-dark overflow-x-hidden">
+      <InAppBrowserBanner />
       {/* ─── Nav top — fondo café para que el logo beige se vea ─── */}
       <nav
         className="w-full"

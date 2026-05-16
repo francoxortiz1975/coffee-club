@@ -42,24 +42,11 @@ export function BriefcaseIcon({ size = 16, className = '' }) {
 }
 
 export function CoffeeBeanIcon({ size = 16, className = '' }) {
-  // Bean ilustrado: gradiente café + ranura central + highlight sutil
-  const id = `bean-${Math.random().toString(36).slice(2, 8)}`
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" className={className}>
-      <defs>
-        <radialGradient id={id} cx="35%" cy="30%" r="80%">
-          <stop offset="0%" stopColor="#a86b3d" />
-          <stop offset="55%" stopColor="#5a341c" />
-          <stop offset="100%" stopColor="#2a1510" />
-        </radialGradient>
-      </defs>
-      <g transform="rotate(-30 12 12)">
-        {/* Cuerpo del grano */}
-        <ellipse cx="12" cy="12" rx="6.5" ry="9.5" fill={`url(#${id})`} />
-        {/* Ranura central — sombra interior */}
-        <path d="M12 3 Q14.5 7 14.5 12 Q14.5 17 12 21" stroke="#1a0d08" strokeWidth="1.2" fill="none" strokeLinecap="round" />
-        {/* Brillo de luz */}
-        <ellipse cx="9.5" cy="8" rx="1.6" ry="3" fill="#ffffff" opacity="0.18" />
+      <g transform="rotate(-30 12 12)" fill="#5a341c">
+        <ellipse cx="12" cy="12" rx="6.5" ry="9.5" />
+        <path d="M12 3 Q14.5 7 14.5 12 Q14.5 17 12 21" stroke="#2a1510" strokeWidth="1.2" fill="none" strokeLinecap="round" />
       </g>
     </svg>
   )

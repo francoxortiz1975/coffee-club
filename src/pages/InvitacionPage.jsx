@@ -46,6 +46,7 @@ export default function InvitacionPage() {
   const { agregarRecibida } = useInvitaciones()
 
   const nombre = params.get('nombre')
+  const receptor = params.get('para')
   const fecha = params.get('fecha')
   const hora = params.get('hora')
 
@@ -53,9 +54,9 @@ export default function InvitacionPage() {
   // (si yo la envié, el context la ignora).
   useEffect(() => {
     if (!cafe) return
-    agregarRecibida({ cafeId: id, nombre: nombre || '', fecha: fecha || '', hora: hora || '' })
+    agregarRecibida({ cafeId: id, nombre: nombre || '', receptor: receptor || '', fecha: fecha || '', hora: hora || '' })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, nombre, fecha, hora, cafe])
+  }, [id, nombre, receptor, fecha, hora, cafe])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -149,6 +150,11 @@ export default function InvitacionPage() {
           <img src={logoDataUrl} alt="Sumay" className="h-8 w-auto object-contain opacity-70 mb-2 animate-[fadeUp_0.8s_ease_0.2s_both]" />
         )}
 
+        {receptor && (
+          <p className="text-white/60 text-xs font-light tracking-wide animate-[fadeUp_0.8s_ease_0.4s_both]">
+            Para <span className="text-white font-medium">{receptor}</span>
+          </p>
+        )}
         {nombre ? (
           <p className="text-white/70 text-sm font-light italic tracking-wide animate-[fadeUp_0.8s_ease_0.5s_both]">
             <span className="text-white font-medium">{nombre}</span> te invita a

@@ -5,8 +5,8 @@ const InvitacionesContext = createContext()
 
 // Identidad de una invitación: cafe + nombre + fecha + hora.
 // Permite deduplicar si se abre dos veces el mismo link.
-function invKey({ cafeId, nombre, fecha, hora }) {
-  return [cafeId, nombre || '', fecha || '', hora || ''].join('|')
+function invKey({ cafeId, nombre, receptor, fecha, hora }) {
+  return [cafeId, nombre || '', receptor || '', fecha || '', hora || ''].join('|')
 }
 
 function loadInicial() {

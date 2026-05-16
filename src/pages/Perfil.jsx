@@ -80,6 +80,7 @@ function InvitacionRow({ inv, tipo, onEliminar }) {
 
   const params = new URLSearchParams()
   if (inv.nombre) params.set('nombre', inv.nombre)
+  if (inv.receptor) params.set('para', inv.receptor)
   if (inv.fecha) params.set('fecha', inv.fecha)
   if (inv.hora) params.set('hora', inv.hora)
   const link = `/invitacion/${inv.cafeId}${params.toString() ? `?${params}` : ''}`
@@ -104,6 +105,9 @@ function InvitacionRow({ inv, tipo, onEliminar }) {
             {detalle && <span className="text-cafe-accent/40">· {detalle}{inv.hora ? ` ${inv.hora}` : ''}</span>}
             {tipo === 'recibidas' && inv.nombre && (
               <span className="text-cafe-accent/40">· de {inv.nombre}</span>
+            )}
+            {tipo === 'enviadas' && inv.receptor && (
+              <span className="text-cafe-accent/40">· para {inv.receptor}</span>
             )}
           </p>
         </div>

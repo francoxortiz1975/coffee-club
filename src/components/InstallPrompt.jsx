@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 const KEY = 'samay_install_dismissed_at'
 const COUNTER_KEY = 'samay_cafe_opens'
-const COOLDOWN_DIAS = 14
+const COOLDOWN_DIAS = 7
 const UMBRAL_CAFES = 3
 
 function fueDescartadoRecientemente() {

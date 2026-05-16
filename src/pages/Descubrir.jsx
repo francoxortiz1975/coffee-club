@@ -5,6 +5,7 @@ import FilterBar from '../components/FilterBar'
 import CafeCardSmall from '../components/CafeCardSmall'
 import CafeHistoriaCard from '../components/CafeHistoriaCard'
 import EspecialidadModal from '../components/EspecialidadModal'
+import InstallSteps from '../components/InstallSteps'
 import { SearchIcon } from '../components/Icons'
 import { useFavoritos } from '../context/FavoritosContext'
 
@@ -98,6 +99,9 @@ export default function Descubrir() {
           ))}
         </div>
       </section>
+
+      {/* Instalar app */}
+      <InstallSteps />
 
       {modalOpen && (
         <EspecialidadModal

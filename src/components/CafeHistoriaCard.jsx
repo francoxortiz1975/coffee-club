@@ -14,7 +14,7 @@ export default function CafeHistoriaCard({ historia }) {
   const IconComp = ICON_MAP[emoji]
 
   return (
-    <div className="shrink-0 w-56 bg-white rounded-2xl p-4 shadow-sm snap-start">
+    <div className="shrink-0 w-64 bg-[#faf4ec] rounded-2xl p-4 shadow-sm snap-start">
       <div className="flex items-center gap-2 mb-3">
         {IconComp && <IconComp size={22} className="text-cafe-accent/70" />}
         <span className="text-[10px] font-semibold text-cafe-accent/50 tracking-wide uppercase">{año}</span>

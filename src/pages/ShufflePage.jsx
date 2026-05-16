@@ -55,7 +55,7 @@ export default function ShufflePage() {
                 : <CoffeeCupIcon size={48} className="text-cafe-accent/20" />}
               <button
                 onClick={() => toggleFavorito(cafe.id)}
-                className={`absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center shadow transition-colors ${esFavorito ? 'text-emerald-400' : 'text-cafe-accent/40'}`}
+                className={`absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center shadow transition-colors ${esFavorito ? 'text-[#b8d04a]' : 'text-cafe-accent/40'}`}
               >
                 <HeartIcon size={15} filled={esFavorito} />
               </button>

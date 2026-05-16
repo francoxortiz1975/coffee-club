@@ -10,6 +10,12 @@ const WAITLIST_KEY = 'samay_waitlist_email'
 // Destacadas para el preview de la landing. Toma los primeros 3 con fotos.
 const cafesDestacados = cafes.filter((c) => c.fotos?.length).slice(0, 3)
 
+// Scroll suave al waitlist sin agregar #waitlist a la URL (IG no parsea bien el #).
+function scrollAWaitlist(e) {
+  e.preventDefault()
+  document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
 function Section({ children, className = '', id }) {
   return (
     <section id={id} className={`w-full px-6 py-16 md:py-24 ${className}`}>
@@ -162,7 +168,7 @@ export default function Landing() {
             <img src="/logo.png" alt="Sumay" className="h-9 w-auto" />
           </div>
           <a
-            href="#waitlist"
+            href="/landing" onClick={scrollAWaitlist}
             className="text-xs sm:text-sm font-bold bg-[#b8d04a] text-cafe-dark px-4 py-2 rounded-full active:scale-95 transition-transform"
           >
             Únete al waitlist
@@ -190,7 +196,7 @@ export default function Landing() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
               <a
-                href="#waitlist"
+                href="/landing" onClick={scrollAWaitlist}
                 className="bg-cafe-dark text-[#b8d04a] text-sm font-bold px-7 py-3.5 rounded-2xl shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform"
               >
                 Quiero entrar al club
@@ -308,7 +314,7 @@ export default function Landing() {
         </div>
         <div className="text-center mt-10">
           <a
-            href="#waitlist"
+            href="/landing" onClick={scrollAWaitlist}
             className="inline-block border border-cafe-dark/25 text-cafe-dark text-sm font-semibold px-7 py-3 rounded-2xl active:scale-95 transition-transform"
           >
             Entrar al club →
@@ -386,7 +392,7 @@ export default function Landing() {
             <span className="text-xs">Hecho con el shungo en Quito · {new Date().getFullYear()}</span>
           </div>
           <div className="flex items-center gap-5 text-xs">
-            <a href="#waitlist" className="hover:text-beige transition-colors">Waitlist</a>
+            <a href="/landing" onClick={scrollAWaitlist} className="hover:text-beige transition-colors">Waitlist</a>
             <a href="mailto:hola@sumayclub.app" className="hover:text-beige transition-colors">Contacto</a>
           </div>
         </div>

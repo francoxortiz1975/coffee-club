@@ -60,6 +60,38 @@ export function CoffeeBeanIcon({ size = 16, className = '' }) {
   )
 }
 
+// Taza de café ilustrada — cuerpo madera + café adentro + crema arriba
+export function CoffeeMugIcon({ size = 28, className = '' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" className={className}>
+      {/* Asa derecha */}
+      <path
+        d="M22 14 q5 0 5 5 t-5 5"
+        stroke="#8b5a2b"
+        strokeWidth="2.4"
+        fill="none"
+        strokeLinecap="round"
+      />
+      {/* Cuerpo de la taza (madera) */}
+      <path
+        d="M5 11 h17 v11 a4 4 0 0 1 -4 4 h-9 a4 4 0 0 1 -4 -4 z"
+        fill="#8b5a2b"
+      />
+      {/* Sombra interior izquierda */}
+      <path
+        d="M5 11 h2 v11 a4 4 0 0 0 4 4 h-2 a4 4 0 0 1 -4 -4 z"
+        fill="#6e4520"
+      />
+      {/* Café dentro */}
+      <ellipse cx="13.5" cy="11" rx="8" ry="1.8" fill="#3a1f10" />
+      {/* Crema/foam */}
+      <ellipse cx="13.5" cy="10.6" rx="5" ry="0.9" fill="#d4a574" opacity="0.85" />
+      {/* Brillo sutil arriba del café */}
+      <ellipse cx="11" cy="10.4" rx="1.6" ry="0.4" fill="#fff" opacity="0.5" />
+    </svg>
+  )
+}
+
 export function CoffeeCupIcon({ size = 24, className = '' }) {
   return (
     <svg {...s({ width: size, height: size })} className={className} viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">

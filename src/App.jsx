@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useLocation, matchPath } from 'react-rout
 import { FavoritosProvider } from './context/FavoritosContext'
 import { VisitasProvider } from './context/VisitasContext'
 import { InvitacionesProvider } from './context/InvitacionesContext'
+import { UsuarioProvider } from './context/UsuarioContext'
 import BottomNav from './components/BottomNav'
 import Descubrir from './pages/Descubrir'
 import Decidir from './pages/Decidir'
@@ -80,9 +81,11 @@ export default function App() {
     <FavoritosProvider>
       <VisitasProvider>
         <InvitacionesProvider>
-          <BrowserRouter>
-            <Layout />
-          </BrowserRouter>
+          <UsuarioProvider>
+            <BrowserRouter>
+              <Layout />
+            </BrowserRouter>
+          </UsuarioProvider>
         </InvitacionesProvider>
       </VisitasProvider>
     </FavoritosProvider>

@@ -54,10 +54,12 @@ function ColeccionBarrio({ barrio }) {
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleVisita(cafe.id) }}
                     aria-label={visitado ? 'Marcar como no visitada' : 'Marcar como visitada'}
                     className={`absolute bottom-1 right-1 w-8 h-8 rounded-full flex items-center justify-center shadow-md active:scale-90 transition-all ${
-                      visitado ? 'bg-cafe-dark text-beige' : 'bg-white/90 text-cafe-dark/40 border border-cafe-dark/20'
+                      visitado ? 'bg-beige' : 'bg-white/90 border border-cafe-dark/20'
                     }`}
                   >
-                    <span className="text-sm font-bold leading-none">✓</span>
+                    {visitado
+                      ? <CoffeeBeanIcon size={18} />
+                      : <CoffeeBeanIcon size={18} className="opacity-25" />}
                   </button>
                 </div>
                 <p className="text-[10px] text-cafe-dark/70 text-center leading-tight line-clamp-2">{cafe.nombre}</p>

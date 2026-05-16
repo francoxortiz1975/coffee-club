@@ -134,15 +134,6 @@ export default function InvitacionPage() {
         <ArrowLeftIcon size={20} />
       </button>
 
-      {/* Botón share — café con ícono lima */}
-      <button
-        onClick={handleShare}
-        disabled={sharing}
-        className="absolute top-12 right-5 z-20 bg-cafe-dark text-[#b8d04a] rounded-full w-10 h-10 flex items-center justify-center shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform disabled:opacity-40"
-        aria-label="Compartir"
-      >
-        {sharing ? <span className="text-xs font-bold">...</span> : <ShareIcon size={18} />}
-      </button>
 
       {/* Contenido centrado */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-8 text-center gap-4">
@@ -182,11 +173,19 @@ export default function InvitacionPage() {
         )}
       </div>
 
-      {/* Botón Ver más — lleva al detalle del café */}
-      <div className="relative z-10 px-6 pb-12 animate-[fadeUp_0.8s_ease_1.5s_both]">
+      {/* Acciones — Compartir (primary) + Ver más (secondary) */}
+      <div className="relative z-10 px-6 pb-12 flex flex-col gap-3 animate-[fadeUp_0.8s_ease_1.5s_both]">
+        <button
+          onClick={handleShare}
+          disabled={sharing}
+          className="w-full bg-cafe-dark text-[#b8d04a] text-base font-bold py-4 rounded-2xl shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform disabled:opacity-50 flex items-center justify-center gap-2"
+        >
+          <ShareIcon size={18} />
+          {sharing ? 'Preparando...' : 'Compartir invitación'}
+        </button>
         <button
           onClick={() => navigate(`/cafe/${id}`)}
-          className="w-full bg-cafe-dark text-[#b8d04a] text-sm font-semibold py-3.5 rounded-2xl shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform"
+          className="w-full bg-cafe-dark text-beige text-sm font-semibold py-3 rounded-2xl active:scale-95 transition-transform"
         >
           Ver más...
         </button>

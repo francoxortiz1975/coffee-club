@@ -126,6 +126,18 @@ function InvitacionRow({ inv, tipo, onEliminar }) {
 export default function Perfil() {
   const { visitas } = useVisitas()
   const { enviadas, recibidas, eliminar, invKey } = useInvitaciones()
+  const [confirmando, setConfirmando] = useState(null) // { tipo, key, nombreCafe }
+
+  function pedirConfirmacion(tipo, inv) {
+    const cafe = cafes.find((c) => c.id === inv.cafeId)
+    setConfirmando({ tipo, key: invKey(inv), nombreCafe: cafe?.nombre ?? 'esta invitación' })
+  }
+
+  function confirmarEliminar() {
+    if (!confirmando) return
+    eliminar(confirmando.tipo, confirmando.key)
+    setConfirmando(null)
+  }
 
   return (
     <div className="min-h-screen px-4 pt-8 pb-4">
@@ -148,7 +160,7 @@ export default function Perfil() {
                     key={`r-${invKey(inv)}`}
                     inv={inv}
                     tipo="recibidas"
-                    onEliminar={() => eliminar('recibidas', invKey(inv))}
+                    onEliminar={() => pedirConfirmacion('recibidas', inv)}
                   />
                 ))}
               </div>
@@ -164,7 +176,7 @@ export default function Perfil() {
                     key={`e-${invKey(inv)}`}
                     inv={inv}
                     tipo="enviadas"
-                    onEliminar={() => eliminar('enviadas', invKey(inv))}
+                    onEliminar={() => pedirConfirmacion('enviadas', inv)}
                   />
                 ))}
               </div>
@@ -194,6 +206,40 @@ export default function Perfil() {
           <ColeccionBarrio key={barrio} barrio={barrio} />
         ))}
       </div>
+
+      {/* Modal de confirmación */}
+      {confirmando && (
+        <div
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6"
+          onClick={() => setConfirmando(null)}
+        >
+          <div
+            className="bg-[#faf4ec] rounded-2xl p-6 max-w-xs w-full shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-lg font-serif font-bold text-cafe-dark mb-2">
+              ¿Eliminar invitación?
+            </h3>
+            <p className="text-sm text-cafe-accent/70 mb-5">
+              Vas a eliminar la invitación a <span className="font-semibold text-cafe-dark">{confirmando.nombreCafe}</span> de tus {confirmando.tipo}. Esta acción no se puede deshacer.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setConfirmando(null)}
+                className="flex-1 py-2.5 rounded-xl text-sm font-semibold border border-cafe-accent/25 text-cafe-accent active:scale-95 transition-transform"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={confirmarEliminar}
+                className="flex-1 py-2.5 rounded-xl text-sm font-bold bg-cafe-dark text-beige active:scale-95 transition-transform"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

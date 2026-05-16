@@ -185,7 +185,7 @@ export default function InvitacionPage() {
         </button>
         <button
           onClick={() => navigate(`/cafe/${id}`)}
-          className="w-full bg-cafe-dark text-beige text-sm font-semibold py-3 rounded-2xl active:scale-95 transition-transform"
+          className="w-full bg-beige text-white text-sm font-semibold py-3 rounded-2xl active:scale-95 transition-transform"
         >
           Ver más...
         </button>

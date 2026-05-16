@@ -195,7 +195,7 @@ export default function Perfil() {
         {visitas.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {Array.from({ length: visitas.length }).map((_, i) => (
-              <CoffeeBeanIcon key={i} size={20} className="text-cafe-dark" />
+              <CoffeeBeanIcon key={i} size={28} />
             ))}
           </div>
         )}

@@ -49,15 +49,17 @@ export default function SwipePage() {
   return (
     <div className="relative min-h-screen flex flex-col">
       {/* Header */}
-      <div className="relative z-10 flex items-center justify-between px-5 pt-12 pb-4">
+      <div className="relative z-10 flex items-center px-5 pt-12 pb-4">
         <h1 className="text-xl font-serif font-bold text-cafe-dark">Swipe</h1>
-        <button
-          onClick={handleTerminar}
-          className="text-sm font-semibold text-cafe-accent border border-cafe-accent/30 px-4 py-1.5 rounded-full"
-        >
-          Terminar
-        </button>
       </div>
+
+      {/* Terminar — esquina inferior izquierda */}
+      <button
+        onClick={handleTerminar}
+        className="fixed bottom-28 left-5 z-20 text-sm font-semibold text-cafe-accent bg-white/80 backdrop-blur-sm border border-cafe-accent/30 px-4 py-1.5 rounded-full shadow-sm"
+      >
+        Terminar
+      </button>
 
       {/* Contenido */}
       <div className="relative z-10 flex-1 flex flex-col items-center px-4 gap-6 justify-center">

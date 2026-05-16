@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import cafes from '../data/cafes.json'
 import { useVisitas } from '../context/VisitasContext'
 import { useInvitaciones } from '../context/InvitacionesContext'
-import { useUsuario, generarUsername } from '../context/UsuarioContext'
+import { useUsuario, generarUsername, TIPOS_CAFE } from '../context/UsuarioContext'
 import {
   CoffeeCupIcon, CoffeeBeanIcon, CoffeeMugIcon, InviteIcon, PinIcon, UserIcon,
 } from '../components/Icons'
@@ -147,6 +147,7 @@ export default function Perfil() {
   const [confirmando, setConfirmando] = useState(null)
   const [editandoPerfil, setEditandoPerfil] = useState(false)
   const [eligiendoFavorita, setEligiendoFavorita] = useState(false)
+  const [eligiendoCafe, setEligiendoCafe] = useState(false)
 
   const cafeFavorito = cafes.find((c) => c.id === usuario.cafeteriaFavoritaId)
 
@@ -187,6 +188,15 @@ export default function Perfil() {
           <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mt-1">Cafeteros</p>
           <p className="text-[9px] text-cafe-accent/40 italic">próximamente</p>
         </div>
+        <button
+          onClick={() => setEligiendoCafe(true)}
+          className="flex-1 flex flex-col items-center justify-center py-3 active:bg-black/5 transition-colors"
+        >
+          <p className="text-sm font-serif font-bold text-cafe-dark line-clamp-1 px-2">
+            {usuario.cafeFavorito || 'Elegir'}
+          </p>
+          <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mt-1">Café favorito</p>
+        </button>
         <button
           onClick={() => setEligiendoFavorita(true)}
           className="flex-1 flex flex-col items-center justify-center py-3 active:bg-black/5 transition-colors"
@@ -289,6 +299,58 @@ export default function Perfil() {
           onClose={() => setEligiendoFavorita(false)}
         />
       )}
+
+      {eligiendoCafe && (
+        <ElegirCafeModal
+          actual={usuario.cafeFavorito}
+          onSelect={(cafeFavorito) => { actualizar({ cafeFavorito }); setEligiendoCafe(false) }}
+          onClose={() => setEligiendoCafe(false)}
+        />
+      )}
+    </div>
+  )
+}
+
+function ElegirCafeModal({ actual, onSelect, onClose }) {
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-6" onClick={onClose}>
+      <div
+        className="bg-[#faf4ec] rounded-t-3xl sm:rounded-2xl p-5 max-w-sm w-full shadow-xl max-h-[80vh] flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h3 className="text-lg font-serif font-bold text-cafe-dark mb-4">¿Cuál es tu café?</h3>
+        <div className="flex-1 overflow-y-auto -mx-5 px-5">
+          {actual && (
+            <button
+              onClick={() => onSelect('')}
+              className="w-full text-left text-xs text-cafe-accent/60 italic py-2 mb-1"
+            >
+              Quitar selección
+            </button>
+          )}
+          <div className="grid grid-cols-2 gap-2">
+            {TIPOS_CAFE.map((tipo) => {
+              const seleccionado = tipo === actual
+              return (
+                <button
+                  key={tipo}
+                  onClick={() => onSelect(tipo)}
+                  className={`py-3 rounded-xl text-sm font-serif font-bold transition-colors ${
+                    seleccionado
+                      ? 'bg-cafe-dark text-beige'
+                      : 'bg-white border border-cafe-accent/20 text-cafe-dark active:bg-cafe-dark/5'
+                  }`}
+                >
+                  {tipo}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+        <button onClick={onClose} className="mt-4 w-full py-2.5 rounded-xl text-sm font-semibold border border-cafe-accent/25 text-cafe-accent active:scale-95 transition-transform">
+          Cerrar
+        </button>
+      </div>
     </div>
   )
 }

@@ -12,6 +12,13 @@ const CAFES = [
   'Macchiato', 'Flatwhite', 'Frappe', 'Ristretto', 'Affogato', 'Turco',
   'Doppio', 'Cubano', 'Bombón',
 ]
+
+export const TIPOS_CAFE = [
+  'Espresso', 'Doppio', 'Ristretto', 'Americano',
+  'Cappuccino', 'Latte', 'Flat white', 'Macchiato', 'Cortado',
+  'Mocha', 'Affogato', 'Frappe',
+  'Turco', 'Cubano', 'Bombón',
+]
 const NOMBRES_DISPLAY = [
   'Cafetero anónimo', 'Catador curioso', 'Bohemio del café',
   'Buscador de cafés', 'Amante del aroma',
@@ -32,6 +39,7 @@ function generarUsuarioInicial() {
     username: generarUsername(),
     foto: '', // dataURL opcional
     cafeteriaFavoritaId: '',
+    cafeFavorito: '',
   }
 }
 
@@ -44,6 +52,7 @@ function loadInicial() {
         username: raw.username ?? generarUsername(),
         foto: raw.foto ?? '',
         cafeteriaFavoritaId: raw.cafeteriaFavoritaId ?? '',
+        cafeFavorito: raw.cafeFavorito ?? '',
       }
     }
   } catch {}

@@ -4,6 +4,7 @@ import { toPng } from 'html-to-image'
 import confetti from 'canvas-confetti'
 import cafes from '../data/cafes.json'
 import { PinIcon, ExternalLinkIcon, ShareIcon, ArrowLeftIcon } from '../components/Icons'
+import { useInvitaciones } from '../context/InvitacionesContext'
 
 function formatFecha(fechaStr) {
   if (!fechaStr) return null
@@ -42,10 +43,19 @@ export default function InvitacionPage() {
   const [coverDataUrl, setCoverDataUrl] = useState(null)
   const [logoDataUrl, setLogoDataUrl] = useState(null)
   const cafe = cafes.find((c) => c.id === id)
+  const { agregarRecibida } = useInvitaciones()
 
   const nombre = params.get('nombre')
   const fecha = params.get('fecha')
   const hora = params.get('hora')
+
+  // Guardar como recibida la primera vez que se abre el link
+  // (si yo la envié, el context la ignora).
+  useEffect(() => {
+    if (!cafe) return
+    agregarRecibida({ cafeId: id, nombre: nombre || '', fecha: fecha || '', hora: hora || '' })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, nombre, fecha, hora, cafe])
 
   useEffect(() => {
     const timer = setTimeout(() => {

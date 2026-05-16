@@ -2,11 +2,13 @@ import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import cafes from '../data/cafes.json'
 import { ArrowLeftIcon } from '../components/Icons'
+import { useInvitaciones } from '../context/InvitacionesContext'
 
 export default function InvitacionSetup() {
   const { id } = useParams()
   const navigate = useNavigate()
   const cafe = cafes.find((c) => c.id === id)
+  const { agregarEnviada } = useInvitaciones()
 
   const [incluirNombre, setIncluirNombre] = useState(null)
   const [nombre, setNombre] = useState('')
@@ -19,10 +21,16 @@ export default function InvitacionSetup() {
   const paso = incluirNombre === null ? 1 : incluirFecha === null ? 2 : 3
 
   function generar() {
+    const nombreFinal = incluirNombre && nombre.trim() ? nombre.trim() : ''
+    const fechaFinal = incluirFecha && fecha ? fecha : ''
+    const horaFinal = incluirFecha && hora ? hora : ''
+
+    agregarEnviada({ cafeId: id, nombre: nombreFinal, fecha: fechaFinal, hora: horaFinal })
+
     const params = new URLSearchParams()
-    if (incluirNombre && nombre.trim()) params.set('nombre', nombre.trim())
-    if (incluirFecha && fecha) params.set('fecha', fecha)
-    if (incluirFecha && hora) params.set('hora', hora)
+    if (nombreFinal) params.set('nombre', nombreFinal)
+    if (fechaFinal) params.set('fecha', fechaFinal)
+    if (horaFinal) params.set('hora', horaFinal)
     navigate(`/invitacion/${id}?${params.toString()}`)
   }
 

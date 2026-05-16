@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation, matchPath } from 'react-router-dom'
 import { FavoritosProvider } from './context/FavoritosContext'
 import { VisitasProvider } from './context/VisitasContext'
+import { InvitacionesProvider } from './context/InvitacionesContext'
 import BottomNav from './components/BottomNav'
 import Descubrir from './pages/Descubrir'
 import Decidir from './pages/Decidir'
@@ -78,9 +79,11 @@ export default function App() {
   return (
     <FavoritosProvider>
       <VisitasProvider>
-        <BrowserRouter>
-          <Layout />
-        </BrowserRouter>
+        <InvitacionesProvider>
+          <BrowserRouter>
+            <Layout />
+          </BrowserRouter>
+        </InvitacionesProvider>
       </VisitasProvider>
     </FavoritosProvider>
   )

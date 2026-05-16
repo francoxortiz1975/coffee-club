@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import cafes from '../data/cafes.json'
 import { useVisitas } from '../context/VisitasContext'
-import { CoffeeCupIcon, CoffeeBeanIcon } from '../components/Icons'
+import { useInvitaciones } from '../context/InvitacionesContext'
+import { CoffeeCupIcon, CoffeeBeanIcon, InviteIcon, PinIcon } from '../components/Icons'
 
 const barrios = [...new Set(cafes.map((c) => c.barrio))]
 
@@ -73,12 +74,100 @@ function ColeccionBarrio({ barrio }) {
   )
 }
 
+function InvitacionRow({ inv, tipo, onEliminar }) {
+  const cafe = cafes.find((c) => c.id === inv.cafeId)
+  if (!cafe) return null
+
+  const params = new URLSearchParams()
+  if (inv.nombre) params.set('nombre', inv.nombre)
+  if (inv.fecha) params.set('fecha', inv.fecha)
+  if (inv.hora) params.set('hora', inv.hora)
+  const link = `/invitacion/${inv.cafeId}${params.toString() ? `?${params}` : ''}`
+
+  const detalle = inv.fecha
+    ? new Date(inv.fecha + 'T12:00:00').toLocaleDateString('es-EC', { day: 'numeric', month: 'short' })
+    : null
+
+  return (
+    <div className="flex items-center gap-3">
+      <Link to={link} className="flex-1 flex items-center gap-3 active:scale-[0.99] transition-transform">
+        <div className="w-12 h-12 rounded-xl bg-cafe-accent/10 overflow-hidden flex items-center justify-center shrink-0">
+          {cafe.fotos?.[0]
+            ? <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
+            : <CoffeeCupIcon size={20} className="text-cafe-accent/30" />}
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-serif font-bold text-cafe-dark truncate">{cafe.nombre}</p>
+          <p className="text-[11px] text-cafe-accent/60 flex items-center gap-1 truncate">
+            <PinIcon size={10} className="shrink-0" />
+            <span className="truncate">{cafe.barrio}</span>
+            {detalle && <span className="text-cafe-accent/40">· {detalle}{inv.hora ? ` ${inv.hora}` : ''}</span>}
+            {tipo === 'recibidas' && inv.nombre && (
+              <span className="text-cafe-accent/40">· de {inv.nombre}</span>
+            )}
+          </p>
+        </div>
+      </Link>
+      <button
+        onClick={onEliminar}
+        aria-label="Eliminar invitación"
+        className="w-7 h-7 rounded-full text-cafe-accent/40 active:text-cafe-accent/80 shrink-0"
+      >
+        ×
+      </button>
+    </div>
+  )
+}
+
 export default function Perfil() {
   const { visitas } = useVisitas()
+  const { enviadas, recibidas, eliminar, invKey } = useInvitaciones()
 
   return (
     <div className="min-h-screen px-4 pt-8 pb-4">
       <h1 className="text-2xl font-serif font-bold text-cafe-dark mb-3">Mi Colección</h1>
+
+      {/* Invitaciones */}
+      {(recibidas.length > 0 || enviadas.length > 0) && (
+        <div className="bg-[#faf4ec] rounded-2xl px-4 py-3 shadow-sm mb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <InviteIcon size={16} className="text-cafe-dark" />
+            <p className="text-sm font-serif font-bold text-cafe-dark">Invitaciones</p>
+          </div>
+
+          {recibidas.length > 0 && (
+            <>
+              <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-2">Recibidas</p>
+              <div className="flex flex-col gap-2.5 mb-3">
+                {recibidas.map((inv) => (
+                  <InvitacionRow
+                    key={`r-${invKey(inv)}`}
+                    inv={inv}
+                    tipo="recibidas"
+                    onEliminar={() => eliminar('recibidas', invKey(inv))}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {enviadas.length > 0 && (
+            <>
+              <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-2">Enviadas</p>
+              <div className="flex flex-col gap-2.5">
+                {enviadas.map((inv) => (
+                  <InvitacionRow
+                    key={`e-${invKey(inv)}`}
+                    inv={inv}
+                    tipo="enviadas"
+                    onEliminar={() => eliminar('enviadas', invKey(inv))}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      )}
 
       {/* Coffee Beans */}
       <div className="bg-[#faf4ec] rounded-2xl px-4 py-3 shadow-sm mb-6">

@@ -29,11 +29,22 @@ function ColeccionBarrio({ barrio }) {
         <span className={`text-cafe-accent/40 transition-transform text-xs ${abierto ? 'rotate-180' : ''}`}>▼</span>
       </button>
 
-      <div className="h-0.5 bg-beige mx-4">
-        <div
-          className="h-full bg-cafe-dark rounded-full transition-all"
-          style={{ width: `${cafesBarrio.length ? (visitados / cafesBarrio.length) * 100 : 0}%` }}
-        />
+      {/* Loyalty card — un stamp por cafetería del barrio */}
+      <div className="px-4 pb-3 flex flex-wrap gap-1.5">
+        {cafesBarrio.map((c) => {
+          const v = visitas.includes(c.id)
+          return (
+            <div
+              key={c.id}
+              className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${
+                v ? 'bg-beige border border-cafe-dark/30' : 'bg-white/40 border border-dashed border-cafe-accent/30'
+              }`}
+              title={c.nombre}
+            >
+              {v && <CoffeeBeanIcon size={16} />}
+            </div>
+          )
+        })}
       </div>
 
       {abierto && (

@@ -156,28 +156,30 @@ export default function Landing() {
                 className="w-full h-full rounded-[2rem] overflow-hidden bg-cover bg-center"
                 style={{ backgroundImage: 'url(/wood-bg.webp)' }}
               >
-                <div className="w-full h-full bg-[#f5ece0]/50 p-6 flex flex-col">
-                  <img src="/logo.png" alt="" className="h-12 w-auto self-center mt-8 mb-6" />
-                  <div className="bg-white/85 backdrop-blur-sm rounded-xl p-3 mb-3 shadow-sm">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-8 h-8 rounded-full bg-cafe-dark/10" />
-                      <div>
-                        <div className="h-2.5 w-20 bg-cafe-dark rounded-full" />
-                        <div className="h-1.5 w-14 bg-cafe-accent/30 rounded-full mt-1" />
-                      </div>
+                <div className="w-full h-full bg-[#f5ece0]/50 flex flex-col">
+                  {/* Header con degradado café — para que el logo beige se lea */}
+                  <div
+                    className="px-6 pt-8 pb-5 rounded-b-3xl"
+                    style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #2a1510 60%, #1e0f0b 100%)' }}
+                  >
+                    <img src="/logo.png" alt="" className="h-12 w-auto mx-auto" />
+                    <div className="mt-4 bg-white/10 rounded-xl px-3 py-2 text-[10px] text-beige/50">
+                      Buscar cafetería…
                     </div>
                   </div>
-                  <div className="bg-[#faf4ec] rounded-2xl overflow-hidden shadow-md flex-1">
-                    {cafesDestacados[0]?.fotos?.[0] && (
-                      <img src={cafesDestacados[0].fotos[0]} alt="" className="w-full h-1/2 object-cover" />
-                    )}
-                    <div className="p-3">
-                      <div className="h-3 w-32 bg-cafe-dark rounded-full mb-2" />
-                      <div className="h-2 w-20 bg-cafe-accent/40 rounded-full mb-3" />
-                      <div className="flex gap-1.5">
-                        <CoffeeBeanIcon size={14} />
-                        <CoffeeBeanIcon size={14} />
-                        <CoffeeBeanIcon size={14} />
+                  <div className="p-4 flex-1 flex flex-col">
+                    <div className="bg-[#faf4ec] rounded-2xl overflow-hidden shadow-md flex-1">
+                      {cafesDestacados[0]?.fotos?.[0] && (
+                        <img src={cafesDestacados[0].fotos[0]} alt="" className="w-full h-1/2 object-cover" />
+                      )}
+                      <div className="p-3">
+                        <div className="h-3 w-32 bg-cafe-dark rounded-full mb-2" />
+                        <div className="h-2 w-20 bg-cafe-accent/40 rounded-full mb-3" />
+                        <div className="flex gap-1.5">
+                          <CoffeeBeanIcon size={14} />
+                          <CoffeeBeanIcon size={14} />
+                          <CoffeeBeanIcon size={14} />
+                        </div>
                       </div>
                     </div>
                   </div>

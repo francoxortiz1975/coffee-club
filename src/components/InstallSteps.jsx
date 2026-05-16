@@ -16,20 +16,20 @@ const PASOS_IOS = [
   {
     n: 1,
     Icono: ShareIcon,
-    titulo: 'Tocá Compartir',
-    texto: 'Abrí Safari y tocá el ícono de Compartir en la barra inferior.',
+    titulo: 'Toca Compartir',
+    texto: 'Abre Safari y toca el ícono de Compartir en la barra inferior.',
   },
   {
     n: 2,
     Icono: ArrowUpIcon,
     titulo: 'Añadir a inicio',
-    texto: 'Deslizá hacia abajo y elegí "Añadir a pantalla de inicio".',
+    texto: 'Desliza hacia abajo y elige "Añadir a pantalla de inicio".',
   },
   {
     n: 3,
     Icono: InviteIcon,
     titulo: 'Listo',
-    texto: 'Tocá Añadir y abrí Sumay como una app desde tu pantalla principal.',
+    texto: 'Toca Añadir y abre Sumay como una app desde tu pantalla principal.',
   },
 ]
 
@@ -38,19 +38,19 @@ const PASOS_ANDROID = [
     n: 1,
     Icono: ShareIcon,
     titulo: 'Menú del navegador',
-    texto: 'Abrí Chrome y tocá los tres puntos arriba a la derecha.',
+    texto: 'Abre Chrome y toca los tres puntos arriba a la derecha.',
   },
   {
     n: 2,
     Icono: ArrowUpIcon,
     titulo: 'Instalar app',
-    texto: 'Elegí "Instalar aplicación" o "Añadir a pantalla principal".',
+    texto: 'Elige "Instalar aplicación" o "Añadir a pantalla principal".',
   },
   {
     n: 3,
     Icono: InviteIcon,
     titulo: 'Listo',
-    texto: 'Confirmá y abrí Sumay desde tu cajón de apps.',
+    texto: 'Confirma y abre Sumay desde tu cajón de apps.',
   },
 ]
 
@@ -71,8 +71,8 @@ export default function InstallSteps() {
 
   return (
     <section className="mt-8 px-4">
-      <h2 className="text-base font-serif font-bold text-cafe-dark mb-1">Llevátela a tu pantalla</h2>
-      <p className="text-xs text-cafe-accent/60 mb-3">Instalá Sumay como app y accedé a un toque, sin abrir el navegador.</p>
+      <h2 className="text-base font-serif font-bold text-cafe-dark mb-1">Llévala a tu pantalla</h2>
+      <p className="text-xs text-cafe-accent/60 mb-3">Instala Sumay como app y accede a un toque, sin abrir el navegador.</p>
       <div className="flex gap-3 overflow-x-auto -mx-4 px-4 scroll-pl-4 pb-2 snap-x snap-mandatory no-scrollbar">
         {pasos.map(({ n, Icono, titulo, texto }) => (
           <div key={n} className="shrink-0 w-64 bg-[#faf4ec] rounded-2xl p-4 shadow-sm snap-start">

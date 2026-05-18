@@ -37,7 +37,10 @@ export default function InvitacionSetup() {
   const labelClass = 'text-lg font-serif font-bold text-cafe-dark block mb-1.5'
 
   return (
-    <div className="min-h-screen flex flex-col px-5 pt-12 pb-8">
+    <div
+      className="min-h-screen flex flex-col px-5 pb-8"
+      style={{ paddingTop: 'calc(48px + env(safe-area-inset-top))' }}
+    >
       <button onClick={() => navigate(-1)} className="text-cafe-accent/50 mb-8 self-start">
         <ArrowLeftIcon size={20} />
       </button>

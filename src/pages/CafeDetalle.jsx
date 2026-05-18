@@ -52,19 +52,32 @@ export default function CafeDetalle() {
           ? <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
           : <CoffeeCupIcon size={56} className="text-cafe-accent/20" />
         }
-        <button onClick={() => navigate(-1)} className="absolute top-4 left-4 bg-white/80 backdrop-blur-sm text-cafe-dark rounded-full w-9 h-9 flex items-center justify-center shadow">
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute left-4 bg-white/80 backdrop-blur-sm text-cafe-dark rounded-full w-9 h-9 flex items-center justify-center shadow"
+          style={{ top: 'calc(16px + env(safe-area-inset-top))' }}
+        >
           <ArrowLeftIcon size={18} />
         </button>
-        <button onClick={() => toggleFavorito(cafe.id)} className={`absolute top-4 right-16 bg-white/80 backdrop-blur-sm rounded-full w-9 h-9 flex items-center justify-center shadow transition-colors ${esFavorito ? 'text-[#b8d04a]' : 'text-cafe-accent/50'}`}>
+        <button
+          onClick={() => toggleFavorito(cafe.id)}
+          className={`absolute right-16 bg-white/80 backdrop-blur-sm rounded-full w-9 h-9 flex items-center justify-center shadow transition-colors ${esFavorito ? 'text-[#b8d04a]' : 'text-cafe-accent/50'}`}
+          style={{ top: 'calc(16px + env(safe-area-inset-top))' }}
+        >
           <HeartIcon size={17} filled={esFavorito} />
         </button>
-        <button onClick={handleShare} className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm text-cafe-dark rounded-full w-9 h-9 flex items-center justify-center shadow">
+        <button
+          onClick={handleShare}
+          className="absolute right-4 bg-white/80 backdrop-blur-sm text-cafe-dark rounded-full w-9 h-9 flex items-center justify-center shadow"
+          style={{ top: 'calc(16px + env(safe-area-inset-top))' }}
+        >
           {copied ? <span className="text-xs font-bold text-green-600">✓</span> : <ShareIcon size={17} />}
         </button>
         {/* Invitar — destacado: café con ícono lima */}
         <Link
           to={`/invitacion/${cafe.id}/setup`}
-          className="absolute top-16 right-4 bg-cafe-dark text-[#b8d04a] rounded-full w-10 h-10 flex items-center justify-center shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform"
+          className="absolute right-4 bg-cafe-dark text-[#b8d04a] rounded-full w-10 h-10 flex items-center justify-center shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform"
+          style={{ top: 'calc(64px + env(safe-area-inset-top))' }}
           aria-label="Invitar"
         >
           <InviteIcon size={18} />

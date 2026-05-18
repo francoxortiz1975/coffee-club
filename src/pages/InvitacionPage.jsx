@@ -129,7 +129,8 @@ export default function InvitacionPage() {
       {/* Botón regresar — lleva a Descubrir (onboarding suave para receptores nuevos) */}
       <button
         onClick={() => navigate('/')}
-        className="absolute top-12 left-5 z-20 text-white/60 hover:text-white transition-colors"
+        className="absolute left-5 z-20 text-white/60 hover:text-white transition-colors"
+        style={{ top: 'calc(48px + env(safe-area-inset-top))' }}
       >
         <ArrowLeftIcon size={20} />
       </button>

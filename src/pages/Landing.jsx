@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import cafes from '../data/cafes.json'
 import InAppBrowserBanner from '../components/InAppBrowserBanner'
+import { supabase } from '../lib/supabase'
 import {
   CoffeeCupIcon, CoffeeBeanIcon, CoffeeMugIcon, HeartIcon,
   DiceIcon, InviteIcon, PinIcon, SparkleIcon,
@@ -100,8 +101,9 @@ function WaitlistForm() {
   const [mensaje, setMensaje] = useState('')
   const [enviado, setEnviado] = useState(false)
   const [error, setError] = useState('')
+  const [enviando, setEnviando] = useState(false)
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault()
     setError('')
     const limpio = email.trim().toLowerCase()
@@ -109,10 +111,35 @@ function WaitlistForm() {
       setError('Email inválido')
       return
     }
-    // Mock por ahora — se reemplaza por insert en Supabase mañana.
+
+    setEnviando(true)
+    const { error: insertError } = await supabase
+      .from('waitlist')
+      .insert({
+        email: limpio,
+        mensaje: mensaje.trim() || null,
+        user_agent: navigator.userAgent.slice(0, 500),
+        source: 'landing',
+      })
+
+    setEnviando(false)
+
+    if (insertError) {
+      // 23505 = unique_violation (email duplicado). Tratarlo como éxito.
+      if (insertError.code === '23505') {
+        setEnviado(true)
+        return
+      }
+      setError('Algo salió mal. Probá de nuevo en un toque.')
+      console.error('waitlist insert error:', insertError)
+      return
+    }
+
+    // Backup local también, por si limpia datos.
     const existentes = JSON.parse(localStorage.getItem(WAITLIST_KEY) || '[]')
-    const entrada = { email: limpio, mensaje: mensaje.trim(), at: Date.now() }
-    if (!existentes.some((e) => e.email === limpio)) existentes.push(entrada)
+    if (!existentes.some((e) => e.email === limpio)) {
+      existentes.push({ email: limpio, mensaje: mensaje.trim(), at: Date.now() })
+    }
     localStorage.setItem(WAITLIST_KEY, JSON.stringify(existentes))
     setEnviado(true)
   }
@@ -147,9 +174,10 @@ function WaitlistForm() {
       />
       <button
         type="submit"
-        className="bg-cafe-dark text-[#b8d04a] text-sm font-bold px-6 py-3.5 rounded-2xl shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform self-stretch sm:self-center sm:px-12"
+        disabled={enviando}
+        className="bg-cafe-dark text-[#b8d04a] text-sm font-bold px-6 py-3.5 rounded-2xl shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform self-stretch sm:self-center sm:px-12 disabled:opacity-50"
       >
-        Reservar mi lugar
+        {enviando ? 'Enviando…' : 'Reservar mi lugar'}
       </button>
       {error && <p className="text-xs text-red-600 text-center">{error}</p>}
     </form>

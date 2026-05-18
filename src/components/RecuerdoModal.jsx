@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRecuerdos } from '../context/RecuerdosContext'
+import { CameraIcon } from './Icons'
 
 export default function RecuerdoModal({ cafe, onClose }) {
   const { getRecuerdo, guardarRecuerdo, eliminarRecuerdo } = useRecuerdos()
@@ -52,11 +53,11 @@ export default function RecuerdoModal({ cafe, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/55 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-6"
+      className="fixed inset-0 z-50 bg-black/55 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-6 pb-28 sm:pb-6"
       onClick={onClose}
     >
       <div
-        className="bg-[#faf4ec] rounded-t-3xl sm:rounded-3xl w-full max-w-sm shadow-2xl flex flex-col max-h-[90vh]"
+        className="bg-[#faf4ec] rounded-3xl w-full max-w-sm shadow-2xl flex flex-col max-h-[80vh]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="px-5 pt-5 pb-2">
@@ -74,8 +75,8 @@ export default function RecuerdoModal({ cafe, onClose }) {
             {preview ? (
               <img src={preview} alt="" className="w-full h-full object-cover" />
             ) : (
-              <div className="text-center">
-                <div className="text-4xl mb-2">📷</div>
+              <div className="text-center flex flex-col items-center">
+                <CameraIcon size={40} className="text-cafe-accent/60 mb-2" />
                 <p className="text-sm text-cafe-accent/70 font-semibold">Agregar foto</p>
                 <p className="text-[11px] text-cafe-accent/50 mt-1">Toca para elegir de tu galería</p>
               </div>

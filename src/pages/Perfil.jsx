@@ -9,7 +9,7 @@ import { useCafeteros } from '../context/CafeterosContext'
 import { useRecuerdos } from '../context/RecuerdosContext'
 import RecuerdoModal from '../components/RecuerdoModal'
 import {
-  CoffeeCupIcon, CoffeeBeanIcon, CoffeeMugIcon, InviteIcon, PinIcon, UserIcon,
+  CoffeeCupIcon, CoffeeBeanIcon, CoffeeMugIcon, InviteIcon, PinIcon, UserIcon, CameraIcon,
 } from '../components/Icons'
 
 const barrios = [...new Set(cafes.map((c) => c.barrio))]
@@ -17,10 +17,27 @@ const barrios = [...new Set(cafes.map((c) => c.barrio))]
 function ColeccionBarrio({ barrio }) {
   const [abierto, setAbierto] = useState(false)
   const [recuerdoCafe, setRecuerdoCafe] = useState(null)
+  const [promptCafe, setPromptCafe] = useState(null) // café recién marcado → "¿agregar foto?"
   const { visitas, toggleVisita } = useVisitas()
   const { getRecuerdo } = useRecuerdos()
   const cafesBarrio = cafes.filter((c) => c.barrio === barrio)
   const visitados = cafesBarrio.filter((c) => visitas.includes(c.id)).length
+
+  // Tap en el bean del slot:
+  //  - si no estaba visitado → marca + abre prompt 'agregar recuerdo'
+  //  - si estaba visitado → desmarca directo, sin prompt
+  async function handleBeanTap(cafe, visitado, e) {
+    e.preventDefault()
+    e.stopPropagation()
+    if (visitado) {
+      // Desmarcar — sin prompt
+      await toggleVisita(cafe.id)
+    } else {
+      // Marcar + abrir prompt
+      await toggleVisita(cafe.id)
+      setPromptCafe(cafe)
+    }
+  }
 
   return (
     <div className="bg-[#faf4ec] rounded-2xl overflow-hidden shadow-sm">
@@ -58,36 +75,20 @@ function ColeccionBarrio({ barrio }) {
           {cafesBarrio.map((cafe) => {
             const visitado = visitas.includes(cafe.id)
             const recuerdo = getRecuerdo(cafe.id)
+            // Solo mostramos el recuerdo como fondo si el café está visitado.
+            const fondoFoto = visitado && recuerdo?.foto_url ? recuerdo.foto_url : cafe.fotos?.[0]
             return (
               <Link key={cafe.id} to={`/cafe/${cafe.id}`} className="flex flex-col items-center gap-1.5">
                 <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-cafe-accent/10 flex items-center justify-center">
-                  {/* Si hay recuerdo, mostramos la foto del recuerdo; si no, la del cafe */}
-                  {recuerdo?.foto_url ? (
-                    <img src={recuerdo.foto_url} alt={cafe.nombre} className="w-full h-full object-cover" />
-                  ) : cafe.fotos?.[0] ? (
-                    <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
-                  ) : (
-                    <CoffeeCupIcon size={24} className="text-cafe-accent/20" />
-                  )}
+                  {fondoFoto
+                    ? <img src={fondoFoto} alt={cafe.nombre} className="w-full h-full object-cover" />
+                    : <CoffeeCupIcon size={24} className="text-cafe-accent/20" />}
                   {!visitado && (
                     <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] pointer-events-none" />
                   )}
-                  {/* Botón cámara — solo si está visitado */}
-                  {visitado && (
-                    <button
-                      type="button"
-                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); setRecuerdoCafe(cafe) }}
-                      aria-label={recuerdo ? 'Editar recuerdo' : 'Agregar recuerdo'}
-                      className={`absolute top-1 left-1 w-7 h-7 rounded-full flex items-center justify-center shadow-md active:scale-90 transition-all ${
-                        recuerdo ? 'bg-[#b8d04a] text-cafe-dark' : 'bg-white/90 text-cafe-dark/60 border border-cafe-dark/20'
-                      }`}
-                    >
-                      <span className="text-xs leading-none">📷</span>
-                    </button>
-                  )}
                   <button
                     type="button"
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleVisita(cafe.id) }}
+                    onClick={(e) => handleBeanTap(cafe, visitado, e)}
                     aria-label={visitado ? 'Marcar como no visitada' : 'Marcar como visitada'}
                     className={`absolute bottom-1 right-1 w-8 h-8 rounded-full flex items-center justify-center shadow-md active:scale-90 transition-all ${
                       visitado ? 'bg-beige' : 'bg-white/90 border border-cafe-dark/20'
@@ -102,6 +103,41 @@ function ColeccionBarrio({ barrio }) {
               </Link>
             )
           })}
+        </div>
+      )}
+
+      {/* Prompt al recién marcar un café como visitado: ofrecemos guardar foto */}
+      {promptCafe && (
+        <div
+          className="fixed inset-0 z-50 bg-black/55 backdrop-blur-sm flex items-center justify-center p-6"
+          onClick={() => setPromptCafe(null)}
+        >
+          <div
+            className="bg-[#faf4ec] rounded-3xl p-6 max-w-xs w-full shadow-2xl text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <CameraIcon size={36} className="text-cafe-dark/60 mx-auto mb-3" />
+            <h3 className="text-lg font-serif font-bold text-cafe-dark mb-1">
+              ¡{promptCafe.nombre}!
+            </h3>
+            <p className="text-sm text-cafe-accent/70 mb-5">
+              ¿Quieres guardar una foto y nota de tu visita?
+            </p>
+            <div className="flex flex-col gap-2.5">
+              <button
+                onClick={() => { setRecuerdoCafe(promptCafe); setPromptCafe(null) }}
+                className="w-full bg-cafe-dark text-[#b8d04a] text-sm font-bold py-3 rounded-2xl ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform"
+              >
+                Agregar foto
+              </button>
+              <button
+                onClick={() => setPromptCafe(null)}
+                className="w-full text-sm font-semibold text-cafe-accent/70 py-2"
+              >
+                Ahora no
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

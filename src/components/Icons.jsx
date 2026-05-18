@@ -92,6 +92,15 @@ export function CoffeeMugIcon({ size = 28, className = '' }) {
   )
 }
 
+export function CameraIcon({ size = 24, className = '' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M4 8 h3.5 l1.5 -2 h6 l1.5 2 H19 a2 2 0 0 1 2 2 v8 a2 2 0 0 1 -2 2 H5 a2 2 0 0 1 -2 -2 V10 a2 2 0 0 1 2 -2 z" />
+      <circle cx="12" cy="13.5" r="3.5" />
+    </svg>
+  )
+}
+
 export function CoffeeCupIcon({ size = 24, className = '' }) {
   return (
     <svg {...s({ width: size, height: size })} className={className} viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">

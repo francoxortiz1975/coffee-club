@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import cafes from '../data/cafes.json'
 import StarRating from '../components/StarRating'
 import { useFavoritos } from '../context/FavoritosContext'
-import { ArrowLeftIcon, HeartIcon, ShareIcon, CoffeeCupIcon, PinIcon, ExternalLinkIcon, InviteIcon } from '../components/Icons'
+import { ArrowLeftIcon, HeartIcon, ShareIcon, CoffeeCupIcon, CoffeeBeanIcon, CameraIcon, PinIcon, ExternalLinkIcon, InviteIcon } from '../components/Icons'
 import { useVisitas } from '../context/VisitasContext'
 import { useRecuerdos } from '../context/RecuerdosContext'
 import { useAuth } from '../context/AuthContext'
@@ -101,61 +101,65 @@ export default function CafeDetalle() {
           <PinIcon size={12} />{cafe.barrio}
         </p>
 
-        <div className="flex items-center justify-between mb-3">
-          <div className="text-amber-500">
-            <StarRating rating={cafe.rating} />
-          </div>
-          <button
-            onClick={() => toggleVisita(cafe.id)}
-            className={`text-xs font-medium px-3 py-1.5 rounded-full border transition-colors ${
-              yaVisitado
-                ? 'bg-cafe-dark text-beige border-cafe-dark'
-                : 'border-cafe-accent/30 text-cafe-accent/70'
-            }`}
-          >
-            {yaVisitado ? '✓ Ya lo visité' : 'Me falta visitar'}
-          </button>
+        <div className="mb-3 text-amber-500">
+          <StarRating rating={cafe.rating} />
         </div>
 
         <span className="inline-block text-xs bg-beige border border-cafe-accent/30 text-cafe-accent rounded-full px-3 py-1 mb-4">
           {cafe.tipo}
         </span>
 
-        {/* Mi recuerdo — visible solo si estás logueado y visitaste */}
-        {user && yaVisitado && (
-          <div className="mb-5">
-            {recuerdo?.foto_url ? (
+        {/* Visited toggle + Recuerdo — grid 2 columnas */}
+        <div className="grid grid-cols-2 gap-2.5 mb-5">
+          {/* Izquierda: visited toggle */}
+          <button
+            onClick={() => toggleVisita(cafe.id)}
+            className={`flex flex-col items-center justify-center gap-1.5 rounded-2xl py-4 px-2 transition-colors ${
+              yaVisitado
+                ? 'bg-cafe-dark text-beige'
+                : 'bg-[#faf4ec] border border-dashed border-cafe-accent/30 text-cafe-accent/70'
+            }`}
+          >
+            <CoffeeBeanIcon size={26} className={yaVisitado ? '' : 'opacity-30'} />
+            <span className="text-xs font-semibold leading-tight">
+              {yaVisitado ? 'Ya visité' : 'Me falta visitar'}
+            </span>
+          </button>
+
+          {/* Derecha: recuerdo. Solo activa si está logueado + visitado */}
+          {user && yaVisitado ? (
+            recuerdo?.foto_url ? (
               <button
                 onClick={() => setRecuerdoAbierto(true)}
-                className="w-full bg-[#faf4ec] rounded-2xl overflow-hidden shadow-sm active:scale-[0.99] transition-transform"
+                className="relative rounded-2xl overflow-hidden bg-[#faf4ec] shadow-sm active:scale-[0.98] transition-transform"
               >
-                <div className="flex">
-                  <img src={recuerdo.foto_url} alt="" className="w-24 h-24 object-cover shrink-0" />
-                  <div className="flex-1 p-3 text-left min-w-0">
-                    <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-1">Mi recuerdo</p>
-                    {recuerdo.nota ? (
-                      <p className="text-xs text-cafe-dark line-clamp-3 leading-snug">{recuerdo.nota}</p>
-                    ) : (
-                      <p className="text-xs text-cafe-accent/50 italic">Sin nota — toca para editar</p>
-                    )}
-                  </div>
+                <img src={recuerdo.foto_url} alt="" className="w-full h-full object-cover absolute inset-0" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                <div className="relative z-10 h-full flex flex-col justify-end p-3 text-left min-h-[100px]">
+                  <p className="text-[9px] uppercase tracking-widest text-white/70">Mi recuerdo</p>
+                  {recuerdo.nota
+                    ? <p className="text-xs text-white font-medium line-clamp-2 leading-tight mt-1">{recuerdo.nota}</p>
+                    : <p className="text-[10px] text-white/60 italic mt-1">Toca para editar</p>}
                 </div>
               </button>
             ) : (
               <button
                 onClick={() => setRecuerdoAbierto(true)}
-                className="w-full flex items-center gap-3 bg-[#faf4ec] border border-dashed border-cafe-accent/30 rounded-2xl px-4 py-3 active:scale-[0.99] transition-transform"
+                className="flex flex-col items-center justify-center gap-1.5 rounded-2xl py-4 px-2 bg-[#faf4ec] border border-dashed border-cafe-accent/30 active:scale-[0.98] transition-transform"
               >
-                <div className="text-2xl">📷</div>
-                <div className="flex-1 text-left">
-                  <p className="text-sm font-serif font-bold text-cafe-dark">Guarda un recuerdo</p>
-                  <p className="text-[11px] text-cafe-accent/60">Foto + nota de tu visita</p>
-                </div>
-                <span className="text-[#b8d04a] text-lg font-bold">+</span>
+                <CameraIcon size={26} className="text-cafe-accent/70" />
+                <span className="text-xs font-semibold text-cafe-accent/80 leading-tight">Agregar recuerdo</span>
               </button>
-            )}
-          </div>
-        )}
+            )
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-1.5 rounded-2xl py-4 px-2 bg-[#faf4ec]/40 border border-dashed border-cafe-accent/15 opacity-50">
+              <CameraIcon size={26} className="text-cafe-accent/40" />
+              <span className="text-[10px] text-cafe-accent/50 leading-tight text-center">
+                {user ? 'Marca como visitado primero' : 'Inicia sesión para guardar recuerdos'}
+              </span>
+            </div>
+          )}
+        </div>
 
         <p className="text-sm text-cafe-dark/75 leading-relaxed mb-6">{cafe.descripcion}</p>
 

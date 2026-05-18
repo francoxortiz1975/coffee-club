@@ -4,6 +4,7 @@ import { VisitasProvider } from './context/VisitasContext'
 import { InvitacionesProvider } from './context/InvitacionesContext'
 import { UsuarioProvider } from './context/UsuarioContext'
 import { AuthProvider } from './context/AuthContext'
+import { CafeterosProvider } from './context/CafeterosContext'
 import BottomNav from './components/BottomNav'
 import InstallPrompt from './components/InstallPrompt'
 import ScrollToTop from './components/ScrollToTop'
@@ -19,6 +20,7 @@ import InvitacionPage from './pages/InvitacionPage'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
 import AuthCallback from './pages/AuthCallback'
+import Cafeteros from './pages/Cafeteros'
 
 const NO_NAV_PATHS = ['/invitacion']
 
@@ -77,6 +79,7 @@ function AppShell() {
           <Route path="/invitacion/:id" element={<InvitacionPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/cafeteros" element={<Cafeteros />} />
         </Routes>
       </main>
       {!hideNav && <BottomNav />}
@@ -106,9 +109,11 @@ export default function App() {
         <VisitasProvider>
           <InvitacionesProvider>
             <UsuarioProvider>
-              <BrowserRouter>
-                <Root />
-              </BrowserRouter>
+              <CafeterosProvider>
+                <BrowserRouter>
+                  <Root />
+                </BrowserRouter>
+              </CafeterosProvider>
             </UsuarioProvider>
           </InvitacionesProvider>
         </VisitasProvider>

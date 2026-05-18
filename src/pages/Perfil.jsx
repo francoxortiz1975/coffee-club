@@ -5,6 +5,7 @@ import { useVisitas } from '../context/VisitasContext'
 import { useInvitaciones } from '../context/InvitacionesContext'
 import { useUsuario, generarUsername, TIPOS_CAFE } from '../context/UsuarioContext'
 import { useAuth } from '../context/AuthContext'
+import { useCafeteros } from '../context/CafeterosContext'
 import {
   CoffeeCupIcon, CoffeeBeanIcon, CoffeeMugIcon, InviteIcon, PinIcon, UserIcon,
 } from '../components/Icons'
@@ -159,6 +160,7 @@ export default function Perfil() {
   const { enviadas, recibidas, eliminar, invKey } = useInvitaciones()
   const { usuario, actualizar } = useUsuario()
   const { user, cerrarSesion } = useAuth()
+  const { confirmados: cafeteros, pendientesRecibidas } = useCafeteros()
   const [confirmando, setConfirmando] = useState(null)
   const [editandoPerfil, setEditandoPerfil] = useState(false)
   const [eligiendoFavorita, setEligiendoFavorita] = useState(false)
@@ -223,11 +225,18 @@ export default function Perfil() {
 
       {/* Stats bar */}
       <div className="bg-[#faf4ec] rounded-2xl shadow-sm flex items-stretch divide-x divide-cafe-accent/15 mb-6">
-        <div className="flex-1 flex flex-col items-center justify-center py-3">
-          <p className="text-base font-serif font-bold text-cafe-accent/40">—</p>
+        <Link
+          to="/cafeteros"
+          className="flex-1 flex flex-col items-center justify-center py-3 active:bg-black/5 transition-colors relative"
+        >
+          <p className="text-base font-serif font-bold text-cafe-dark tabular-nums">{cafeteros.length}</p>
           <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mt-1">Cafeteros</p>
-          <p className="text-[9px] text-cafe-accent/40 italic">próximamente</p>
-        </div>
+          {pendientesRecibidas.length > 0 && (
+            <span className="absolute top-2 right-2 bg-[#b8d04a] text-cafe-dark text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+              {pendientesRecibidas.length}
+            </span>
+          )}
+        </Link>
         <button
           onClick={() => setEligiendoCafe(true)}
           className="flex-1 flex flex-col items-center justify-center py-3 active:bg-black/5 transition-colors"

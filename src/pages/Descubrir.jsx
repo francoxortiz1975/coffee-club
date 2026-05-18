@@ -37,7 +37,7 @@ export default function Descubrir() {
         className="px-4 pb-4 rounded-b-3xl -mt-[300px]"
         style={{
           background: 'linear-gradient(160deg, #4a2c1a 0%, #2a1510 60%, #1e0f0b 100%)',
-          paddingTop: 'calc(348px + env(safe-area-inset-top))',
+          paddingTop: 'calc(324px + env(safe-area-inset-top))',
         }}
       >
         <div className="flex justify-center mb-3">

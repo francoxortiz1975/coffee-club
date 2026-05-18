@@ -51,7 +51,7 @@ export default function SwipePage() {
       {/* Header */}
       <div
         className="relative z-10 flex items-center px-5 pb-4"
-        style={{ paddingTop: 'calc(48px + env(safe-area-inset-top))' }}
+        style={{ paddingTop: 'calc(24px + env(safe-area-inset-top))' }}
       >
         <h1 className="text-xl font-serif font-bold text-cafe-dark">Swipe</h1>
       </div>

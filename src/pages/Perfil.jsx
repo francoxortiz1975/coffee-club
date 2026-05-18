@@ -179,7 +179,7 @@ export default function Perfil() {
   return (
     <div
       className="min-h-screen px-4 pb-4"
-      style={{ paddingTop: 'calc(48px + env(safe-area-inset-top))' }}
+      style={{ paddingTop: 'calc(24px + env(safe-area-inset-top))' }}
     >
       {/* Botón Entrar / Salir — temporal arriba a la derecha */}
       <div className="flex justify-end mb-2">

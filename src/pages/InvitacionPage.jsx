@@ -130,7 +130,7 @@ export default function InvitacionPage() {
       <button
         onClick={() => navigate('/')}
         className="absolute left-5 z-20 text-white/60 hover:text-white transition-colors"
-        style={{ top: 'calc(48px + env(safe-area-inset-top))' }}
+        style={{ top: 'calc(24px + env(safe-area-inset-top))' }}
       >
         <ArrowLeftIcon size={20} />
       </button>

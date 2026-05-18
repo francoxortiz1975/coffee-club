@@ -6,6 +6,7 @@ import { UsuarioProvider } from './context/UsuarioContext'
 import { AuthProvider } from './context/AuthContext'
 import BottomNav from './components/BottomNav'
 import InstallPrompt from './components/InstallPrompt'
+import ScrollToTop from './components/ScrollToTop'
 import Descubrir from './pages/Descubrir'
 import Decidir from './pages/Decidir'
 import ShufflePage from './pages/ShufflePage'
@@ -86,12 +87,15 @@ function AppShell() {
 
 function Root() {
   return (
-    <Routes>
-      {/* Landing: full-width, sin Layout, sin BottomNav, sin bg images */}
-      <Route path="/landing" element={<Landing />} />
-      {/* Resto: app dentro del Layout mobile-only */}
-      <Route path="*" element={<AppShell />} />
-    </Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
+        {/* Landing: full-width, sin Layout, sin BottomNav, sin bg images */}
+        <Route path="/landing" element={<Landing />} />
+        {/* Resto: app dentro del Layout mobile-only */}
+        <Route path="*" element={<AppShell />} />
+      </Routes>
+    </>
   )
 }
 

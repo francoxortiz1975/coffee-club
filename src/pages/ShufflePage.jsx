@@ -27,7 +27,7 @@ export default function ShufflePage() {
       {/* Header */}
       <div
         className="flex items-center px-5 pb-6"
-        style={{ paddingTop: 'calc(24px + env(safe-area-inset-top))' }}
+        style={{ paddingTop: 'calc(16px + env(safe-area-inset-top))' }}
       >
         <button onClick={() => navigate(-1)} className="text-beige/60 mr-4">
           <ArrowLeftIcon size={20} />

@@ -39,7 +39,7 @@ export default function InvitacionSetup() {
   return (
     <div
       className="min-h-screen flex flex-col px-5 pb-8"
-      style={{ paddingTop: 'calc(24px + env(safe-area-inset-top))' }}
+      style={{ paddingTop: 'calc(16px + env(safe-area-inset-top))' }}
     >
       <button onClick={() => navigate(-1)} className="text-cafe-accent/50 mb-8 self-start">
         <ArrowLeftIcon size={20} />

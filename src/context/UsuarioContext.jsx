@@ -109,10 +109,16 @@ export function UsuarioProvider({ children }) {
 
     // Auth mode → leer de Supabase + suscribir a cambios
     setCargando(true)
-    loadFromSupabase(user.id).then((perfil) => {
-      if (perfil) setUsuario(perfil)
-      setCargando(false)
-    })
+    let activo = true
+
+    function refresh() {
+      if (!activo) return
+      loadFromSupabase(user.id).then((perfil) => {
+        if (activo && perfil) setUsuario(perfil)
+        if (activo) setCargando(false)
+      })
+    }
+    refresh()
 
     // Realtime: si el profile cambia en otra pestaña/device, refrescamos UI
     const channel = supabase
@@ -138,8 +144,15 @@ export function UsuarioProvider({ children }) {
       )
       .subscribe()
 
+    // Red de seguridad: refetch al volver al foco o reconectar
+    window.addEventListener('focus', refresh)
+    window.addEventListener('online', refresh)
+
     return () => {
+      activo = false
       supabase.removeChannel(channel)
+      window.removeEventListener('focus', refresh)
+      window.removeEventListener('online', refresh)
     }
   }, [user, authCargando])
 

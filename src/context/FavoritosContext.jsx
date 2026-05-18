@@ -39,8 +39,12 @@ export function FavoritosProvider({ children }) {
       return
     }
 
+    let activo = true
+
     // Carga inicial desde Supabase
-    loadFromSupabase(user.id).then(setFavoritos)
+    loadFromSupabase(user.id).then((data) => {
+      if (activo) setFavoritos(data)
+    })
 
     // Realtime: insert/delete en favoritos del user → refresca state
     const channel = supabase
@@ -63,8 +67,21 @@ export function FavoritosProvider({ children }) {
       )
       .subscribe()
 
+    // Red de seguridad: refetch al volver al foco o reconectar
+    function refresh() {
+      if (!activo) return
+      loadFromSupabase(user.id).then((data) => {
+        if (activo) setFavoritos(data)
+      })
+    }
+    window.addEventListener('focus', refresh)
+    window.addEventListener('online', refresh)
+
     return () => {
+      activo = false
       supabase.removeChannel(channel)
+      window.removeEventListener('focus', refresh)
+      window.removeEventListener('online', refresh)
     }
   }, [user, authCargando])
 

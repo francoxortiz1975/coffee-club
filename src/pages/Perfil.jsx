@@ -75,16 +75,28 @@ function ColeccionBarrio({ barrio }) {
           {cafesBarrio.map((cafe) => {
             const visitado = visitas.includes(cafe.id)
             const recuerdo = getRecuerdo(cafe.id)
-            // Solo mostramos el recuerdo como fondo si el café está visitado.
-            const fondoFoto = visitado && recuerdo?.foto_url ? recuerdo.foto_url : cafe.fotos?.[0]
+            const cafeFoto = cafe.fotos?.[0]
+            // Si está visitado y hay recuerdo + foto del café → crossfade
+            const conCrossfade = visitado && recuerdo?.foto_url && cafeFoto
             return (
               <Link key={cafe.id} to={`/cafe/${cafe.id}`} className="flex flex-col items-center gap-1.5">
                 <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-cafe-accent/10 flex items-center justify-center">
-                  {fondoFoto
-                    ? <img src={fondoFoto} alt={cafe.nombre} className="w-full h-full object-cover" />
-                    : <CoffeeCupIcon size={24} className="text-cafe-accent/20" />}
+                  {conCrossfade ? (
+                    <>
+                      {/* Capa de abajo: recuerdo (siempre visible) */}
+                      <img src={recuerdo.foto_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                      {/* Capa de arriba: foto del café — anima fade out/in */}
+                      <img src={cafeFoto} alt={cafe.nombre} className="absolute inset-0 w-full h-full object-cover recuerdo-fade" />
+                    </>
+                  ) : visitado && recuerdo?.foto_url ? (
+                    <img src={recuerdo.foto_url} alt={cafe.nombre} className="w-full h-full object-cover" />
+                  ) : cafeFoto ? (
+                    <img src={cafeFoto} alt={cafe.nombre} className="w-full h-full object-cover" />
+                  ) : (
+                    <CoffeeCupIcon size={24} className="text-cafe-accent/20" />
+                  )}
                   {!visitado && (
-                    <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] pointer-events-none" />
+                    <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] pointer-events-none z-10" />
                   )}
                   <button
                     type="button"

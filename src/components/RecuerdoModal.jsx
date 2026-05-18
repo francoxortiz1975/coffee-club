@@ -91,7 +91,6 @@ export default function RecuerdoModal({ cafe, onClose }) {
             ref={fileRef}
             type="file"
             accept="image/*"
-            capture="environment"
             onChange={elegirFoto}
             className="hidden"
           />

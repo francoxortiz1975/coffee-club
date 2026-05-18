@@ -8,6 +8,7 @@ import { CafeterosProvider } from './context/CafeterosContext'
 import BottomNav from './components/BottomNav'
 import InstallPrompt from './components/InstallPrompt'
 import ScrollToTop from './components/ScrollToTop'
+import MigrationRunner from './components/MigrationRunner'
 import Descubrir from './pages/Descubrir'
 import Decidir from './pages/Decidir'
 import ShufflePage from './pages/ShufflePage'
@@ -92,6 +93,7 @@ function Root() {
   return (
     <>
       <ScrollToTop />
+      <MigrationRunner />
       <Routes>
         {/* Landing: full-width, sin Layout, sin BottomNav, sin bg images */}
         <Route path="/landing" element={<Landing />} />

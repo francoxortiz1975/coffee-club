@@ -96,21 +96,50 @@ export function UsuarioProvider({ children }) {
   const [usuario, setUsuario] = useState(USUARIO_VACIO)
   const [cargando, setCargando] = useState(true)
 
-  // Sync con auth state
+  // Sync con auth state + suscripción realtime cuando hay user logueado
   useEffect(() => {
     if (authCargando) return
 
-    if (user) {
-      // Auth mode → leer de Supabase
-      setCargando(true)
-      loadFromSupabase(user.id).then((perfil) => {
-        if (perfil) setUsuario(perfil)
-        setCargando(false)
-      })
-    } else {
+    if (!user) {
       // Anonymous mode → localStorage
       setUsuario(loadAnonymous())
       setCargando(false)
+      return
+    }
+
+    // Auth mode → leer de Supabase + suscribir a cambios
+    setCargando(true)
+    loadFromSupabase(user.id).then((perfil) => {
+      if (perfil) setUsuario(perfil)
+      setCargando(false)
+    })
+
+    // Realtime: si el profile cambia en otra pestaña/device, refrescamos UI
+    const channel = supabase
+      .channel(`profile-${user.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'profiles',
+          filter: `id=eq.${user.id}`,
+        },
+        (payload) => {
+          const fila = payload.new
+          setUsuario((prev) => ({
+            ...prev,
+            nombre: fila.nombre ?? prev.nombre,
+            username: fila.username ?? prev.username,
+            cafeFavorito: fila.cafe_favorito || '',
+            cafeteriaFavoritaId: fila.cafeteria_favorita_id || '',
+          }))
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
     }
   }, [user, authCargando])
 

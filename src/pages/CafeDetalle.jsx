@@ -5,6 +5,9 @@ import StarRating from '../components/StarRating'
 import { useFavoritos } from '../context/FavoritosContext'
 import { ArrowLeftIcon, HeartIcon, ShareIcon, CoffeeCupIcon, PinIcon, ExternalLinkIcon, InviteIcon } from '../components/Icons'
 import { useVisitas } from '../context/VisitasContext'
+import { useRecuerdos } from '../context/RecuerdosContext'
+import { useAuth } from '../context/AuthContext'
+import RecuerdoModal from '../components/RecuerdoModal'
 
 const PLACEHOLDER_FOTOS = [null, null, null]
 
@@ -17,6 +20,10 @@ export default function CafeDetalle() {
   const esFavorito = cafe ? favoritos.includes(cafe.id) : false
   const { visitas, toggleVisita } = useVisitas()
   const yaVisitado = cafe ? visitas.includes(cafe.id) : false
+  const { user } = useAuth()
+  const { getRecuerdo } = useRecuerdos()
+  const recuerdo = cafe ? getRecuerdo(cafe.id) : null
+  const [recuerdoAbierto, setRecuerdoAbierto] = useState(false)
 
   // Tracking de engagement para el banner de instalación
   useEffect(() => {
@@ -114,6 +121,42 @@ export default function CafeDetalle() {
           {cafe.tipo}
         </span>
 
+        {/* Mi recuerdo — visible solo si estás logueado y visitaste */}
+        {user && yaVisitado && (
+          <div className="mb-5">
+            {recuerdo?.foto_url ? (
+              <button
+                onClick={() => setRecuerdoAbierto(true)}
+                className="w-full bg-[#faf4ec] rounded-2xl overflow-hidden shadow-sm active:scale-[0.99] transition-transform"
+              >
+                <div className="flex">
+                  <img src={recuerdo.foto_url} alt="" className="w-24 h-24 object-cover shrink-0" />
+                  <div className="flex-1 p-3 text-left min-w-0">
+                    <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-1">Mi recuerdo</p>
+                    {recuerdo.nota ? (
+                      <p className="text-xs text-cafe-dark line-clamp-3 leading-snug">{recuerdo.nota}</p>
+                    ) : (
+                      <p className="text-xs text-cafe-accent/50 italic">Sin nota — toca para editar</p>
+                    )}
+                  </div>
+                </div>
+              </button>
+            ) : (
+              <button
+                onClick={() => setRecuerdoAbierto(true)}
+                className="w-full flex items-center gap-3 bg-[#faf4ec] border border-dashed border-cafe-accent/30 rounded-2xl px-4 py-3 active:scale-[0.99] transition-transform"
+              >
+                <div className="text-2xl">📷</div>
+                <div className="flex-1 text-left">
+                  <p className="text-sm font-serif font-bold text-cafe-dark">Guarda un recuerdo</p>
+                  <p className="text-[11px] text-cafe-accent/60">Foto + nota de tu visita</p>
+                </div>
+                <span className="text-[#b8d04a] text-lg font-bold">+</span>
+              </button>
+            )}
+          </div>
+        )}
+
         <p className="text-sm text-cafe-dark/75 leading-relaxed mb-6">{cafe.descripcion}</p>
 
         {/* Slide de fotos */}
@@ -143,6 +186,10 @@ export default function CafeDetalle() {
           </a>
         )}
       </div>
+
+      {recuerdoAbierto && (
+        <RecuerdoModal cafe={cafe} onClose={() => setRecuerdoAbierto(false)} />
+      )}
     </div>
   )
 }

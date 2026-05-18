@@ -6,6 +6,8 @@ import { useInvitaciones } from '../context/InvitacionesContext'
 import { useUsuario, generarUsername, TIPOS_CAFE } from '../context/UsuarioContext'
 import { useAuth } from '../context/AuthContext'
 import { useCafeteros } from '../context/CafeterosContext'
+import { useRecuerdos } from '../context/RecuerdosContext'
+import RecuerdoModal from '../components/RecuerdoModal'
 import {
   CoffeeCupIcon, CoffeeBeanIcon, CoffeeMugIcon, InviteIcon, PinIcon, UserIcon,
 } from '../components/Icons'
@@ -14,7 +16,9 @@ const barrios = [...new Set(cafes.map((c) => c.barrio))]
 
 function ColeccionBarrio({ barrio }) {
   const [abierto, setAbierto] = useState(false)
+  const [recuerdoCafe, setRecuerdoCafe] = useState(null)
   const { visitas, toggleVisita } = useVisitas()
+  const { getRecuerdo } = useRecuerdos()
   const cafesBarrio = cafes.filter((c) => c.barrio === barrio)
   const visitados = cafesBarrio.filter((c) => visitas.includes(c.id)).length
 
@@ -53,14 +57,33 @@ function ColeccionBarrio({ barrio }) {
         <div className="grid grid-cols-3 gap-3 p-4">
           {cafesBarrio.map((cafe) => {
             const visitado = visitas.includes(cafe.id)
+            const recuerdo = getRecuerdo(cafe.id)
             return (
               <Link key={cafe.id} to={`/cafe/${cafe.id}`} className="flex flex-col items-center gap-1.5">
                 <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-cafe-accent/10 flex items-center justify-center">
-                  {cafe.fotos?.[0]
-                    ? <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
-                    : <CoffeeCupIcon size={24} className="text-cafe-accent/20" />}
+                  {/* Si hay recuerdo, mostramos la foto del recuerdo; si no, la del cafe */}
+                  {recuerdo?.foto_url ? (
+                    <img src={recuerdo.foto_url} alt={cafe.nombre} className="w-full h-full object-cover" />
+                  ) : cafe.fotos?.[0] ? (
+                    <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
+                  ) : (
+                    <CoffeeCupIcon size={24} className="text-cafe-accent/20" />
+                  )}
                   {!visitado && (
                     <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] pointer-events-none" />
+                  )}
+                  {/* Botón cámara — solo si está visitado */}
+                  {visitado && (
+                    <button
+                      type="button"
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); setRecuerdoCafe(cafe) }}
+                      aria-label={recuerdo ? 'Editar recuerdo' : 'Agregar recuerdo'}
+                      className={`absolute top-1 left-1 w-7 h-7 rounded-full flex items-center justify-center shadow-md active:scale-90 transition-all ${
+                        recuerdo ? 'bg-[#b8d04a] text-cafe-dark' : 'bg-white/90 text-cafe-dark/60 border border-cafe-dark/20'
+                      }`}
+                    >
+                      <span className="text-xs leading-none">📷</span>
+                    </button>
                   )}
                   <button
                     type="button"
@@ -80,6 +103,10 @@ function ColeccionBarrio({ barrio }) {
             )
           })}
         </div>
+      )}
+
+      {recuerdoCafe && (
+        <RecuerdoModal cafe={recuerdoCafe} onClose={() => setRecuerdoCafe(null)} />
       )}
     </div>
   )

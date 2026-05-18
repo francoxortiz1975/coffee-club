@@ -5,6 +5,7 @@ import { InvitacionesProvider } from './context/InvitacionesContext'
 import { UsuarioProvider } from './context/UsuarioContext'
 import { AuthProvider } from './context/AuthContext'
 import { CafeterosProvider } from './context/CafeterosContext'
+import { RecuerdosProvider } from './context/RecuerdosContext'
 import BottomNav from './components/BottomNav'
 import InstallPrompt from './components/InstallPrompt'
 import ScrollToTop from './components/ScrollToTop'
@@ -112,9 +113,11 @@ export default function App() {
           <InvitacionesProvider>
             <UsuarioProvider>
               <CafeterosProvider>
-                <BrowserRouter>
-                  <Root />
-                </BrowserRouter>
+                <RecuerdosProvider>
+                  <BrowserRouter>
+                    <Root />
+                  </BrowserRouter>
+                </RecuerdosProvider>
               </CafeterosProvider>
             </UsuarioProvider>
           </InvitacionesProvider>

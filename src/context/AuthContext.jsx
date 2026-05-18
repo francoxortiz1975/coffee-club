@@ -22,13 +22,24 @@ export function AuthProvider({ children }) {
     return () => sub.subscription.unsubscribe()
   }, [])
 
-  // Enviar magic link al email. redirectTo decide dónde cae el user después de hacer click.
+  // Manda email con magic link + código OTP de 6 dígitos.
+  // El user puede clickear el link (browser) o tipear el código (PWA / cross-device).
   async function enviarMagicLink(email, redirectTo) {
     return supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: redirectTo || window.location.origin + '/',
+        emailRedirectTo: redirectTo || window.location.origin + '/auth/callback',
       },
+    })
+  }
+
+  // Verificar el código OTP de 6 dígitos que el user copia del email.
+  // Crea la sesión directamente acá, sin redirect — perfecto para PWA.
+  async function verificarCodigo(email, codigo) {
+    return supabase.auth.verifyOtp({
+      email,
+      token: codigo,
+      type: 'email',
     })
   }
 
@@ -43,6 +54,7 @@ export function AuthProvider({ children }) {
         user: session?.user ?? null,
         cargando,
         enviarMagicLink,
+        verificarCodigo,
         cerrarSesion,
       }}
     >

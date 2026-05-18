@@ -17,6 +17,7 @@ import InvitacionSetup from './pages/InvitacionSetup'
 import InvitacionPage from './pages/InvitacionPage'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
+import AuthCallback from './pages/AuthCallback'
 
 const NO_NAV_PATHS = ['/invitacion']
 
@@ -74,6 +75,7 @@ function AppShell() {
           <Route path="/invitacion/:id/setup" element={<InvitacionSetup />} />
           <Route path="/invitacion/:id" element={<InvitacionPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
         </Routes>
       </main>
       {!hideNav && <BottomNav />}

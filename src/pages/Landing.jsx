@@ -130,7 +130,7 @@ function WaitlistForm() {
         setEnviado(true)
         return
       }
-      setError('Algo salió mal. Probá de nuevo en un toque.')
+      setError('Algo salió mal. Prueba de nuevo en un toque.')
       console.error('waitlist insert error:', insertError)
       return
     }

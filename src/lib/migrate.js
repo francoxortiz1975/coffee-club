@@ -3,6 +3,28 @@ import { supabase } from './supabase'
 // Marca de "ya migré este device a Supabase". Una sola vez por device + cuenta.
 const FLAG_KEY = 'samay_migrated_v1'
 
+// Chequea rápido si hay algo local para migrar (sin tocar Supabase).
+// Útil para decidir si mostrar el overlay de "Guardando tus datos…".
+export function hasLocalDataToMigrate() {
+  if (localStorage.getItem(FLAG_KEY)) return false
+  try {
+    const u = JSON.parse(localStorage.getItem('samay_usuario') || 'null')
+    if (u && (u.nombre || u.username || u.cafeFavorito || u.cafeteriaFavoritaId)) {
+      // Solo cuenta si customizó algo (no el random default)
+      if (u.nombre && !/^(Cafetero|Catador|Bohemio|Buscador|Amante) /i.test(u.nombre)) return true
+      if (u.cafeFavorito) return true
+      if (u.cafeteriaFavoritaId) return true
+    }
+    const f = JSON.parse(localStorage.getItem('samay_favoritos') || '[]')
+    if (Array.isArray(f) && f.length > 0) return true
+    const v = JSON.parse(localStorage.getItem('samay_visitas') || '[]')
+    if (Array.isArray(v) && v.length > 0) return true
+    const inv = JSON.parse(localStorage.getItem('samay_invitaciones') || '{}')
+    if (Array.isArray(inv?.enviadas) && inv.enviadas.length > 0) return true
+  } catch {}
+  return false
+}
+
 // Importa lo que haya en localStorage al schema de Supabase para el user actual.
 // Idempotente: si ya corrió antes, no hace nada.
 // Silencioso: si algo falla, loguea y sigue. Nunca rompe el UX.

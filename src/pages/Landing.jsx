@@ -149,7 +149,7 @@ function WaitlistForm() {
       <div className="bg-[#b8d04a]/20 border border-[#b8d04a]/40 rounded-2xl p-6 text-center">
         <div className="text-3xl mb-2">☕</div>
         <p className="text-cafe-dark font-serif font-bold text-lg">¡Estás dentro!</p>
-        <p className="text-sm text-cafe-dark/70 mt-1">Te avisaremos cuando abramos nuevos cupos.</p>
+        <p className="text-sm text-cafe-dark/70 mt-1">Te actualizaremos pronto sobre el acceso a la app.</p>
       </div>
     )
   }
@@ -404,8 +404,8 @@ export default function Landing() {
             Reserva tu lugar en el club.
           </h2>
           <p className="text-base text-cafe-dark/70 leading-relaxed mb-8">
-            Sumay está en beta cerrada. Deja tu email y te avisamos cuando
-            abramos nuevos cupos. Sin spam, sin gente rara.
+            Deja tu email y te concederemos acceso anticipado a la aplicación.
+            ¡Nada de spam!
           </p>
           <WaitlistForm />
           <p className="text-[11px] text-cafe-accent/50 mt-5">

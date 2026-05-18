@@ -31,10 +31,14 @@ export default function Descubrir() {
   return (
     <div className="pb-4">
 
-      {/* Header con degradado café — se extiende 300px arriba del viewport */}
+      {/* Header con degradado café — se extiende 300px arriba del viewport.
+          pt suma safe-area-inset-top para que el logo no quede bajo el notch en PWA. */}
       <div
-        className="px-4 pb-4 rounded-b-3xl -mt-[300px] pt-[340px]"
-        style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #2a1510 60%, #1e0f0b 100%)' }}
+        className="px-4 pb-4 rounded-b-3xl -mt-[300px]"
+        style={{
+          background: 'linear-gradient(160deg, #4a2c1a 0%, #2a1510 60%, #1e0f0b 100%)',
+          paddingTop: 'calc(340px + env(safe-area-inset-top))',
+        }}
       >
         <div className="flex justify-center mb-3">
           <img src="/logo.png" alt="Sumay Coffee Club" className="h-20 w-auto object-contain" />

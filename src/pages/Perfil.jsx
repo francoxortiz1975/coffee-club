@@ -177,7 +177,10 @@ export default function Perfil() {
   }
 
   return (
-    <div className="min-h-screen px-4 pt-10 pb-4">
+    <div
+      className="min-h-screen px-4 pb-4"
+      style={{ paddingTop: 'calc(40px + env(safe-area-inset-top))' }}
+    >
       {/* Botón Entrar / Salir — temporal arriba a la derecha */}
       <div className="flex justify-end mb-2">
         {user ? (

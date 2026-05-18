@@ -4,6 +4,7 @@ import cafes from '../data/cafes.json'
 import { useVisitas } from '../context/VisitasContext'
 import { useInvitaciones } from '../context/InvitacionesContext'
 import { useUsuario, generarUsername, TIPOS_CAFE } from '../context/UsuarioContext'
+import { useAuth } from '../context/AuthContext'
 import {
   CoffeeCupIcon, CoffeeBeanIcon, CoffeeMugIcon, InviteIcon, PinIcon, UserIcon,
 } from '../components/Icons'
@@ -157,6 +158,7 @@ export default function Perfil() {
   const { visitas } = useVisitas()
   const { enviadas, recibidas, eliminar, invKey } = useInvitaciones()
   const { usuario, actualizar } = useUsuario()
+  const { user, cerrarSesion } = useAuth()
   const [confirmando, setConfirmando] = useState(null)
   const [editandoPerfil, setEditandoPerfil] = useState(false)
   const [eligiendoFavorita, setEligiendoFavorita] = useState(false)
@@ -176,6 +178,26 @@ export default function Perfil() {
 
   return (
     <div className="min-h-screen px-4 pt-10 pb-4">
+      {/* Botón Entrar / Salir — temporal arriba a la derecha */}
+      <div className="flex justify-end mb-2">
+        {user ? (
+          <button
+            onClick={cerrarSesion}
+            className="text-[11px] font-semibold text-cafe-accent/70 border border-cafe-accent/25 px-3 py-1 rounded-full"
+            title={user.email}
+          >
+            Salir
+          </button>
+        ) : (
+          <Link
+            to="/login"
+            className="text-[11px] font-bold bg-cafe-dark text-[#b8d04a] px-3 py-1 rounded-full"
+          >
+            Iniciar sesión
+          </Link>
+        )}
+      </div>
+
       {/* Header centrado */}
       <div className="flex flex-col items-center text-center mb-6">
         <button

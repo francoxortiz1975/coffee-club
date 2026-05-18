@@ -3,6 +3,7 @@ import { FavoritosProvider } from './context/FavoritosContext'
 import { VisitasProvider } from './context/VisitasContext'
 import { InvitacionesProvider } from './context/InvitacionesContext'
 import { UsuarioProvider } from './context/UsuarioContext'
+import { AuthProvider } from './context/AuthContext'
 import BottomNav from './components/BottomNav'
 import InstallPrompt from './components/InstallPrompt'
 import Descubrir from './pages/Descubrir'
@@ -15,6 +16,7 @@ import CafeDetalle from './pages/CafeDetalle'
 import InvitacionSetup from './pages/InvitacionSetup'
 import InvitacionPage from './pages/InvitacionPage'
 import Landing from './pages/Landing'
+import Login from './pages/Login'
 
 const NO_NAV_PATHS = ['/invitacion']
 
@@ -71,6 +73,7 @@ function AppShell() {
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/invitacion/:id/setup" element={<InvitacionSetup />} />
           <Route path="/invitacion/:id" element={<InvitacionPage />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </main>
       {!hideNav && <BottomNav />}
@@ -92,16 +95,18 @@ function Root() {
 
 export default function App() {
   return (
-    <FavoritosProvider>
-      <VisitasProvider>
-        <InvitacionesProvider>
-          <UsuarioProvider>
-            <BrowserRouter>
-              <Root />
-            </BrowserRouter>
-          </UsuarioProvider>
-        </InvitacionesProvider>
-      </VisitasProvider>
-    </FavoritosProvider>
+    <AuthProvider>
+      <FavoritosProvider>
+        <VisitasProvider>
+          <InvitacionesProvider>
+            <UsuarioProvider>
+              <BrowserRouter>
+                <Root />
+              </BrowserRouter>
+            </UsuarioProvider>
+          </InvitacionesProvider>
+        </VisitasProvider>
+      </FavoritosProvider>
+    </AuthProvider>
   )
 }

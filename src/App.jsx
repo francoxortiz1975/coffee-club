@@ -32,7 +32,7 @@ const BG_RULES = [
   { path: '/decidir/swipe',     bg: '/white-bg.webp', overlay: 40 },
   { path: '/decidir/seleccionados', bg: '/wood-bg.webp', overlay: 50 },
   { path: '/decidir',           bg: '/texture-bg.webp', overlay: 0  },
-  { path: '/perfil',            bg: '/panama-bg.webp', overlay: 80 },
+  { path: '/perfil',            bg: '/panama-bg.webp', overlay: 0  },
   { path: '/cafe/:id',          bg: '/white-bg.webp', overlay: 40 },
   { path: '/invitacion/:id/setup', bg: '/wood-bg.webp', overlay: 50 },
   { path: '/invitacion/:id',    bg: '/wood-bg.webp', overlay: 50 },

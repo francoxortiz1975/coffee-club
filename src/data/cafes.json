@@ -41,8 +41,8 @@
   },
   {
     "id": "quito-deli",
-    "nombre": "Quito Deli Patisserie & Boulangerie",
-    "barrio": "",
+    "nombre": "Quito Deli",
+    "barrio": "La Floresta",
     "tipo": "Cafetería",
     "ocasiones": ["pareja", "amigos", "work", "reunión"],
     "especialidad": "Croissants y pan recién horneado al estilo europeo",
@@ -52,6 +52,6 @@
     "googleMaps": "https://maps.app.goo.gl/xydq9tk4A5FzaNf17",
     "instagram": "https://www.instagram.com/quitodeliuio/",
     "precio": "$$",
-    "rating": 4.6
+    "rating": 4.8
   }
 ]

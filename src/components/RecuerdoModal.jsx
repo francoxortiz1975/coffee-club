@@ -90,9 +90,9 @@ export default function RecuerdoModal({ cafe, onClose }) {
               )}
             </button>
 
-            {/* Plaquita de madera con textarea integrado */}
+            {/* Plaquita de madera con textarea integrado, centrado vertical */}
             <div
-              className="relative border-t border-black/30"
+              className="relative border-t border-black/30 flex items-center justify-center min-h-[68px]"
               style={{
                 background: 'linear-gradient(160deg, #6e4a2e 0%, #4a2c1a 60%, #3a2010 100%)',
                 boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
@@ -100,11 +100,22 @@ export default function RecuerdoModal({ cafe, onClose }) {
             >
               <textarea
                 value={nota}
-                onChange={(e) => setNota(e.target.value)}
+                onChange={(e) => {
+                  setNota(e.target.value)
+                  // auto-resize
+                  e.target.style.height = 'auto'
+                  e.target.style.height = e.target.scrollHeight + 'px'
+                }}
+                ref={(el) => {
+                  if (el) {
+                    el.style.height = 'auto'
+                    el.style.height = el.scrollHeight + 'px'
+                  }
+                }}
                 placeholder='"Fui con María, pedí latte…"'
-                rows={2}
+                rows={1}
                 maxLength={280}
-                className="w-full bg-transparent text-beige font-serif italic text-center text-sm leading-snug px-4 py-3 outline-none resize-none placeholder:text-beige/45"
+                className="w-full bg-transparent text-beige font-serif italic text-center text-sm leading-snug px-4 py-2 outline-none resize-none placeholder:text-beige/45 overflow-hidden"
               />
             </div>
           </div>

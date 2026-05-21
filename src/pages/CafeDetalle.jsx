@@ -140,20 +140,15 @@ export default function CafeDetalle() {
             recuerdo?.foto_url ? (
               <button
                 onClick={() => setRecuerdoAbierto(true)}
-                className="flex flex-col rounded-2xl overflow-hidden bg-[#faf4ec] shadow-sm active:scale-[0.98] transition-transform text-left min-h-[100px]"
+                className="relative rounded-2xl overflow-hidden bg-[#faf4ec] shadow-sm active:scale-[0.98] transition-transform"
               >
-                <img src={recuerdo.foto_url} alt="" className="w-full flex-1 object-cover" />
-                {/* Plaquita de madera estilo café con la nota */}
-                <div
-                  className="px-2.5 py-1.5 text-beige text-center border-t border-black/30"
-                  style={{
-                    background: 'linear-gradient(160deg, #6e4a2e 0%, #4a2c1a 60%, #3a2010 100%)',
-                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
-                  }}
-                >
+                <img src={recuerdo.foto_url} alt="" className="w-full h-full object-cover absolute inset-0" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className="relative z-10 h-full flex flex-col justify-end p-3 text-left min-h-[100px]">
+                  <p className="text-[9px] uppercase tracking-widest text-white/70">Mi recuerdo</p>
                   {recuerdo.nota
-                    ? <p className="text-[10px] font-serif italic leading-snug line-clamp-2">"{recuerdo.nota}"</p>
-                    : <p className="text-[9px] uppercase tracking-widest text-beige/60">Mi recuerdo</p>}
+                    ? <p className="text-xs text-white font-serif italic line-clamp-2 leading-tight mt-1">"{recuerdo.nota}"</p>
+                    : <p className="text-[10px] text-white/60 italic mt-1">Toca para editar</p>}
                 </div>
               </button>
             ) : (

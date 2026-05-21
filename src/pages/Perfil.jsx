@@ -24,17 +24,18 @@ function ColeccionBarrio({ barrio }) {
   const visitados = cafesBarrio.filter((c) => visitas.includes(c.id)).length
 
   // Tap en el bean del slot:
-  //  - si no estaba visitado → marca + abre prompt 'agregar recuerdo'
   //  - si estaba visitado → desmarca directo, sin prompt
+  //  - si no estaba visitado y NO hay recuerdo → marca + abre prompt 'agregar recuerdo'
+  //  - si no estaba visitado y SÍ hay recuerdo guardado → solo marca, sin prompt
   async function handleBeanTap(cafe, visitado, e) {
     e.preventDefault()
     e.stopPropagation()
     if (visitado) {
-      // Desmarcar — sin prompt
       await toggleVisita(cafe.id)
-    } else {
-      // Marcar + abrir prompt
-      await toggleVisita(cafe.id)
+      return
+    }
+    await toggleVisita(cafe.id)
+    if (!getRecuerdo(cafe.id)) {
       setPromptCafe(cafe)
     }
   }

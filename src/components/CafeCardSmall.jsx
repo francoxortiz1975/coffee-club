@@ -10,7 +10,7 @@ const OCASION_LABELS = {
   work: 'Work',
 }
 
-export default function CafeCardSmall({ cafe }) {
+export default function CafeCardSmall({ cafe, fullWidth = false }) {
   const { id, nombre, barrio, ocasiones, especialidad, precio, fotos } = cafe
   const { favoritos, toggleFavorito } = useFavoritos()
   const esFavorito = favoritos.includes(id)
@@ -21,10 +21,12 @@ export default function CafeCardSmall({ cafe }) {
     toggleFavorito(id)
   }
 
+  const sizing = fullWidth ? 'w-full' : 'shrink-0 w-64 snap-start'
+
   return (
     <Link
       to={`/cafe/${id}`}
-      className="shrink-0 w-64 bg-[#faf4ec] rounded-2xl overflow-hidden shadow-sm snap-start block active:scale-[0.98] transition-transform"
+      className={`${sizing} bg-[#faf4ec] rounded-2xl overflow-hidden shadow-sm block active:scale-[0.98] transition-transform`}
     >
       <div className="w-full h-36 bg-cafe-accent/10 flex items-center justify-center relative">
         {fotos?.[0] ? (

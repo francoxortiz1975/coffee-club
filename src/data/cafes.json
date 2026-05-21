@@ -22,11 +22,11 @@
   {
     "id": "coffee-factory",
     "nombre": "Coffee Factory",
-    "barrio": "",
+    "barrio": "La Carolina",
     "tipo": "Café de especialidad",
     "ocasiones": ["pareja", "amigos", "turístico"],
-    "especialidad": "Café ecuatoriano molido al momento",
-    "historia": "Un café de especialidad donde cada taza de café ecuatoriano se muele al momento. Sebastián, su dueño, convierte cada visita en una clase magistral sobre el origen y tueste del café.",
+    "especialidad": "Café de especialidad calidad de exportación 100% ecuatoriano",
+    "historia": "Coffee Factory fue fundado en 2019 en Quito. El café que utilizan se produce en la Finca Vista Hermosa, ubicada en Nanegalito, Pichincha, a 1.850 msnm. Además, ofrecen productos únicos de sal y dulce elaborados de forma artesanal.",
     "descripcion": "Local pequeño y acogedor donde el protagonista es el café ecuatoriano de origen. Sebastián te recibe con agua con gas y te guía en una experiencia sensorial: te explica el maridaje gastronómico, las notas de cada variedad y de dónde viene cada grano antes de prepararlo. En el menú encontrarás affogatos, golden coffee, matcha latte y postres artesanales como el cheesecake de café y la torta de choclo. Tiene parqueadero propio.",
     "fotos": [
       "/images/coffee-factory/cover.jpg",
@@ -34,23 +34,23 @@
       "/images/coffee-factory/food.jpg",
       "/images/coffee-factory/food2.jpg"
     ],
-    "googleMaps": "",
-    "instagram": "",
+    "googleMaps": "https://maps.app.goo.gl/jrzsZsr15V8xEZaM9",
+    "instagram": "https://www.instagram.com/coffeefactoryecuador/?hl=es",
     "precio": "$$$",
-    "rating": 4.7
+    "rating": 4.9
   },
   {
     "id": "quito-deli",
     "nombre": "Quito Deli Patisserie & Boulangerie",
     "barrio": "",
-    "tipo": "Panadería, pastelería & café",
+    "tipo": "Cafetería",
     "ocasiones": ["pareja", "amigos", "work", "reunión"],
     "especialidad": "Croissants y pan recién horneado al estilo europeo",
     "historia": "Con más de 30 años de experiencia, Quito Deli mantiene el estilo tradicional europeo en panadería y pastelería de la ciudad. El olor del pan recién horneado es el toque especial que lo caracteriza, y también crea un ambiente único para pasar las mañanas o tardes disfrutando de un delicioso café y sus acompañantes.",
     "descripcion": "En Quito Deli encuentras una gran selección de tortas, postres y panes recién horneados. Así como variedad de bocadillos, jugos naturales, galletas, café y una zona saludable. Quito Deli también ofrece almuerzos ligeros y cenas elaboradas para disfrutar con familiares y amigos.",
     "fotos": [],
-    "googleMaps": "",
-    "instagram": "",
+    "googleMaps": "https://maps.app.goo.gl/xydq9tk4A5FzaNf17",
+    "instagram": "https://www.instagram.com/quitodeliuio/",
     "precio": "$$",
     "rating": 4.6
   }

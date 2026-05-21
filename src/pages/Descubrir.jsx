@@ -85,9 +85,7 @@ export default function Descubrir() {
   const cafesDeCafeteros   = cafes.filter((c) => cafeIdsDeCafeteros.includes(c.id))
   const cafesParaTrabajar  = cafes.filter((c) => c.ocasiones.includes('work'))
   const cafesRomantico     = cafes.filter((c) => c.ocasiones.includes('pareja'))
-  const cafesConAmigos     = cafes.filter((c) => c.ocasiones.includes('amigos'))
   const cafesTuristico     = cafes.filter((c) => c.ocasiones.includes('turístico'))
-  const cafesTopRated      = cafes.filter((c) => c.rating >= 4.7).sort((a, b) => b.rating - a.rating)
 
   return (
     <div className="pb-4">
@@ -164,11 +162,9 @@ export default function Descubrir() {
           <CafesRow titulo="Cerca de ti" cafesList={cafes} />
           <CafesRow titulo="Tus cafeteros visitaron" cafesList={cafesDeCafeteros} />
           <CafesRow titulo="Favoritos" cafesList={cafesFavoritos} />
-          <CafesRow titulo="Pa trabajar" cafesList={cafesParaTrabajar} />
           <CafesRow titulo="Algo romántico" cafesList={cafesRomantico} />
-          <CafesRow titulo="Con amigos" cafesList={cafesConAmigos} />
+          <CafesRow titulo="Pa trabajar" cafesList={cafesParaTrabajar} />
           <CafesRow titulo="Para turistear" cafesList={cafesTuristico} />
-          <CafesRow titulo="Top rated" cafesList={cafesTopRated} />
 
           {/* Sobre el café ecuatoriano */}
           <section className="mt-8 px-4">

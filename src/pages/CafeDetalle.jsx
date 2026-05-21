@@ -8,6 +8,7 @@ import { useVisitas } from '../context/VisitasContext'
 import { useRecuerdos } from '../context/RecuerdosContext'
 import { useAuth } from '../context/AuthContext'
 import RecuerdoModal from '../components/RecuerdoModal'
+import PhotoLightbox from '../components/PhotoLightbox'
 
 const PLACEHOLDER_FOTOS = [null, null, null]
 
@@ -24,6 +25,7 @@ export default function CafeDetalle() {
   const { getRecuerdo } = useRecuerdos()
   const recuerdo = cafe ? getRecuerdo(cafe.id) : null
   const [recuerdoAbierto, setRecuerdoAbierto] = useState(false)
+  const [lightboxIndex, setLightboxIndex] = useState(null) // null = cerrado, número = abierto en esa foto
 
   // Tracking de engagement para el banner de instalación
   useEffect(() => {
@@ -55,10 +57,17 @@ export default function CafeDetalle() {
     <div className="relative min-h-screen">
       {/* Hero foto */}
       <div className="relative z-10 w-full h-64 bg-cafe-accent/10 flex items-center justify-center">
-        {cafe.fotos[0]
-          ? <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
-          : <CoffeeCupIcon size={56} className="text-cafe-accent/20" />
-        }
+        {cafe.fotos[0] ? (
+          <button
+            onClick={() => setLightboxIndex(0)}
+            className="w-full h-full block active:opacity-90"
+            aria-label="Ver foto en grande"
+          >
+            <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
+          </button>
+        ) : (
+          <CoffeeCupIcon size={56} className="text-cafe-accent/20" />
+        )}
         <button
           onClick={() => navigate(-1)}
           className="absolute left-4 bg-white/80 backdrop-blur-sm text-cafe-dark rounded-full w-9 h-9 flex items-center justify-center shadow"
@@ -131,15 +140,20 @@ export default function CafeDetalle() {
             recuerdo?.foto_url ? (
               <button
                 onClick={() => setRecuerdoAbierto(true)}
-                className="relative rounded-2xl overflow-hidden bg-[#faf4ec] shadow-sm active:scale-[0.98] transition-transform"
+                className="flex flex-col rounded-2xl overflow-hidden bg-[#faf4ec] shadow-sm active:scale-[0.98] transition-transform text-left min-h-[100px]"
               >
-                <img src={recuerdo.foto_url} alt="" className="w-full h-full object-cover absolute inset-0" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                <div className="relative z-10 h-full flex flex-col justify-end p-3 text-left min-h-[100px]">
-                  <p className="text-[9px] uppercase tracking-widest text-white/70">Mi recuerdo</p>
+                <img src={recuerdo.foto_url} alt="" className="w-full flex-1 object-cover" />
+                {/* Plaquita de madera estilo café con la nota */}
+                <div
+                  className="px-2.5 py-1.5 text-beige text-center border-t border-black/30"
+                  style={{
+                    background: 'linear-gradient(160deg, #6e4a2e 0%, #4a2c1a 60%, #3a2010 100%)',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
+                  }}
+                >
                   {recuerdo.nota
-                    ? <p className="text-xs text-white font-medium line-clamp-2 leading-tight mt-1">{recuerdo.nota}</p>
-                    : <p className="text-[10px] text-white/60 italic mt-1">Toca para editar</p>}
+                    ? <p className="text-[10px] font-serif italic leading-snug line-clamp-2">"{recuerdo.nota}"</p>
+                    : <p className="text-[9px] uppercase tracking-widest text-beige/60">Mi recuerdo</p>}
                 </div>
               </button>
             ) : (
@@ -163,16 +177,22 @@ export default function CafeDetalle() {
 
         <p className="text-sm text-cafe-dark/75 leading-relaxed mb-6">{cafe.descripcion}</p>
 
-        {/* Slide de fotos */}
+        {/* Slide de fotos — tap abre lightbox fullscreen */}
         <h2 className="text-sm font-semibold text-cafe-dark mb-3">Fotos</h2>
         <div className="flex gap-3 overflow-x-auto pb-3 -mx-5 px-5 snap-x snap-mandatory no-scrollbar">
           {fotos.map((foto, i) => (
-            <div key={i} className="shrink-0 w-44 h-32 rounded-xl overflow-hidden bg-cafe-accent/10 flex items-center justify-center snap-start">
+            <button
+              key={i}
+              type="button"
+              onClick={() => foto && setLightboxIndex(i)}
+              disabled={!foto}
+              className="shrink-0 w-44 h-32 rounded-xl overflow-hidden bg-cafe-accent/10 flex items-center justify-center snap-start active:scale-[0.97] transition-transform"
+            >
               {foto
                 ? <img src={foto} alt={`${cafe.nombre} ${i + 1}`} className="w-full h-full object-cover" />
                 : <CoffeeCupIcon size={28} className="text-cafe-accent/20" />
               }
-            </div>
+            </button>
           ))}
         </div>
 
@@ -193,6 +213,14 @@ export default function CafeDetalle() {
 
       {recuerdoAbierto && (
         <RecuerdoModal cafe={cafe} onClose={() => setRecuerdoAbierto(false)} />
+      )}
+
+      {lightboxIndex !== null && cafe.fotos.length > 0 && (
+        <PhotoLightbox
+          fotos={cafe.fotos}
+          indexInicial={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
       )}
     </div>
   )

@@ -48,7 +48,12 @@
     "especialidad": "Croissants y pan recién horneado al estilo europeo",
     "historia": "Con más de 30 años de experiencia, Quito Deli mantiene el estilo tradicional europeo en panadería y pastelería de la ciudad. El olor del pan recién horneado es el toque especial que lo caracteriza, y también crea un ambiente único para pasar las mañanas o tardes disfrutando de un delicioso café y sus acompañantes.",
     "descripcion": "En Quito Deli encuentras una gran selección de tortas, postres y panes recién horneados. Así como variedad de bocadillos, jugos naturales, galletas, café y una zona saludable. Quito Deli también ofrece almuerzos ligeros y cenas elaboradas para disfrutar con familiares y amigos.",
-    "fotos": [],
+    "fotos": [
+      "/images/quito-deli/cover.jpg",
+      "/images/quito-deli/place.jpg",
+      "/images/quito-deli/food.jpg",
+      "/images/quito-deli/food2.jpg"
+    ],
     "googleMaps": "https://maps.app.goo.gl/xydq9tk4A5FzaNf17",
     "instagram": "https://www.instagram.com/quitodeliuio/",
     "precio": "$$",

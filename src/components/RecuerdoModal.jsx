@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRecuerdos } from '../context/RecuerdosContext'
-import { CameraIcon } from './Icons'
+import { CameraIcon, PencilIcon } from './Icons'
 
 export default function RecuerdoModal({ cafe, onClose }) {
   const { getRecuerdo, guardarRecuerdo, eliminarRecuerdo } = useRecuerdos()
@@ -66,27 +66,49 @@ export default function RecuerdoModal({ cafe, onClose }) {
         </div>
 
         <div className="px-5 pb-5 overflow-y-auto">
-          {/* Foto */}
-          <button
-            type="button"
-            onClick={() => fileRef.current?.click()}
-            className="relative w-full aspect-square rounded-2xl overflow-hidden bg-cafe-accent/10 flex items-center justify-center mb-4 active:scale-[0.99] transition-transform"
-          >
-            {preview ? (
-              <img src={preview} alt="" className="w-full h-full object-cover" />
-            ) : (
-              <div className="text-center flex flex-col items-center">
-                <CameraIcon size={40} className="text-cafe-accent/60 mb-2" />
-                <p className="text-sm text-cafe-accent/70 font-semibold">Agregar foto</p>
-                <p className="text-[11px] text-cafe-accent/50 mt-1">Toca para elegir de tu galería</p>
-              </div>
-            )}
-            {preview && (
-              <div className="absolute bottom-3 right-3 bg-cafe-dark/80 text-beige text-[10px] font-semibold px-3 py-1.5 rounded-full backdrop-blur-sm">
-                Cambiar
-              </div>
-            )}
-          </button>
+          {/* Polaroid: foto + plaquita de madera con nota editable */}
+          <div className="rounded-2xl overflow-hidden bg-[#faf4ec] shadow-sm mb-4">
+            {/* Foto */}
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              className="relative w-full aspect-square overflow-hidden bg-cafe-accent/10 flex items-center justify-center active:scale-[0.99] transition-transform"
+            >
+              {preview ? (
+                <img src={preview} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <div className="text-center flex flex-col items-center">
+                  <CameraIcon size={40} className="text-cafe-accent/60 mb-2" />
+                  <p className="text-sm text-cafe-accent/70 font-semibold">Agregar foto</p>
+                  <p className="text-[11px] text-cafe-accent/50 mt-1">Toca para elegir de tu galería</p>
+                </div>
+              )}
+              {preview && (
+                <div className="absolute top-3 right-3 w-9 h-9 rounded-full bg-cafe-dark/80 text-beige flex items-center justify-center shadow-lg backdrop-blur-sm">
+                  <PencilIcon size={15} />
+                </div>
+              )}
+            </button>
+
+            {/* Plaquita de madera con textarea integrado */}
+            <div
+              className="relative border-t border-black/30"
+              style={{
+                background: 'linear-gradient(160deg, #6e4a2e 0%, #4a2c1a 60%, #3a2010 100%)',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
+              }}
+            >
+              <textarea
+                value={nota}
+                onChange={(e) => setNota(e.target.value)}
+                placeholder='"Fui con María, pedí latte…"'
+                rows={2}
+                maxLength={280}
+                className="w-full bg-transparent text-beige font-serif italic text-center text-sm leading-snug px-4 py-3 outline-none resize-none placeholder:text-beige/45"
+              />
+            </div>
+          </div>
+
           <input
             ref={fileRef}
             type="file"
@@ -94,20 +116,6 @@ export default function RecuerdoModal({ cafe, onClose }) {
             onChange={elegirFoto}
             className="hidden"
           />
-
-          {/* Nota */}
-          <label className="text-[11px] uppercase tracking-widest text-cafe-accent/50 block mb-1.5">
-            Nota (opcional)
-          </label>
-          <textarea
-            value={nota}
-            onChange={(e) => setNota(e.target.value)}
-            placeholder="Fui con María, pedí latte..."
-            rows={3}
-            maxLength={280}
-            className="w-full bg-white border border-cafe-accent/20 rounded-xl px-3 py-2.5 text-sm text-cafe-dark outline-none focus:border-cafe-accent/50 resize-none"
-          />
-          <p className="text-[10px] text-cafe-accent/40 mt-1 text-right">{nota.length}/280</p>
 
           {error && <p className="text-xs text-red-600 mt-2 text-center">{error}</p>}
         </div>

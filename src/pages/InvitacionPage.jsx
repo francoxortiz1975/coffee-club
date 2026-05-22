@@ -12,6 +12,101 @@ function formatFecha(fechaStr) {
   return d.toLocaleDateString('es-EC', { weekday: 'long', day: 'numeric', month: 'long' })
 }
 
+// Carta cerrada con animación de apertura. Swipe up o tap → onOpen.
+function EnvelopeIntro({ receptor, abriendo, onOpen, logoDataUrl }) {
+  const startY = useRef(0)
+  const [dy, setDy] = useState(0)
+
+  function handleTouchStart(e) {
+    if (abriendo) return
+    startY.current = e.touches[0].clientY
+  }
+  function handleTouchMove(e) {
+    if (abriendo) return
+    const delta = e.touches[0].clientY - startY.current
+    if (delta < 0) setDy(Math.max(delta, -120))
+  }
+  function handleTouchEnd() {
+    if (abriendo) return
+    if (dy < -50) onOpen()
+    else setDy(0)
+  }
+
+  // Estados visuales del flap y body
+  const flapStyle = {
+    background: 'linear-gradient(135deg, #d4c3a8 0%, #b09872 100%)',
+    clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
+    transformOrigin: 'top',
+    transform: abriendo ? 'rotateX(-180deg)' : 'rotateX(0deg)',
+    transition: 'transform 0.9s cubic-bezier(0.4, 0, 0.2, 1)',
+    backfaceVisibility: 'hidden',
+  }
+  const bodyStyle = {
+    background: 'linear-gradient(160deg, #faf4ec 0%, #e8dcc7 100%)',
+    opacity: abriendo ? 0 : 1,
+    transition: 'opacity 0.4s 0.6s ease',
+  }
+  const sealStyle = {
+    background: 'radial-gradient(circle at 30% 30%, #c8e057 0%, #8a9d2e 70%, #5f6f1f 100%)',
+    boxShadow: '0 4px 10px rgba(0,0,0,0.35), inset 0 1px 2px rgba(255,255,255,0.3)',
+    opacity: abriendo ? 0 : 1,
+    transition: 'opacity 0.3s, transform 0.3s',
+    transform: abriendo ? 'scale(0.5)' : 'scale(1)',
+  }
+  const containerStyle = {
+    transform: `translateY(${dy}px) ${abriendo ? 'scale(1.15)' : 'scale(1)'}`,
+    transition: abriendo
+      ? 'transform 1s ease-in, opacity 0.4s 0.7s ease'
+      : (dy === 0 ? 'transform 0.3s ease' : 'none'),
+    opacity: abriendo ? 0 : 1,
+    perspective: '1000px',
+  }
+
+  return (
+    <div
+      className="absolute inset-0 z-30 flex flex-col items-center justify-center px-8 text-center select-none"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onClick={() => !abriendo && onOpen()}
+      style={{ touchAction: 'none' }}
+    >
+      {/* Encabezado "Para X" — siempre visible */}
+      {receptor && (
+        <div style={{ opacity: abriendo ? 0 : 1, transition: 'opacity 0.3s' }}>
+          <p className="text-white/60 font-serif italic text-sm mb-1">Para</p>
+          <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-10 tracking-tight">
+            {receptor.toUpperCase()}
+          </h2>
+        </div>
+      )}
+
+      {/* Carta */}
+      <div className="relative w-72 h-52" style={containerStyle}>
+        {/* Body */}
+        <div className="absolute inset-0 rounded-lg shadow-2xl" style={bodyStyle} />
+        {/* Flap triangular */}
+        <div className="absolute top-0 left-0 right-0 h-1/2" style={flapStyle} />
+        {/* Sello de cera */}
+        <div
+          className="absolute left-1/2 -translate-x-1/2 w-16 h-16 rounded-full flex items-center justify-center z-10"
+          style={{ ...sealStyle, top: 'calc(50% - 8px)' }}
+        >
+          {logoDataUrl
+            ? <img src={logoDataUrl} alt="" className="w-9 h-9 object-contain opacity-90" />
+            : <span className="text-cafe-dark font-serif font-bold text-2xl">S</span>}
+        </div>
+      </div>
+
+      {/* Hint deslizar */}
+      <div className="mt-10" style={{ opacity: abriendo ? 0 : 1, transition: 'opacity 0.3s' }}>
+        <p className="text-white/50 text-3xl leading-none animate-bounce">↑</p>
+        <p className="text-white/70 font-serif italic text-sm mt-2">Desliza para abrir</p>
+      </div>
+    </div>
+  )
+}
+
 function formatHora(horaStr) {
   if (!horaStr) return null
   const [h, m] = horaStr.split(':')
@@ -50,6 +145,9 @@ export default function InvitacionPage() {
   const fecha = params.get('fecha')
   const hora = params.get('hora')
 
+  // 'cerrada' (mostrar carta) | 'abriendo' (animando) | 'abierta' (invitación visible)
+  const [estado, setEstado] = useState('cerrada')
+
   // Guardar como recibida la primera vez que se abre el link
   // (si yo la envié, el context la ignora).
   useEffect(() => {
@@ -58,21 +156,25 @@ export default function InvitacionPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, nombre, receptor, fecha, hora, cafe])
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
+  function abrirCarta() {
+    if (estado !== 'cerrada') return
+    setEstado('abriendo')
+    // Confetti al inicio de la animación
+    setTimeout(() => {
       confetti({
-        particleCount: 80,
-        spread: 70,
+        particleCount: 100,
+        spread: 80,
         origin: { y: 0.4 },
-        colors: ['#d4af37', '#f5f0e8', '#c8a96e', '#fff8e7', '#b8962e'],
+        colors: ['#b8d04a', '#d4af37', '#f5f0e8', '#c8a96e', '#fff8e7'],
         shapes: ['circle'],
-        scalar: 0.9,
+        scalar: 1,
         gravity: 0.8,
         ticks: 200,
       })
-    }, 600)
-    return () => clearTimeout(timer)
-  }, [])
+    }, 500)
+    // Después de la animación → revelar invitación
+    setTimeout(() => setEstado('abierta'), 1100)
+  }
 
   // Preload images as data URLs so html-to-image can capture them
   useEffect(() => {
@@ -129,15 +231,30 @@ export default function InvitacionPage() {
       {/* Botón regresar — lleva a Descubrir (onboarding suave para receptores nuevos) */}
       <button
         onClick={() => navigate('/')}
-        className="absolute left-5 z-20 text-white/60 hover:text-white transition-colors"
+        className="absolute left-5 z-40 text-white/60 hover:text-white transition-colors"
         style={{ top: 'calc(16px + env(safe-area-inset-top))' }}
       >
         <ArrowLeftIcon size={20} />
       </button>
 
+      {/* Carta cerrada — visible mientras estado !== 'abierta' */}
+      {estado !== 'abierta' && (
+        <EnvelopeIntro
+          receptor={receptor}
+          abriendo={estado === 'abriendo'}
+          onOpen={abrirCarta}
+          logoDataUrl={logoDataUrl}
+        />
+      )}
 
-      {/* Contenido centrado */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-8 text-center gap-4">
+      {/* Contenido centrado — fade in cuando se abre */}
+      <div
+        className="relative z-10 flex-1 flex flex-col items-center justify-center px-8 text-center gap-4 transition-opacity duration-700"
+        style={{
+          opacity: estado === 'abierta' ? 1 : 0,
+          pointerEvents: estado === 'abierta' ? 'auto' : 'none',
+        }}
+      >
 
         {logoDataUrl && (
           <img src={logoDataUrl} alt="Sumay" className="h-8 w-auto object-contain opacity-70 mb-2 animate-[fadeUp_0.8s_ease_0.2s_both]" />
@@ -175,7 +292,13 @@ export default function InvitacionPage() {
       </div>
 
       {/* Acciones — Compartir (primary) + Ver más (secondary) */}
-      <div className="relative z-10 px-6 pb-12 flex flex-col gap-3 animate-[fadeUp_0.8s_ease_1.5s_both]">
+      <div
+        className="relative z-10 px-6 pb-12 flex flex-col gap-3 transition-opacity duration-700"
+        style={{
+          opacity: estado === 'abierta' ? 1 : 0,
+          pointerEvents: estado === 'abierta' ? 'auto' : 'none',
+        }}
+      >
         <button
           onClick={handleShare}
           disabled={sharing}

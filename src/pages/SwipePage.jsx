@@ -48,8 +48,8 @@ export default function SwipePage() {
 
   return (
     <div
-      className="relative min-h-screen flex flex-col overflow-hidden"
-      style={{ touchAction: 'pan-y', overscrollBehavior: 'none' }}
+      className="relative h-screen flex flex-col overflow-hidden"
+      style={{ touchAction: 'none', overscrollBehavior: 'none' }}
     >
       {/* Header */}
       <div
@@ -79,7 +79,7 @@ export default function SwipePage() {
               style={{
                 transform: `translateX(${offsetX}px) rotate(${rotation}deg)`,
                 transition: animating ? 'transform 0.32s ease' : 'none',
-                touchAction: 'pan-y', // browser solo maneja vertical, horizontal lo agarra nuestro handler
+                touchAction: 'none', // toda la interacción la captura nuestro handler de swipe
               }}
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}

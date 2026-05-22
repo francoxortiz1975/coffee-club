@@ -47,7 +47,10 @@ export default function SwipePage() {
   const noOpacity = Math.max(0, Math.min(-offsetX / 80, 1))
 
   return (
-    <div className="relative min-h-screen flex flex-col">
+    <div
+      className="relative min-h-screen flex flex-col overflow-hidden"
+      style={{ touchAction: 'pan-y', overscrollBehavior: 'none' }}
+    >
       {/* Header */}
       <div
         className="relative z-10 flex items-center px-5 pb-4"
@@ -76,6 +79,7 @@ export default function SwipePage() {
               style={{
                 transform: `translateX(${offsetX}px) rotate(${rotation}deg)`,
                 transition: animating ? 'transform 0.32s ease' : 'none',
+                touchAction: 'pan-y', // browser solo maneja vertical, horizontal lo agarra nuestro handler
               }}
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}

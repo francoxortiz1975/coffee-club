@@ -3,8 +3,12 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import cafes from '../data/cafes.json'
 import StarRating from '../components/StarRating'
 import { useFavoritos } from '../context/FavoritosContext'
-import { ArrowLeftIcon, HeartIcon, ShareIcon, CoffeeCupIcon, PinIcon, ExternalLinkIcon, InviteIcon } from '../components/Icons'
+import { ArrowLeftIcon, HeartIcon, ShareIcon, CoffeeCupIcon, CoffeeBeanIcon, CameraIcon, PinIcon, ExternalLinkIcon, InviteIcon } from '../components/Icons'
 import { useVisitas } from '../context/VisitasContext'
+import { useRecuerdos } from '../context/RecuerdosContext'
+import { useAuth } from '../context/AuthContext'
+import RecuerdoModal from '../components/RecuerdoModal'
+import PhotoLightbox from '../components/PhotoLightbox'
 
 const PLACEHOLDER_FOTOS = [null, null, null]
 
@@ -17,6 +21,11 @@ export default function CafeDetalle() {
   const esFavorito = cafe ? favoritos.includes(cafe.id) : false
   const { visitas, toggleVisita } = useVisitas()
   const yaVisitado = cafe ? visitas.includes(cafe.id) : false
+  const { user } = useAuth()
+  const { getRecuerdo } = useRecuerdos()
+  const recuerdo = cafe ? getRecuerdo(cafe.id) : null
+  const [recuerdoAbierto, setRecuerdoAbierto] = useState(false)
+  const [lightboxIndex, setLightboxIndex] = useState(null) // null = cerrado, número = abierto en esa foto
 
   // Tracking de engagement para el banner de instalación
   useEffect(() => {
@@ -48,23 +57,43 @@ export default function CafeDetalle() {
     <div className="relative min-h-screen">
       {/* Hero foto */}
       <div className="relative z-10 w-full h-64 bg-cafe-accent/10 flex items-center justify-center">
-        {cafe.fotos[0]
-          ? <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
-          : <CoffeeCupIcon size={56} className="text-cafe-accent/20" />
-        }
-        <button onClick={() => navigate(-1)} className="absolute top-4 left-4 bg-white/80 backdrop-blur-sm text-cafe-dark rounded-full w-9 h-9 flex items-center justify-center shadow">
+        {cafe.fotos[0] ? (
+          <button
+            onClick={() => setLightboxIndex(0)}
+            className="w-full h-full block active:opacity-90"
+            aria-label="Ver foto en grande"
+          >
+            <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
+          </button>
+        ) : (
+          <CoffeeCupIcon size={56} className="text-cafe-accent/20" />
+        )}
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute left-4 bg-white/80 backdrop-blur-sm text-cafe-dark rounded-full w-9 h-9 flex items-center justify-center shadow"
+          style={{ top: 'calc(16px + env(safe-area-inset-top))' }}
+        >
           <ArrowLeftIcon size={18} />
         </button>
-        <button onClick={() => toggleFavorito(cafe.id)} className={`absolute top-4 right-16 bg-white/80 backdrop-blur-sm rounded-full w-9 h-9 flex items-center justify-center shadow transition-colors ${esFavorito ? 'text-[#b8d04a]' : 'text-cafe-accent/50'}`}>
+        <button
+          onClick={() => toggleFavorito(cafe.id)}
+          className={`absolute right-16 bg-white/80 backdrop-blur-sm rounded-full w-9 h-9 flex items-center justify-center shadow transition-colors ${esFavorito ? 'text-[#b8d04a]' : 'text-cafe-accent/50'}`}
+          style={{ top: 'calc(16px + env(safe-area-inset-top))' }}
+        >
           <HeartIcon size={17} filled={esFavorito} />
         </button>
-        <button onClick={handleShare} className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm text-cafe-dark rounded-full w-9 h-9 flex items-center justify-center shadow">
+        <button
+          onClick={handleShare}
+          className="absolute right-4 bg-white/80 backdrop-blur-sm text-cafe-dark rounded-full w-9 h-9 flex items-center justify-center shadow"
+          style={{ top: 'calc(16px + env(safe-area-inset-top))' }}
+        >
           {copied ? <span className="text-xs font-bold text-green-600">✓</span> : <ShareIcon size={17} />}
         </button>
         {/* Invitar — destacado: café con ícono lima */}
         <Link
           to={`/invitacion/${cafe.id}/setup`}
-          className="absolute top-16 right-4 bg-cafe-dark text-[#b8d04a] rounded-full w-10 h-10 flex items-center justify-center shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform"
+          className="absolute right-4 bg-cafe-dark text-[#b8d04a] rounded-full w-10 h-10 flex items-center justify-center shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform"
+          style={{ top: 'calc(64px + env(safe-area-inset-top))' }}
           aria-label="Invitar"
         >
           <InviteIcon size={18} />
@@ -81,38 +110,84 @@ export default function CafeDetalle() {
           <PinIcon size={12} />{cafe.barrio}
         </p>
 
-        <div className="flex items-center justify-between mb-3">
-          <div className="text-amber-500">
-            <StarRating rating={cafe.rating} />
-          </div>
-          <button
-            onClick={() => toggleVisita(cafe.id)}
-            className={`text-xs font-medium px-3 py-1.5 rounded-full border transition-colors ${
-              yaVisitado
-                ? 'bg-cafe-dark text-beige border-cafe-dark'
-                : 'border-cafe-accent/30 text-cafe-accent/70'
-            }`}
-          >
-            {yaVisitado ? '✓ Ya lo visité' : 'Me falta visitar'}
-          </button>
+        <div className="mb-3 text-amber-500">
+          <StarRating rating={cafe.rating} />
         </div>
 
         <span className="inline-block text-xs bg-beige border border-cafe-accent/30 text-cafe-accent rounded-full px-3 py-1 mb-4">
           {cafe.tipo}
         </span>
 
+        {/* Visited toggle + Recuerdo — grid 2 columnas */}
+        <div className="grid grid-cols-2 gap-2.5 mb-5">
+          {/* Izquierda: visited toggle */}
+          <button
+            onClick={() => toggleVisita(cafe.id)}
+            className={`flex flex-col items-center justify-center gap-1.5 rounded-2xl py-4 px-2 transition-colors ${
+              yaVisitado
+                ? 'bg-cafe-dark text-beige'
+                : 'bg-[#faf4ec] border border-dashed border-cafe-accent/30 text-cafe-accent/70'
+            }`}
+          >
+            <CoffeeBeanIcon size={26} className={yaVisitado ? '' : 'opacity-30'} />
+            <span className="text-xs font-semibold leading-tight">
+              {yaVisitado ? 'Ya visité' : 'Me falta visitar'}
+            </span>
+          </button>
+
+          {/* Derecha: recuerdo. Solo activa si está logueado + visitado */}
+          {user && yaVisitado ? (
+            recuerdo?.foto_url ? (
+              <button
+                onClick={() => setRecuerdoAbierto(true)}
+                className="relative rounded-2xl overflow-hidden bg-[#faf4ec] shadow-sm active:scale-[0.98] transition-transform"
+              >
+                <img src={recuerdo.foto_url} alt="" className="w-full h-full object-cover absolute inset-0" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className="relative z-10 h-full flex flex-col justify-end p-3 text-left min-h-[100px]">
+                  <p className="text-[9px] uppercase tracking-widest text-white/70">Mi recuerdo</p>
+                  {recuerdo.nota
+                    ? <p className="text-xs text-white font-serif italic line-clamp-2 leading-tight mt-1">"{recuerdo.nota}"</p>
+                    : <p className="text-[10px] text-white/60 italic mt-1">Toca para editar</p>}
+                </div>
+              </button>
+            ) : (
+              <button
+                onClick={() => setRecuerdoAbierto(true)}
+                className="flex flex-col items-center justify-center gap-1.5 rounded-2xl py-4 px-2 bg-[#faf4ec] border border-dashed border-cafe-accent/30 active:scale-[0.98] transition-transform"
+              >
+                <CameraIcon size={26} className="text-cafe-accent/70" />
+                <span className="text-xs font-semibold text-cafe-accent/80 leading-tight">Agregar recuerdo</span>
+              </button>
+            )
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-1.5 rounded-2xl py-4 px-2 bg-[#faf4ec]/40 border border-dashed border-cafe-accent/15 opacity-50">
+              <CameraIcon size={26} className="text-cafe-accent/40" />
+              <span className="text-[10px] text-cafe-accent/50 leading-tight text-center">
+                {user ? 'Marca como visitado primero' : 'Inicia sesión para guardar recuerdos'}
+              </span>
+            </div>
+          )}
+        </div>
+
         <p className="text-sm text-cafe-dark/75 leading-relaxed mb-6">{cafe.descripcion}</p>
 
-        {/* Slide de fotos */}
+        {/* Slide de fotos — tap abre lightbox fullscreen */}
         <h2 className="text-sm font-semibold text-cafe-dark mb-3">Fotos</h2>
         <div className="flex gap-3 overflow-x-auto pb-3 -mx-5 px-5 snap-x snap-mandatory no-scrollbar">
           {fotos.map((foto, i) => (
-            <div key={i} className="shrink-0 w-44 h-32 rounded-xl overflow-hidden bg-cafe-accent/10 flex items-center justify-center snap-start">
+            <button
+              key={i}
+              type="button"
+              onClick={() => foto && setLightboxIndex(i)}
+              disabled={!foto}
+              className="shrink-0 w-44 h-32 rounded-xl overflow-hidden bg-cafe-accent/10 flex items-center justify-center snap-start active:scale-[0.97] transition-transform"
+            >
               {foto
                 ? <img src={foto} alt={`${cafe.nombre} ${i + 1}`} className="w-full h-full object-cover" />
                 : <CoffeeCupIcon size={28} className="text-cafe-accent/20" />
               }
-            </div>
+            </button>
           ))}
         </div>
 
@@ -130,6 +205,18 @@ export default function CafeDetalle() {
           </a>
         )}
       </div>
+
+      {recuerdoAbierto && (
+        <RecuerdoModal cafe={cafe} onClose={() => setRecuerdoAbierto(false)} />
+      )}
+
+      {lightboxIndex !== null && cafe.fotos.length > 0 && (
+        <PhotoLightbox
+          fotos={cafe.fotos}
+          indexInicial={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
+      )}
     </div>
   )
 }

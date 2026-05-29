@@ -1,6 +1,9 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
+import { supabase } from '../lib/supabase'
+import { useAuth } from './AuthContext'
 
 const KEY = 'samay_usuario'
+const FOTO_KEY = 'samay_usuario_foto' // foto local-only (hasta que tengamos Storage)
 const UsuarioContext = createContext()
 
 const PREFIJOS = [
@@ -12,16 +15,16 @@ const CAFES = [
   'Macchiato', 'Flatwhite', 'Frappe', 'Ristretto', 'Affogato', 'Turco',
   'Doppio', 'Cubano', 'Bombón',
 ]
+const NOMBRES_DISPLAY = [
+  'Cafetero anónimo', 'Catador curioso', 'Bohemio del café',
+  'Buscador de cafés', 'Amante del aroma',
+]
 
 export const TIPOS_CAFE = [
   'Espresso', 'Doppio', 'Ristretto', 'Americano',
   'Cappuccino', 'Latte', 'Flat white', 'Macchiato', 'Cortado',
   'Mocha', 'Affogato', 'Frappe',
   'Turco', 'Cubano', 'Bombón',
-]
-const NOMBRES_DISPLAY = [
-  'Cafetero anónimo', 'Catador curioso', 'Bohemio del café',
-  'Buscador de cafés', 'Amante del aroma',
 ]
 
 function pick(arr) {
@@ -33,27 +36,30 @@ export function generarUsername() {
   return `${pick(PREFIJOS)}${pick(CAFES)}${n}`
 }
 
+const USUARIO_VACIO = {
+  nombre: '',
+  username: '',
+  foto: '',
+  cafeteriaFavoritaId: '',
+  cafeFavorito: '',
+}
+
+// ─── Anonymous mode (sin auth) ─── usa localStorage como antes ─────
 function generarUsuarioInicial() {
   return {
     nombre: pick(NOMBRES_DISPLAY),
     username: generarUsername(),
-    foto: '', // dataURL opcional
+    foto: '',
     cafeteriaFavoritaId: '',
     cafeFavorito: '',
   }
 }
 
-function loadInicial() {
+function loadAnonymous() {
   try {
     const raw = JSON.parse(localStorage.getItem(KEY))
     if (raw && typeof raw === 'object') {
-      return {
-        nombre: raw.nombre ?? generarUsuarioInicial().nombre,
-        username: raw.username ?? generarUsername(),
-        foto: raw.foto ?? '',
-        cafeteriaFavoritaId: raw.cafeteriaFavoritaId ?? '',
-        cafeFavorito: raw.cafeFavorito ?? '',
-      }
+      return { ...USUARIO_VACIO, ...raw }
     }
   } catch {}
   const inicial = generarUsuarioInicial()
@@ -61,19 +67,128 @@ function loadInicial() {
   return inicial
 }
 
-export function UsuarioProvider({ children }) {
-  const [usuario, setUsuario] = useState(loadInicial)
+// ─── Auth mode ─── lee de Supabase profiles ───────────────────────
+async function loadFromSupabase(userId) {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('username, nombre, cafe_favorito, cafeteria_favorita_id, foto_url')
+    .eq('id', userId)
+    .single()
 
-  function actualizar(parcial) {
-    setUsuario((prev) => {
-      const next = { ...prev, ...parcial }
+  if (error) {
+    console.error('profile load error:', error)
+    return null
+  }
+  // Mapear snake_case → camelCase del UI
+  // Foto: si el profile no tiene url (todavía no hay Storage), leer dataURL local.
+  const fotoLocal = localStorage.getItem(FOTO_KEY) || ''
+  return {
+    nombre: data.nombre || '',
+    username: data.username || '',
+    foto: data.foto_url || fotoLocal,
+    cafeFavorito: data.cafe_favorito || '',
+    cafeteriaFavoritaId: data.cafeteria_favorita_id || '',
+  }
+}
+
+export function UsuarioProvider({ children }) {
+  const { user, cargando: authCargando } = useAuth()
+  const [usuario, setUsuario] = useState(USUARIO_VACIO)
+  const [cargando, setCargando] = useState(true)
+
+  // Sync con auth state + suscripción realtime cuando hay user logueado
+  useEffect(() => {
+    if (authCargando) return
+
+    if (!user) {
+      // Anonymous mode → localStorage
+      setUsuario(loadAnonymous())
+      setCargando(false)
+      return
+    }
+
+    // Auth mode → leer de Supabase + suscribir a cambios
+    setCargando(true)
+    let activo = true
+
+    function refresh() {
+      if (!activo) return
+      loadFromSupabase(user.id).then((perfil) => {
+        if (activo && perfil) setUsuario(perfil)
+        if (activo) setCargando(false)
+      })
+    }
+    refresh()
+
+    // Realtime: si el profile cambia en otra pestaña/device, refrescamos UI
+    const channel = supabase
+      .channel(`profile-${user.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'profiles',
+          filter: `id=eq.${user.id}`,
+        },
+        (payload) => {
+          const fila = payload.new
+          setUsuario((prev) => ({
+            ...prev,
+            nombre: fila.nombre ?? prev.nombre,
+            username: fila.username ?? prev.username,
+            cafeFavorito: fila.cafe_favorito || '',
+            cafeteriaFavoritaId: fila.cafeteria_favorita_id || '',
+          }))
+        }
+      )
+      .subscribe()
+
+    // Red de seguridad: refetch al volver al foco o reconectar
+    window.addEventListener('focus', refresh)
+    window.addEventListener('online', refresh)
+
+    return () => {
+      activo = false
+      supabase.removeChannel(channel)
+      window.removeEventListener('focus', refresh)
+      window.removeEventListener('online', refresh)
+    }
+  }, [user, authCargando])
+
+  async function actualizar(parcial) {
+    const next = { ...usuario, ...parcial }
+    setUsuario(next)
+
+    if (user) {
+      // Foto se guarda local hasta que tengamos Storage; el resto va a Supabase.
+      if ('foto' in parcial) {
+        localStorage.setItem(FOTO_KEY, parcial.foto || '')
+      }
+
+      const updates = {}
+      if ('nombre' in parcial) updates.nombre = parcial.nombre
+      if ('username' in parcial) updates.username = parcial.username
+      if ('cafeFavorito' in parcial) updates.cafe_favorito = parcial.cafeFavorito
+      if ('cafeteriaFavoritaId' in parcial) updates.cafeteria_favorita_id = parcial.cafeteriaFavoritaId
+      // foto_url lo dejamos para cuando tengamos Storage
+
+      if (Object.keys(updates).length > 0) {
+        updates.updated_at = new Date().toISOString()
+        const { error } = await supabase
+          .from('profiles')
+          .update(updates)
+          .eq('id', user.id)
+        if (error) console.error('profile update error:', error)
+      }
+    } else {
+      // Anonymous → localStorage
       localStorage.setItem(KEY, JSON.stringify(next))
-      return next
-    })
+    }
   }
 
   return (
-    <UsuarioContext.Provider value={{ usuario, actualizar }}>
+    <UsuarioContext.Provider value={{ usuario, actualizar, cargando }}>
       {children}
     </UsuarioContext.Provider>
   )

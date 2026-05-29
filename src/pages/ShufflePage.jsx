@@ -25,7 +25,10 @@ export default function ShufflePage() {
   return (
     <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #2a1510 60%, #1e0f0b 100%)' }}>
       {/* Header */}
-      <div className="flex items-center px-5 pt-12 pb-6">
+      <div
+        className="flex items-center px-5 pb-6"
+        style={{ paddingTop: 'calc(16px + env(safe-area-inset-top))' }}
+      >
         <button onClick={() => navigate(-1)} className="text-beige/60 mr-4">
           <ArrowLeftIcon size={20} />
         </button>

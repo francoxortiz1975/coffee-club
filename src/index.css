@@ -15,3 +15,24 @@ body {
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Anti-zoom de iOS Safari al hacer focus en inputs.
+   iOS auto-zoomea si el font-size < 16px. Forzamos min 16px solo en
+   touch devices, así desktop conserva el diseño tipográfico fino. */
+@media (hover: none) and (pointer: coarse) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]),
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* Crossfade lento entre dos imágenes apiladas (foto del café ↔ recuerdo) */
+@keyframes recuerdoCrossfade {
+  0%, 42% { opacity: 1; }
+  50%, 92% { opacity: 0; }
+  100% { opacity: 1; }
+}
+.recuerdo-fade {
+  animation: recuerdoCrossfade 6s ease-in-out infinite;
+}

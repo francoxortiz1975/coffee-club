@@ -5,17 +5,40 @@ import { useVisitas } from '../context/VisitasContext'
 import { useInvitaciones } from '../context/InvitacionesContext'
 import { useUsuario, generarUsername, TIPOS_CAFE } from '../context/UsuarioContext'
 import { useAuth } from '../context/AuthContext'
+import { useCafeteros } from '../context/CafeterosContext'
+import { useRecuerdos } from '../context/RecuerdosContext'
+import RecuerdoModal from '../components/RecuerdoModal'
 import {
-  CoffeeCupIcon, CoffeeBeanIcon, CoffeeMugIcon, InviteIcon, PinIcon, UserIcon,
+  CoffeeCupIcon, CoffeeBeanIcon, CoffeeMugIcon, InviteIcon, PinIcon, UserIcon, CameraIcon,
 } from '../components/Icons'
 
 const barrios = [...new Set(cafes.map((c) => c.barrio))]
 
 function ColeccionBarrio({ barrio }) {
   const [abierto, setAbierto] = useState(false)
+  const [recuerdoCafe, setRecuerdoCafe] = useState(null)
+  const [promptCafe, setPromptCafe] = useState(null) // café recién marcado → "¿agregar foto?"
   const { visitas, toggleVisita } = useVisitas()
+  const { getRecuerdo } = useRecuerdos()
   const cafesBarrio = cafes.filter((c) => c.barrio === barrio)
   const visitados = cafesBarrio.filter((c) => visitas.includes(c.id)).length
+
+  // Tap en el bean del slot:
+  //  - si estaba visitado → desmarca directo, sin prompt
+  //  - si no estaba visitado y NO hay recuerdo → marca + abre prompt 'agregar recuerdo'
+  //  - si no estaba visitado y SÍ hay recuerdo guardado → solo marca, sin prompt
+  async function handleBeanTap(cafe, visitado, e) {
+    e.preventDefault()
+    e.stopPropagation()
+    if (visitado) {
+      await toggleVisita(cafe.id)
+      return
+    }
+    await toggleVisita(cafe.id)
+    if (!getRecuerdo(cafe.id)) {
+      setPromptCafe(cafe)
+    }
+  }
 
   return (
     <div className="bg-[#faf4ec] rounded-2xl overflow-hidden shadow-sm">
@@ -52,18 +75,33 @@ function ColeccionBarrio({ barrio }) {
         <div className="grid grid-cols-3 gap-3 p-4">
           {cafesBarrio.map((cafe) => {
             const visitado = visitas.includes(cafe.id)
+            const recuerdo = getRecuerdo(cafe.id)
+            const cafeFoto = cafe.fotos?.[0]
+            // Si está visitado y hay recuerdo + foto del café → crossfade
+            const conCrossfade = visitado && recuerdo?.foto_url && cafeFoto
             return (
               <Link key={cafe.id} to={`/cafe/${cafe.id}`} className="flex flex-col items-center gap-1.5">
                 <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-cafe-accent/10 flex items-center justify-center">
-                  {cafe.fotos?.[0]
-                    ? <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
-                    : <CoffeeCupIcon size={24} className="text-cafe-accent/20" />}
+                  {conCrossfade ? (
+                    <>
+                      {/* Capa de abajo: recuerdo (siempre visible) */}
+                      <img src={recuerdo.foto_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                      {/* Capa de arriba: foto del café — anima fade out/in */}
+                      <img src={cafeFoto} alt={cafe.nombre} className="absolute inset-0 w-full h-full object-cover recuerdo-fade" />
+                    </>
+                  ) : visitado && recuerdo?.foto_url ? (
+                    <img src={recuerdo.foto_url} alt={cafe.nombre} className="w-full h-full object-cover" />
+                  ) : cafeFoto ? (
+                    <img src={cafeFoto} alt={cafe.nombre} className="w-full h-full object-cover" />
+                  ) : (
+                    <CoffeeCupIcon size={24} className="text-cafe-accent/20" />
+                  )}
                   {!visitado && (
-                    <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] pointer-events-none" />
+                    <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] pointer-events-none z-10" />
                   )}
                   <button
                     type="button"
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleVisita(cafe.id) }}
+                    onClick={(e) => handleBeanTap(cafe, visitado, e)}
                     aria-label={visitado ? 'Marcar como no visitada' : 'Marcar como visitada'}
                     className={`absolute bottom-1 right-1 w-8 h-8 rounded-full flex items-center justify-center shadow-md active:scale-90 transition-all ${
                       visitado ? 'bg-beige' : 'bg-white/90 border border-cafe-dark/20'
@@ -79,6 +117,45 @@ function ColeccionBarrio({ barrio }) {
             )
           })}
         </div>
+      )}
+
+      {/* Prompt al recién marcar un café como visitado: ofrecemos guardar foto */}
+      {promptCafe && (
+        <div
+          className="fixed inset-0 z-50 bg-black/55 backdrop-blur-sm flex items-center justify-center p-6"
+          onClick={() => setPromptCafe(null)}
+        >
+          <div
+            className="bg-[#faf4ec] rounded-3xl p-6 max-w-xs w-full shadow-2xl text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <CameraIcon size={36} className="text-cafe-dark/60 mx-auto mb-3" />
+            <h3 className="text-lg font-serif font-bold text-cafe-dark mb-1">
+              ¡{promptCafe.nombre}!
+            </h3>
+            <p className="text-sm text-cafe-accent/70 mb-5">
+              ¿Quieres guardar una foto y nota de tu visita?
+            </p>
+            <div className="flex flex-col gap-2.5">
+              <button
+                onClick={() => { setRecuerdoCafe(promptCafe); setPromptCafe(null) }}
+                className="w-full bg-cafe-dark text-[#b8d04a] text-sm font-bold py-3 rounded-2xl ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform"
+              >
+                Agregar foto
+              </button>
+              <button
+                onClick={() => setPromptCafe(null)}
+                className="w-full text-sm font-semibold text-cafe-accent/70 py-2"
+              >
+                Ahora no
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {recuerdoCafe && (
+        <RecuerdoModal cafe={recuerdoCafe} onClose={() => setRecuerdoCafe(null)} />
       )}
     </div>
   )
@@ -159,6 +236,7 @@ export default function Perfil() {
   const { enviadas, recibidas, eliminar, invKey } = useInvitaciones()
   const { usuario, actualizar } = useUsuario()
   const { user, cerrarSesion } = useAuth()
+  const { confirmados: cafeteros, pendientesRecibidas } = useCafeteros()
   const [confirmando, setConfirmando] = useState(null)
   const [editandoPerfil, setEditandoPerfil] = useState(false)
   const [eligiendoFavorita, setEligiendoFavorita] = useState(false)
@@ -177,7 +255,10 @@ export default function Perfil() {
   }
 
   return (
-    <div className="min-h-screen px-4 pt-10 pb-4">
+    <div
+      className="min-h-screen px-4 pb-4"
+      style={{ paddingTop: 'calc(16px + env(safe-area-inset-top))' }}
+    >
       {/* Botón Entrar / Salir — temporal arriba a la derecha */}
       <div className="flex justify-end mb-2">
         {user ? (
@@ -220,11 +301,18 @@ export default function Perfil() {
 
       {/* Stats bar */}
       <div className="bg-[#faf4ec] rounded-2xl shadow-sm flex items-stretch divide-x divide-cafe-accent/15 mb-6">
-        <div className="flex-1 flex flex-col items-center justify-center py-3">
-          <p className="text-base font-serif font-bold text-cafe-accent/40">—</p>
+        <Link
+          to="/cafeteros"
+          className="flex-1 flex flex-col items-center justify-center py-3 active:bg-black/5 transition-colors relative"
+        >
+          <p className="text-base font-serif font-bold text-cafe-dark tabular-nums">{cafeteros.length}</p>
           <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mt-1">Cafeteros</p>
-          <p className="text-[9px] text-cafe-accent/40 italic">próximamente</p>
-        </div>
+          {pendientesRecibidas.length > 0 && (
+            <span className="absolute top-2 right-2 bg-[#b8d04a] text-cafe-dark text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+              {pendientesRecibidas.length}
+            </span>
+          )}
+        </Link>
         <button
           onClick={() => setEligiendoCafe(true)}
           className="flex-1 flex flex-col items-center justify-center py-3 active:bg-black/5 transition-colors"

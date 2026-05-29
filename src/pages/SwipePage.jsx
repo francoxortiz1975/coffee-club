@@ -47,9 +47,15 @@ export default function SwipePage() {
   const noOpacity = Math.max(0, Math.min(-offsetX / 80, 1))
 
   return (
-    <div className="relative min-h-screen flex flex-col">
+    <div
+      className="relative h-screen flex flex-col overflow-hidden"
+      style={{ touchAction: 'none', overscrollBehavior: 'none' }}
+    >
       {/* Header */}
-      <div className="relative z-10 flex items-center px-5 pt-12 pb-4">
+      <div
+        className="relative z-10 flex items-center px-5 pb-4"
+        style={{ paddingTop: 'calc(16px + env(safe-area-inset-top))' }}
+      >
         <h1 className="text-xl font-serif font-bold text-cafe-dark">Swipe</h1>
       </div>
 
@@ -73,6 +79,7 @@ export default function SwipePage() {
               style={{
                 transform: `translateX(${offsetX}px) rotate(${rotation}deg)`,
                 transition: animating ? 'transform 0.32s ease' : 'none',
+                touchAction: 'none', // toda la interacción la captura nuestro handler de swipe
               }}
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}

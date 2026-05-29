@@ -54,7 +54,7 @@ export default function Seleccionados() {
                       onClick={() => toggleFavorito(cafe.id)}
                       className={`flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border transition-colors ${
                         esFavorito
-                          ? 'border-red-300 text-red-400 bg-red-50'
+                          ? 'border-[#b8d04a]/60 text-[#8a9d2e] bg-[#b8d04a]/15'
                           : 'border-cafe-accent/25 text-cafe-accent/60'
                       }`}
                     >

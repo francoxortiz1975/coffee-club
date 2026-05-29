@@ -4,8 +4,12 @@ import { VisitasProvider } from './context/VisitasContext'
 import { InvitacionesProvider } from './context/InvitacionesContext'
 import { UsuarioProvider } from './context/UsuarioContext'
 import { AuthProvider } from './context/AuthContext'
+import { CafeterosProvider } from './context/CafeterosContext'
+import { RecuerdosProvider } from './context/RecuerdosContext'
 import BottomNav from './components/BottomNav'
 import InstallPrompt from './components/InstallPrompt'
+import ScrollToTop from './components/ScrollToTop'
+import MigrationRunner from './components/MigrationRunner'
 import Descubrir from './pages/Descubrir'
 import Decidir from './pages/Decidir'
 import ShufflePage from './pages/ShufflePage'
@@ -18,6 +22,7 @@ import InvitacionPage from './pages/InvitacionPage'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
 import AuthCallback from './pages/AuthCallback'
+import Cafeteros from './pages/Cafeteros'
 
 const NO_NAV_PATHS = ['/invitacion']
 
@@ -27,7 +32,7 @@ const BG_RULES = [
   { path: '/decidir/swipe',     bg: '/white-bg.webp', overlay: 40 },
   { path: '/decidir/seleccionados', bg: '/wood-bg.webp', overlay: 50 },
   { path: '/decidir',           bg: '/texture-bg.webp', overlay: 0  },
-  { path: '/perfil',            bg: '/panama-bg.webp', overlay: 80 },
+  { path: '/perfil',            bg: '/panama-bg.webp', overlay: 0  },
   { path: '/cafe/:id',          bg: '/white-bg.webp', overlay: 40 },
   { path: '/invitacion/:id/setup', bg: '/wood-bg.webp', overlay: 50 },
   { path: '/invitacion/:id',    bg: '/wood-bg.webp', overlay: 50 },
@@ -76,6 +81,7 @@ function AppShell() {
           <Route path="/invitacion/:id" element={<InvitacionPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/cafeteros" element={<Cafeteros />} />
         </Routes>
       </main>
       {!hideNav && <BottomNav />}
@@ -86,12 +92,16 @@ function AppShell() {
 
 function Root() {
   return (
-    <Routes>
-      {/* Landing: full-width, sin Layout, sin BottomNav, sin bg images */}
-      <Route path="/landing" element={<Landing />} />
-      {/* Resto: app dentro del Layout mobile-only */}
-      <Route path="*" element={<AppShell />} />
-    </Routes>
+    <>
+      <ScrollToTop />
+      <MigrationRunner />
+      <Routes>
+        {/* Landing: full-width, sin Layout, sin BottomNav, sin bg images */}
+        <Route path="/landing" element={<Landing />} />
+        {/* Resto: app dentro del Layout mobile-only */}
+        <Route path="*" element={<AppShell />} />
+      </Routes>
+    </>
   )
 }
 
@@ -102,9 +112,13 @@ export default function App() {
         <VisitasProvider>
           <InvitacionesProvider>
             <UsuarioProvider>
-              <BrowserRouter>
-                <Root />
-              </BrowserRouter>
+              <CafeterosProvider>
+                <RecuerdosProvider>
+                  <BrowserRouter>
+                    <Root />
+                  </BrowserRouter>
+                </RecuerdosProvider>
+              </CafeterosProvider>
             </UsuarioProvider>
           </InvitacionesProvider>
         </VisitasProvider>

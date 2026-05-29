@@ -15,11 +15,17 @@ jobs:
           SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: |
-          echo "URL configurada: ${SUPABASE_URL:+sí}${SUPABASE_URL:-NO}"
-          echo "KEY configurada: ${SUPABASE_ANON_KEY:+sí}${SUPABASE_ANON_KEY:-NO}"
-          curl -v --fail \
-            "$SUPABASE_URL/rest/v1/profiles?select=id&limit=1" \
-            -H "apikey: $SUPABASE_ANON_KEY" \
-            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
-            && echo "Supabase activo ✓" \
-            || echo "Advertencia: no se pudo conectar a Supabase"
+          for i in 1 2 3; do
+            echo "Intento $i..."
+            if curl -s --fail \
+              "$SUPABASE_URL/rest/v1/profiles?select=id&limit=1" \
+              -H "apikey: $SUPABASE_ANON_KEY" \
+              -H "Authorization: Bearer $SUPABASE_ANON_KEY"; then
+              echo "Supabase activo ✓"
+              exit 0
+            fi
+            echo "Falló, esperando 30s..."
+            sleep 30
+          done
+          echo "Supabase no respondió después de 3 intentos"
+          exit 1

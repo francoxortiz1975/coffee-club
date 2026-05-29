@@ -18,7 +18,7 @@ jobs:
           echo "URL configurada: ${SUPABASE_URL:+sí}${SUPABASE_URL:-NO}"
           echo "KEY configurada: ${SUPABASE_ANON_KEY:+sí}${SUPABASE_ANON_KEY:-NO}"
           curl -v --fail \
-            "$SUPABASE_URL/rest/v1/cafes?select=id&limit=1" \
+            "$SUPABASE_URL/rest/v1/profiles?select=id&limit=1" \
             -H "apikey: $SUPABASE_ANON_KEY" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
             && echo "Supabase activo ✓" \

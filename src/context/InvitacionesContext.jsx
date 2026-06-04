@@ -212,7 +212,14 @@ export function InvitacionesProvider({ children }) {
 
     // Auth → Supabase. key acá es el uuid de la fila.
     const { error } = await supabase.from('invitaciones').delete().eq('id', key)
-    if (error) console.error('invitaciones delete error:', error)
+    if (error) {
+      console.error('invitaciones delete error:', error)
+      return
+    }
+    setState((prev) => ({
+      ...prev,
+      [tipo]: prev[tipo].filter((i) => i.id !== key),
+    }))
   }
 
   return (

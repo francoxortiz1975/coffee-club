@@ -9,7 +9,28 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/icon-1024.png', 'logo.png'],
+      includeAssets: [
+        'icons/icon-1024.png',
+        'logo.png',
+        '*.webp',
+        '*.jpg',
+      ],
+      workbox: {
+        runtimeCaching: [
+          {
+            urlPattern: /\/images\//,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'cafe-images',
+              expiration: {
+                maxEntries: 300,
+                maxAgeSeconds: 60 * 60 * 24 * 60, // 60 días
+              },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
+      },
       manifest: {
         name: 'Sumay Coffee Club',
         short_name: 'Sumay',

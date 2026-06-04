@@ -210,16 +210,24 @@ export function InvitacionesProvider({ children }) {
       return
     }
 
-    // Auth → Supabase. key acá es el uuid de la fila.
-    const { error } = await supabase.from('invitaciones').delete().eq('id', key)
-    if (error) {
-      console.error('invitaciones delete error:', error)
-      return
-    }
+    // Optimistic: sacar de UI de inmediato, revertir si falla.
     setState((prev) => ({
       ...prev,
       [tipo]: prev[tipo].filter((i) => i.id !== key),
     }))
+
+    const { error } = await supabase.from('invitaciones').delete().eq('id', key)
+    if (error) {
+      console.error('invitaciones delete error:', error)
+      // Revertir: recargar desde Supabase
+      const { data: perfil } = await supabase.from('profiles').select('nombre').eq('id', user.id).single()
+      const miNombre = perfil?.nombre || ''
+      const [enviadas, recibidas] = await Promise.all([
+        loadEnviadas(user.id, miNombre),
+        loadRecibidas(user.id),
+      ])
+      setState({ enviadas, recibidas })
+    }
   }
 
   return (

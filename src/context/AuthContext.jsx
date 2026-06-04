@@ -8,10 +8,30 @@ export function AuthProvider({ children }) {
   const [cargando, setCargando] = useState(true)
 
   useEffect(() => {
-    // Sesión inicial al montar
+    let resuelto = false
+
+    // Timeout de seguridad: si getSession cuelga (red cortada, token inválido),
+    // liberamos el cargando para que el app arranque en modo anónimo.
+    const timeout = setTimeout(() => {
+      if (!resuelto) {
+        resuelto = true
+        setCargando(false)
+      }
+    }, 6000)
+
     supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session)
-      setCargando(false)
+      if (!resuelto) {
+        resuelto = true
+        clearTimeout(timeout)
+        setSession(data.session)
+        setCargando(false)
+      }
+    }).catch(() => {
+      if (!resuelto) {
+        resuelto = true
+        clearTimeout(timeout)
+        setCargando(false)
+      }
     })
 
     // Suscripción a cambios de sesión (login, logout, refresh token, etc.)
@@ -19,7 +39,10 @@ export function AuthProvider({ children }) {
       setSession(sess)
     })
 
-    return () => sub.subscription.unsubscribe()
+    return () => {
+      clearTimeout(timeout)
+      sub.subscription.unsubscribe()
+    }
   }, [])
 
   // Manda email con magic link + código OTP de 6 dígitos.

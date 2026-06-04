@@ -16,6 +16,8 @@ export default defineConfig({
         '*.jpg',
       ],
       workbox: {
+        cleanupOutdatedCaches: true,
+        navigateFallback: '/index.html',
         runtimeCaching: [
           {
             urlPattern: /\/images\//,

@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation, matchPath } from 'react-router-dom'
+import { Component } from 'react'
+import { useAuth } from './context/AuthContext'
 import { FavoritosProvider } from './context/FavoritosContext'
 import { VisitasProvider } from './context/VisitasContext'
 import { InvitacionesProvider } from './context/InvitacionesContext'
@@ -23,6 +25,37 @@ import Landing from './pages/Landing'
 import Login from './pages/Login'
 import AuthCallback from './pages/AuthCallback'
 import Cafeteros from './pages/Cafeteros'
+
+// ─── Error boundary: captura crashes de React y muestra pantalla de recarga ──
+class ErrorBoundary extends Component {
+  state = { error: null }
+  static getDerivedStateFromError(error) { return { error } }
+  render() {
+    if (!this.state.error) return this.props.children
+    return (
+      <div className="fixed inset-0 flex flex-col items-center justify-center bg-[#2a1510] gap-6 p-8 text-center">
+        <img src="/logo.png" alt="Sumay" className="w-20 h-20 opacity-80" />
+        <p className="text-[#b8d04a] font-serif text-lg font-bold">Algo salió mal</p>
+        <p className="text-white/60 text-sm">Toca para recargar la app.</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="mt-2 px-6 py-3 rounded-2xl bg-[#b8d04a] text-[#2a1510] font-bold text-sm"
+        >
+          Recargar
+        </button>
+      </div>
+    )
+  }
+}
+
+// ─── Splash: muestra logo mientras auth resuelve la sesión ────────────────────
+function Splash() {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-[#2a1510]">
+      <img src="/logo.png" alt="Sumay" className="w-24 h-24" />
+    </div>
+  )
+}
 
 const NO_NAV_PATHS = ['/invitacion']
 
@@ -91,6 +124,8 @@ function AppShell() {
 }
 
 function Root() {
+  const { cargando } = useAuth()
+  if (cargando) return <Splash />
   return (
     <>
       <ScrollToTop />
@@ -107,22 +142,24 @@ function Root() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <FavoritosProvider>
-        <VisitasProvider>
-          <InvitacionesProvider>
-            <UsuarioProvider>
-              <CafeterosProvider>
-                <RecuerdosProvider>
-                  <BrowserRouter>
-                    <Root />
-                  </BrowserRouter>
-                </RecuerdosProvider>
-              </CafeterosProvider>
-            </UsuarioProvider>
-          </InvitacionesProvider>
-        </VisitasProvider>
-      </FavoritosProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <FavoritosProvider>
+          <VisitasProvider>
+            <InvitacionesProvider>
+              <UsuarioProvider>
+                <CafeterosProvider>
+                  <RecuerdosProvider>
+                    <BrowserRouter>
+                      <Root />
+                    </BrowserRouter>
+                  </RecuerdosProvider>
+                </CafeterosProvider>
+              </UsuarioProvider>
+            </InvitacionesProvider>
+          </VisitasProvider>
+        </FavoritosProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   )
 }

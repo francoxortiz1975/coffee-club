@@ -12,48 +12,69 @@ function formatFecha(fechaStr) {
   return d.toLocaleDateString('es-EC', { weekday: 'long', day: 'numeric', month: 'long' })
 }
 
-// Carta cerrada con animación de apertura. Swipe up o tap → onOpen.
+// Carta cerrada con apertura reactiva al gesto.
+// El flap rota en tiempo real con el dedo; al soltar:
+//   ≥ 45% del recorrido → completa apertura (onOpen)
+//   < 45%              → vuelve elásticamente al origen
 function EnvelopeIntro({ receptor, abriendo, onOpen, logoDataUrl }) {
   const startY = useRef(0)
-  const [dy, setDy] = useState(0)
+  const [dy, setDy] = useState(0)       // px arrastrados, 0 a -MAX_DRAG
+  const [dragging, setDragging] = useState(false)
+
+  const MAX_DRAG = 110
+  // progress: 0 (cerrado) → 1 (completamente abierto)
+  const progress = abriendo ? 1 : Math.min(1, Math.abs(dy) / MAX_DRAG)
 
   function handleTouchStart(e) {
     if (abriendo) return
     startY.current = e.touches[0].clientY
+    setDragging(true)
   }
   function handleTouchMove(e) {
     if (abriendo) return
     const delta = e.touches[0].clientY - startY.current
-    if (delta < 0) setDy(Math.max(delta, -120))
+    if (delta < 0) setDy(Math.max(delta, -MAX_DRAG))
   }
   function handleTouchEnd() {
     if (abriendo) return
-    if (dy < -50) onOpen()
-    else setDy(0)
+    setDragging(false)
+    if (Math.abs(dy) >= MAX_DRAG * 0.45) {
+      onOpen()
+    } else {
+      setDy(0)
+    }
   }
 
-  // Estados visuales del flap y body
+  // Transición: sin transición mientras arrastra (sigue el dedo),
+  // con ease al soltar (snap-back o commit).
+  const snapT = 'transform 0.38s cubic-bezier(0.34, 1.4, 0.64, 1)'
+  const noT = 'none'
+  const commitT = 'transform 0.9s cubic-bezier(0.4, 0, 0.2, 1)'
+
   const flapStyle = {
     background: 'linear-gradient(135deg, #d4c3a8 0%, #b09872 100%)',
     clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
     transformOrigin: 'top',
-    transform: abriendo ? 'rotateX(-180deg)' : 'rotateX(0deg)',
-    transition: 'transform 0.9s cubic-bezier(0.4, 0, 0.2, 1)',
+    transform: `rotateX(${-180 * progress}deg)`,
+    transition: abriendo ? commitT : dragging ? noT : snapT,
     backfaceVisibility: 'hidden',
   }
   const bodyStyle = {
     background: 'linear-gradient(160deg, #faf4ec 0%, #e8dcc7 100%)',
-    opacity: abriendo ? 0 : 1,
-    transition: 'opacity 0.4s 0.6s ease',
+    opacity: abriendo ? 0 : 1 - progress * 0.55,
+    transition: abriendo ? 'opacity 0.4s 0.6s ease' : dragging ? noT : 'opacity 0.38s ease',
   }
   const containerStyle = {
-    transform: `translateY(${dy}px) ${abriendo ? 'scale(1.15)' : 'scale(1)'}`,
+    transform: `translateY(${abriendo ? 0 : dy * 0.22}px) scale(${abriendo ? 1.15 : 1 + progress * 0.04})`,
     transition: abriendo
       ? 'transform 1s ease-in, opacity 0.4s 0.7s ease'
-      : (dy === 0 ? 'transform 0.3s ease' : 'none'),
+      : dragging ? noT : snapT,
     opacity: abriendo ? 0 : 1,
     perspective: '1000px',
   }
+
+  const fadeWithProgress = (base = 1, rate = 2) =>
+    abriendo ? 0 : Math.max(0, base - progress * rate)
 
   return (
     <div
@@ -64,9 +85,12 @@ function EnvelopeIntro({ receptor, abriendo, onOpen, logoDataUrl }) {
       onClick={() => !abriendo && onOpen()}
       style={{ touchAction: 'none' }}
     >
-      {/* Encabezado "Para X" — siempre visible */}
+      {/* Encabezado "Para X" — se desvanece al arrastrar */}
       {receptor && (
-        <div style={{ opacity: abriendo ? 0 : 1, transition: 'opacity 0.3s' }}>
+        <div style={{
+          opacity: fadeWithProgress(1, 2.5),
+          transition: abriendo ? 'opacity 0.3s' : dragging ? noT : 'opacity 0.38s',
+        }}>
           <p className="text-white/60 font-serif italic text-sm mb-1">Para</p>
           <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-10 tracking-tight">
             {receptor.toUpperCase()}
@@ -76,11 +100,8 @@ function EnvelopeIntro({ receptor, abriendo, onOpen, logoDataUrl }) {
 
       {/* Carta */}
       <div className="relative w-72 h-52" style={containerStyle}>
-        {/* Body */}
         <div className="absolute inset-0 rounded-lg shadow-2xl" style={bodyStyle} />
-        {/* Flap triangular */}
         <div className="absolute top-0 left-0 right-0 h-1/2" style={flapStyle} />
-        {/* Logo Sumay — esquina superior derecha */}
         {logoDataUrl && (
           <img
             src={logoDataUrl}
@@ -91,17 +112,23 @@ function EnvelopeIntro({ receptor, abriendo, onOpen, logoDataUrl }) {
               right: 12,
               width: 26,
               height: 26,
-              opacity: abriendo ? 0 : 0.45,
+              opacity: fadeWithProgress(0.45, 1),
               filter: 'sepia(0.15)',
-              transform: abriendo ? 'scale(0.7)' : 'scale(1)',
-              transition: 'opacity 0.3s, transform 0.3s',
+              transform: `scale(${abriendo ? 0.7 : 1})`,
+              transition: abriendo ? 'opacity 0.3s, transform 0.3s' : dragging ? noT : 'opacity 0.38s, transform 0.38s',
             }}
           />
         )}
       </div>
 
-      {/* Hint deslizar */}
-      <div className="mt-10" style={{ opacity: abriendo ? 0 : 1, transition: 'opacity 0.3s' }}>
+      {/* Hint — desaparece rápido al primer arrastre */}
+      <div
+        className="mt-10"
+        style={{
+          opacity: fadeWithProgress(1, 4),
+          transition: abriendo ? 'opacity 0.3s' : dragging ? noT : 'opacity 0.38s',
+        }}
+      >
         <p className="text-white/50 text-3xl leading-none animate-bounce">↑</p>
         <p className="text-white/70 font-serif italic text-sm mt-2">Desliza para abrir</p>
       </div>

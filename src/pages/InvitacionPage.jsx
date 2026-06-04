@@ -46,13 +46,6 @@ function EnvelopeIntro({ receptor, abriendo, onOpen, logoDataUrl }) {
     opacity: abriendo ? 0 : 1,
     transition: 'opacity 0.4s 0.6s ease',
   }
-  const sealStyle = {
-    background: 'radial-gradient(circle at 30% 30%, #c8e057 0%, #8a9d2e 70%, #5f6f1f 100%)',
-    boxShadow: '0 4px 10px rgba(0,0,0,0.35), inset 0 1px 2px rgba(255,255,255,0.3)',
-    opacity: abriendo ? 0 : 1,
-    transition: 'opacity 0.3s, transform 0.3s',
-    transform: abriendo ? 'scale(0.5)' : 'scale(1)',
-  }
   const containerStyle = {
     transform: `translateY(${dy}px) ${abriendo ? 'scale(1.15)' : 'scale(1)'}`,
     transition: abriendo
@@ -87,15 +80,24 @@ function EnvelopeIntro({ receptor, abriendo, onOpen, logoDataUrl }) {
         <div className="absolute inset-0 rounded-lg shadow-2xl" style={bodyStyle} />
         {/* Flap triangular */}
         <div className="absolute top-0 left-0 right-0 h-1/2" style={flapStyle} />
-        {/* Sello de cera */}
-        <div
-          className="absolute left-1/2 -translate-x-1/2 w-16 h-16 rounded-full flex items-center justify-center z-10"
-          style={{ ...sealStyle, top: 'calc(50% - 8px)' }}
-        >
-          {logoDataUrl
-            ? <img src={logoDataUrl} alt="" className="w-9 h-9 object-contain opacity-90" />
-            : <span className="text-cafe-dark font-serif font-bold text-2xl">S</span>}
-        </div>
+        {/* Logo Sumay — esquina superior derecha */}
+        {logoDataUrl && (
+          <img
+            src={logoDataUrl}
+            alt="Sumay"
+            className="absolute z-20 object-contain"
+            style={{
+              top: 10,
+              right: 12,
+              width: 26,
+              height: 26,
+              opacity: abriendo ? 0 : 0.45,
+              filter: 'sepia(0.15)',
+              transform: abriendo ? 'scale(0.7)' : 'scale(1)',
+              transition: 'opacity 0.3s, transform 0.3s',
+            }}
+          />
+        )}
       </div>
 
       {/* Hint deslizar */}

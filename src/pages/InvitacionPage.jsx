@@ -61,16 +61,17 @@ function EnvelopeIntro({ receptor, abriendo, onOpen, logoDataUrl }) {
   }
   const bodyStyle = {
     background: 'linear-gradient(160deg, #faf4ec 0%, #e8dcc7 100%)',
-    opacity: abriendo ? 0 : 1 - progress * 0.55,
-    transition: abriendo ? 'opacity 0.4s 0.6s ease' : dragging ? noT : 'opacity 0.38s ease',
+    opacity: abriendo ? 1 : 1 - progress * 0.55,
+    transition: dragging ? noT : 'opacity 0.38s ease',
   }
+  // Zoom: durante el gesto escala levemente; al commit dispara a 6x llenando pantalla.
   const containerStyle = {
-    transform: `translateY(${abriendo ? 0 : dy * 0.22}px) scale(${abriendo ? 1.15 : 1 + progress * 0.04})`,
+    transform: `translateY(${abriendo ? 0 : dy * 0.22}px) scale(${abriendo ? 6 : 1 + progress * 0.1})`,
     transition: abriendo
-      ? 'transform 1s ease-in, opacity 0.4s 0.7s ease'
+      ? 'transform 0.52s cubic-bezier(0.4, 0, 1, 1)'
       : dragging ? noT : snapT,
-    opacity: abriendo ? 0 : 1,
-    perspective: '1000px',
+    opacity: 1,
+    perspective: abriendo ? 'none' : '1000px',
   }
 
   const fadeWithProgress = (base = 1, rate = 2) =>
@@ -188,7 +189,7 @@ export default function InvitacionPage() {
   function abrirCarta() {
     if (estado !== 'cerrada') return
     setEstado('abriendo')
-    // Confetti al inicio de la animación
+    // Confetti justo antes de que el zoom complete (0.52s)
     setTimeout(() => {
       confetti({
         particleCount: 100,
@@ -200,9 +201,9 @@ export default function InvitacionPage() {
         gravity: 0.8,
         ticks: 200,
       })
-    }, 500)
-    // Después de la animación → revelar invitación
-    setTimeout(() => setEstado('abierta'), 1100)
+    }, 420)
+    // Revelar invitación cuando el zoom llena la pantalla
+    setTimeout(() => setEstado('abierta'), 540)
   }
 
   // Preload images as data URLs so html-to-image can capture them
@@ -276,9 +277,9 @@ export default function InvitacionPage() {
         />
       )}
 
-      {/* Contenido centrado — fade in cuando se abre */}
+      {/* Contenido — aparece directo tras el zoom; elementos entran con fadeUp propio */}
       <div
-        className="relative z-10 flex-1 flex flex-col items-center justify-center px-8 text-center gap-4 transition-opacity duration-700"
+        className="relative z-10 flex-1 flex flex-col items-center justify-center px-8 text-center gap-4"
         style={{
           opacity: estado === 'abierta' ? 1 : 0,
           pointerEvents: estado === 'abierta' ? 'auto' : 'none',
@@ -320,9 +321,9 @@ export default function InvitacionPage() {
         )}
       </div>
 
-      {/* Acciones — Compartir (primary) + Ver más (secondary) */}
+      {/* Acciones */}
       <div
-        className="relative z-10 px-6 pb-12 flex flex-col gap-3 transition-opacity duration-700"
+        className="relative z-10 px-6 pb-12 flex flex-col gap-3"
         style={{
           opacity: estado === 'abierta' ? 1 : 0,
           pointerEvents: estado === 'abierta' ? 'auto' : 'none',

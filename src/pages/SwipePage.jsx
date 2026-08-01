@@ -142,9 +142,9 @@ export default function SwipePage() {
                 /* 1 HOJA POR CAFÉ: FRENTE E INVERSO EN FULL SCREEN */
                 <div
                   key={cafe.id}
-                  className="st-page relative bg-[#fcf8f2] border-0 overflow-hidden preserve-3d"
+                  className="st-page relative bg-[#fcf8f2] border-0 preserve-3d"
                   style={{ backgroundColor: '#fcf8f2', opacity: 1 }}
-                  data-density="soft"
+                  data-density="hard"
                 >
                   {/* A) CARA FRONTAL (Frente pergamino completo) */}
                   <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-5 sm:p-6 flex flex-col justify-between overflow-hidden backface-hidden z-10">

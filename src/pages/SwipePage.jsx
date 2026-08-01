@@ -8,11 +8,26 @@ export default function SwipePage() {
   const navigate = useNavigate()
   const [seleccionados, setSeleccionados] = useState([])
   const [currentCafeIndex, setCurrentCafeIndex] = useState(0)
+  const [dimensions, setDimensions] = useState({ width: 350, height: 550 })
 
   const bookContainerRef = useRef(null)
   const pageFlipRef = useRef(null)
 
-  // Crear la lista de hojas: para cada café se genera (Frente + Reverso Blanco) + Hoja Final
+  // Calcular dimensiones dinámicas para que el libro ocupe todo el alto/ancho disponible
+  useEffect(() => {
+    function updateDimensions() {
+      const w = Math.min(window.innerWidth - 24, 390)
+      // Ocupar todo el espacio entre el header (50px) y el bottom nav (55px)
+      const h = Math.min(window.innerHeight - 105, 640)
+      setDimensions({ width: w, height: h })
+    }
+
+    updateDimensions()
+    window.addEventListener('resize', updateDimensions)
+    return () => window.removeEventListener('resize', updateDimensions)
+  }, [])
+
+  // Inicializar PageFlip con las dimensiones ampliadas al máximo de la pantalla
   useEffect(() => {
     if (!bookContainerRef.current) return
 
@@ -21,19 +36,18 @@ export default function SwipePage() {
         const pages = bookContainerRef.current.querySelectorAll('.st-page')
         if (pages.length === 0) return
 
-        // Destruir instancia previa si existe
         if (pageFlipRef.current) {
           try { pageFlipRef.current.destroy() } catch (e) { /* ignore */ }
         }
 
         const pageFlip = new PageFlip(bookContainerRef.current, {
-          width: 340,
-          height: 490,
+          width: dimensions.width,
+          height: dimensions.height,
           size: 'fixed',
           minWidth: 280,
-          maxWidth: 380,
-          minHeight: 420,
-          maxHeight: 560,
+          maxWidth: 440,
+          minHeight: 440,
+          maxHeight: 700,
           drawShadow: true,
           maxShadowOpacity: 0.35,
           showCover: false,
@@ -50,7 +64,6 @@ export default function SwipePage() {
 
         pageFlip.on('flip', (e) => {
           const pageNum = e.data
-          // Cada café ocupa 2 páginas (frente y reverso)
           const cafeIdx = Math.floor(pageNum / 2)
           setCurrentCafeIndex(Math.min(cafeIdx, cafes.length))
         })
@@ -67,13 +80,12 @@ export default function SwipePage() {
         try { pageFlipRef.current.destroy() } catch (e) { /* ignore */ }
       }
     }
-  }, [])
+  }, [dimensions])
 
   function toggleChecklist(cafeId) {
     const wasSelected = seleccionados.includes(cafeId)
     if (!wasSelected) {
       setSeleccionados((prev) => [...prev, cafeId])
-      // Al hacer check, voltear 2 páginas (frente + reverso) para pasar al siguiente café
       setTimeout(() => {
         if (pageFlipRef.current) {
           pageFlipRef.current.flipNext()
@@ -95,10 +107,10 @@ export default function SwipePage() {
       className="fixed inset-0 max-w-md mx-auto h-screen max-h-screen overflow-hidden flex flex-col justify-between bg-[#241710] select-none"
       style={{ touchAction: 'none', overscrollBehavior: 'none' }}
     >
-      {/* Encabezado fijo superior */}
+      {/* Encabezado compacto */}
       <header
-        className="relative z-30 flex items-center justify-between px-5 pb-2 text-beige/90 bg-[#241710]"
-        style={{ paddingTop: 'calc(12px + env(safe-area-inset-top))' }}
+        className="relative z-30 flex items-center justify-between px-5 pb-1 text-beige/90 bg-[#241710]"
+        style={{ paddingTop: 'calc(10px + env(safe-area-inset-top))' }}
       >
         <button
           onClick={() => navigate('/decidir')}
@@ -123,12 +135,12 @@ export default function SwipePage() {
         </button>
       </header>
 
-      {/* ÁREA CENTRAL DEL LIBRO (FIJA SIN SCROLL) */}
-      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-3 py-1 overflow-hidden">
-        <div className="w-full max-w-[340px] flex flex-col items-center">
+      {/* ÁREA CENTRAL DEL LIBRO (AMPLIADA A CASI TODO EL SCREEN) */}
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-3 overflow-hidden">
+        <div className="w-full flex flex-col items-center">
           
           {/* Indicador de página superior */}
-          <div className="w-full flex justify-between items-center px-1 mb-1.5 text-[11px] font-serif text-beige/60">
+          <div className="w-full flex justify-between items-center px-1 mb-1 text-[11px] font-serif text-beige/60">
             <span>{currentCafeIndex > 0 ? '← Desliza esquina' : ''}</span>
             <span>
               {isEnd ? 'Fin del libro' : `Página ${currentCafeIndex + 1} de ${cafes.length}`}
@@ -136,35 +148,39 @@ export default function SwipePage() {
             <span>{!isEnd ? 'Arrastra hoja →' : ''}</span>
           </div>
 
-          {/* CONTENEDOR 3D DE PÁGINAS PAGEFLIP */}
-          <div className="relative w-[340px] h-[490px] flex justify-center items-center">
+          {/* CONTENEDOR DE PÁGINAS PAGEFLIP MAXIMIZADO */}
+          <div
+            className="relative flex justify-center items-center"
+            style={{ width: `${dimensions.width}px`, height: `${dimensions.height}px` }}
+          >
             <div
               ref={bookContainerRef}
-              className="w-[340px] h-[490px] shadow-2xl rounded-r-xl rounded-l-sm bg-[#fcf8f2] overflow-hidden"
+              className="shadow-2xl rounded-r-xl rounded-l-sm bg-[#fcf8f2] overflow-hidden"
+              style={{ width: `${dimensions.width}px`, height: `${dimensions.height}px` }}
             >
               {cafes.map((cafe, i) => {
                 const isSelected = seleccionados.includes(cafe.id)
                 return [
-                  /* 1. FRENTE DE LA HOJA: INFO DEL CAFÉ */
+                  /* 1. FRENTE DE LA HOJA: FOTO AMPLIADA E INFO COMPLETA */
                   <div
                     key={`front-${cafe.id}`}
-                    className="st-page bg-[#fcf8f2] border border-amber-900/20 p-4 flex flex-col justify-between overflow-hidden shadow-sm"
+                    className="st-page bg-[#fcf8f2] border border-amber-900/20 p-5 flex flex-col justify-between overflow-hidden shadow-sm"
                     style={{ backgroundColor: '#fcf8f2', opacity: 1 }}
                     data-density="soft"
                   >
                     {/* Lomo sutil izquierdo */}
-                    <div className="absolute inset-y-0 left-0 w-5 book-spine-gradient pointer-events-none z-20" />
+                    <div className="absolute inset-y-0 left-0 w-6 book-spine-gradient pointer-events-none z-20" />
 
                     {/* Encabezado Hoja */}
-                    <div className="relative z-10 flex justify-between items-center pb-1.5 border-b border-[#8b5a2b]/15 text-[9px] font-serif text-[#6b4c3b]/70 uppercase tracking-widest">
+                    <div className="relative z-10 flex justify-between items-center pb-2 border-b border-[#8b5a2b]/15 text-[10px] font-serif text-[#6b4c3b]/70 uppercase tracking-widest">
                       <span className="font-semibold">SUMAY SELECCIÓN</span>
                       <span>HOJA #{i + 1}</span>
                     </div>
 
-                    {/* Foto + Info */}
-                    <div className="relative z-10 my-1 flex-1 flex flex-col justify-around">
-                      {/* Foto marco blanco vintage */}
-                      <div className="relative w-full h-40 rounded-lg bg-[#ebdccb] border-4 border-white shadow-sm overflow-hidden">
+                    {/* Foto ampliada + Detalles */}
+                    <div className="relative z-10 my-2 flex-1 flex flex-col justify-between">
+                      {/* Foto marco vintage ocupando buen espacio vertical */}
+                      <div className="relative w-full h-52 sm:h-60 rounded-xl bg-[#ebdccb] border-4 border-white shadow-sm overflow-hidden">
                         {cafe.fotos?.[0] ? (
                           <img
                             src={cafe.fotos[0]}
@@ -173,32 +189,32 @@ export default function SwipePage() {
                           />
                         ) : (
                           <div className="w-full h-full flex flex-col items-center justify-center text-[#8b5a2b]/40 bg-[#f4ebe1]">
-                            <CoffeeCupIcon size={40} />
+                            <CoffeeCupIcon size={52} />
                           </div>
                         )}
-                        <span className="absolute bottom-2 right-2 bg-[#2a1a10]/85 backdrop-blur-md text-amber-200 text-xs font-serif px-2.5 py-0.5 rounded-full border border-amber-500/30">
+                        <span className="absolute bottom-2.5 right-2.5 bg-[#2a1a10]/85 backdrop-blur-md text-amber-200 text-xs font-serif px-3 py-1 rounded-full border border-amber-500/30 font-semibold">
                           {cafe.precio}
                         </span>
                       </div>
 
                       {/* Detalles */}
-                      <div className="mt-1">
-                        <h2 className="text-lg font-serif font-bold text-[#3d2b1f] leading-tight">
+                      <div className="mt-3 flex-1 flex flex-col justify-center">
+                        <h2 className="text-xl font-serif font-bold text-[#3d2b1f] leading-tight">
                           {cafe.nombre}
                         </h2>
-                        <p className="text-xs text-[#6b4c3b] font-serif flex items-center gap-1 mt-0.5">
-                          <PinIcon size={11} className="text-[#8b5a2b]" /> {cafe.barrio}
+                        <p className="text-xs text-[#6b4c3b] font-serif flex items-center gap-1 mt-1">
+                          <PinIcon size={12} className="text-[#8b5a2b]" /> {cafe.barrio}
                         </p>
-                        <p className="text-xs font-medium text-[#5c3a21] mt-1 italic">
+                        <p className="text-xs font-medium text-[#5c3a21] mt-1.5 italic">
                           ✨ {cafe.especialidad}
                         </p>
-                        <p className="text-[11px] text-[#6b4c3b]/85 mt-1 line-clamp-2 leading-relaxed font-serif">
+                        <p className="text-xs text-[#6b4c3b]/85 mt-2 line-clamp-3 leading-relaxed font-serif">
                           {cafe.historia}
                         </p>
                       </div>
                     </div>
 
-                    {/* CHECKLIST MANUSCRITO ELEGANTE Y DISCRETO (SIN TEXTOS EXPLICITOS NI BOTONES REPETIDOS) */}
+                    {/* CHECKLIST MANUSCRITO DISCRETO */}
                     <div className="relative z-10 pt-2 border-t border-dashed border-[#8b5a2b]/25">
                       <button
                         type="button"
@@ -206,7 +222,7 @@ export default function SwipePage() {
                           e.stopPropagation()
                           toggleChecklist(cafe.id)
                         }}
-                        className={`w-full text-left flex items-center gap-3 p-2 rounded-xl transition-all border ${
+                        className={`w-full text-left flex items-center gap-3 p-3 rounded-xl transition-all border ${
                           isSelected
                             ? 'bg-[#eadacb] border-[#8b5a2b]/40 shadow-sm'
                             : 'bg-white/80 border-[#8b5a2b]/20 hover:bg-white'
@@ -214,7 +230,7 @@ export default function SwipePage() {
                       >
                         {/* Casilla manuscrita */}
                         <div
-                          className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all ${
+                          className={`w-7 h-7 rounded border-2 flex items-center justify-center transition-all ${
                             isSelected
                               ? 'border-[#3d2b1f] bg-[#dfcca7]'
                               : 'border-[#8b5a2b]/60 bg-white'
@@ -222,7 +238,7 @@ export default function SwipePage() {
                         >
                           {isSelected ? (
                             <svg
-                              className="w-4 h-4 text-[#2a1510] animate-ink-draw"
+                              className="w-5 h-5 text-[#2a1510] animate-ink-draw"
                               viewBox="0 0 24 24"
                               fill="none"
                               stroke="currentColor"
@@ -233,12 +249,12 @@ export default function SwipePage() {
                               <polyline points="20 6 9 17 4 12" />
                             </svg>
                           ) : (
-                            <span className="font-handwriting text-[#8b5a2b]/40 text-xs">✓</span>
+                            <span className="font-handwriting text-[#8b5a2b]/40 text-sm">✓</span>
                           )}
                         </div>
 
                         <div className="flex-1 min-w-0">
-                          <p className="font-handwriting text-lg text-[#3d2b1f] font-bold leading-none">
+                          <p className="font-handwriting text-xl text-[#3d2b1f] font-bold leading-none">
                             {isSelected ? 'Me interesa este café (Guardado)' : 'Me interesa este café'}
                           </p>
                         </div>
@@ -246,23 +262,22 @@ export default function SwipePage() {
                     </div>
                   </div>,
 
-                  /* 2. REVERSO DE LA HOJA: BLANCO/CREMA LIMPIO SIN REFLEJOS O TRANSPARENCIAS */
+                  /* 2. REVERSO BLANCO LIMPIO */
                   <div
                     key={`back-${cafe.id}`}
-                    className="st-page bg-[#fcf8f2] border border-amber-900/20 p-5 flex flex-col items-center justify-between text-center overflow-hidden shadow-sm"
+                    className="st-page bg-[#fcf8f2] border border-amber-900/20 p-6 flex flex-col items-center justify-between text-center overflow-hidden shadow-sm"
                     style={{ backgroundColor: '#fcf8f2', opacity: 1 }}
                     data-density="soft"
                   >
-                    {/* Lomo sutil derecho (al ser reverso) */}
-                    <div className="absolute inset-y-0 right-0 w-5 book-spine-gradient pointer-events-none z-20" />
+                    <div className="absolute inset-y-0 right-0 w-6 book-spine-gradient pointer-events-none z-20" />
 
                     <div className="w-full text-right text-[9px] font-serif text-[#6b4c3b]/40 uppercase tracking-widest">
                       NOTAS DE GUÍA
                     </div>
 
-                    <div className="flex flex-col items-center gap-2 my-auto opacity-40">
-                      <CoffeeCupIcon size={32} className="text-[#8b5a2b]" />
-                      <p className="font-handwriting text-xl text-[#6b4c3b] max-w-[200px] leading-snug">
+                    <div className="flex flex-col items-center gap-3 my-auto opacity-40">
+                      <CoffeeCupIcon size={36} className="text-[#8b5a2b]" />
+                      <p className="font-handwriting text-2xl text-[#6b4c3b] max-w-[220px] leading-snug">
                         "El café conecta historias, momentos y personas."
                       </p>
                     </div>
@@ -274,30 +289,30 @@ export default function SwipePage() {
                 ]
               }).flat()}
 
-              {/* HOJA FINAL DE CIERRE DEL LIBRO (SIN ERRORES AL INTENTAR SEGUIR PASANDO) */}
+              {/* HOJA FINAL DE CIERRE DEL LIBRO */}
               <div
                 className="st-page bg-[#fcf8f2] border border-amber-900/20 p-6 flex flex-col items-center justify-between text-center overflow-hidden shadow-sm"
                 style={{ backgroundColor: '#fcf8f2', opacity: 1 }}
                 data-density="hard"
               >
-                <div className="absolute inset-y-0 left-0 w-5 book-spine-gradient pointer-events-none z-20" />
+                <div className="absolute inset-y-0 left-0 w-6 book-spine-gradient pointer-events-none z-20" />
 
                 <div className="text-[9px] font-serif text-[#6b4c3b]/50 uppercase tracking-widest">
                   PORTADA TRASERA
                 </div>
 
                 <div className="flex flex-col items-center gap-3 my-auto">
-                  <div className="w-14 h-14 rounded-full bg-[#ebdccb] flex items-center justify-center text-[#5c3a21] shadow-inner">
-                    <CoffeeCupIcon size={28} />
+                  <div className="w-16 h-16 rounded-full bg-[#ebdccb] flex items-center justify-center text-[#5c3a21] shadow-inner">
+                    <CoffeeCupIcon size={32} />
                   </div>
-                  <h2 className="text-xl font-serif font-bold text-[#3d2b1f]">¡Has llegado al final!</h2>
-                  <p className="font-handwriting text-xl text-[#8b5a2b] font-bold">
+                  <h2 className="text-2xl font-serif font-bold text-[#3d2b1f]">¡Has llegado al final!</h2>
+                  <p className="font-handwriting text-2xl text-[#8b5a2b] font-bold">
                     Guardaste {seleccionados.length} cafeterías
                   </p>
                   <button
                     type="button"
                     onClick={handleTerminar}
-                    className="mt-2 bg-[#3d2b1f] hover:bg-[#523b2c] text-beige font-serif text-xs font-semibold px-6 py-2.5 rounded-full shadow-md active:scale-95 transition-transform"
+                    className="mt-3 bg-[#3d2b1f] hover:bg-[#523b2c] text-beige font-serif text-sm font-semibold px-6 py-3 rounded-full shadow-md active:scale-95 transition-transform"
                   >
                     Ver mis cafeterías seleccionadas
                   </button>
@@ -313,12 +328,8 @@ export default function SwipePage() {
         </div>
       </main>
 
-      {/* Pie de página minimalista fijo */}
-      <footer className="relative z-30 py-2 text-center bg-[#241710]">
-        <p className="text-[10px] text-beige/40 font-serif">
-          Sumay Coffee Club • Guía de Cafeterías
-        </p>
-      </footer>
+      {/* Espaciador inferior para no solapar con la barra flotante */}
+      <div className="h-4 pointer-events-none" />
     </div>
   )
 }

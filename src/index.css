@@ -5,6 +5,7 @@
   --color-cafe-dark: #3d2b1f;
   --color-cafe-accent: #6b4c3b;
   --font-serif: 'Inika', Georgia, serif;
+  --font-handwriting: 'Caveat', cursive, sans-serif;
 }
 
 body {
@@ -15,6 +16,38 @@ body {
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.font-handwriting {
+  font-family: 'Caveat', cursive, sans-serif;
+}
+
+/* Sombra y textura de hoja de libro */
+.book-paper-texture {
+  background-color: #fcf8f2;
+  background-image: radial-gradient(#e5d9c8 0.5px, transparent 0.5px);
+  background-size: 16px 16px;
+}
+
+/* Pliegue del lomo del libro en el borde izquierdo */
+.book-spine-gradient {
+  background: linear-gradient(to right, rgba(40, 20, 10, 0.25) 0%, rgba(40, 20, 10, 0.08) 3%, rgba(255, 255, 255, 0.15) 6%, transparent 12%);
+}
+
+/* Sombra de la página al voltear */
+.page-curl-shadow {
+  box-shadow: -12px 0 25px rgba(30, 15, 5, 0.28), 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Keyframe para dibujo animado de checkmark manuscrito */
+@keyframes checkmarkInk {
+  0% { stroke-dashoffset: 24; opacity: 0; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+.animate-ink-draw {
+  stroke-dasharray: 24;
+  animation: checkmarkInk 0.35s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
 
 /* Anti-zoom de iOS Safari al hacer focus en inputs.
    iOS auto-zoomea si el font-size < 16px. Forzamos min 16px solo en
@@ -36,3 +69,4 @@ body {
 .recuerdo-fade {
   animation: recuerdoCrossfade 6s ease-in-out infinite;
 }
+

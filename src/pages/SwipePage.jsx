@@ -214,26 +214,22 @@ export default function SwipePage() {
                         </div>
                       </div>
 
-                      {/* CHECKLIST MANUSCRITO DISCRETO */}
-                      <div className="relative z-10 pt-2 border-t border-dashed border-[#8b5a2b]/25">
+                      {/* CHECKLIST MANUSCRITO RÚSTICO (SIN BOX CONTAINER) */}
+                      <div className="relative z-10 pt-2 border-t border-dashed border-[#8b5a2b]/30 mt-1">
                         <button
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation()
                             toggleChecklist(cafe.id)
                           }}
-                          className={`w-full text-left flex items-center gap-3 p-3 rounded-xl transition-all border ${
-                            isSelected
-                              ? 'bg-[#eadacb] border-[#8b5a2b]/40 shadow-sm'
-                              : 'bg-white/80 border-[#8b5a2b]/20 hover:bg-white'
-                          }`}
+                          className="w-full text-left flex items-center gap-3 py-1 px-0.5 hover:opacity-85 active:scale-[0.98] transition-all group"
                         >
-                          {/* Casilla manuscrita */}
+                          {/* Casilla rústica dibujada */}
                           <div
-                            className={`w-7 h-7 rounded border-2 flex items-center justify-center transition-all ${
+                            className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all ${
                               isSelected
-                                ? 'border-[#3d2b1f] bg-[#dfcca7]'
-                                : 'border-[#8b5a2b]/60 bg-white'
+                                ? 'border-[#3d2b1f] bg-[#e6d8c3]/80'
+                                : 'border-[#6b4c3b]/60 bg-transparent group-hover:border-[#3d2b1f]'
                             }`}
                           >
                             {isSelected ? (
@@ -242,20 +238,20 @@ export default function SwipePage() {
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
-                                strokeWidth="3"
+                                strokeWidth="3.2"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                               >
                                 <polyline points="20 6 9 17 4 12" />
                               </svg>
                             ) : (
-                              <span className="font-handwriting text-[#8b5a2b]/40 text-sm">✓</span>
+                              <span className="font-rustic text-[#8b5a2b]/40 text-xs">✓</span>
                             )}
                           </div>
 
                           <div className="flex-1 min-w-0">
-                            <p className="font-handwriting text-xl text-[#3d2b1f] font-bold leading-none">
-                              {isSelected ? 'Me interesa este café (Guardado)' : 'Me interesa este café'}
+                            <p className="font-rustic text-2xl text-[#3d2b1f] font-bold leading-none tracking-wide">
+                              {isSelected ? '✓ Me interesa este café' : 'Me interesa este café'}
                             </p>
                           </div>
                         </button>

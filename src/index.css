@@ -6,6 +6,7 @@
   --color-cafe-accent: #6b4c3b;
   --font-serif: 'Inika', Georgia, serif;
   --font-handwriting: 'Caveat', cursive, sans-serif;
+  --font-rustic: 'Patrick Hand', 'Architects Daughter', cursive, sans-serif;
 }
 
 body {
@@ -19,6 +20,10 @@ body {
 
 .font-handwriting {
   font-family: 'Caveat', cursive, sans-serif;
+}
+
+.font-rustic {
+  font-family: 'Patrick Hand', 'Architects Daughter', cursive, sans-serif;
 }
 
 /* Sombra y textura de hoja de libro */

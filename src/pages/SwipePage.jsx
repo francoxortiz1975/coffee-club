@@ -48,7 +48,11 @@ export default function SwipePage() {
         if (pages.length === 0) return
 
         if (pageFlipRef.current) {
-          try { pageFlipRef.current.destroy() } catch (e) { /* ignore */ }
+          try {
+            pageFlipRef.current.destroy()
+          } catch {
+            // ignore
+          }
         }
 
         const pageFlip = new PageFlip(bookContainerRef.current, {
@@ -60,13 +64,13 @@ export default function SwipePage() {
           minHeight: 460,
           maxHeight: 850,
           drawShadow: true,
-          maxShadowOpacity: 0.4,
+          maxShadowOpacity: 0.28,
           showCover: false,
           usePortrait: true,
           startPage: 0,
-          flippingTime: 450,
+          flippingTime: 560,
           useMouseEvents: true,
-          swipeDistance: 20,
+          swipeDistance: 28,
           clickEventForward: false,
           mobileScrollSupport: false,
         })
@@ -75,25 +79,13 @@ export default function SwipePage() {
 
         pageFlip.on('flip', (e) => {
           const pageIdx = e.data
-          const prevIdx = prevPageIdxRef.current
           prevPageIdxRef.current = pageIdx
 
-          // Si el deslizamiento manual con el dedo aterrizó en una página impar de reverso (SUMAY GUÍA)
-          if (pageIdx % 2 === 1 && pageIdx < cafes.length * 2) {
-            const targetPage = pageIdx > prevIdx ? pageIdx + 1 : Math.max(0, pageIdx - 1)
-            setTimeout(() => {
-              if (pageFlipRef.current) {
-                pageFlipRef.current.flip(targetPage)
-              }
-            }, 30)
-            return
-          }
-
-          const cafeIdx = Math.floor(pageIdx / 2)
+          const cafeIdx = Math.min(pageIdx, cafes.length - 1)
           setCurrentCafeIndex(Math.min(cafeIdx, cafes.length))
 
           // Redirección automática al llegar al final del libro
-          if (cafeIdx >= cafes.length || pageIdx >= cafes.length * 2) {
+          if (pageIdx >= cafes.length) {
             setTimeout(() => {
               navigate('/decidir/seleccionados', { state: { seleccionados: seleccionadosRef.current } })
             }, 450)
@@ -109,7 +101,11 @@ export default function SwipePage() {
     return () => {
       clearTimeout(timer)
       if (pageFlipRef.current) {
-        try { pageFlipRef.current.destroy() } catch (e) { /* ignore */ }
+        try {
+          pageFlipRef.current.destroy()
+        } catch {
+          // ignore
+        }
       }
     }
   }, [dimensions, navigate])
@@ -128,7 +124,7 @@ export default function SwipePage() {
         if (isLastCafe) {
           navigate('/decidir/seleccionados', { state: { seleccionados: updated } })
         } else if (pageFlipRef.current) {
-          const targetPage = (cafeIdx + 1) * 2
+          const targetPage = cafeIdx + 1
           pageFlipRef.current.flip(targetPage)
         }
       }, 400)
@@ -161,19 +157,17 @@ export default function SwipePage() {
           >
             {cafes.map((cafe, i) => {
               const isSelected = seleccionados.includes(cafe.id)
-              return [
-                /* A) FRENTE DE LA HOJA (Info del Café) */
+
+              return (
                 <div
-                  key={`front-${cafe.id}`}
-                  className="st-page bg-[#fcf8f2] border-0 overflow-hidden"
+                  key={cafe.id}
+                  className="st-page relative preserve-3d bg-[#fcf8f2] border-0 overflow-hidden"
                   style={{ backgroundColor: '#fcf8f2', opacity: 1 }}
                   data-density="soft"
                 >
                   <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-5 sm:p-6 flex flex-col justify-between overflow-hidden z-10">
-                    {/* Lomo sutil izquierdo */}
                     <div className="absolute inset-y-0 left-0 w-6 book-spine-gradient pointer-events-none z-20" />
 
-                    {/* Encabezado integrado */}
                     <div className="relative z-20 flex justify-between items-center pb-2 border-b border-[#8b5a2b]/20">
                       <button
                         type="button"
@@ -211,7 +205,6 @@ export default function SwipePage() {
                       </button>
                     </div>
 
-                    {/* Foto ampliada + Detalles */}
                     <div className="relative z-10 my-3 flex-1 flex flex-col justify-between">
                       <div className="relative w-full h-60 sm:h-72 rounded-xl bg-[#ebdccb] border-4 border-white shadow-md overflow-hidden">
                         {cafe.fotos?.[0] ? (
@@ -246,7 +239,6 @@ export default function SwipePage() {
                       </div>
                     </div>
 
-                    {/* CHECKLIST MANUSCRITO RÚSTICO */}
                     <div className="relative z-10 pt-2 border-t border-dashed border-[#8b5a2b]/30">
                       <button
                         type="button"
@@ -287,17 +279,16 @@ export default function SwipePage() {
                         </div>
                       </button>
                     </div>
-                  </div>
-                </div>,
 
-                /* B) REVERSO DE LA HOJA (Papel Pergamino Limpio con Marca de Agua) */
-                <div
-                  key={`back-${cafe.id}`}
-                  className="st-page bg-[#fcf8f2] border-0 overflow-hidden"
-                  style={{ backgroundColor: '#fcf8f2', opacity: 1 }}
-                  data-density="soft"
-                >
-                  <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-6 flex flex-col items-center justify-between text-center overflow-hidden z-10">
+                  </div>
+
+                  <div
+                    className="absolute inset-0 bg-[#f8f1e7] book-paper-texture p-6 flex flex-col items-center justify-between text-center overflow-hidden z-10 backface-hidden rotate-y-180"
+                    style={{
+                      opacity: 0.94,
+                      filter: 'saturate(0.92) contrast(0.97)',
+                    }}
+                  >
                     <div className="absolute inset-y-0 right-0 w-6 book-spine-gradient pointer-events-none z-20" />
 
                     <div className="w-full text-right text-[9px] font-serif text-[#6b4c3b]/40 uppercase tracking-widest">
@@ -309,13 +300,13 @@ export default function SwipePage() {
                       <span className="text-xs font-serif text-[#6b4c3b] tracking-widest uppercase">SUMAY GUÍA</span>
                     </div>
 
-                    <div className="text-[9px] font-serif text-[#6b4c3b]/40 tracking-wider">
+                    <div className="text-[9px] font-serif text-[#6b5a2b]/40 tracking-wider">
                       QUITO • COLECCIÓN DE CAFETERÍAS
                     </div>
                   </div>
                 </div>
-              ]
-            }).flat()}
+              )
+            })}
 
             {/* PORTADA TRASERA DE CIERRE DEL LIBRO */}
             <div

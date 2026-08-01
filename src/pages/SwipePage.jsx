@@ -13,13 +13,18 @@ export default function SwipePage() {
   const bookContainerRef = useRef(null)
   const pageFlipRef = useRef(null)
   const seleccionadosRef = useRef(seleccionados)
+  const currentCafeIndexRef = useRef(currentCafeIndex)
 
-  // Sincronizar seleccionadosRef
+  // Sincronizar referencias
   useEffect(() => {
     seleccionadosRef.current = seleccionados
   }, [seleccionados])
 
-  // Calcular dimensiones ocupando el 100% exacto de la pantalla sin fondo café alrededor
+  useEffect(() => {
+    currentCafeIndexRef.current = currentCafeIndex
+  }, [currentCafeIndex])
+
+  // Calcular dimensiones para ocupar el 100% de la pantalla sin fondos externos
   useEffect(() => {
     function updateDimensions() {
       const w = Math.min(window.innerWidth, 440)
@@ -32,7 +37,7 @@ export default function SwipePage() {
     return () => window.removeEventListener('resize', updateDimensions)
   }, [])
 
-  // Inicializar PageFlip a pantalla completa
+  // Inicializar PageFlip en modo 'soft' con doblado curvo sensual y pares (Frente/Reverso)
   useEffect(() => {
     if (!bookContainerRef.current) return
 
@@ -53,12 +58,12 @@ export default function SwipePage() {
           maxWidth: 480,
           minHeight: 460,
           maxHeight: 850,
-          drawShadow: true,
-          maxShadowOpacity: 0.45,
+          drawShadow: true, // Sombras suaves de doblado curvo
+          maxShadowOpacity: 0.4,
           showCover: false,
           usePortrait: true,
           startPage: 0,
-          flippingTime: 550,
+          flippingTime: 600,
           useMouseEvents: true,
           swipeDistance: 25,
           clickEventForward: false,
@@ -69,10 +74,11 @@ export default function SwipePage() {
 
         pageFlip.on('flip', (e) => {
           const pageIdx = e.data
-          setCurrentCafeIndex(Math.min(pageIdx, cafes.length))
+          const cafeIdx = Math.floor(pageIdx / 2)
+          setCurrentCafeIndex(Math.min(cafeIdx, cafes.length))
 
-          // Al hojear hasta el final, redirigir automáticamente a Seleccionados
-          if (pageIdx >= cafes.length) {
+          // Redirección automática al llegar al final
+          if (cafeIdx >= cafes.length || pageIdx >= cafes.length * 2) {
             setTimeout(() => {
               navigate('/decidir/seleccionados', { state: { seleccionados: seleccionadosRef.current } })
             }, 450)
@@ -95,7 +101,8 @@ export default function SwipePage() {
 
   function toggleChecklist(cafeId) {
     const wasSelected = seleccionados.includes(cafeId)
-    const isLastCafe = cafeId === cafes[cafes.length - 1].id
+    const cafeIdx = cafes.findIndex((c) => c.id === cafeId)
+    const isLastCafe = cafeIdx === cafes.length - 1
 
     if (!wasSelected) {
       const updated = [...seleccionados, cafeId]
@@ -103,10 +110,12 @@ export default function SwipePage() {
       seleccionadosRef.current = updated
 
       setTimeout(() => {
-        if (isLastCafe || currentCafeIndex >= cafes.length - 1) {
+        if (isLastCafe) {
           navigate('/decidir/seleccionados', { state: { seleccionados: updated } })
         } else if (pageFlipRef.current) {
-          pageFlipRef.current.flipNext()
+          // Saltar 2 páginas (frente + reverso) para ir directo al frente del siguiente café con física curva 'soft'
+          const targetPage = (cafeIdx + 1) * 2
+          pageFlipRef.current.flip(targetPage)
         }
       }, 400)
     } else {
@@ -125,7 +134,7 @@ export default function SwipePage() {
       className="fixed inset-0 max-w-md mx-auto h-screen max-h-screen overflow-hidden flex items-center justify-center bg-[#fcf8f2] select-none"
       style={{ touchAction: 'none', overscrollBehavior: 'none' }}
     >
-      {/* TODO EL SCREEN ES 100% LA HOJA DEL LIBRO (SIN FONDO CAFÉ EXTERNO) */}
+      {/* 100% HOJA DEL LIBRO A PANTALLA COMPLETA */}
       <main className="relative z-10 w-full h-full flex items-center justify-center overflow-hidden">
         <div
           className="relative flex justify-center items-center w-full h-full"
@@ -138,22 +147,20 @@ export default function SwipePage() {
           >
             {cafes.map((cafe, i) => {
               const isSelected = seleccionados.includes(cafe.id)
-              return (
-                /* 1 HOJA POR CAFÉ: FRENTE E INVERSO EN FULL SCREEN */
+              return [
+                /* A) FRENTE DE LA HOJA (Info del Café) - Modo Soft con Curvatura Orgánica */
                 <div
-                  key={cafe.id}
-                  className="st-page relative bg-[#fcf8f2] border-0 preserve-3d"
+                  key={`front-${cafe.id}`}
+                  className="st-page bg-[#fcf8f2] border-0 overflow-hidden"
                   style={{ backgroundColor: '#fcf8f2', opacity: 1 }}
-                  data-density="hard"
+                  data-density="soft"
                 >
-                  {/* A) CARA FRONTAL (Frente pergamino completo) */}
-                  <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-5 sm:p-6 flex flex-col justify-between overflow-hidden backface-hidden z-10">
+                  <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-5 sm:p-6 flex flex-col justify-between overflow-hidden z-10">
                     {/* Lomo sutil izquierdo */}
                     <div className="absolute inset-y-0 left-0 w-6 book-spine-gradient pointer-events-none z-20" />
 
-                    {/* ENCABEZADO INTEGRADO DENTRO DE LA HOJA DEL LIBRO */}
+                    {/* Encabezado integrado */}
                     <div className="relative z-20 flex justify-between items-center pb-2 border-b border-[#8b5a2b]/20">
-                      {/* Botón Volver */}
                       <button
                         type="button"
                         onClick={(e) => {
@@ -166,7 +173,6 @@ export default function SwipePage() {
                         <span className="text-xs">Decidir</span>
                       </button>
 
-                      {/* Título de la Guía y Folio */}
                       <div className="text-center">
                         <span className="font-bold text-[#3d2b1f] block leading-tight text-xs tracking-wider uppercase font-serif">
                           Libro de Cafeterías
@@ -176,7 +182,6 @@ export default function SwipePage() {
                         </span>
                       </div>
 
-                      {/* Ribbon Marcador de Seleccionados Integrado */}
                       <button
                         type="button"
                         onClick={(e) => {
@@ -192,9 +197,8 @@ export default function SwipePage() {
                       </button>
                     </div>
 
-                    {/* CONTENIDO PRINCIPAL: FOTO AMPLIADA + DETALLES */}
+                    {/* Foto ampliada + Detalles */}
                     <div className="relative z-10 my-3 flex-1 flex flex-col justify-between">
-                      {/* Foto marco vintage ocupando espacio amplio */}
                       <div className="relative w-full h-60 sm:h-72 rounded-xl bg-[#ebdccb] border-4 border-white shadow-md overflow-hidden">
                         {cafe.fotos?.[0] ? (
                           <img
@@ -212,7 +216,6 @@ export default function SwipePage() {
                         </span>
                       </div>
 
-                      {/* Detalles del café */}
                       <div className="mt-3 flex-1 flex flex-col justify-center">
                         <h2 className="text-2xl font-serif font-bold text-[#3d2b1f] leading-tight">
                           {cafe.nombre}
@@ -229,7 +232,7 @@ export default function SwipePage() {
                       </div>
                     </div>
 
-                    {/* CHECKLIST MANUSCRITO RÚSTICO INTEGRADO AL PIE DE PÁGINA */}
+                    {/* CHECKLIST MANUSCRITO RÚSTICO */}
                     <div className="relative z-10 pt-2 border-t border-dashed border-[#8b5a2b]/30">
                       <button
                         type="button"
@@ -239,7 +242,6 @@ export default function SwipePage() {
                         }}
                         className="w-full text-left flex items-center gap-3 py-1.5 px-0.5 hover:opacity-85 active:scale-[0.98] transition-all group"
                       >
-                        {/* Casilla rústica */}
                         <div
                           className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all ${
                             isSelected
@@ -272,11 +274,18 @@ export default function SwipePage() {
                       </button>
                     </div>
                   </div>
+                </div>,
 
-                  {/* B) CARA TRASERA (Reverso limpio pergamino) */}
-                  <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-6 flex flex-col items-center justify-between text-center overflow-hidden backface-hidden rotate-y-180 z-0">
+                /* B) REVERSO DE LA HOJA (Papel Pergamino Limpio con Marca de Agua) */
+                <div
+                  key={`back-${cafe.id}`}
+                  className="st-page bg-[#fcf8f2] border-0 overflow-hidden"
+                  style={{ backgroundColor: '#fcf8f2', opacity: 1 }}
+                  data-density="soft"
+                >
+                  <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-6 flex flex-col items-center justify-between text-center overflow-hidden z-10">
                     <div className="absolute inset-y-0 right-0 w-6 book-spine-gradient pointer-events-none z-20" />
-                    
+
                     <div className="w-full text-right text-[9px] font-serif text-[#6b4c3b]/40 uppercase tracking-widest">
                       SUMAY COFFEE CLUB
                     </div>
@@ -291,16 +300,16 @@ export default function SwipePage() {
                     </div>
                   </div>
                 </div>
-              )
-            })}
+              ]
+            }).flat()}
 
-            {/* HOJA FINAL DE PORTADA TRASERA */}
+            {/* PORTADA TRASERA DE CIERRE DEL LIBRO */}
             <div
-              className="st-page relative bg-[#fcf8f2] border-0 overflow-hidden preserve-3d"
+              className="st-page bg-[#fcf8f2] border-0 overflow-hidden"
               style={{ backgroundColor: '#fcf8f2', opacity: 1 }}
-              data-density="hard"
+              data-density="soft"
             >
-              <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-6 flex flex-col items-center justify-between text-center overflow-hidden backface-hidden z-10">
+              <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-6 flex flex-col items-center justify-between text-center overflow-hidden z-10">
                 <div className="absolute inset-y-0 left-0 w-6 book-spine-gradient pointer-events-none z-20" />
 
                 <div className="text-[9px] font-serif text-[#6b4c3b]/50 uppercase tracking-widest">

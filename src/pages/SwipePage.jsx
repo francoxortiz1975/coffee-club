@@ -12,8 +12,14 @@ export default function SwipePage() {
 
   const bookContainerRef = useRef(null)
   const pageFlipRef = useRef(null)
+  const seleccionadosRef = useRef(seleccionados)
 
-  // Calcular dimensiones maximizadas al 100% de la pantalla (descontando solo espacio mínimo de la barra flotante)
+  // Mantener seleccionadosRef sincronizado para los callbacks de eventos
+  useEffect(() => {
+    seleccionadosRef.current = seleccionados
+  }, [seleccionados])
+
+  // Calcular dimensiones maximizadas al 100% de la pantalla
   useEffect(() => {
     function updateDimensions() {
       const w = Math.min(window.innerWidth - 12, 410)
@@ -26,7 +32,7 @@ export default function SwipePage() {
     return () => window.removeEventListener('resize', updateDimensions)
   }, [])
 
-  // Inicializar PageFlip con el libro ocupando la totalidad del viewport
+  // Inicializar PageFlip con redirección automática al llegar al final
   useEffect(() => {
     if (!bookContainerRef.current) return
 
@@ -62,7 +68,15 @@ export default function SwipePage() {
         pageFlip.loadFromHTML(pages)
 
         pageFlip.on('flip', (e) => {
-          setCurrentCafeIndex(Math.min(e.data, cafes.length))
+          const pageIdx = e.data
+          setCurrentCafeIndex(Math.min(pageIdx, cafes.length))
+
+          // Al hojear hasta el final (portada trasera o pasada la última cafetería)
+          if (pageIdx >= cafes.length) {
+            setTimeout(() => {
+              navigate('/decidir/seleccionados', { state: { seleccionados: seleccionadosRef.current } })
+            }, 450)
+          }
         })
 
         pageFlipRef.current = pageFlip
@@ -77,24 +91,34 @@ export default function SwipePage() {
         try { pageFlipRef.current.destroy() } catch (e) { /* ignore */ }
       }
     }
-  }, [dimensions])
+  }, [dimensions, navigate])
 
   function toggleChecklist(cafeId) {
     const wasSelected = seleccionados.includes(cafeId)
+    const isLastCafe = cafeId === cafes[cafes.length - 1].id
+
     if (!wasSelected) {
-      setSeleccionados((prev) => [...prev, cafeId])
+      const updated = [...seleccionados, cafeId]
+      setSeleccionados(updated)
+      seleccionadosRef.current = updated
+
       setTimeout(() => {
-        if (pageFlipRef.current) {
+        if (isLastCafe || currentCafeIndex >= cafes.length - 1) {
+          // Al marcar el último café o estar en la última página, redirigir automáticamente a Seleccionados
+          navigate('/decidir/seleccionados', { state: { seleccionados: updated } })
+        } else if (pageFlipRef.current) {
           pageFlipRef.current.flipNext()
         }
-      }, 350)
+      }, 400)
     } else {
-      setSeleccionados((prev) => prev.filter((id) => id !== cafeId))
+      const updated = seleccionados.filter((id) => id !== cafeId)
+      setSeleccionados(updated)
+      seleccionadosRef.current = updated
     }
   }
 
   function handleTerminar() {
-    navigate('/decidir/seleccionados', { state: { seleccionados } })
+    navigate('/decidir/seleccionados', { state: { seleccionados: seleccionadosRef.current } })
   }
 
   return (
@@ -271,7 +295,7 @@ export default function SwipePage() {
               )
             })}
 
-            {/* HOJA FINAL DE PORTADA TRASERA */}
+            {/* HOJA FINAL DE PORTADA TRASERA (REDIRECCIONA AUTOMÁTICAMENTE AL LLEGAR) */}
             <div
               className="st-page relative bg-[#fcf8f2] border border-amber-900/20 overflow-hidden shadow-sm preserve-3d"
               style={{ backgroundColor: '#fcf8f2', opacity: 1 }}
@@ -288,7 +312,7 @@ export default function SwipePage() {
                   <div className="w-20 h-20 rounded-full bg-[#ebdccb] flex items-center justify-center text-[#5c3a21] shadow-inner">
                     <CoffeeCupIcon size={40} />
                   </div>
-                  <h2 className="text-2xl font-serif font-bold text-[#3d2b1f]">¡Has llegado al final!</h2>
+                  <h2 className="text-2xl font-serif font-bold text-[#3d2b1f]">¡Redirigiendo a Seleccionados!</h2>
                   <p className="font-rustic text-3xl text-[#8b5a2b] font-bold">
                     Guardaste {seleccionados.length} cafeterías
                   </p>

@@ -14,6 +14,7 @@ export default function SwipePage() {
   const pageFlipRef = useRef(null)
   const seleccionadosRef = useRef(seleccionados)
   const currentCafeIndexRef = useRef(currentCafeIndex)
+  const prevPageIdxRef = useRef(0)
 
   // Sincronizar referencias
   useEffect(() => {
@@ -37,7 +38,7 @@ export default function SwipePage() {
     return () => window.removeEventListener('resize', updateDimensions)
   }, [])
 
-  // Inicializar PageFlip en modo 'soft' con doblado curvo sensual y pares (Frente/Reverso)
+  // Inicializar PageFlip en modo 'soft' evitando reposar en hojas impares de reverso
   useEffect(() => {
     if (!bookContainerRef.current) return
 
@@ -58,14 +59,14 @@ export default function SwipePage() {
           maxWidth: 480,
           minHeight: 460,
           maxHeight: 850,
-          drawShadow: true, // Sombras suaves de doblado curvo
+          drawShadow: true,
           maxShadowOpacity: 0.4,
           showCover: false,
           usePortrait: true,
           startPage: 0,
-          flippingTime: 600,
+          flippingTime: 450,
           useMouseEvents: true,
-          swipeDistance: 25,
+          swipeDistance: 20,
           clickEventForward: false,
           mobileScrollSupport: false,
         })
@@ -74,10 +75,24 @@ export default function SwipePage() {
 
         pageFlip.on('flip', (e) => {
           const pageIdx = e.data
+          const prevIdx = prevPageIdxRef.current
+          prevPageIdxRef.current = pageIdx
+
+          // Si el deslizamiento manual con el dedo aterrizó en una página impar de reverso (SUMAY GUÍA)
+          if (pageIdx % 2 === 1 && pageIdx < cafes.length * 2) {
+            const targetPage = pageIdx > prevIdx ? pageIdx + 1 : Math.max(0, pageIdx - 1)
+            setTimeout(() => {
+              if (pageFlipRef.current) {
+                pageFlipRef.current.flip(targetPage)
+              }
+            }, 30)
+            return
+          }
+
           const cafeIdx = Math.floor(pageIdx / 2)
           setCurrentCafeIndex(Math.min(cafeIdx, cafes.length))
 
-          // Redirección automática al llegar al final
+          // Redirección automática al llegar al final del libro
           if (cafeIdx >= cafes.length || pageIdx >= cafes.length * 2) {
             setTimeout(() => {
               navigate('/decidir/seleccionados', { state: { seleccionados: seleccionadosRef.current } })
@@ -113,7 +128,6 @@ export default function SwipePage() {
         if (isLastCafe) {
           navigate('/decidir/seleccionados', { state: { seleccionados: updated } })
         } else if (pageFlipRef.current) {
-          // Saltar 2 páginas (frente + reverso) para ir directo al frente del siguiente café con física curva 'soft'
           const targetPage = (cafeIdx + 1) * 2
           pageFlipRef.current.flip(targetPage)
         }
@@ -148,7 +162,7 @@ export default function SwipePage() {
             {cafes.map((cafe, i) => {
               const isSelected = seleccionados.includes(cafe.id)
               return [
-                /* A) FRENTE DE LA HOJA (Info del Café) - Modo Soft con Curvatura Orgánica */
+                /* A) FRENTE DE LA HOJA (Info del Café) */
                 <div
                   key={`front-${cafe.id}`}
                   className="st-page bg-[#fcf8f2] border-0 overflow-hidden"

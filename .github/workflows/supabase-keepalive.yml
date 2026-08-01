@@ -29,14 +29,15 @@ jobs:
             echo "Auth Health Response Code: $STATUS_AUTH"
             echo "REST API Response Code: $STATUS_REST"
 
-            if [ "$STATUS_AUTH" -eq 200 ] || [ "$STATUS_REST" -eq 200 ]; then
-              echo "✅ Supabase está activo y respondiendo correctamente."
+            # Cualquier código HTTP válido (< 500 y no 000) confirma que el servidor de Supabase está activo
+            if ([ "$STATUS_AUTH" -ne 0 ] && [ "$STATUS_AUTH" -lt 500 ]) || ([ "$STATUS_REST" -ne 0 ] && [ "$STATUS_REST" -lt 500 ]); then
+              echo "✅ Supabase está activo y registrando tráfico correctamente."
               exit 0
             fi
 
-            echo "Reintentando en 15 segundos..."
-            sleep 15
+            echo "Reintentando en 10 segundos..."
+            sleep 10
           done
 
-          echo "❌ No se pudo conectar a Supabase. Si la base de datos está pausada por inactividad, debes restaurarla manualmente una vez en supabase.com/dashboard."
+          echo "❌ No se pudo conectar a Supabase (Servidor deshabilitado o pausado)."
           exit 1

@@ -70,13 +70,19 @@ body {
   animation: recuerdoCrossfade 6s ease-in-out infinite;
 }
 
-/* Ocultar únicamente la capa de brillo/reflejo que cruza la cara de la hoja (.stf__innerShadow)
-   sin afectar la sombra exterior ni la opacidad/textura de la hoja */
-.stf__innerShadow,
-.stf__hardInnerShadow {
-  display: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
+/* Utilidades 3D para reverso de página limpio sin espejados ni tarjetas intermedias */
+.preserve-3d {
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
 }
 
 

@@ -8,22 +8,22 @@ export default function SwipePage() {
   const navigate = useNavigate()
   const [seleccionados, setSeleccionados] = useState([])
   const [currentCafeIndex, setCurrentCafeIndex] = useState(0)
-  const [dimensions, setDimensions] = useState({ width: 370, height: 640 })
+  const [dimensions, setDimensions] = useState({ width: 390, height: 680 })
 
   const bookContainerRef = useRef(null)
   const pageFlipRef = useRef(null)
   const seleccionadosRef = useRef(seleccionados)
 
-  // Mantener seleccionadosRef sincronizado para los callbacks de eventos
+  // Sincronizar seleccionadosRef
   useEffect(() => {
     seleccionadosRef.current = seleccionados
   }, [seleccionados])
 
-  // Calcular dimensiones maximizadas al 100% de la pantalla
+  // Calcular dimensiones ocupando el 100% exacto de la pantalla sin fondo café alrededor
   useEffect(() => {
     function updateDimensions() {
-      const w = Math.min(window.innerWidth - 12, 410)
-      const h = Math.min(window.innerHeight - 55, 740)
+      const w = Math.min(window.innerWidth, 440)
+      const h = Math.min(window.innerHeight - 40, 800)
       setDimensions({ width: w, height: h })
     }
 
@@ -32,7 +32,7 @@ export default function SwipePage() {
     return () => window.removeEventListener('resize', updateDimensions)
   }, [])
 
-  // Inicializar PageFlip con redirección automática al llegar al final
+  // Inicializar PageFlip a pantalla completa
   useEffect(() => {
     if (!bookContainerRef.current) return
 
@@ -50,9 +50,9 @@ export default function SwipePage() {
           height: dimensions.height,
           size: 'fixed',
           minWidth: 280,
-          maxWidth: 450,
+          maxWidth: 480,
           minHeight: 460,
-          maxHeight: 800,
+          maxHeight: 850,
           drawShadow: true,
           maxShadowOpacity: 0.45,
           showCover: false,
@@ -71,7 +71,7 @@ export default function SwipePage() {
           const pageIdx = e.data
           setCurrentCafeIndex(Math.min(pageIdx, cafes.length))
 
-          // Al hojear hasta el final (portada trasera o pasada la última cafetería)
+          // Al hojear hasta el final, redirigir automáticamente a Seleccionados
           if (pageIdx >= cafes.length) {
             setTimeout(() => {
               navigate('/decidir/seleccionados', { state: { seleccionados: seleccionadosRef.current } })
@@ -104,7 +104,6 @@ export default function SwipePage() {
 
       setTimeout(() => {
         if (isLastCafe || currentCafeIndex >= cafes.length - 1) {
-          // Al marcar el último café o estar en la última página, redirigir automáticamente a Seleccionados
           navigate('/decidir/seleccionados', { state: { seleccionados: updated } })
         } else if (pageFlipRef.current) {
           pageFlipRef.current.flipNext()
@@ -123,38 +122,38 @@ export default function SwipePage() {
 
   return (
     <div
-      className="fixed inset-0 max-w-md mx-auto h-screen max-h-screen overflow-hidden flex items-center justify-center bg-[#1c120c] select-none"
+      className="fixed inset-0 max-w-md mx-auto h-screen max-h-screen overflow-hidden flex items-center justify-center bg-[#fcf8f2] select-none"
       style={{ touchAction: 'none', overscrollBehavior: 'none' }}
     >
-      {/* TODO EL SCREEN ES ÚNICAMENTE EL LIBRO (SIN HEADERS EXTERNOS) */}
+      {/* TODO EL SCREEN ES 100% LA HOJA DEL LIBRO (SIN FONDO CAFÉ EXTERNO) */}
       <main className="relative z-10 w-full h-full flex items-center justify-center overflow-hidden">
         <div
-          className="relative flex justify-center items-center"
+          className="relative flex justify-center items-center w-full h-full"
           style={{ width: `${dimensions.width}px`, height: `${dimensions.height}px` }}
         >
           <div
             ref={bookContainerRef}
-            className="shadow-2xl rounded-r-2xl rounded-l-sm bg-[#fcf8f2] overflow-hidden border border-amber-950/40"
+            className="w-full h-full bg-[#fcf8f2] overflow-hidden"
             style={{ width: `${dimensions.width}px`, height: `${dimensions.height}px` }}
           >
             {cafes.map((cafe, i) => {
               const isSelected = seleccionados.includes(cafe.id)
               return (
-                /* 1 HOJA POR CAFÉ: FRENTE E INVERSO DENTRO DEL PANE COMPLETO */
+                /* 1 HOJA POR CAFÉ: FRENTE E INVERSO EN FULL SCREEN */
                 <div
                   key={cafe.id}
-                  className="st-page relative bg-[#fcf8f2] border border-amber-900/20 overflow-hidden shadow-sm preserve-3d"
+                  className="st-page relative bg-[#fcf8f2] border-0 overflow-hidden preserve-3d"
                   style={{ backgroundColor: '#fcf8f2', opacity: 1 }}
                   data-density="soft"
                 >
-                  {/* A) CARA FRONTAL (Ocupa el 100% de la hoja con encabezado e interacciones integradas) */}
+                  {/* A) CARA FRONTAL (Frente pergamino completo) */}
                   <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-5 sm:p-6 flex flex-col justify-between overflow-hidden backface-hidden z-10">
                     {/* Lomo sutil izquierdo */}
                     <div className="absolute inset-y-0 left-0 w-6 book-spine-gradient pointer-events-none z-20" />
 
-                    {/* ENCABEZADO INTEGRADO DENTRO DE LA PÁGINA DEL LIBRO */}
+                    {/* ENCABEZADO INTEGRADO DENTRO DE LA HOJA DEL LIBRO */}
                     <div className="relative z-20 flex justify-between items-center pb-2 border-b border-[#8b5a2b]/20">
-                      {/* Botón Volver adentro del libro */}
+                      {/* Botón Volver */}
                       <button
                         type="button"
                         onClick={(e) => {
@@ -196,7 +195,7 @@ export default function SwipePage() {
                     {/* CONTENIDO PRINCIPAL: FOTO AMPLIADA + DETALLES */}
                     <div className="relative z-10 my-3 flex-1 flex flex-col justify-between">
                       {/* Foto marco vintage ocupando espacio amplio */}
-                      <div className="relative w-full h-56 sm:h-64 rounded-xl bg-[#ebdccb] border-4 border-white shadow-md overflow-hidden">
+                      <div className="relative w-full h-60 sm:h-72 rounded-xl bg-[#ebdccb] border-4 border-white shadow-md overflow-hidden">
                         {cafe.fotos?.[0] ? (
                           <img
                             src={cafe.fotos[0]}
@@ -274,7 +273,7 @@ export default function SwipePage() {
                     </div>
                   </div>
 
-                  {/* B) CARA TRASERA (Reverso limpio de la hoja en doblado) */}
+                  {/* B) CARA TRASERA (Reverso limpio pergamino) */}
                   <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-6 flex flex-col items-center justify-between text-center overflow-hidden backface-hidden rotate-y-180 z-0">
                     <div className="absolute inset-y-0 right-0 w-6 book-spine-gradient pointer-events-none z-20" />
                     
@@ -295,9 +294,9 @@ export default function SwipePage() {
               )
             })}
 
-            {/* HOJA FINAL DE PORTADA TRASERA (REDIRECCIONA AUTOMÁTICAMENTE AL LLEGAR) */}
+            {/* HOJA FINAL DE PORTADA TRASERA */}
             <div
-              className="st-page relative bg-[#fcf8f2] border border-amber-900/20 overflow-hidden shadow-sm preserve-3d"
+              className="st-page relative bg-[#fcf8f2] border-0 overflow-hidden preserve-3d"
               style={{ backgroundColor: '#fcf8f2', opacity: 1 }}
               data-density="hard"
             >
@@ -312,7 +311,7 @@ export default function SwipePage() {
                   <div className="w-20 h-20 rounded-full bg-[#ebdccb] flex items-center justify-center text-[#5c3a21] shadow-inner">
                     <CoffeeCupIcon size={40} />
                   </div>
-                  <h2 className="text-2xl font-serif font-bold text-[#3d2b1f]">¡Redirigiendo a Seleccionados!</h2>
+                  <h2 className="text-2xl font-serif font-bold text-[#3d2b1f]">¡Has llegado al final!</h2>
                   <p className="font-rustic text-3xl text-[#8b5a2b] font-bold">
                     Guardaste {seleccionados.length} cafeterías
                   </p>

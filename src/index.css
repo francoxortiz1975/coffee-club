@@ -70,18 +70,13 @@ body {
   animation: recuerdoCrossfade 6s ease-in-out infinite;
 }
 
-/* Eliminar por completo sombras, reflejos y capas de brillo canvas inyectadas por PageFlip */
-.st-page canvas,
-.st-page-shadow,
-.st-page-cover-shadow {
+/* Ocultar únicamente la capa de brillo/reflejo que cruza la cara de la hoja (.stf__innerShadow)
+   sin afectar la sombra exterior ni la opacidad/textura de la hoja */
+.stf__innerShadow,
+.stf__hardInnerShadow {
   display: none !important;
   opacity: 0 !important;
   visibility: hidden !important;
 }
 
-.st-page {
-  background-color: #fcf8f2 !important;
-  backface-visibility: hidden !important;
-  -webkit-backface-visibility: hidden !important;
-}
 

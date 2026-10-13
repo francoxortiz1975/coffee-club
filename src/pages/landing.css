@@ -207,14 +207,8 @@
 .sl .token.on { background: var(--accent); border: 0; color: #5a341c; }
 .sl .token.on:nth-child(odd) { transform: rotate(-2.5deg); }
 .sl .token.on:nth-child(even) { transform: rotate(2deg); }
-.sl .cup-tile {
-  grid-column: 6; grid-row: 1 / span 2; border-radius: 22px; position: relative;
-  background: #f7eddb; color: #2a1a10; padding: 10px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-}
-.sl .cup-tile::before { content: ''; position: absolute; inset: 7px; border: 1.5px dashed rgba(42, 26, 16, 0.3); border-radius: 16px; pointer-events: none; }
-.sl .cup-tile svg { flex: 1 1 0; min-height: 0; width: 100%; max-width: 160px; overflow: visible; }
-.sl .cup-tile .cap { font-family: var(--font-hand); font-size: 1.6rem; line-height: 1; padding-bottom: 8px; white-space: nowrap; }
+.sl .cup { grid-column: 6; grid-row: 1 / span 2; min-width: 0; display: grid; place-items: center; }
+.sl .cup svg { width: 100%; max-width: 200px; height: auto; overflow: visible; }
 .sl .steam path { animation: steam 3.4s ease-in-out infinite; transform-box: fill-box; }
 .sl .steam path:nth-child(2) { animation-delay: 0.9s; }
 .sl .steam path:nth-child(3) { animation-delay: 1.8s; }
@@ -320,8 +314,8 @@
 /* ---------- tablet and below: the cup gets its own row ---------- */
 @media (max-width: 1100px) {
   .sl .collect { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-  .sl .cup-tile { grid-column: 1 / -1; grid-row: auto; flex-direction: row; justify-content: center; gap: 18px; padding: 16px; }
-  .sl .cup-tile svg { flex: none; width: 118px; height: auto; max-width: none; }
+  .sl .cup { grid-column: 1 / -1; grid-row: auto; padding-top: 6px; }
+  .sl .cup svg { width: 170px; max-width: none; }
 }
 
 /* ---------- mobile (< 768px): one column everywhere ---------- */

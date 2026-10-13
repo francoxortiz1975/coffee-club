@@ -123,32 +123,60 @@ function Bean() {
   )
 }
 
-// Taza de madera de la colección (misma paleta que CoffeeMugIcon), con vapor y arte en la crema.
+// Taza de porcelana con crema y vapor.
 function Cup() {
   return (
-    <svg viewBox="0 0 120 124" aria-hidden="true">
+    <svg viewBox="0 0 220 190" aria-hidden="true">
       <defs>
-        <linearGradient id="sl-cup-wood" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#bd8049" />
-          <stop offset="1" stopColor="#7a4a23" />
+        <radialGradient id="sl-cup-g-shadow" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stopColor="#2a1608" stopOpacity="0.45"/>
+          <stop offset="1" stopColor="#2a1608" stopOpacity="0"/>
+        </radialGradient>
+        <linearGradient id="sl-cup-g-saucer" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#fffaf0"/>
+          <stop offset="1" stopColor="#e2d4b8"/>
         </linearGradient>
+        <linearGradient id="sl-cup-g-body" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#e9dcc3"/>
+          <stop offset="0.22" stopColor="#fffdf7"/>
+          <stop offset="0.62" stopColor="#f1e6d0"/>
+          <stop offset="1" stopColor="#cdbb99"/>
+        </linearGradient>
+        <radialGradient id="sl-cup-g-coffee" cx="50%" cy="46%" r="60%">
+          <stop offset="0" stopColor="#9a5a2c"/>
+          <stop offset="0.55" stopColor="#5a2f14"/>
+          <stop offset="1" stopColor="#2e170a"/>
+        </radialGradient>
+        <clipPath id="sl-cup-c-body"><path d="M44 74 C44 118 70 146 110 146 C150 146 176 118 176 74 Z"/></clipPath>
       </defs>
-      <g className="steam" fill="none" stroke="#a98660" strokeWidth="3.2" strokeLinecap="round">
-        <path d="M40 34 C34 27 46 22 40 13" />
-        <path d="M58 32 C52 24 64 19 58 8" />
-        <path d="M76 34 C70 27 82 22 76 13" />
+
+      <g className="steam" fill="none" stroke="#fffaf0" strokeWidth="4" strokeLinecap="round" opacity="0.85">
+        <path d="M88 52 C80 42 96 36 88 24 C84 18 88 12 92 8"/>
+        <path d="M110 48 C102 38 118 30 110 18 C106 12 110 6 114 2"/>
+        <path d="M132 52 C124 42 140 36 132 24 C128 18 132 12 136 8"/>
       </g>
-      <ellipse cx="58" cy="108" rx="46" ry="9" fill="#d9c3a0" />
-      <ellipse cx="58" cy="106" rx="40" ry="6.5" fill="#e8d6b6" />
-      <path d="M90 56 C112 52 114 84 90 88" fill="none" stroke="#8b5a2b" strokeWidth="8.5" strokeLinecap="round" />
-      <path d="M91 58 C108 56 109 80 91 84" fill="none" stroke="#b98550" strokeWidth="2.4" strokeLinecap="round" />
-      <path d="M20 48 H96 V74 C96 94 80 104 58 104 C36 104 20 94 20 74 Z" fill="url(#sl-cup-wood)" />
-      <path d="M31 62 C42 66 62 59 84 66 M27 76 C42 82 72 76 90 83 M36 91 C50 95 66 93 82 95" fill="none" stroke="#4a2a0f" strokeOpacity="0.28" strokeWidth="1.5" strokeLinecap="round" />
-      <ellipse cx="58" cy="48" rx="38" ry="10" fill="#f6ead5" stroke="#d6bd96" />
-      <ellipse cx="58" cy="49" rx="33" ry="7.6" fill="#3a1f10" />
-      <ellipse cx="58" cy="49" rx="27" ry="5.7" fill="#cf9a68" />
-      <path d="M58 53 C51 49 51 44.6 54.4 44.6 C56.4 44.6 58 46.4 58 46.4 C58 46.4 59.6 44.6 61.6 44.6 C65 44.6 65 49 58 53 Z" fill="#f8eddb" />
-      <ellipse cx="38" cy="46.5" rx="5" ry="1.2" fill="#fff" opacity="0.5" />
+
+      <ellipse cx="108" cy="160" rx="92" ry="14" fill="url(#sl-cup-g-shadow)"/>
+      <ellipse cx="110" cy="150" rx="86" ry="19" fill="#d6c7a8"/>
+      <ellipse cx="110" cy="146" rx="86" ry="19" fill="url(#sl-cup-g-saucer)"/>
+      <ellipse cx="110" cy="143" rx="56" ry="10.5" fill="#e6d9bd"/>
+      <ellipse cx="110" cy="141" rx="56" ry="10" fill="none" stroke="#fffdf6" strokeOpacity="0.8" strokeWidth="1.4"/>
+
+      <path d="M172 84 C206 78 208 124 170 128" fill="none" stroke="#c9b894" strokeWidth="15" strokeLinecap="round"/>
+      <path d="M172 84 C204 80 204 122 170 127" fill="none" stroke="#f6ecd8" strokeWidth="11" strokeLinecap="round"/>
+      <path d="M174 85 C198 84 200 106 190 118" fill="none" stroke="#ffffff" strokeOpacity="0.7" strokeWidth="3" strokeLinecap="round"/>
+
+      <path d="M44 74 C44 118 70 146 110 146 C150 146 176 118 176 74 Z" fill="url(#sl-cup-g-body)"/>
+      <g clipPath="url(#sl-cup-c-body)">
+        <path d="M150 80 C158 118 140 142 112 146 C146 144 170 122 176 80 Z" fill="#7a6540" fillOpacity="0.22"/>
+      </g>
+      <path d="M56 84 C58 108 70 128 90 138" fill="none" stroke="#ffffff" strokeOpacity="0.85" strokeWidth="5" strokeLinecap="round"/>
+
+      <ellipse cx="110" cy="74" rx="66" ry="19" fill="#fffaf0" stroke="#d9c9a8" strokeWidth="1.5"/>
+      <ellipse cx="110" cy="75" rx="58" ry="15" fill="#e6d6b6"/>
+      <ellipse cx="110" cy="76" rx="56" ry="14" fill="url(#sl-cup-g-coffee)"/>
+      <ellipse cx="110" cy="77" rx="40" ry="9" fill="#b5763f" fillOpacity="0.38" />
+      <ellipse cx="82" cy="72" rx="9" ry="2.2" fill="#fff" fillOpacity="0.35" transform="rotate(-8 82 72)"/>
     </svg>
   )
 }
@@ -412,9 +440,8 @@ export default function Landing() {
                   <Bean />
                 </div>
               ))}
-              <div className="cup-tile">
+              <div className="cup">
                 <Cup />
-                <span className="cap">{t.beans.cup}</span>
               </div>
             </div>
             <p className="count">{t.beans.count}</p>

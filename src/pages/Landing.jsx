@@ -232,8 +232,12 @@ function WaitlistForm({ t, lang }) {
         <label htmlFor="sl-email">{t.email}</label>
         <input
           id="sl-email"
+          name="email"
           type="email"
+          inputMode="email"
           autoComplete="email"
+          autoCapitalize="none"
+          spellCheck={false}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder={t.emailPlaceholder}
@@ -242,7 +246,7 @@ function WaitlistForm({ t, lang }) {
       </div>
       <div className="field">
         <label htmlFor="sl-city">{t.city}</label>
-        <select id="sl-city" value={ciudad} onChange={(e) => setCiudad(e.target.value)}>
+        <select id="sl-city" name="city" value={ciudad} onChange={(e) => setCiudad(e.target.value)}>
           <option value="">{t.cityNone}</option>
           {Object.entries(t.cities).map(([value, label]) => (
             <option key={value} value={value}>{label}</option>
@@ -251,7 +255,7 @@ function WaitlistForm({ t, lang }) {
       </div>
       <div className="field">
         <label htmlFor="sl-message">{t.message}</label>
-        <textarea id="sl-message" value={mensaje} onChange={(e) => setMensaje(e.target.value)} maxLength={400} />
+        <textarea id="sl-message" name="message" value={mensaje} onChange={(e) => setMensaje(e.target.value)} maxLength={400} />
         <span className="help">{t.messageHelp}</span>
       </div>
       <button className="btn btn-dark" type="submit" disabled={enviando}>
@@ -291,9 +295,17 @@ export default function Landing() {
 
   const cafe = (id) => cafes.find((c) => c.id === id)
 
+  function skipToContent(e) {
+    e.preventDefault()
+    const main = document.getElementById('main')
+    main?.focus({ preventScroll: true })
+    main?.scrollIntoView({ block: 'start' })
+  }
+
   return (
     <div className="sl" data-theme={theme ?? undefined} ref={rootRef}>
       <InAppBrowserBanner t={t.inApp} />
+      <a className="skip" href="/landing" onClick={skipToContent}>{t.skip}</a>
 
       <nav className="nav" aria-label="Main">
         <div className="wrap nav-inner">
@@ -305,6 +317,7 @@ export default function Landing() {
         </div>
       </nav>
 
+      <main id="main" tabIndex={-1}>
       <header className="hero">
         <div className="wrap hero-grid">
           <div className="hero-copy">
@@ -319,10 +332,10 @@ export default function Landing() {
           </div>
           <div className="hero-visual">
             <figure className="hero-photo">
-              <img src="/images/coffee-factory/food.jpg" alt={t.heroPhotoAlt} />
+              <img src="/images/coffee-factory/food.jpg" alt={t.heroPhotoAlt} width="1400" height="933" fetchPriority="high" decoding="async" />
             </figure>
             <Phone className="hero-phone">
-              <img src="/landing/app-discover.webp" alt={t.heroPhoneAlt} />
+              <img src="/landing/app-discover.webp" alt={t.heroPhoneAlt} width="720" height="1565" decoding="async" />
             </Phone>
           </div>
         </div>
@@ -346,9 +359,9 @@ export default function Landing() {
             </div>
             <div className="panel-visual">
               <div className="mosaic">
-                <img src="/images/republica-del-cacao/food.jpg" alt="" loading="lazy" />
-                <img src="/images/coffee-factory/place.jpg" alt="" loading="lazy" />
-                <img src="/images/quito-deli/food.jpg" alt="" loading="lazy" />
+                <img src="/images/republica-del-cacao/food.jpg" alt="" loading="lazy" decoding="async" />
+                <img src="/images/coffee-factory/place.jpg" alt="" loading="lazy" decoding="async" />
+                <img src="/images/quito-deli/food.jpg" alt="" loading="lazy" decoding="async" />
               </div>
             </div>
           </article>
@@ -366,14 +379,14 @@ export default function Landing() {
           </article>
 
           <article className="panel panel-invite" style={{ '--i': 2 }}>
-            <div className="bg"><img src="/images/coffee-factory/place.jpg" alt="" loading="lazy" /></div>
+            <div className="bg"><img src="/images/coffee-factory/place.jpg" alt="" loading="lazy" decoding="async" /></div>
             <div className="panel-copy">
               <h2>{t.panels.invite.title}</h2>
               <p>{t.panels.invite.body}</p>
             </div>
             <div className="panel-visual">
               <Phone className="bleed-phone">
-                <img src="/landing/app-envelope.webp" alt={t.panels.invite.alt} loading="lazy" />
+                <img src="/landing/app-envelope.webp" alt={t.panels.invite.alt} loading="lazy" decoding="async" />
               </Phone>
             </div>
           </article>
@@ -421,7 +434,7 @@ export default function Landing() {
               const data = cafe(id)
               return (
                 <article key={id} className={`cafe${big ? ' big' : ''} reveal`} style={{ '--d': `${i * 100}ms` }}>
-                  <div className="ph"><img src={photo} alt={t.cafes.alts[id]} loading="lazy" /></div>
+                  <div className="ph"><img src={photo} alt={t.cafes.alts[id]} loading="lazy" decoding="async" /></div>
                   <div>
                     <h3>{data.nombre}</h3>
                     <p className="meta">{data.barrio} · {data.precio}</p>
@@ -460,6 +473,7 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      </main>
 
       <footer className="footer">
         <div className="wrap footer-inner">

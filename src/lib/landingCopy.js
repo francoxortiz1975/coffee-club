@@ -3,6 +3,7 @@ export const LANGS = ['en', 'es']
 export const copy = {
   es: {
     metaDescription: 'Descubre, decide e invita a las mejores cafeterías de Quito y París.',
+    skip: 'Saltar al contenido',
     navCta: 'Únete al waitlist',
     betaTag: 'Beta',
 
@@ -65,7 +66,7 @@ export const copy = {
 
     invites: {
       titleA: 'Se acabó el ',
-      titleEm: '"¿dónde nos vemos?"',
+      titleEm: '“¿dónde nos vemos?”',
       body: 'Elige el café, la fecha y la persona. Sumay arma una invitación animada y bien bonita. El otro la abre y ya sabe a dónde ir.',
       facts: ['Café', 'Fecha y hora', 'Quién invita', 'Link único'],
       alt: 'Animación de la app: un sobre se abre y revela la invitación de Franco a María en Coffee Factory',
@@ -103,13 +104,14 @@ export const copy = {
       insideBefore: 'Estás dentro de ',
       insideAfter: '. Toca los ',
       topRight: ' arriba a la derecha → ',
-      openExternal: '"Abrir en navegador externo"',
-      openChrome: '"Abrir en Chrome"',
+      openExternal: '“Abrir en navegador externo”',
+      openChrome: '“Abrir en Chrome”',
     },
   },
 
   en: {
     metaDescription: 'Discover, decide and invite to the best coffee shops in Quito and Paris.',
+    skip: 'Skip to content',
     navCta: 'Join the waitlist',
     betaTag: 'Beta',
 
@@ -172,7 +174,7 @@ export const copy = {
 
     invites: {
       titleA: 'No more ',
-      titleEm: '"where should we meet?"',
+      titleEm: '“where should we meet?”',
       body: 'Pick the café, the date and the person. Sumay builds a beautifully animated invitation. They open it and know exactly where to go.',
       facts: ['Café', 'Date and time', 'Who invites', 'Unique link'],
       alt: 'App animation: an envelope opens and reveals Franco’s invitation to Maria at Coffee Factory',
@@ -210,8 +212,8 @@ export const copy = {
       insideBefore: "You're inside ",
       insideAfter: '. Tap the ',
       topRight: ' at the top right → ',
-      openExternal: '"Open in external browser"',
-      openChrome: '"Open in Chrome"',
+      openExternal: '“Open in external browser”',
+      openChrome: '“Open in Chrome”',
     },
   },
 }

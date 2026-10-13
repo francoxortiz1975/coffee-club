@@ -45,13 +45,13 @@ function PhoneMockup({ screenshot }) {
 
   return (
     <div className="relative flex justify-center md:justify-end">
-      <div className="relative w-[280px] sm:w-[320px] aspect-[9/19.5] rounded-[2.5rem] bg-cafe-dark p-3 shadow-2xl ring-8 ring-cafe-dark/10 rotate-2">
-        <div className="w-full h-full rounded-[2rem] overflow-hidden bg-[#faf4ec] relative">
+      <div className="relative w-[280px] sm:w-[320px] rounded-[2.5rem] bg-cafe-dark p-3 shadow-2xl ring-8 ring-cafe-dark/10 rotate-2">
+        <div className="w-full aspect-[1206/2622] rounded-[2rem] overflow-hidden bg-[#faf4ec] relative">
           {!error ? (
             <img
               src={screenshot}
               alt="Sumay app preview"
-              className="absolute inset-2 w-[calc(100%-1rem)] h-[calc(100%-1rem)] object-contain object-top rounded-[1.5rem]"
+              className="absolute inset-0 w-full h-full object-cover"
               onError={() => setError(true)}
             />
           ) : (

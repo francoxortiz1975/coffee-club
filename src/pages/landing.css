@@ -207,8 +207,11 @@
 .sl .token.on { background: var(--accent); border: 0; color: #5a341c; }
 .sl .token.on:nth-child(odd) { transform: rotate(-2.5deg); }
 .sl .token.on:nth-child(even) { transform: rotate(2deg); }
-.sl .cup { grid-column: 6; grid-row: 1 / span 2; min-width: 0; display: grid; place-items: center; }
-.sl .cup svg { width: 100%; max-width: 200px; height: auto; overflow: visible; }
+.sl .cup {
+  grid-column: 6; grid-row: 1 / span 2; min-width: 0; border-radius: 20px;
+  display: grid; place-items: center; background: #26140b; color: var(--accent);
+}
+.sl .cup svg { width: 54%; max-width: 76px; height: auto; overflow: visible; }
 .sl .steam path { animation: steam 3.4s ease-in-out infinite; transform-box: fill-box; }
 .sl .steam path:nth-child(2) { animation-delay: 0.9s; }
 .sl .steam path:nth-child(3) { animation-delay: 1.8s; }
@@ -311,13 +314,6 @@
   .sl .panel { position: relative; top: auto; }
 }
 
-/* ---------- tablet and below: the cup gets its own row ---------- */
-@media (max-width: 1100px) {
-  .sl .collect { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-  .sl .cup { grid-column: 1 / -1; grid-row: auto; padding-top: 6px; }
-  .sl .cup svg { width: 170px; max-width: none; }
-}
-
 /* ---------- mobile (< 768px): one column everywhere ---------- */
 @media (max-width: 767px) {
   .sl .hero { min-height: 0; }
@@ -332,4 +328,8 @@
   .sl .statement p { margin-left: 0; }
   .sl .nav .btn { padding: 11px 14px; }
   .sl .tag { display: none; }
+  .sl .collect { gap: 8px; }
+  .sl .board { padding: 16px; }
+  .sl .token { border-radius: 14px; }
+  .sl .cup { border-radius: 14px; }
 }

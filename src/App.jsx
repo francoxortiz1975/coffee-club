@@ -22,6 +22,7 @@ import CafeDetalle from './pages/CafeDetalle'
 import InvitacionSetup from './pages/InvitacionSetup'
 import InvitacionPage from './pages/InvitacionPage'
 import Landing from './pages/Landing'
+import Privacy from './pages/Privacy'
 import Login from './pages/Login'
 import AuthCallback from './pages/AuthCallback'
 import Cafeteros from './pages/Cafeteros'
@@ -133,6 +134,8 @@ function Root() {
       <Routes>
         {/* Landing: full-width, sin Layout, sin BottomNav, sin bg images */}
         <Route path="/landing" element={<Landing />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/privacidad" element={<Privacy />} />
         {/* Resto: app dentro del Layout mobile-only */}
         <Route path="*" element={<AppShell />} />
       </Routes>

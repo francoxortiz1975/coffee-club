@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import '@fontsource-variable/bricolage-grotesque'
 import '@fontsource-variable/geist'
 import '@fontsource/parisienne/latin-400.css'
@@ -6,11 +7,12 @@ import './landing.css'
 import cafes from '../data/cafes.json'
 import InAppBrowserBanner from '../components/InAppBrowserBanner'
 import { supabase } from '../lib/supabase'
-import { copy, LANGS } from '../lib/landingCopy'
+import { copy } from '../lib/landingCopy'
 import { useLandingLang } from '../lib/useLandingLang'
+import { useTheme } from '../lib/useTheme'
+import { LangToggle, ThemeToggle } from '../components/LandingChrome'
 
 const WAITLIST_KEY = 'samay_waitlist_email'
-const THEME_KEY = 'sumay_theme'
 
 const FEATURED = [
   { id: 'republica-del-cacao', photo: '/images/republica-del-cacao/place.jpg', big: true },
@@ -26,26 +28,6 @@ function scrollToId(id) {
     e.preventDefault()
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
-}
-
-function useTheme() {
-  const [theme, setTheme] = useState(() => {
-    try {
-      const saved = localStorage.getItem(THEME_KEY)
-      return saved === 'dark' || saved === 'light' ? saved : null
-    } catch {
-      return null
-    }
-  })
-  const choose = (next) => {
-    setTheme(next)
-    try {
-      localStorage.setItem(THEME_KEY, next)
-    } catch {
-      // sin persistencia, el cambio igual aplica en esta sesión.
-    }
-  }
-  return [theme, choose]
 }
 
 function useReveal() {
@@ -136,30 +118,6 @@ function Cup() {
       <path d="M16.7 10.6h1.1a2.5 2.5 0 0 1 0 5h-1.7" />
       <path d="M3 21.1h15.6" strokeWidth="1.9" />
     </svg>
-  )
-}
-
-function LangToggle({ lang, setLang }) {
-  return (
-    <div className="seg" role="group" aria-label="Language">
-      {LANGS.map((code) => (
-        <button key={code} type="button" onClick={() => setLang(code)} aria-pressed={lang === code}>
-          {code}
-        </button>
-      ))}
-    </div>
-  )
-}
-
-function ThemeToggle({ t, effective, onChoose }) {
-  return (
-    <div className="seg" role="group" aria-label={t.theme}>
-      {['dark', 'light'].map((mode) => (
-        <button key={mode} type="button" onClick={() => onChoose(mode)} aria-pressed={effective === mode}>
-          {t[mode]}
-        </button>
-      ))}
-    </div>
   )
 }
 
@@ -480,6 +438,7 @@ export default function Landing() {
           <img className="logo" src="/logo.png" alt="Sumay" />
           <span className="made">{t.footer.made}</span>
           <span className="spacer" />
+          <Link className="link" to="/privacy">{t.footer.privacy}</Link>
           <a className="link" href="mailto:hola@sumayclub.app">{t.footer.contact}</a>
           <ThemeToggle t={t.footer} effective={effectiveTheme} onChoose={chooseTheme} />
         </div>

@@ -299,6 +299,16 @@
 .sl .success { padding: 24px; border-radius: var(--r-input); background: var(--on-accent); color: var(--accent); }
 .sl .success strong { font-family: var(--font-display); font-size: 1.5rem; display: block; margin-bottom: 4px; }
 
+/* ---------- privacy / long-form text ---------- */
+.sl .prose { max-width: 46rem; padding-block: clamp(40px, 6vw, 88px) clamp(56px, 8vw, 112px); margin-inline: auto; }
+.sl .prose h1 { font-size: clamp(2.4rem, 1.2rem + 3.4vw, 3.6rem); line-height: 1.04; margin-bottom: 10px; }
+.sl .prose .updated { font-size: 0.9rem; color: var(--muted); margin-bottom: 28px; }
+.sl .prose .lead { font-size: 1.2rem; color: var(--text); margin-bottom: 40px; max-width: 34em; }
+.sl .prose section { padding-top: 28px; margin-top: 28px; border-top: 1px solid var(--line); }
+.sl .prose h2 { font-size: 1.35rem; line-height: 1.2; margin-bottom: 12px; letter-spacing: -0.02em; }
+.sl .prose section p { color: var(--muted); font-size: 1.05rem; max-width: 40em; }
+.sl .prose section p + p { margin-top: 12px; }
+
 /* ---------- footer ---------- */
 .sl .footer { padding-block: 40px; background: var(--nav-bg); border-top: 1px solid var(--line); }
 .sl .footer-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }

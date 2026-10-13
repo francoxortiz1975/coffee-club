@@ -93,6 +93,7 @@ export const copy = {
 
     footer: {
       made: 'Hecho con el shungo en Quito y París',
+      privacy: 'Privacidad',
       contact: 'Contacto',
       dark: 'Oscuro',
       light: 'Claro',
@@ -201,6 +202,7 @@ export const copy = {
 
     footer: {
       made: 'Made with shungo in Quito & Paris',
+      privacy: 'Privacy',
       contact: 'Contact',
       dark: 'Dark',
       light: 'Light',

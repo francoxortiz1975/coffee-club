@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import '@fontsource-variable/bricolage-grotesque'
 import '@fontsource-variable/geist'
-import '@fontsource/gwendolyn/latin-400.css'
+import '@fontsource/parisienne/latin-400.css'
 import './landing.css'
 import cafes from '../data/cafes.json'
 import InAppBrowserBanner from '../components/InAppBrowserBanner'

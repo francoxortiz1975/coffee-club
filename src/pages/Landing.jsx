@@ -389,18 +389,19 @@ export default function Landing() {
           <div className="board">
             <div className="collect" role="img" aria-label={t.beans.label}>
               <BeanDefs />
-              {Array.from({ length: BEANS_TOTAL }, (_, i) => (
-                <div
-                  key={i}
-                  className={`token${i < BEANS_COLLECTED ? ' on' : ''}`}
-                  style={{ '--n': i }}
-                >
-                  <Bean />
-                </div>
-              ))}
-              <div className="cup">
-                <Cup />
-              </div>
+              {Array.from({ length: BEANS_TOTAL }, (_, i) => {
+                const isCup = i === BEANS_TOTAL - 1
+                const collected = i < BEANS_COLLECTED
+                return (
+                  <div
+                    key={i}
+                    className={`token${collected ? ' on' : ''}${isCup ? ' cup' : ''}`}
+                    style={{ '--n': i }}
+                  >
+                    {isCup ? <Cup /> : <Bean />}
+                  </div>
+                )
+              })}
             </div>
             <p className="count">{t.beans.count}</p>
           </div>

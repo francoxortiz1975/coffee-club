@@ -201,17 +201,14 @@
 .sl .beans-grid { display: grid; grid-template-columns: 0.85fr 1.3fr; gap: clamp(32px, 6vw, 96px); align-items: center; }
 .sl .beans h2 { font-size: clamp(2rem, 1.1rem + 2.8vw, 3.3rem); line-height: 1.04; margin-bottom: 18px; }
 .sl .beans .note { font-family: var(--font-hand); font-size: clamp(1.5rem, 1.1rem + 1vw, 2rem); line-height: 1.3; color: var(--accent-hand); max-width: 17em; word-spacing: 0.08em; }
-.sl .collect { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(0, 2.2fr); gap: 12px; align-items: stretch; }
+.sl .collect { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
 .sl .token { aspect-ratio: 1; align-self: start; border-radius: 20px; display: grid; place-items: center; border: 1px dashed var(--line); color: var(--muted); }
 .sl .token svg { width: 46%; height: 46%; }
 .sl .token.on { background: var(--accent); border: 0; color: #5a341c; }
 .sl .token.on:nth-child(odd) { transform: rotate(-2.5deg); }
 .sl .token.on:nth-child(even) { transform: rotate(2deg); }
-.sl .cup {
-  grid-column: 6; grid-row: 1 / span 2; min-width: 0; border-radius: 20px;
-  display: grid; place-items: center; background: #26140b; color: var(--accent);
-}
-.sl .cup svg { width: 54%; max-width: 76px; height: auto; overflow: visible; }
+.sl .token.cup, .sl .board .token.cup { background: #26140b; border: 0; color: var(--accent); }
+.sl .token.cup svg { width: 56%; height: 56%; overflow: visible; }
 .sl .steam path { animation: steam 3.4s ease-in-out infinite; transform-box: fill-box; }
 .sl .steam path:nth-child(2) { animation-delay: 0.9s; }
 .sl .steam path:nth-child(3) { animation-delay: 1.8s; }
@@ -331,5 +328,5 @@
   .sl .collect { gap: 8px; }
   .sl .board { padding: 16px; }
   .sl .token { border-radius: 14px; }
-  .sl .cup { border-radius: 14px; }
+  .sl .token.cup { border-radius: 14px; }
 }

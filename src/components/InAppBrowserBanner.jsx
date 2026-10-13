@@ -15,7 +15,7 @@ function esIOS() {
   return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
 }
 
-export default function InAppBrowserBanner() {
+export default function InAppBrowserBanner({ t }) {
   const [app, setApp] = useState(null)
 
   useEffect(() => {
@@ -30,12 +30,12 @@ export default function InAppBrowserBanner() {
         <div className="text-2xl shrink-0">☕</div>
         <div className="flex-1 min-w-0">
           <p className="text-xs font-bold leading-tight">
-            Abre Sumay en tu navegador
+            {t.title}
           </p>
           <p className="text-[11px] text-beige/70 leading-snug mt-0.5">
-            Estás dentro de {app}. Toca los <span className="font-bold">⋯</span>
-            {' '}arriba a la derecha → <span className="font-bold">
-              {esIOS() ? '"Abrir en navegador externo"' : '"Abrir en Chrome"'}
+            {t.insideBefore}{app}{t.insideAfter}<span className="font-bold">⋯</span>
+            {t.topRight}<span className="font-bold">
+              {esIOS() ? t.openExternal : t.openChrome}
             </span>.
           </p>
         </div>

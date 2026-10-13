@@ -1,7 +1,9 @@
-import { useState, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import cafes from '../data/cafes.json'
 import InAppBrowserBanner from '../components/InAppBrowserBanner'
 import { supabase } from '../lib/supabase'
+import { copy, LANGS } from '../lib/landingCopy'
+import { useLandingLang } from '../lib/useLandingLang'
 import {
   CoffeeCupIcon, CoffeeBeanIcon, CoffeeMugIcon, HeartIcon,
   DiceIcon, InviteIcon, PinIcon, SparkleIcon,
@@ -96,9 +98,10 @@ function CafeMiniCard({ cafe }) {
   )
 }
 
-function WaitlistForm() {
+function WaitlistForm({ t, lang }) {
   const [email, setEmail] = useState('')
   const [mensaje, setMensaje] = useState('')
+  const [ciudad, setCiudad] = useState('')
   const [enviado, setEnviado] = useState(false)
   const [error, setError] = useState('')
   const [enviando, setEnviando] = useState(false)
@@ -108,18 +111,20 @@ function WaitlistForm() {
     setError('')
     const limpio = email.trim().toLowerCase()
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(limpio)) {
-      setError('Email inválido')
+      setError(t.errorInvalid)
       return
     }
 
     setEnviando(true)
+    // Idioma y ciudad viajan en `source` (landing:<lang>:<ciudad>) para no
+    // depender de columnas nuevas en la tabla waitlist.
     const { error: insertError } = await supabase
       .from('waitlist')
       .insert({
         email: limpio,
         mensaje: mensaje.trim() || null,
         user_agent: navigator.userAgent.slice(0, 500),
-        source: 'landing',
+        source: `landing:${lang}:${ciudad || 'na'}`,
       })
 
     setEnviando(false)
@@ -130,7 +135,7 @@ function WaitlistForm() {
         setEnviado(true)
         return
       }
-      setError('Algo salió mal. Prueba de nuevo en un toque.')
+      setError(t.errorGeneric)
       console.error('waitlist insert error:', insertError)
       return
     }
@@ -138,7 +143,7 @@ function WaitlistForm() {
     // Backup local también, por si limpia datos.
     const existentes = JSON.parse(localStorage.getItem(WAITLIST_KEY) || '[]')
     if (!existentes.some((e) => e.email === limpio)) {
-      existentes.push({ email: limpio, mensaje: mensaje.trim(), at: Date.now() })
+      existentes.push({ email: limpio, mensaje: mensaje.trim(), lang, ciudad, at: Date.now() })
     }
     localStorage.setItem(WAITLIST_KEY, JSON.stringify(existentes))
     setEnviado(true)
@@ -148,8 +153,8 @@ function WaitlistForm() {
     return (
       <div className="bg-[#b8d04a]/20 border border-[#b8d04a]/40 rounded-2xl p-6 text-center">
         <div className="text-3xl mb-2">☕</div>
-        <p className="text-cafe-dark font-serif font-bold text-lg">¡Estás dentro!</p>
-        <p className="text-sm text-cafe-dark/70 mt-1">Te actualizaremos pronto sobre el acceso a la app.</p>
+        <p className="text-cafe-dark font-serif font-bold text-lg">{t.successTitle}</p>
+        <p className="text-sm text-cafe-dark/70 mt-1">{t.successBody}</p>
       </div>
     )
   }
@@ -160,14 +165,25 @@ function WaitlistForm() {
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="tu@email.com"
+        placeholder={t.emailPlaceholder}
         className="w-full bg-white border border-cafe-accent/25 rounded-2xl px-5 py-3.5 text-sm text-cafe-dark outline-none focus:border-cafe-accent/60"
         required
       />
+      <select
+        value={ciudad}
+        onChange={(e) => setCiudad(e.target.value)}
+        aria-label={t.cityPlaceholder}
+        className={`w-full bg-white border border-cafe-accent/25 rounded-2xl pl-4 pr-3 py-3.5 text-sm outline-none focus:border-cafe-accent/60 ${ciudad ? 'text-cafe-dark' : 'text-cafe-dark/50'}`}
+      >
+        <option value="">{t.cityPlaceholder}</option>
+        {Object.entries(t.cities).map(([valor, etiqueta]) => (
+          <option key={valor} value={valor}>{etiqueta}</option>
+        ))}
+      </select>
       <textarea
         value={mensaje}
         onChange={(e) => setMensaje(e.target.value)}
-        placeholder="Recomiéndanos una cafetería, mándanos un mensaje o cuéntanos qué buscas (opcional)"
+        placeholder={t.messagePlaceholder}
         rows={3}
         maxLength={400}
         className="w-full bg-white border border-cafe-accent/25 rounded-2xl px-5 py-3 text-sm text-cafe-dark outline-none focus:border-cafe-accent/60 resize-none"
@@ -177,32 +193,62 @@ function WaitlistForm() {
         disabled={enviando}
         className="bg-cafe-dark text-[#b8d04a] text-sm font-bold px-6 py-3.5 rounded-2xl shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform self-stretch sm:self-center sm:px-12 disabled:opacity-50"
       >
-        {enviando ? 'Enviando…' : 'Reservar mi lugar'}
+        {enviando ? t.submitting : t.submit}
       </button>
       {error && <p className="text-xs text-red-600 text-center">{error}</p>}
     </form>
   )
 }
 
+function LangToggle({ lang, setLang }) {
+  return (
+    <div role="group" aria-label="Language" className="flex items-center rounded-full bg-beige/10 p-0.5 text-[11px] font-bold">
+      {LANGS.map((code) => (
+        <button
+          key={code}
+          type="button"
+          onClick={() => setLang(code)}
+          aria-pressed={lang === code}
+          className={`px-2.5 py-1 rounded-full uppercase transition-colors ${
+            lang === code ? 'bg-beige text-cafe-dark' : 'text-beige/60'
+          }`}
+        >
+          {code}
+        </button>
+      ))}
+    </div>
+  )
+}
+
 export default function Landing() {
+  const [lang, setLang] = useLandingLang()
+  const t = copy[lang]
+
+  useEffect(() => {
+    document.querySelector('meta[name="description"]')?.setAttribute('content', t.metaDescription)
+  }, [t])
+
   return (
     <div className="min-h-screen bg-beige text-cafe-dark overflow-x-hidden">
-      <InAppBrowserBanner />
+      <InAppBrowserBanner t={t.inApp} />
       {/* ─── Nav top — fondo café para que el logo beige se vea ─── */}
       <nav
         className="w-full"
         style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #2a1510 60%, #1e0f0b 100%)' }}
       >
-        <div className="w-full px-6 py-5 max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
+        <div className="w-full px-6 py-5 max-w-6xl mx-auto flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 shrink-0">
             <img src="/logo.png" alt="Sumay" className="h-9 w-auto" />
           </div>
-          <a
-            href="/landing" onClick={scrollAWaitlist}
-            className="text-xs sm:text-sm font-bold bg-[#b8d04a] text-cafe-dark px-4 py-2 rounded-full active:scale-95 transition-transform"
-          >
-            Únete al waitlist
-          </a>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <LangToggle lang={lang} setLang={setLang} />
+            <a
+              href="/landing" onClick={scrollAWaitlist}
+              className="text-xs sm:text-sm font-bold bg-[#b8d04a] text-cafe-dark px-3 sm:px-4 py-2 rounded-full active:scale-95 transition-transform whitespace-nowrap"
+            >
+              {t.navCta}
+            </a>
+          </div>
         </div>
       </nav>
 
@@ -212,24 +258,22 @@ export default function Landing() {
           {/* Texto */}
           <div className="text-center md:text-left">
             <p className="text-xs uppercase tracking-[0.3em] text-cafe-accent/60 mb-4">
-              Coffee club · Quito
+              {t.heroEyebrow}
             </p>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold leading-[1.05] tracking-tight mb-5">
-              El club del<br />
-              <span className="text-cafe-accent/80">buen café</span><br />
-              en Ecuador.
+              {t.heroTitle[0]}<br />
+              <span className="text-cafe-accent/80">{t.heroTitle[1]}</span><br />
+              {t.heroTitle[2]}
             </h1>
             <p className="text-base sm:text-lg text-cafe-dark/70 leading-relaxed mb-8 max-w-md mx-auto md:mx-0">
-              Descubre las cafeterías más chéveres de la ciudad, decide a dónde
-              ir sin estresarte y manda invitaciones bacanas a tus panas.
-              Coleccionas coffee beans con cada visita.
+              {t.heroBody}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
               <a
                 href="/landing" onClick={scrollAWaitlist}
                 className="bg-cafe-dark text-[#b8d04a] text-sm font-bold px-7 py-3.5 rounded-2xl shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform"
               >
-                Quiero entrar al club
+                {t.heroCta}
               </a>
             </div>
           </div>
@@ -243,11 +287,11 @@ export default function Landing() {
       <Section className="bg-cafe-dark text-beige">
         <div className="max-w-3xl mx-auto text-center">
           <SparkleIcon size={36} className="text-[#b8d04a] mx-auto mb-5" />
-          <p className="text-xs uppercase tracking-[0.3em] text-beige/50 mb-4">¿Qué es Sumay?</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-beige/50 mb-4">{t.whatEyebrow}</p>
           <p className="text-2xl sm:text-3xl md:text-4xl font-serif leading-snug">
-            Tu pana de confianza para <span className="text-[#b8d04a]">ubicar buenos cafés</span>,
-            <span className="italic"> coleccionarlos</span> y armar el próximo
-            <span className="text-[#b8d04a]"> cafecito</span> sin pensarlo mucho.
+            {t.whatParts.a}<span className="text-[#b8d04a]">{t.whatParts.hl1}</span>{t.whatParts.b}
+            <span className="italic">{t.whatParts.it}</span>{t.whatParts.c}
+            <span className="text-[#b8d04a]">{t.whatParts.hl2}</span>{t.whatParts.d}
           </p>
         </div>
       </Section>
@@ -255,30 +299,15 @@ export default function Landing() {
       {/* ─── Cómo funciona ─── */}
       <Section>
         <div className="text-center mb-12">
-          <p className="text-xs uppercase tracking-[0.3em] text-cafe-accent/60 mb-3">Cómo funciona</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-cafe-accent/60 mb-3">{t.howEyebrow}</p>
           <h2 className="text-3xl sm:text-4xl font-serif font-bold text-cafe-dark">
-            Tres movimientos. Cero estrés.
+            {t.howTitle}
           </h2>
         </div>
         <div className="flex flex-col md:flex-row gap-5">
-          <FeatureCard
-            Icono={CoffeeCupIcon}
-            titulo="Descubre"
-            texto="Cafeterías curadas por barrio, especialidad y ocasión. Filtros, favoritas y reseñas reales."
-            accent="bg-cafe-dark"
-          />
-          <FeatureCard
-            Icono={DiceIcon}
-            titulo="Decide"
-            texto="Aleatorio para los que no se deciden, o swipe estilo Tinder para armar tu lista de cafés por visitar."
-            accent="bg-[#7d4f2f]"
-          />
-          <FeatureCard
-            Icono={InviteIcon}
-            titulo="Invita"
-            texto="Genera una invitación bien elegante, con fecha y nombre. La mandas por WhatsApp ¡de una!"
-            accent="bg-[#b8d04a]"
-          />
+          <FeatureCard Icono={CoffeeCupIcon} {...t.features[0]} accent="bg-cafe-dark" />
+          <FeatureCard Icono={DiceIcon} {...t.features[1]} accent="bg-[#7d4f2f]" />
+          <FeatureCard Icono={InviteIcon} {...t.features[2]} accent="bg-[#b8d04a]" />
         </div>
       </Section>
 
@@ -293,14 +322,12 @@ export default function Landing() {
         >
           <div className="bg-[#faf4ec]/85 backdrop-blur-sm rounded-2xl p-8 sm:p-12 grid md:grid-cols-2 gap-10 items-center">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-cafe-accent/60 mb-3">Colecciona</p>
+              <p className="text-xs uppercase tracking-[0.3em] text-cafe-accent/60 mb-3">{t.beansEyebrow}</p>
               <h2 className="text-3xl sm:text-4xl font-serif font-bold text-cafe-dark leading-tight mb-4">
-                Cada café = un coffee bean.
+                {t.beansTitle}
               </h2>
               <p className="text-base text-cafe-dark/70 leading-relaxed mb-6">
-                Cuando llegas a 10 beans, se convierten en una taza. Tu progreso
-                por barrio se ve con estampas tipo loyalty card. Mientras más te
-                das una vuelta, más chévere se pone tu colección.
+                {t.beansBody}
               </p>
               <div className="flex items-center gap-3 flex-wrap">
                 <span className="text-3xl font-serif font-bold text-cafe-dark tabular-nums">23</span>
@@ -332,9 +359,9 @@ export default function Landing() {
       {/* ─── Cafeterías destacadas ─── */}
       <Section>
         <div className="text-center mb-10">
-          <p className="text-xs uppercase tracking-[0.3em] text-cafe-accent/60 mb-3">Destacadas</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-cafe-accent/60 mb-3">{t.featuredEyebrow}</p>
           <h2 className="text-3xl sm:text-4xl font-serif font-bold text-cafe-dark">
-            Algunas de las joyas que vas a encontrar
+            {t.featuredTitle}
           </h2>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -347,7 +374,7 @@ export default function Landing() {
             href="/landing" onClick={scrollAWaitlist}
             className="inline-block border border-cafe-dark/25 text-cafe-dark text-sm font-semibold px-7 py-3 rounded-2xl active:scale-95 transition-transform"
           >
-            Entrar al club →
+            {t.featuredCta}
           </a>
         </div>
       </Section>
@@ -356,19 +383,17 @@ export default function Landing() {
       <Section className="bg-cafe-dark text-beige">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-beige/50 mb-3">Invitaciones</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-beige/50 mb-3">{t.invEyebrow}</p>
             <h2 className="text-3xl sm:text-4xl font-serif font-bold mb-4 leading-tight">
-              No más <em className="text-[#b8d04a] not-italic">"¿dónde nos vemos?"</em>
+              {t.invTitleA}<em className="text-[#b8d04a] not-italic">{t.invTitleEm}</em>
             </h2>
             <p className="text-base text-beige/70 leading-relaxed mb-6">
-              Elige el café, la fecha y la persona. Sumay te arma una invitación
-              visual elegante con un link único para mandar por WhatsApp o donde
-              quieras. El otro abre el link y ya sabe a dónde ir.
+              {t.invBody}
             </p>
             <div className="flex flex-wrap gap-2">
-              {['Café favorito', 'Fecha y hora', 'Quién invita', 'Link único'].map((t) => (
-                <span key={t} className="text-xs bg-beige/10 border border-beige/15 text-beige/90 rounded-full px-3 py-1">
-                  {t}
+              {t.invChips.map((chip) => (
+                <span key={chip} className="text-xs bg-beige/10 border border-beige/15 text-beige/90 rounded-full px-3 py-1">
+                  {chip}
                 </span>
               ))}
             </div>
@@ -380,12 +405,12 @@ export default function Landing() {
                   <img src={cafesDestacados[0].fotos[0]} alt="" className="absolute inset-0 w-full h-full object-cover" />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/90 p-6 flex flex-col items-center justify-center text-center text-white">
-                  <p className="text-[10px] text-white/50 uppercase tracking-widest mb-4">Invitación</p>
-                  <h3 className="text-2xl font-serif font-bold mb-2">¡MARÍA!</h3>
-                  <p className="text-xs text-white/70 italic mb-3"><span className="text-white font-semibold">Franco</span> te invita a</p>
+                  <p className="text-[10px] text-white/50 uppercase tracking-widest mb-4">{t.invCardLabel}</p>
+                  <h3 className="text-2xl font-serif font-bold mb-2">{t.invCardName}</h3>
+                  <p className="text-xs text-white/70 italic mb-3"><span className="text-white font-semibold">Franco</span>{t.invCardInvites}</p>
                   <h4 className="text-2xl font-serif font-bold leading-tight">{cafesDestacados[0]?.nombre || 'Botánica'}</h4>
                   <div className="mt-4 border border-white/20 rounded-xl px-4 py-2">
-                    <p className="text-xs font-semibold">sábado, 18 mayo</p>
+                    <p className="text-xs font-semibold">{t.invCardDate}</p>
                     <p className="text-[10px] text-white/60">5:00 pm</p>
                   </div>
                 </div>
@@ -399,17 +424,16 @@ export default function Landing() {
       <Section id="waitlist" className="bg-[#faf4ec]">
         <div className="max-w-2xl mx-auto text-center">
           <HeartIcon size={32} filled className="text-[#b8d04a] mx-auto mb-4" />
-          <p className="text-xs uppercase tracking-[0.3em] text-cafe-accent/60 mb-3">Únete</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-cafe-accent/60 mb-3">{t.waitEyebrow}</p>
           <h2 className="text-3xl sm:text-4xl font-serif font-bold text-cafe-dark mb-3 leading-tight">
-            Reserva tu lugar en el club.
+            {t.waitTitle}
           </h2>
           <p className="text-base text-cafe-dark/70 leading-relaxed mb-8">
-            Deja tu email y te concederemos acceso anticipado a la aplicación.
-            ¡Nada de spam!
+            {t.waitBody}
           </p>
-          <WaitlistForm />
+          <WaitlistForm t={t} lang={lang} />
           <p className="text-[11px] text-cafe-accent/50 mt-5">
-            Al sumarte aceptás recibir un único mail con el acceso.
+            {t.waitTerms}
           </p>
         </div>
       </Section>
@@ -419,11 +443,11 @@ export default function Landing() {
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5">
           <div className="flex items-center gap-3">
             <img src="/logo.png" alt="Sumay" className="h-8 w-auto opacity-80" />
-            <span className="text-xs">Hecho con el shungo en Quito · {new Date().getFullYear()}</span>
+            <span className="text-xs">{t.footerMade} · {new Date().getFullYear()}</span>
           </div>
           <div className="flex items-center gap-5 text-xs">
-            <a href="/landing" onClick={scrollAWaitlist} className="hover:text-beige transition-colors">Waitlist</a>
-            <a href="mailto:hola@sumayclub.app" className="hover:text-beige transition-colors">Contacto</a>
+            <a href="/landing" onClick={scrollAWaitlist} className="hover:text-beige transition-colors">{t.footerWaitlist}</a>
+            <a href="mailto:hola@sumayclub.app" className="hover:text-beige transition-colors">{t.footerContact}</a>
           </div>
         </div>
       </footer>

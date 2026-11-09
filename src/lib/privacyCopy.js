@@ -3,13 +3,13 @@ export const privacyCopy = {
     title: 'Privacy',
     docTitle: 'Privacy | Sumay Coffee Club',
     intro: 'Sumay is a small project. This page explains, in plain words, what we collect and why.',
-    updated: 'Last updated October 13, 2026',
+    updated: 'Last updated November 9, 2026',
     back: 'Back to home',
     sections: [
       {
         heading: 'What we collect',
         items: [
-          'On the waitlist: your email, and optionally your city and a message. We also note which language you used and your browser and device type, so we can see where interest is coming from.',
+          'On the waitlist: your email, and optionally your city and a message. If you take the coffee profile quiz, we also save your answers (what you are looking for, your coffee shop mood, your coffee level, how often you go, and your neighborhoods) and your profile name. We also note which language you used, which link brought you here, and your browser and device type, so we can see where interest is coming from.',
           'In the app, if you create an account: your email (to sign you in with a one-time email link), your name and username, your favorite coffee and café, an optional photo, and what you create there: favorites, visits, invitations, memories with photos, and connections with other members.',
         ],
       },
@@ -28,7 +28,7 @@ export const privacyCopy = {
       {
         heading: 'On your device',
         items: [
-          'We save your language and theme choice, and a copy of your waitlist sign-up, in your browser’s local storage. The app also keeps your favorites and visits there. You can clear all of it in your browser settings.',
+          'We save your language and theme choice, and a copy of your waitlist sign-up, in your browser’s local storage. The app also keeps your favorites and visits there. When you share your coffee profile, the image is created on your device. You can clear all of it in your browser settings.',
         ],
       },
       {
@@ -54,13 +54,13 @@ export const privacyCopy = {
     title: 'Privacidad',
     docTitle: 'Privacidad | Sumay Coffee Club',
     intro: 'Sumay es un proyecto pequeño. Esta página explica, en palabras simples, qué datos recogemos y para qué.',
-    updated: 'Última actualización: 13 de octubre de 2026',
+    updated: 'Última actualización: 9 de noviembre de 2026',
     back: 'Volver al inicio',
     sections: [
       {
         heading: 'Qué recogemos',
         items: [
-          'En el waitlist: tu email y, si quieres, tu ciudad y un mensaje. También anotamos en qué idioma entraste y el tipo de navegador y dispositivo, para saber de dónde viene el interés.',
+          'En el waitlist: tu email y, si quieres, tu ciudad y un mensaje. Si haces el quiz de tu perfil cafetero, también guardamos tus respuestas (qué buscas, tu mood de cafetería, tu nivel de café, con qué frecuencia vas y tus barrios) y el nombre de tu perfil. También anotamos en qué idioma entraste, qué link te trajo y el tipo de navegador y dispositivo, para saber de dónde viene el interés.',
           'En la app, si creas una cuenta: tu email (para entrar con un link de un solo uso), tu nombre y usuario, tu café y cafetería favoritos, una foto opcional y lo que creas ahí: favoritas, visitas, invitaciones, recuerdos con fotos y conexiones con otros miembros.',
         ],
       },
@@ -79,7 +79,7 @@ export const privacyCopy = {
       {
         heading: 'En tu dispositivo',
         items: [
-          'Guardamos tu idioma, tu tema y una copia de tu registro al waitlist en el almacenamiento local de tu navegador. La app también guarda ahí tus favoritas y visitas. Puedes borrarlo todo desde los ajustes de tu navegador.',
+          'Guardamos tu idioma, tu tema y una copia de tu registro al waitlist en el almacenamiento local de tu navegador. La app también guarda ahí tus favoritas y visitas. Cuando compartes tu perfil cafetero, la imagen se crea en tu dispositivo. Puedes borrarlo todo desde los ajustes de tu navegador.',
         ],
       },
       {

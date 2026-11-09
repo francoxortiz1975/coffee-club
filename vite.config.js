@@ -18,6 +18,9 @@ export default defineConfig({
       workbox: {
         cleanupOutdatedCaches: true,
         navigateFallback: '/index.html',
+        // el prototipo de onboarding es una página estática aparte: no la intercepta el SPA ni se precachea
+        navigateFallbackDenylist: [/^\/onboarding/],
+        globIgnores: ['onboarding/**'],
         runtimeCaching: [
           {
             urlPattern: /\/images\//,

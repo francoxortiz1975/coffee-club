@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Sumay onboarding (prototype)</title>
+<meta name="color-scheme" content="dark" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="stylesheet" href="icons/regular.css" />
+<link rel="stylesheet" href="icons/fill.css" />
+<style>
+  @font-face { font-family: 'Bricolage Grotesque'; src: url('fonts/bricolage.woff2') format('woff2'); font-weight: 200 800; font-display: swap; }
+  @font-face { font-family: 'Geist'; src: url('fonts/geist.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+  @font-face { font-family: 'Parisienne'; src: url('fonts/parisienne.woff2') format('woff2'); font-display: swap; }
+  :root {
+    --font-display: 'Bricolage Grotesque', 'Geist', system-ui, sans-serif;
+    --font-body: 'Geist', system-ui, -apple-system, sans-serif;
+    --font-hand: 'Parisienne', cursive;
+    --bg: #1e0f0b; --bg-2: #140a07;
+    --text: #f4ede0; --muted: #cdbba3; --line: rgba(244, 237, 224, 0.16);
+    --tile: rgba(244, 237, 224, 0.05);
+    --lime: #b8d04a; --lime-hand: #cde35f; --on-lime: #1f1409;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { background: #0e0705; color: var(--text); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  h1, h2, h3, p { margin: 0; }
+  :focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; border-radius: 10px; }
+
+  /* ---------- stage: rail | phone | notes ---------- */
+  .stage { min-height: 100%; display: grid; grid-template-columns: 260px 390px 320px; gap: 40px; justify-content: center; align-items: center; padding: 32px; }
+  .rail h1 { font: 700 1.4rem/1.1 var(--font-display); letter-spacing: -0.03em; margin-bottom: 6px; }
+  .rail .sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 22px; }
+  .rail ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: s; }
+  .rail li button { width: 100%; text-align: left; background: none; border: 0; padding: 9px 10px; border-radius: 10px; color: var(--muted); font-size: 0.92rem; display: flex; gap: 10px; align-items: baseline; }
+  .rail li button[aria-current='step'] { background: rgba(184, 208, 74, 0.12); color: var(--text); }
+  .rail li button:hover { color: var(--text); }
+  .rail .n { font-variant-numeric: tabular-nums; width: 1.4em; opacity: 0.7; }
+  .rail .foot { margin-top: 22px; font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+  .notes { align-self: center; }
+  .notes .card { border: 1px solid var(--line); border-radius: 20px; padding: 20px; background: rgba(244, 237, 224, 0.03); }
+  .notes h2 { font: 700 1.15rem/1.2 var(--font-display); letter-spacing: -0.02em; margin-bottom: 12px; }
+  .notes dl { margin: 0; display: grid; gap: 12px; font-size: 0.9rem; line-height: 1.5; }
+  .notes dt { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--lime); margin-bottom: 2px; font-weight: 600; }
+  .notes dd { margin: 0; color: var(--muted); }
+
+  /* ---------- phone ---------- */
+  .phone { position: relative; width: 390px; height: 844px; border-radius: 48px; overflow: hidden; background: linear-gradient(160deg, var(--bg) 0%, var(--bg-2) 100%); box-shadow: 0 0 0 10px #0a0503, 0 0 0 11px rgba(255, 255, 255, 0.12), 0 40px 80px -30px #000; isolation: isolate; }
+  .phone::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.06; mix-blend-mode: overlay; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  .screen { position: absolute; inset: 0; padding: 58px 24px 28px; display: none; flex-direction: column; }
+  .screen.on { display: flex; }
+  @media (prefers-reduced-motion: no-preference) {
+    .screen.on { animation: in 0.45s var(--ease) both; }
+    @keyframes in { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+    .screen.back.on { animation-name: inBack; }
+    @keyframes inBack { from { opacity: 0; transform: translateX(-18px); } to { opacity: 1; transform: none; } }
+  }
+
+  /* top bar: back, progress, skip */
+  .top { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; min-height: 44px; }
+  .icon-btn { width: 44px; height: 44px; margin-left: -10px; border: 0; background: none; display: grid; place-items: center; border-radius: 50%; font-size: 1.3rem; }
+  .progress { flex: 1; display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .progress i { height: 4px; border-radius: 4px; background: var(--line); }
+  .progress i.done { background: var(--lime); }
+  .skip { min-height: 44px; padding: 0 4px 0 12px; border: 0; background: none; color: var(--muted); font-size: 0.95rem; }
+  .skip:hover { color: var(--text); }
+
+  h2.title { font: 700 2rem/1.05 var(--font-display); letter-spacing: -0.035em; margin-bottom: 10px; text-wrap: balance; }
+  .lede { color: var(--muted); font-size: 1rem; line-height: 1.5; margin-bottom: 20px; }
+  .hand { font-family: var(--font-hand); font-weight: 400; color: var(--lime-hand); letter-spacing: 0; }
+
+  /* selection tiles: border + check, never color alone */
+  .tiles { display: grid; gap: 12px; }
+  .tile { position: relative; display: grid; grid-template-columns: 40px 1fr 24px; gap: 14px; align-items: center; text-align: left; min-height: 64px; padding: 12px 16px; border-radius: 20px; background: var(--tile); border: 1.5px solid var(--line); transition: border-color 0.25s var(--ease), background-color 0.25s var(--ease), transform 0.15s ease-out; }
+  .tile:active { transform: scale(0.98); }
+  .tile .ic { font-size: 1.6rem; color: var(--muted); }
+  .tile .t { display: block; font-weight: 600; font-size: 1.02rem; }
+  .tile .s { display: block; color: var(--muted); font-size: 0.86rem; margin-top: 1px; }
+  .tile .chk { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--line); display: grid; place-items: center; font-size: 0.85rem; color: transparent; }
+  .tile[aria-pressed='true'] { border-color: var(--lime); background: rgba(184, 208, 74, 0.1); }
+  .tile[aria-pressed='true'] .chk { background: var(--lime); border-color: var(--lime); color: var(--on-lime); }
+  .tile[aria-pressed='true'] .ic { color: var(--lime); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip { min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--tile); font-size: 0.98rem; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; transition: border-color 0.25s var(--ease), background-color 0.25s var(--ease), transform 0.15s ease-out; }
+  .chip:active { transform: scale(0.97); }
+  .chip[aria-pressed='true'] { border-color: var(--lime); background: rgba(184, 208, 74, 0.12); }
+  .chip[aria-pressed='true']::before { content: '\2713'; font-weight: 700; color: var(--lime); }
+  .chip.loc { border-style: dashed; color: var(--muted); }
+  .hint { color: var(--muted); font-size: 0.85rem; margin-top: 14px; }
+
+  /* live tuning strip: the answers become visible */
+  .tuning { margin-top: auto; padding: 12px 0 14px; min-height: 76px; }
+  .tuning .lbl { font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
+  .tuning .row { display: flex; flex-wrap: wrap; gap: 8px; min-height: 30px; }
+  .tag { font-size: 0.82rem; font-weight: 500; padding: 5px 11px; border-radius: 999px; border: 1px solid rgba(184, 208, 74, 0.55); color: var(--lime); }
+  @media (prefers-reduced-motion: no-preference) { .tag { animation: pop 0.35s var(--ease) both; } @keyframes pop { from { opacity: 0; transform: translateY(6px) scale(0.96); } to { opacity: 1; transform: none; } } }
+  .empty-note { font-size: 0.88rem; color: var(--muted); }
+
+  .cta { width: 100%; min-height: 54px; border: 0; border-radius: 999px; background: var(--lime); color: var(--on-lime); font-weight: 600; font-size: 1.02rem; transition: transform 0.15s ease-out, filter 0.25s var(--ease); }
+  .cta:hover { filter: brightness(0.95); } .cta:active { transform: scale(0.98); }
+  .cta.quiet { background: transparent; color: var(--text); border: 1.5px solid var(--line); }
+  .link { min-height: 44px; margin-top: 6px; background: none; border: 0; color: var(--muted); font-size: 0.95rem; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--line); }
+  .link:hover { color: var(--text); }
+
+  /* welcome */
+  .welcome .logo { height: 44px; width: auto; align-self: flex-start; margin-bottom: 18px; }
+  .welcome .photo { flex: 1; min-height: 200px; max-height: 320px; border-radius: 28px; overflow: hidden; margin-bottom: 22px; }
+  .welcome .photo img { width: 100%; height: 100%; object-fit: cover; object-position: 72% 50%; display: block; }
+  .welcome h1 { font: 700 2.1rem/1.04 var(--font-display); letter-spacing: -0.035em; margin-bottom: 16px; }
+  .verbs { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .verbs li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: center; color: var(--muted); font-size: 0.98rem; }
+  .verbs li i { font-size: 1.3rem; color: var(--lime); }
+  .verbs b { color: var(--text); font-weight: 600; }
+  .welcome .actions { margin-top: 18px; display: grid; justify-items: center; gap: 2px; }
+
+  /* building */
+  .building { justify-content: center; }
+  .building h2 { font: 700 2rem/1.05 var(--font-display); letter-spacing: -0.035em; margin-bottom: 26px; }
+  .checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+  .checks li { display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: center; color: var(--muted); font-size: 1.02rem; transition: color 0.3s; }
+  .checks li .dot { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--line); display: grid; place-items: center; font-size: 0.8rem; color: transparent; transition: all 0.3s var(--ease); }
+  .checks li.ok { color: var(--text); }
+  .checks li.ok .dot { background: var(--lime); border-color: var(--lime); color: var(--on-lime); }
+
+  /* picks */
+  .picks { padding-bottom: 0; }
+  .scroll { flex: 1; overflow-y: auto; margin: 0 -24px; padding: 0 24px 16px; scrollbar-width: none; overscroll-behavior: contain; }
+  .scroll::-webkit-scrollbar { display: none; }
+  .pick { margin-bottom: 18px; }
+  .pick .pw { position: relative; height: 176px; border-radius: 24px; overflow: hidden; }
+  .pick .pw img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .heart { position: absolute; right: 10px; top: 10px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(20, 10, 7, 0.7); color: var(--text); display: grid; place-items: center; font-size: 1.3rem; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+  .heart[aria-pressed='true'] { color: var(--lime); }
+  .pick h3 { font: 700 1.3rem/1.1 var(--font-display); letter-spacing: -0.02em; margin: 12px 0 2px; }
+  .pick .where { color: var(--muted); font-size: 0.88rem; display: flex; align-items: center; gap: 6px; }
+  .pick .why { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 8px; }
+  .pick .teaser { color: var(--muted); font-size: 0.95rem; }
+  .bottom { padding-top: 12px; }
+
+  /* card */
+  .board { border-radius: 28px; padding: 18px; background-color: #d9b98c; background-image: linear-gradient(rgba(70, 40, 18, 0.14), rgba(70, 40, 18, 0.14)), url('/wood-bg.webp'); background-size: auto, cover; border: 1px solid rgba(20, 10, 4, 0.5); margin: 6px 0 24px; }
+  .slots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 9px; }
+  .slot { aspect-ratio: 1; border-radius: 16px; display: grid; place-items: center; border: 1px dashed rgba(42, 26, 16, 0.4); color: #6a4a2a; }
+  .slot svg { width: 46%; height: 46%; }
+  .slot.on { background: var(--lime); border: 0; color: #5a341c; }
+  .slot.cup { background: #26140b; border: 0; color: var(--lime); font-size: 1.5rem; }
+  @media (prefers-reduced-motion: no-preference) { .slot.on { animation: drop 0.8s 0.35s var(--ease) both; } @keyframes drop { from { opacity: 0; transform: translateY(-46px) scale(0.6); } 60% { transform: translateY(4px) scale(1.04); } to { opacity: 1; transform: none; } } }
+  .board .count { margin-top: 14px; font: 400 1.5rem/1 var(--font-hand); color: #2a1608; }
+  .big-hand { font: 400 2.6rem/1.05 var(--font-hand); color: var(--lime-hand); margin: 4px 0 8px; }
+  .fine { color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
+
+  /* save */
+  .field { display: grid; gap: 8px; margin: 18px 0 8px; }
+  .field label { font-weight: 600; font-size: 0.92rem; }
+  .field input { width: 100%; min-height: 54px; border-radius: 16px; border: 1.5px solid transparent; background: #f7f0e3; color: #2a1a10; padding: 0 18px; font: 400 1.05rem var(--font-body); }
+  .field input:focus { outline: 0; border-color: var(--lime); box-shadow: 0 0 0 4px rgba(184, 208, 74, 0.25); }
+  .field .err { color: #ffb4a2; font-size: 0.88rem; min-height: 1.2em; }
+  .spacer { flex: 1; }
+  /* pace payoff */
+  .pace { margin-top: auto; padding: 14px 16px; border-radius: 20px; border: 1.5px solid rgba(184, 208, 74, 0.5); background: rgba(184, 208, 74, 0.08); display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: center; min-height: 74px; margin-bottom: 14px; }
+  .pace i { font-size: 1.7rem; color: var(--lime); }
+  .pace .p1 { font-weight: 600; font-size: 1rem; line-height: 1.25; }
+  .pace .p2 { color: var(--muted); font-size: 0.86rem; margin-top: 2px; }
+  .pace.idle { border-style: dashed; border-color: var(--line); background: none; color: var(--muted); font-size: 0.92rem; }
+  .pace.idle i { color: var(--muted); }
+  /* profile card */
+  .profile-card { position: relative; border-radius: 28px; padding: 22px 22px 20px; border: 1px solid var(--line); background: radial-gradient(120% 80% at 80% 0%, rgba(184, 208, 74, 0.14), transparent 60%), linear-gradient(165deg, #2a1510, #170b08); overflow: hidden; }
+  .profile-card .kicker { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .profile-card .kicker img { height: 30px; width: auto; }
+  .profile-card .kicker span { font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .profile-card .arch { font: 400 3.3rem/1 var(--font-hand); color: var(--lime-hand); margin-bottom: 8px; }
+  .profile-card .line { color: var(--text); font-size: 1.02rem; line-height: 1.4; margin-bottom: 18px; }
+  .traits { list-style: none; margin: 0; padding: 14px 0 0; border-top: 1px solid var(--line); display: grid; gap: 11px; }
+  .traits li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: center; font-size: 0.95rem; }
+  .traits li i { font-size: 1.25rem; color: var(--lime); }
+  .traits li b { font-weight: 600; }
+  .traits li span { color: var(--muted); }
+  .profile-card .url { margin-top: 16px; font-size: 0.78rem; color: var(--muted); letter-spacing: 0.02em; }
+  .toast { position: absolute; left: 24px; right: 24px; bottom: 96px; padding: 14px 16px; border-radius: 16px; background: #f7f0e3; color: #2a1a10; font-size: 0.92rem; font-weight: 500; text-align: center; opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity 0.3s var(--ease), transform 0.3s var(--ease); z-index: 5; }
+  .toast.on { opacity: 1; transform: none; }
+  .done .logo { height: 40px; align-self: flex-start; }
+
+  /* ---------- responsive: phone only on small screens, notes under it ---------- */
+  @media (max-width: 1060px) {
+    .stage { grid-template-columns: 390px; gap: 28px; }
+    .rail, .notes { max-width: 390px; }
+    .rail ol { display: flex; flex-wrap: wrap; gap: 6px; }
+    .rail li button { padding: 6px 10px; border: 1px solid var(--line); }
+    .rail .n { display: none; }
+  }
+  @media (max-width: 460px) {
+    .stage { padding: 0; grid-template-columns: 1fr; }
+    .phone { width: 100%; height: 100dvh; border-radius: 0; box-shadow: none; }
+    .rail, .notes { padding: 20px; max-width: none; }
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><mask id="bm"><g transform="rotate(-30 12 12)"><ellipse cx="12" cy="12" rx="6.5" ry="9.5" fill="white"/><path d="M12 3 Q14.5 7 14.5 12 Q14.5 17 12 21" stroke="black" stroke-width="1.4" fill="none" stroke-linecap="round"/></g></mask></defs></svg>
+
+<div class="stage">
+  <aside class="rail" aria-label="Prototype steps">
+    <h1>Sumay onboarding</h1>
+    <p class="sub">Ideal first run. Tap through it like a new member.</p>
+    <ol id="nav"></ol>
+    <p class="foot">Café names, photos and details on the picks screen are sample content. Real Paris cafés slot in here.</p>
+  </aside>
+
+  <main class="phone" id="phone" aria-label="Sumay app preview">
+
+    <!-- 0 welcome -->
+    <section class="screen welcome" data-id="welcome">
+      <img class="logo" src="/logo.png" alt="Sumay Coffee Club" />
+      <div class="photo"><img src="img/hero.jpg" alt="Iced espresso in a stemmed glass on a wooden board, next to old books and coffee beans" /></div>
+      <h1>Let's build your<span class="hand" style="display:block;font-size:1.3em;line-height:1.1">coffee profile!</span></h1>
+      <ul class="verbs">
+        <li><i class="ph ph-compass" aria-hidden="true"></i><span><b>Discover</b> hand-picked cafés, with their story</span></li>
+        <li><i class="ph ph-coffee-bean" aria-hidden="true"></i><span><b>Collect</b> a bean at every visit</span></li>
+        <li><i class="ph ph-users-three" aria-hidden="true"></i><span><b>Share</b> a café with your people</span></li>
+      </ul>
+      <div class="actions">
+        <button class="cta" data-next>Build my profile</button>
+        <button class="link" data-act="login">I already have an account</button>
+      </div>
+    </section>
+
+    <!-- 1 looking -->
+    <section class="screen q" data-id="looking" data-q="1">
+      <div class="top"><button class="icon-btn" data-back aria-label="Back"><i class="ph ph-arrow-left"></i></button><div class="progress" role="progressbar" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" aria-label="Question 1 of 5"></div><button class="skip" data-next>Skip</button></div>
+      <h2 class="title">What are you looking for?</h2>
+      <p class="lede">Pick any that fit. We'll lead with those.</p>
+      <div class="tiles" data-group="look" role="group" aria-label="What you are looking for">
+        <button class="tile" data-v="new" aria-pressed="false"><i class="ph ph-compass ic"></i><span><span class="t">New places to try</span><span class="s">Hand-picked cafés I'd never find alone</span></span><i class="ph ph-check chk"></i></button>
+        <button class="tile" data-v="learn" aria-pressed="false"><i class="ph ph-book-open ic"></i><span><span class="t">Learn about coffee</span><span class="s">Origins, roasters, the story behind it</span></span><i class="ph ph-check chk"></i></button>
+        <button class="tile" data-v="rewards" aria-pressed="false"><i class="ph ph-coffee-bean ic"></i><span><span class="t">Rewards</span><span class="s">Beans for every visit, at every café</span></span><i class="ph ph-check chk"></i></button>
+      </div>
+      <div class="tuning"><div class="lbl">Building your profile</div><div class="row" data-tuning></div></div>
+      <button class="cta" data-next data-cta>Continue</button>
+    </section>
+
+    <!-- 2 mood -->
+    <section class="screen q" data-id="mood" data-q="2">
+      <div class="top"><button class="icon-btn" data-back aria-label="Back"><i class="ph ph-arrow-left"></i></button><div class="progress" role="progressbar" aria-valuemin="1" aria-valuemax="5" aria-valuenow="2" aria-label="Question 2 of 5"></div><button class="skip" data-next>Skip</button></div>
+      <h2 class="title">What's your coffee shop mood?</h2>
+      <p class="lede">Pick any that sound like you.</p>
+      <div class="tiles" data-group="mood" role="group" aria-label="Your coffee shop mood">
+        <button class="tile" data-v="work" aria-pressed="false"><i class="ph ph-laptop ic"></i><span><span class="t">Laptop-friendly</span><span class="s">I go to work!</span></span><i class="ph ph-check chk"></i></button>
+        <button class="tile" data-v="date" aria-pressed="false"><i class="ph ph-heart ic"></i><span><span class="t">With my date</span><span class="s">Somewhere with a little magic</span></span><i class="ph ph-check chk"></i></button>
+        <button class="tile" data-v="friends" aria-pressed="false"><i class="ph ph-users-three ic"></i><span><span class="t">With friends</span><span class="s">Easy to talk, easy to stay</span></span><i class="ph ph-check chk"></i></button>
+        <button class="tile" data-v="solo" aria-pressed="false"><i class="ph ph-book-open ic"></i><span><span class="t">Just me, with a book</span><span class="s">A quiet corner and a good cup</span></span><i class="ph ph-check chk"></i></button>
+      </div>
+      <div class="tuning"><div class="lbl">Building your profile</div><div class="row" data-tuning></div></div>
+      <button class="cta" data-next data-cta>Continue</button>
+    </section>
+
+    <!-- 3 level -->
+    <section class="screen q" data-id="level" data-q="3">
+      <div class="top"><button class="icon-btn" data-back aria-label="Back"><i class="ph ph-arrow-left"></i></button><div class="progress" role="progressbar" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" aria-label="Question 3 of 5"></div><button class="skip" data-next>Skip</button></div>
+      <h2 class="title">How much of a coffee lover are you?</h2>
+      <p class="lede">No wrong answer. It decides how much story you see.</p>
+      <div class="tiles" data-group="level" data-single role="radiogroup" aria-label="Your coffee level">
+        <button class="tile" data-v="start" aria-pressed="false"><i class="ph ph-plant ic"></i><span><span class="t">I'm just starting</span><span class="s">Discovering what I like</span></span><i class="ph ph-check chk"></i></button>
+        <button class="tile" data-v="getting" aria-pressed="false"><i class="ph ph-coffee ic"></i><span><span class="t">Getting there</span><span class="s">I have a few favorites</span></span><i class="ph ph-check chk"></i></button>
+        <button class="tile" data-v="know" aria-pressed="false"><i class="ph ph-flame ic"></i><span><span class="t">I know my stuff</span><span class="s">Roasters, methods, tasting notes</span></span><i class="ph ph-check chk"></i></button>
+        <button class="tile" data-v="specialty" aria-pressed="false"><i class="ph ph-sparkle ic"></i><span><span class="t">Specialty all the way</span><span class="s">Single origin or nothing</span></span><i class="ph ph-check chk"></i></button>
+      </div>
+      <div class="tuning"><div class="lbl">Building your profile</div><div class="row" data-tuning></div></div>
+      <button class="cta" data-next data-cta>Continue</button>
+    </section>
+
+    <!-- 4 pace -->
+    <section class="screen q" data-id="pace" data-q="4">
+      <div class="top"><button class="icon-btn" data-back aria-label="Back"><i class="ph ph-arrow-left"></i></button><div class="progress" role="progressbar" aria-valuemin="1" aria-valuemax="5" aria-valuenow="4" aria-label="Question 4 of 5"></div><button class="skip" data-next>Skip</button></div>
+      <h2 class="title">How many coffee shops a week?</h2>
+      <p class="lede">A rough guess is perfect.</p>
+      <div class="tiles" data-group="freq" data-single role="radiogroup" aria-label="Coffee shops per week">
+        <button class="tile" data-v="rare" aria-pressed="false"><i class="ph ph-coffee ic"></i><span><span class="t">Once in a while</span><span class="s">A treat now and then</span></span><i class="ph ph-check chk"></i></button>
+        <button class="tile" data-v="low" aria-pressed="false"><i class="ph ph-coffee ic"></i><span><span class="t">1 or 2 a week</span><span class="s">A steady habit</span></span><i class="ph ph-check chk"></i></button>
+        <button class="tile" data-v="mid" aria-pressed="false"><i class="ph ph-coffee ic"></i><span><span class="t">3 to 5 a week</span><span class="s">Part of my routine</span></span><i class="ph ph-check chk"></i></button>
+        <button class="tile" data-v="high" aria-pressed="false"><i class="ph ph-coffee ic"></i><span><span class="t">6 or more</span><span class="s">Practically a regular</span></span><i class="ph ph-check chk"></i></button>
+      </div>
+      <div class="pace idle" id="pace"><i class="ph ph-coffee-bean" aria-hidden="true"></i><span>Pick one to see how fast you'll earn your first cup.</span></div>
+      <button class="cta" data-next data-cta>Continue</button>
+    </section>
+
+    <!-- 5 hoods -->
+    <section class="screen q" data-id="hoods" data-q="5">
+      <div class="top"><button class="icon-btn" data-back aria-label="Back"><i class="ph ph-arrow-left"></i></button><div class="progress" role="progressbar" aria-valuemin="1" aria-valuemax="5" aria-valuenow="5" aria-label="Question 5 of 5"></div><button class="skip" data-next>Skip</button></div>
+      <h2 class="title">Where are you most days?</h2>
+      <p class="lede">Pick up to three neighborhoods.</p>
+      <div class="chips" data-group="hood" data-max="3" role="group" aria-label="Your neighborhoods">
+        <button class="chip" data-v="Le Marais" aria-pressed="false">Le Marais</button>
+        <button class="chip" data-v="Belleville" aria-pressed="false">Belleville</button>
+        <button class="chip" data-v="Saint-Germain" aria-pressed="false">Saint-Germain</button>
+        <button class="chip" data-v="Montmartre" aria-pressed="false">Montmartre</button>
+        <button class="chip" data-v="Canal Saint-Martin" aria-pressed="false">Canal Saint-Martin</button>
+        <button class="chip" data-v="Bastille" aria-pressed="false">Bastille</button>
+        <button class="chip" data-v="Latin Quarter" aria-pressed="false">Latin Quarter</button>
+        <button class="chip" data-v="Oberkampf" aria-pressed="false">Oberkampf</button>
+        <button class="chip loc" data-act="loc"><i class="ph ph-map-pin" aria-hidden="true"></i>Use my location</button>
+      </div>
+      <p class="hint">We only ask for your location if you tap it, and only to find cafés near you.</p>
+      <div class="tuning"><div class="lbl">Building your profile</div><div class="row" data-tuning></div></div>
+      <button class="cta" data-next data-cta>See my profile</button>
+    </section>
+
+    <!-- 6 building -->
+    <section class="screen building" data-id="building">
+      <h2>Building your <span class="hand" style="font-size:1.2em">coffee profile.</span></h2>
+      <ul class="checks">
+        <li data-c="0"><span class="dot"><i class="ph ph-check"></i></span><span>Reading what you're looking for</span></li>
+        <li data-c="1"><span class="dot"><i class="ph ph-check"></i></span><span>Matching your coffee shop mood</span></li>
+        <li data-c="2"><span class="dot"><i class="ph ph-check"></i></span><span>Tuning the stories to your level</span></li>
+      </ul>
+    </section>
+
+    <!-- 7 profile -->
+    <section class="screen" data-id="profile">
+      <div class="top"><button class="icon-btn" data-back aria-label="Back"><i class="ph ph-arrow-left"></i></button><span style="flex:1"></span></div>
+      <h2 class="title" style="margin-bottom:14px">Meet your coffee profile.</h2>
+      <div class="profile-card" id="profileCard"></div>
+      <div class="spacer"></div>
+      <button class="cta quiet" data-act="share" style="margin-bottom:8px"><i class="ph ph-share-network" aria-hidden="true"></i> Share my profile</button>
+      <button class="cta" data-next>Show me my first picks</button>
+    </section>
+
+    <!-- 8 picks -->
+    <section class="screen picks" data-id="picks">
+      <div class="top" style="margin-bottom:10px"><button class="icon-btn" data-back aria-label="Back"><i class="ph ph-arrow-left"></i></button><span style="flex:1"></span></div>
+      <h2 class="title" style="margin-bottom:2px">Your first picks</h2>
+      <p class="big-hand" style="font-size:1.9rem;margin:0 0 12px">picked for you.</p>
+      <div class="scroll" id="pickList"></div>
+      <div class="bottom"><button class="cta" data-next>Start my card</button></div>
+    </section>
+
+    <!-- 9 card -->
+    <section class="screen" data-id="card">
+      <div class="top"><button class="icon-btn" data-back aria-label="Back"><i class="ph ph-arrow-left"></i></button><span style="flex:1"></span></div>
+      <h2 class="title">Your card is ready.</h2>
+      <p class="big-hand">You start with a bean.</p>
+      <div class="board">
+        <div class="slots" id="slots" role="img" aria-label="One of ten beans collected"></div>
+        <p class="count">1 of 10 beans</p>
+      </div>
+      <p class="fine" id="cardFine">Every café you visit adds a bean. Ten beans make a cup, and every café in Paris counts.</p>
+      <div class="spacer"></div>
+      <button class="cta" data-next>Continue</button>
+    </section>
+
+    <!-- 10 save -->
+    <section class="screen" data-id="save">
+      <div class="top"><button class="icon-btn" data-back aria-label="Back"><i class="ph ph-arrow-left"></i></button><span style="flex:1"></span></div>
+      <h2 class="title">Save your picks and your card.</h2>
+      <p class="lede">So they follow you to any phone. We'll email you a code. No passwords.</p>
+      <div class="field">
+        <label for="em">Email</label>
+        <input id="em" type="email" inputmode="email" autocomplete="email" autocapitalize="none" spellcheck="false" placeholder="you@email.com" />
+        <div class="err" id="emErr" role="alert"></div>
+      </div>
+      <p class="fine" style="font-size:0.88rem">We only use your email to sign you in and send your access. <a href="/privacy" style="color:var(--text)">Privacy</a></p>
+      <div class="spacer"></div>
+      <button class="cta" id="sendCode">Send me a code</button>
+      <button class="link" data-skipsave style="justify-self:center;width:100%">Not now, let me explore first</button>
+    </section>
+
+    <!-- 11 done -->
+    <section class="screen done" data-id="done">
+      <img class="logo" src="/logo.png" alt="Sumay" />
+      <div class="spacer"></div>
+      <p class="big-hand" style="font-size:3.4rem;line-height:1">Welcome to the club.</p>
+      <p class="lede" style="margin-top:14px;max-width:20em">Your picks are ready, your card has its first bean, and the swipe book is waiting.</p>
+      <div class="spacer"></div>
+      <button class="cta">Open Sumay</button>
+      <button class="link" style="width:100%">Invite a friend to start together</button>
+    </section>
+    <div class="toast" id="toast" role="status"></div>
+  </main>
+
+  <aside class="notes" aria-live="polite"><div class="card" id="note"></div></aside>
+</div>
+
+<script>
+  const STEPS = [
+    { id: 'welcome', name: 'Welcome' },
+    { id: 'looking', name: 'What you are after' },
+    { id: 'mood', name: 'Your mood' },
+    { id: 'level', name: 'Coffee lover level' },
+    { id: 'pace', name: 'How often' },
+    { id: 'hoods', name: 'Where you are' },
+    { id: 'building', name: 'Building your profile' },
+    { id: 'profile', name: 'Your coffee profile' },
+    { id: 'picks', name: 'Your first picks' },
+    { id: 'card', name: 'Your card' },
+    { id: 'save', name: 'Save it' },
+    { id: 'done', name: 'Welcome' },
+  ];
+  const NOTES = {
+    welcome: { t: 'Frame it as building something', why: 'A profile is something they get at the end, so five questions feel like a game, not a form. Three verbs hold every feature.', feeds: 'Nothing yet. No account, no permissions.', hig: 'onboarding.md: "design a flow that’s fast, fun, and optional."' },
+    looking: { t: 'What they are after decides what leads', why: 'New places, coffee culture or rewards: your three pillars. Their answer decides which one the home screen leads with.', feeds: 'Home layout order: Discover, stories, or beans first.', hig: 'entering-data.md: "offer choices instead of requiring text entry."' },
+    mood: { t: 'Mood is the occasion', why: 'Work, date, friends, or a quiet corner. This is the strongest signal for "for you", so people can pick several.', feeds: 'Occasion tags on every café: laptop-friendly, date, groups, quiet.', hig: 'accessibility.md: controls 44x44 pt, selected shown by check and border, not color alone.' },
+    level: { t: 'Tailor the depth of the story', why: 'Four levels, written as the person speaking so nobody feels tested. Beginners get friendly tips, specialty fans get origins and tasting notes.', feeds: 'How much story and detail each café shows.', hig: 'onboarding.md: "Keep onboarding content focused on the experience you provide."' },
+    pace: { t: 'Turn a number into a promise', why: 'Frequency alone is a boring question. Answering it shows how soon they earn a cup, which is the most exciting line in the flow.', feeds: 'Rewards pacing, reminder timing and the first-cup estimate.', hig: 'feedback.md: show the result of the action right where it happens.' },
+    hoods: { t: 'Neighborhoods first, location on demand', why: 'Optional and last. Location is offered, never forced, so the first run has no system permission alert.', feeds: 'Ordering by distance. Precise location later, in context, with a one-button pre-alert.', hig: 'privacy.md: "Request permission only when your app clearly needs access."' },
+    building: { t: 'A short, honest pause', why: 'About two seconds that show the work, so the profile feels earned.', feeds: 'Nothing new.', hig: 'launching.md: "Launch instantly." Keep this under about two seconds.' },
+    profile: { t: 'Give them an identity', why: 'A named profile ("The Remote Worker") is a payoff and a shareable image. It is the moment people tell a friend about Sumay.', feeds: 'Share card for Instagram. The profile can be edited later.', hig: 'onboarding.md: make it enjoyable, not a form.' },
+    picks: { t: 'The payoff: picks with reasons', why: 'Each pick says why it is for you, built from their answers. That makes "for you" believable and teaches the culture.', feeds: 'Hearts become favorites. Reasons are your first personalization proof.', hig: 'onboarding.md: "Teach through interactivity." Tap a heart, it is real.' },
+    card: { t: 'Start with one bean', why: 'A card that starts partly filled gets finished more often. The first bean drops in as the one moment of motion.', feeds: 'Rewards: ten beans make a cup, across every café.', hig: 'motion.md: purposeful and brief. Reduced motion shows the bean already placed.' },
+    save: { t: 'Ask for the account last', why: 'They have seen the value, so the ask is easy. Email code, no password. "Not now" lets them explore first.', feeds: 'Account, profile, favorites and card sync. Name and photo can wait.', hig: 'managing-accounts.md: "Delay sign-in for as long as possible."' },
+    done: { t: 'One clear next step', why: 'End on the app, not a form. Inviting a friend is offered once, as an invitation.', feeds: 'First session starts with picks, card and the swipe book ready.', hig: 'onboarding.md: "Postpone nonessential setup flows or customization steps."' },
+  };
+  const LOOK = { new: 'New places', learn: 'Coffee stories', rewards: 'Rewards' };
+  const MOOD = { work: 'Laptop-friendly', date: 'Date spots', friends: 'Good with friends', solo: 'Quiet corners' };
+  const LEVELTAG = { start: 'Friendly tips', getting: 'Local favorites', know: 'Roasters and methods', specialty: 'Single origin focus' };
+  const LEVELLABEL = { start: "I'm just starting", getting: 'Getting there', know: 'I know my stuff', specialty: 'Specialty all the way' };
+  const FREQLABEL = { rare: 'Once in a while', low: '1 or 2 a week', mid: '3 to 5 a week', high: '6 or more a week' };
+  const RATE = { rare: 0.5, low: 1.5, mid: 4, high: 7 };
+  const REASON_MOOD = { work: 'Good for working', date: 'Made for a date', friends: 'Easy with friends', solo: 'A quiet corner' };
+  const REASON_LOOK = { new: 'A new find', learn: 'Has a story to tell', rewards: 'Earns you beans' };
+  const TEASE = {
+    start: ['A friendly first stop.', 'Easy to love, easy to order.', 'Ask for the house favorite.'],
+    getting: ['Roasted nearby, worth asking about.', 'A good place to find a new favorite.', 'Seasonal menu worth trying.'],
+    know: ['Single origin on rotation. Ask for tasting notes.', 'Brew bar with two filter methods.', 'The roaster is on site.'],
+    specialty: ['Rotating single origins, brewed to order.', 'Filter flights and cuppings on weekends.', 'Small-batch roasts with the origin on every bag.'],
+    none: ['Hand-picked by the club.', 'A local favorite.', 'Worth a detour.'],
+  };
+  const PICKS = [
+    { name: 'Atelier Grain', img: 'img/pick2.jpg' },
+    { name: 'Maison Crema', img: 'img/pick1.jpg' },
+    { name: 'Le Petit Torréfacteur', img: 'img/pick3.jpg' },
+  ];
+  const ARCH = {
+    remote: ['The Remote Worker', 'Laptop open, flat white close.'],
+    romantic: ['The Romantic', 'Always knows the best table for two.'],
+    social: ['The Social Sipper', 'Coffee is better with company.'],
+    quiet: ['The Quiet Regular', 'A book, a corner and a perfect cup.'],
+    explorer: ['The Explorer', 'Always looking for the next great café.'],
+    connoisseur: ['The Connoisseur', 'Origins, roasters and brew methods.'],
+    collector: ['The Collector', 'Every visit counts, every bean too.'],
+    taster: ['The Coffee Lover', 'Good coffee, good company, good places.'],
+  };
+  const sel = { look: new Set(), mood: new Set(), level: null, freq: null, hood: new Set() };
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const screens = [...document.querySelectorAll('.screen')];
+  let cur = 0, timers = [];
+  const $ = (q) => document.querySelector(q);
+
+  const nav = $('#nav');
+  STEPS.forEach((s, i) => { const li = document.createElement('li'); li.innerHTML = `<button data-i="${i}"><span class="n">${i + 1}</span><span>${s.name}</span></button>`; nav.appendChild(li); });
+  nav.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) go(+b.dataset.i); });
+  document.querySelectorAll('.progress').forEach((p) => { const q = +p.closest('.screen').dataset.q; p.innerHTML = [1, 2, 3, 4, 5].map((n) => `<i class="${n <= q ? 'done' : ''}"></i>`).join(''); });
+
+  function weeksText() {
+    if (!sel.freq) return '';
+    if (sel.freq === 'rare') return 'a few months';
+    const w = Math.max(1, Math.ceil(9 / RATE[sel.freq]));
+    return w === 1 ? 'about a week' : `about ${w} weeks`;
+  }
+  function renderPace() {
+    const el = $('#pace');
+    if (!sel.freq) { el.className = 'pace idle'; el.innerHTML = '<i class="ph ph-coffee-bean" aria-hidden="true"></i><span>Pick one to see how fast you’ll earn your first cup.</span>'; return; }
+    el.className = 'pace';
+    el.innerHTML = `<i class="ph ph-coffee-bean" aria-hidden="true"></i><div><div class="p1">At this pace, your first cup is ${weeksText()} away.</div><div class="p2">Every café in Paris counts toward it.</div></div>`;
+  }
+  function tags() {
+    const out = [];
+    sel.look.forEach((v) => out.push(LOOK[v]));
+    sel.mood.forEach((v) => out.push(MOOD[v]));
+    if (sel.level) out.push(LEVELTAG[sel.level]);
+    sel.hood.forEach((v) => out.push('Near ' + v));
+    return out;
+  }
+  function renderTuning() {
+    const t = tags();
+    document.querySelectorAll('[data-tuning]').forEach((row) => { row.innerHTML = t.length ? t.slice(-4).map((x) => `<span class="tag">${x}</span>`).join('') : '<span class="empty-note">Your profile will start to take shape here.</span>'; });
+    const has = { looking: sel.look.size, mood: sel.mood.size, level: sel.level ? 1 : 0, pace: sel.freq ? 1 : 0, hoods: sel.hood.size };
+    document.querySelectorAll('.screen.q').forEach((sc) => {
+      const id = sc.dataset.id, cta = sc.querySelector('[data-cta]'), base = id === 'hoods' ? 'See my profile' : 'Continue';
+      cta.textContent = has[id] ? base : 'Skip for now'; cta.classList.toggle('quiet', !has[id]);
+    });
+    renderPace();
+  }
+
+  document.querySelectorAll('[data-group]').forEach((g) => {
+    g.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-v]'); if (!b) return;
+      const key = g.dataset.group, v = b.dataset.v, max = +g.dataset.max || 99;
+      if (g.hasAttribute('data-single')) { sel[key] = sel[key] === v ? null : v; g.querySelectorAll('[data-v]').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.v === sel[key]))); }
+      else { const set = sel[key]; if (set.has(v)) set.delete(v); else if (set.size < max) set.add(v); else return; b.setAttribute('aria-pressed', String(set.has(v))); }
+      renderTuning();
+    });
+  });
+  $('[data-act="loc"]').addEventListener('click', (e) => { e.currentTarget.innerHTML = '<i class="ph ph-info" aria-hidden="true"></i>This opens a one-button explainer, then the system alert'; e.currentTarget.style.whiteSpace = 'normal'; });
+
+  function archetype() {
+    const sc = { remote: sel.mood.has('work') ? 3 : 0, romantic: sel.mood.has('date') ? 3 : 0, social: sel.mood.has('friends') ? 3 : 0, quiet: sel.mood.has('solo') ? 3 : 0,
+      explorer: sel.look.has('new') ? 3 : 0,
+      connoisseur: (sel.look.has('learn') ? 2 : 0) + (sel.level === 'know' ? 2 : sel.level === 'specialty' ? 3 : 0),
+      collector: (sel.look.has('rewards') ? 3 : 0) + (sel.freq === 'high' ? 1 : 0) };
+    let best = 'taster', top = 0;
+    ['remote', 'romantic', 'social', 'quiet', 'explorer', 'connoisseur', 'collector'].forEach((k) => { if (sc[k] > top) { top = sc[k]; best = k; } });
+    return best;
+  }
+  function renderProfile() {
+    const [name, line] = ARCH[archetype()];
+    const rows = [];
+    if (sel.look.size) rows.push(['ph-compass', 'Looking for', [...sel.look].map((v) => LOOK[v]).join(', ')]);
+    if (sel.mood.size) rows.push(['ph-laptop', 'Mood', [...sel.mood].map((v) => MOOD[v]).join(', ')]);
+    if (sel.level) rows.push(['ph-flame', 'Coffee lover', LEVELLABEL[sel.level]]);
+    if (sel.freq) rows.push(['ph-coffee', 'Pace', FREQLABEL[sel.freq]]);
+    $('#profileCard').innerHTML = `<div class="kicker"><img src="/logo.png" alt="Sumay" /><span>Coffee profile</span></div><div class="arch">${name}</div><p class="line">${line}</p>${rows.length ? `<ul class="traits">${rows.map(([ic, k, v]) => `<li><i class="ph ${ic}" aria-hidden="true"></i><span><b>${k}</b> &nbsp;${v}</span></li>`).join('')}</ul>` : ''}<div class="url">sumayclub.app</div>`;
+  }
+  function reasonFor(i) {
+    const m = [...sel.mood], l = [...sel.look], h = [...sel.hood], out = [];
+    if (m.length) out.push(REASON_MOOD[m[i % m.length]]);
+    if (l.length) out.push(REASON_LOOK[l[(i + 1) % l.length]]);
+    out.push(h.length ? 'Near ' + h[i % h.length] : 'Hand-picked by the club');
+    return out;
+  }
+  function renderPicks() {
+    const lv = sel.level || 'none';
+    $('#pickList').innerHTML = PICKS.map((p, i) => `
+      <article class="pick">
+        <div class="pw"><img src="${p.img}" alt="" /><button class="heart" aria-pressed="false" aria-label="Save ${p.name}"><i class="ph ph-heart"></i></button></div>
+        <h3>${p.name}</h3>
+        <div class="where"><i class="ph ph-map-pin" aria-hidden="true"></i>${[...sel.hood][i % Math.max(sel.hood.size, 1)] || 'Paris'}</div>
+        <div class="why">${reasonFor(i).map((x) => `<span class="tag">${x}</span>`).join('')}</div>
+        <p class="teaser">${TEASE[lv][i]}</p>
+      </article>`).join('');
+  }
+  $('#pickList').addEventListener('click', (e) => {
+    const b = e.target.closest('.heart'); if (!b) return;
+    const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', String(on)); b.querySelector('i').className = on ? 'ph-fill ph-heart' : 'ph ph-heart';
+  });
+  function renderSlots() {
+    const bean = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" fill="currentColor" mask="url(#bm)"/></svg>';
+    $('#slots').innerHTML = Array.from({ length: 10 }, (_, i) => i === 9 ? '<div class="slot cup"><i class="ph ph-coffee" aria-hidden="true"></i></div>' : `<div class="slot${i === 0 ? ' on' : ''}">${bean}</div>`).join('');
+    $('#cardFine').textContent = sel.freq ? `At ${FREQLABEL[sel.freq].toLowerCase()}, your first cup is ${weeksText()} away. Every café in Paris counts.` : 'Every café you visit adds a bean. Ten beans make a cup, and every café in Paris counts.';
+  }
+  function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); timers.push(setTimeout(() => t.classList.remove('on'), 2600)); }
+
+  function go(n, back) {
+    timers.forEach(clearTimeout); timers = [];
+    cur = Math.max(0, Math.min(STEPS.length - 1, n));
+    screens.forEach((s) => { s.classList.toggle('on', s.dataset.id === STEPS[cur].id); s.classList.toggle('back', !!back); });
+    nav.querySelectorAll('button').forEach((b) => { if (+b.dataset.i === cur) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
+    const note = NOTES[STEPS[cur].id];
+    $('#note').innerHTML = `<h2>${note.t}</h2><dl><div><dt>Why</dt><dd>${note.why}</dd></div><div><dt>Feeds</dt><dd>${note.feeds}</dd></div><div><dt>Apple HIG</dt><dd>${note.hig}</dd></div></dl>`;
+    renderTuning();
+    const id = STEPS[cur].id;
+    if (id === 'profile') renderProfile();
+    if (id === 'picks') renderPicks();
+    if (id === 'card') renderSlots();
+    if (id === 'building') runBuilding();
+    try { history.replaceState(null, '', '?step=' + (cur + 1) + (new URLSearchParams(location.search).get('demo') ? '&demo=1' : '')); } catch (e) {}
+  }
+  function runBuilding() {
+    const lis = [...document.querySelectorAll('.checks li')]; lis.forEach((l) => l.classList.remove('ok'));
+    const hold = new URLSearchParams(location.search).get('hold'), step = reduce ? 150 : 650;
+    lis.forEach((l, i) => timers.push(setTimeout(() => l.classList.add('ok'), step * (i + 1) * (hold && i > 1 ? 99 : 1))));
+    if (!hold) timers.push(setTimeout(() => go(cur + 1), step * 4 + 250));
+  }
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-next]')) go(cur + 1);
+    else if (e.target.closest('[data-back]')) go(cur - 1, true);
+    else if (e.target.closest('[data-skipsave]')) go(STEPS.length - 1);
+    else if (e.target.closest('[data-act="share"]')) toast('This opens your phone’s share sheet with an image of your profile.');
+    else if (e.target.closest('#sendCode')) {
+      const v = $('#em').value.trim(), err = $('#emErr');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { err.textContent = 'That email looks incomplete. Check it and try again.'; $('#em').focus(); return; }
+      err.textContent = ''; go(cur + 1);
+    }
+  });
+
+  const q = new URLSearchParams(location.search);
+  if (q.get('demo')) {
+    const pick = (grp, vals) => vals.forEach((v) => document.querySelector(`[data-group="${grp}"] [data-v="${v}"]`).click());
+    pick('look', ['new', 'rewards']); pick('mood', ['work', 'friends']); pick('level', ['getting']); pick('freq', ['mid']); pick('hood', ['Le Marais', 'Belleville']);
+  }
+  go((+q.get('step') || 1) - 1);
+</script>
+</body>
+</html>

@@ -42,7 +42,7 @@ export const copy = {
 
     beans: {
       title: 'Cada café es un bean. Diez beans hacen una taza.',
-      note: '¡Igual que una tarjeta de lealtad! Pero funciona en todas las cafeterías de la app.',
+      note: '¡Igual que una tarjeta de lealtad! Pero para todas las cafeterías de París.',
       count: '7 de 10 beans',
       label: 'Siete de diez beans coleccionados',
     },
@@ -151,7 +151,7 @@ export const copy = {
 
     beans: {
       title: 'Every coffee is a bean. Ten beans make a cup.',
-      note: 'Just like a loyalty card! But it works at every café in the app.',
+      note: 'Just like a loyalty card! But for every café in Paris.',
       count: '7 of 10 beans',
       label: 'Seven of ten beans collected',
     },

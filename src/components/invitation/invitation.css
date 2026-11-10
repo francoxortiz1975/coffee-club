@@ -51,8 +51,10 @@
 /* wax stamp: the scratch surface itself */
 .iv-stamp { position: absolute; left: 50%; top: 124px; width: 112px; height: 112px; margin: -56px 0 0 -56px; z-index: 6; pointer-events: none; }
 .iv-trace, .iv-stampc { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; }
-.iv-stampc { touch-action: none; cursor: grab; pointer-events: auto; filter: drop-shadow(0 5px 5px rgba(0, 0, 0, .4)); transition: opacity .4s ease, transform .4s ease; animation: iv-wiggle 5.5s ease-in-out infinite; }
-.iv-stampc:active { cursor: grabbing; animation: none; }
+.iv-pad { position: absolute; inset: -34px; border-radius: 50%; touch-action: none; cursor: grab; pointer-events: auto; }
+.iv-root:not([data-phase='idle']) .iv-pad { pointer-events: none; }
+.iv-stampc { touch-action: none; pointer-events: none; filter: drop-shadow(0 5px 5px rgba(0, 0, 0, .4)); transition: opacity .4s ease, transform .4s ease; animation: iv-wiggle 5.5s ease-in-out infinite; }
+
 .iv-root:not([data-phase='idle']) .iv-stampc { opacity: 0; transform: scale(.94); pointer-events: none; animation: none; }
 @keyframes iv-wiggle { 0%, 82%, 100% { transform: rotate(0); } 86% { transform: rotate(-5deg); } 90% { transform: rotate(4deg); } 94% { transform: rotate(-2deg); } }
 

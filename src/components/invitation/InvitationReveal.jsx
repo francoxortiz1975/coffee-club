@@ -244,7 +244,9 @@ function StampScratch({ onDone }) {
   return (
     <>
       <canvas ref={trace} className="iv-trace" aria-hidden="true" />
-      <canvas ref={ref} className="iv-stampc" onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} aria-hidden="true" />
+      <canvas ref={ref} className="iv-stampc" aria-hidden="true" />
+      {/* a generous touch area around the stamp, so a finger that starts a little off it still scratches */}
+      <div className="iv-pad" onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} />
     </>
   )
 }

@@ -37,6 +37,16 @@ export default function InvitacionPage() {
 
   // 'cerrada' (sealed envelope) | 'abriendo' (animating) | 'abierta' (letter visible)
   const [estado, setEstado] = useState('cerrada')
+  // The invitation is a single fixed scene: nothing on it should scroll, so a finger that
+  // slips off the stamp scratches or does nothing instead of dragging the page.
+  useEffect(() => {
+    const html = document.documentElement, body = document.body
+    const prev = { h: html.style.overflow, ho: html.style.overscrollBehavior, b: body.style.cssText }
+    html.style.overflow = 'hidden'
+    html.style.overscrollBehavior = 'none'
+    body.style.cssText += ';position:fixed;inset:0;width:100%;overflow:hidden;overscroll-behavior:none;'
+    return () => { html.style.overflow = prev.h; html.style.overscrollBehavior = prev.ho; body.style.cssText = prev.b }
+  }, [])
   const [zoomed, setZoomed] = useState(false) // the letter is blown up: hide the buttons so it has the whole screen
 
   // Guardar como recibida la primera vez que se abre el link
@@ -88,7 +98,7 @@ export default function InvitacionPage() {
   const sealed = estado !== 'abierta'
 
   return (
-    <div ref={cardRef} className="min-h-screen relative flex flex-col overflow-hidden">
+    <div ref={cardRef} className="relative flex flex-col overflow-hidden" style={{ height: '100dvh', touchAction: 'none' }}>
 
       {/* Background: the café's own photo, soft while sealed and clearer once the letter is open */}
       {coverDataUrl ? (

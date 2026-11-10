@@ -93,17 +93,18 @@ function Silk({ w, h, clip }) {
   )
 }
 
-function Wax({ size, className, style }) {
+function Wax({ size, className, style, pf = TEXT_CHUNK }) {
+  const f = (id) => `url(#${pf}-${id})`
   return (
     <svg className={className} style={style} width={size} height={size} viewBox="-50 -50 100 100" aria-hidden="true">
       <ellipse cx="2" cy="7" rx="42" ry="38" fill="#000" opacity=".45" style={{ filter: 'blur(4px)' }} />
-      <g filter={u('wob')}>
-        <circle r="42" fill={u('wg')} />
-        <circle r="42" fill={u('wd')} />
+      <g filter={f('wob')}>
+        <circle r="42" fill={f('wg')} />
+        <circle r="42" fill={f('wd')} />
       </g>
       <circle r="30" fill="none" stroke="#2f3711" strokeOpacity=".6" strokeWidth="2.4" transform="translate(.8 1)" />
       <circle r="30" fill="none" stroke="#c7d27a" strokeOpacity=".5" strokeWidth="1.6" />
-      <g filter={u('emb')}>
+      <g filter={f('emb')}>
         <text y="13" textAnchor="middle" fontFamily="'Cormorant Garamond', Georgia, serif" fontSize="42" fontWeight="600" fill="#59641f">S</text>
       </g>
     </svg>
@@ -252,8 +253,9 @@ function StampScratch({ onDone }) {
 }
 
 // ---- the letter -------------------------------------------------------------
+const LP = 'ivl' // the letter carries its own defs so the share image (which copies only the letter) keeps the frame and the stamp
 const DECO = (
-  <svg className="iv-frame" viewBox="0 0 248 440" fill="none" stroke={u('gold')} strokeLinecap="round" aria-hidden="true">
+  <svg className="iv-frame" viewBox="0 0 248 440" fill="none" stroke={`url(#${LP}-gold)`} strokeLinecap="round" aria-hidden="true">
     <rect x="10" y="10" width="228" height="420" strokeWidth="1.2" /><rect x="16" y="16" width="216" height="408" strokeWidth=".5" />
     <path d="M16 62 L62 16 M16 76 L76 16" strokeWidth=".6" /><path d="M232 62 L186 16 M232 76 L172 16" strokeWidth=".6" />
     <path d="M16 378 L62 424 M16 364 L76 424" strokeWidth=".6" /><path d="M232 378 L186 424 M232 364 L172 424" strokeWidth=".6" />
@@ -262,6 +264,32 @@ const DECO = (
     <rect x="119.5" y="379" width="9" height="9" transform="rotate(45 124 383.5)" strokeWidth=".9" />
   </svg>
 )
+
+function LetterDefs() {
+  return (
+    <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true" focusable="false">
+      <defs>
+        <filter id={`${LP}-wob`} x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="4" result="n" />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="9" />
+        </filter>
+        <filter id={`${LP}-emb`}>
+          <feDropShadow dx="-.8" dy="-.9" stdDeviation=".4" floodColor="#d8e28a" floodOpacity=".7" />
+          <feDropShadow dx=".9" dy="1.1" stdDeviation=".5" floodColor="#1d2308" floodOpacity=".8" />
+        </filter>
+        <radialGradient id={`${LP}-wg`} cx="35%" cy="28%" r="85%">
+          <stop offset="0" stopColor="#8e9a42" /><stop offset=".45" stopColor="#626d27" /><stop offset="1" stopColor="#3a4316" />
+        </radialGradient>
+        <radialGradient id={`${LP}-wd`} cx="50%" cy="50%" r="50%">
+          <stop offset=".7" stopColor="#2c3310" stopOpacity="0" /><stop offset="1" stopColor="#2c3310" stopOpacity=".55" />
+        </radialGradient>
+        <linearGradient id={`${LP}-gold`} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#f3dfae" /><stop offset=".5" stopColor="#c9a15a" /><stop offset="1" stopColor="#ecd49a" />
+        </linearGradient>
+      </defs>
+    </svg>
+  )
+}
 
 function dateParts(fecha) {
   if (!fecha) return null
@@ -287,9 +315,10 @@ function Letter({ cafe, nombre, receptor, fecha, hora }) {
   const size = len > 22 ? 'iv-xs' : len > 14 ? 'iv-sm' : ''
   return (
     <div className="iv-letter">
+      <LetterDefs />
       {DECO}
       <div className="iv-inner">
-        <Wax size={50} className="iv-stampsm" />
+        <Wax size={50} className="iv-stampsm" pf={LP} />
         <p className="iv-from">{nombre ? <><b>{nombre}</b> invites you to</> : <>You are invited to</>}</p>
         <h1 className={`iv-name ${size}`}>{cafe.nombre}</h1>
         <div className="iv-hair"><i /><u /><i /></div>

@@ -88,3 +88,7 @@
   .iv-stampc, .iv-sheen { animation: none; }
   .iv-sheen { display: none; }
 }
+
+/* while the letter is being turned into the share image */
+.iv-capture .iv-name { background: none; -webkit-text-fill-color: currentColor; color: #e8cd8f; }
+.iv-capture .iv-letter { box-shadow: none; }

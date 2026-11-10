@@ -65,7 +65,20 @@ export default function InvitacionPage() {
   async function handleShare() {
     setSharing(true)
     try {
-      const dataUrl = await toPng(cardRef.current, { pixelRatio: 2 })
+      // Share the letter itself, not the whole screen: its own size, crisp, no shadow or zoom.
+      const letter = cardRef.current.querySelector('.iv-letter')
+      const root = letter.closest('.iv-root')
+      root.classList.add('iv-capture') // swaps the gradient-clipped name for a solid gold, which every browser can draw
+      let dataUrl
+      try {
+        dataUrl = await toPng(letter, {
+          pixelRatio: 3,
+          backgroundColor: '#0b2015',
+          style: { boxShadow: 'none', transform: 'none', margin: '0', position: 'static', inset: 'auto' },
+        })
+      } finally {
+        root.classList.remove('iv-capture')
+      }
 
       const res = await fetch(dataUrl)
       const blob = await res.blob()

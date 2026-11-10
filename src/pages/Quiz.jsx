@@ -13,7 +13,6 @@ import './quiz.css'
 import { quizCopy, HOODS, RATE } from '../lib/quizCopy'
 import { useLandingLang } from '../lib/useLandingLang'
 import { joinWaitlist } from '../lib/waitlist'
-import { LangToggle } from '../components/LandingChrome'
 import LoopVideo from '../components/LoopVideo'
 
 const STEPS = ['intro', 'looking', 'mood', 'level', 'pace', 'hoods', 'building', 'profile', 'join', 'done']
@@ -83,7 +82,7 @@ function Tile({ id, pressed, onClick, label, hint }) {
 }
 
 export default function Quiz() {
-  const [lang, setLang] = useLandingLang()
+  const [lang] = useLandingLang()
   const t = quizCopy[lang]
   const [step, setStep] = useState('intro')
   const [back, setBack] = useState(false)
@@ -263,7 +262,6 @@ export default function Quiz() {
       <section className="screen intro" key="intro">
         <div className="brandrow">
           <img src={logoData || '/logo.png'} alt="Sumay Coffee Club" />
-          <LangToggle lang={lang} setLang={setLang} />
         </div>
         <h1 ref={headingRef} tabIndex={-1}>{t.intro.title}<span className="hand big">{t.intro.hand}</span></h1>
         <p className="now">{t.intro.nowIn}</p>
@@ -429,7 +427,6 @@ export default function Quiz() {
       <section className="screen" key="done">
         <div className="brandrow">
           <img src={logoData || '/logo.png'} alt="Sumay" />
-          <LangToggle lang={lang} setLang={setLang} />
         </div>
         <div style={{ flex: 1 }} />
         <h2 className="title" ref={headingRef} tabIndex={-1} style={{ marginBottom: 0 }}>{t.done.title}</h2>

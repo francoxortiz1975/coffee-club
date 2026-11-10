@@ -8,10 +8,10 @@ import { copy } from '../lib/landingCopy'
 import { privacyCopy } from '../lib/privacyCopy'
 import { useLandingLang } from '../lib/useLandingLang'
 import { useTheme } from '../lib/useTheme'
-import { LangToggle, ThemeToggle } from '../components/LandingChrome'
+import { ThemeToggle } from '../components/LandingChrome'
 
 export default function Privacy() {
-  const [lang, setLang] = useLandingLang()
+  const [lang] = useLandingLang()
   const [theme, chooseTheme] = useTheme()
   const t = privacyCopy[lang]
   const chrome = copy[lang]
@@ -42,7 +42,6 @@ export default function Privacy() {
             <img className="logo" src="/logo.png" alt="Sumay Coffee Club" />
           </Link>
           <span className="spacer" />
-          <LangToggle lang={lang} setLang={setLang} />
           <Link className="btn btn-primary" to="/landing">{t.back}</Link>
         </div>
       </nav>

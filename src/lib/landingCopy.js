@@ -1,5 +1,26 @@
 export const LANGS = ['en', 'es']
 
+// The playable loyalty card on the landing. English in both languages on purpose.
+const beansPlay = {
+  stage: 'Today’s box',
+  card: 'Loyalty card',
+  capBean: 'Scratch it off with your finger.',
+  capCup: 'Ten. Scratch off your cup.',
+  alt: 'Can’t scratch? Tap to reveal',
+  padBean: 'Today’s box. Drag to scratch it off, or press Enter to reveal it.',
+  padCup: 'Your cup. Drag to scratch it off, or press Enter to reveal it.',
+  foilBean: ['Scratch', 'here!'],
+  foilCup: ['Scratch', 'for your', 'cup!'],
+  c0: 'Ten beans make a cup.',
+  c1: '1 bean. 9 to a cup.',
+  cN: '{n} beans. {r} to a cup.',
+  c9: 'One more, and that’s a cup.',
+  c10: 'Ten beans. That’s a cup.',
+  doneTitle: 'Ten beans. That’s a cup.',
+  join: 'Join the waitlist',
+  again: 'Play again',
+}
+
 export const copy = {
   es: {
     metaDescription: 'Descubre, decide e invita a las mejores cafeterías de Quito y París.',
@@ -43,8 +64,7 @@ export const copy = {
     beans: {
       title: 'Cada café es un bean. Diez beans hacen una taza.',
       note: '¡Igual que una tarjeta de lealtad! Pero para todas las cafeterías de París.',
-      count: '7 de 10 beans',
-      label: 'Siete de diez beans coleccionados',
+      play: beansPlay,
     },
 
     cafes: {
@@ -152,8 +172,7 @@ export const copy = {
     beans: {
       title: 'Every coffee is a bean. Ten beans make a cup.',
       note: 'Just like a loyalty card! But for every café in Paris.',
-      count: '7 of 10 beans',
-      label: 'Seven of ten beans collected',
+      play: beansPlay,
     },
 
     cafes: {

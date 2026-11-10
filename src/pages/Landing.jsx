@@ -10,8 +10,9 @@ import { supabase } from '../lib/supabase'
 import { copy } from '../lib/landingCopy'
 import { useLandingLang } from '../lib/useLandingLang'
 import { useTheme } from '../lib/useTheme'
-import { LangToggle, ThemeToggle } from '../components/LandingChrome'
+import { ThemeToggle } from '../components/LandingChrome'
 import LoopVideo from '../components/LoopVideo'
+import ScratchCard from '../components/ScratchCard'
 import { getRef } from '../lib/waitlist'
 
 const WAITLIST_KEY = 'samay_waitlist_email'
@@ -21,8 +22,6 @@ const FEATURED = [
   { id: 'coffee-factory', photo: '/images/coffee-factory/cover.jpg' },
   { id: 'quito-deli', photo: '/images/quito-deli/place.jpg' },
 ]
-const BEANS_COLLECTED = 7
-const BEANS_TOTAL = 10
 
 // Scroll suave sin agregar #hash a la URL (el webview de Instagram no parsea bien el #).
 function scrollToId(id) {
@@ -35,7 +34,7 @@ function scrollToId(id) {
 function useReveal() {
   const ref = useRef(null)
   useEffect(() => {
-    const els = ref.current?.querySelectorAll('.reveal, .collect') ?? []
+    const els = ref.current?.querySelectorAll('.reveal') ?? []
     if (!('IntersectionObserver' in window)) {
       els.forEach((el) => el.classList.add('in'))
       return undefined
@@ -60,45 +59,6 @@ function Phone({ className = '', children }) {
     <div className={`phone ${className}`}>
       <div className="screen">{children}</div>
     </div>
-  )
-}
-
-function BeanDefs() {
-  return (
-    <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
-      <defs>
-        <mask id="sl-bean-mask">
-          <g transform="rotate(-30 12 12)">
-            <ellipse cx="12" cy="12" rx="6.5" ry="9.5" fill="white" />
-            <path d="M12 3 Q14.5 7 14.5 12 Q14.5 17 12 21" stroke="black" strokeWidth="1.4" fill="none" strokeLinecap="round" />
-          </g>
-        </mask>
-      </defs>
-    </svg>
-  )
-}
-
-function Bean() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <rect width="24" height="24" fill="currentColor" mask="url(#sl-bean-mask)" />
-    </svg>
-  )
-}
-
-// Taza minimalista, mismo lenguaje plano que los beans: forma sólida de un solo color.
-function Cup() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <g className="steam" strokeWidth="1.5">
-        <path d="M8.2 2.6c-.9 1 .9 1.9 0 3.1" />
-        <path d="M12 2.2c-.9 1.1.9 2 0 3.5" />
-        <path d="M15.8 2.6c-.9 1 .9 1.9 0 3.1" />
-      </g>
-      <path d="M4.5 9.2h12.2v4.4a5.3 5.3 0 0 1-5.3 5.3H9.8a5.3 5.3 0 0 1-5.3-5.3z" fill="currentColor" stroke="none" />
-      <path d="M16.7 10.6h1.1a2.5 2.5 0 0 1 0 5h-1.7" />
-      <path d="M3 21.1h15.6" strokeWidth="1.9" />
-    </svg>
   )
 }
 
@@ -207,7 +167,7 @@ function WaitlistForm({ t, lang }) {
 }
 
 export default function Landing() {
-  const [lang, setLang] = useLandingLang()
+  const [lang] = useLandingLang()
   const [theme, chooseTheme] = useTheme()
   const t = copy[lang]
   const rootRef = useReveal()
@@ -232,6 +192,8 @@ export default function Landing() {
     setTimeout(() => document.getElementById('sl-message')?.focus({ preventScroll: true }), 600)
   }
 
+  const joinWaitlist = () => document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+
   const cafe = (id) => cafes.find((c) => c.id === id)
 
   function skipToContent(e) {
@@ -251,7 +213,6 @@ export default function Landing() {
           <img className="logo" src="/logo.png" alt="Sumay Coffee Club" />
           <span className="tag">{t.betaTag}</span>
           <span className="spacer" />
-          <LangToggle lang={lang} setLang={setLang} />
           <a className="btn btn-primary" href="/landing" onClick={scrollToId('waitlist')}>{t.navCta}</a>
         </div>
       </nav>
@@ -338,25 +299,7 @@ export default function Landing() {
             <h2>{t.beans.title}</h2>
             <p className="note">{t.beans.note}</p>
           </div>
-          <div className="board">
-            <div className="collect" role="img" aria-label={t.beans.label}>
-              <BeanDefs />
-              {Array.from({ length: BEANS_TOTAL }, (_, i) => {
-                const isCup = i === BEANS_TOTAL - 1
-                const collected = i < BEANS_COLLECTED
-                return (
-                  <div
-                    key={i}
-                    className={`token${collected ? ' on' : ''}${isCup ? ' cup' : ''}`}
-                    style={{ '--n': i }}
-                  >
-                    {isCup ? <Cup /> : <Bean />}
-                  </div>
-                )
-              })}
-            </div>
-            <p className="count">{t.beans.count}</p>
-          </div>
+          <ScratchCard copy={t.beans.play} onJoin={joinWaitlist} />
         </div>
       </section>
 

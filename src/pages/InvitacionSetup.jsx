@@ -45,28 +45,28 @@ export default function InvitacionSetup() {
         <ArrowLeftIcon size={20} />
       </button>
 
-      <p className="text-xs text-cafe-accent/50 uppercase tracking-widest mb-2">Invitación para</p>
+      <p className="text-xs text-cafe-accent/50 uppercase tracking-widest mb-2">Invitation to</p>
       <h1 className="text-2xl font-serif font-bold text-cafe-dark mb-8">{cafe.nombre}</h1>
 
-      <label className={labelClass}>De</label>
+      <label className={labelClass}>From</label>
       <input
         type="text"
         value={nombre}
         onChange={(e) => setNombre(e.target.value)}
-        placeholder="Tu nombre (opcional)"
+        placeholder="Your name (optional)"
         className={inputClass}
       />
 
-      <label className={labelClass}>Para</label>
+      <label className={labelClass}>To</label>
       <input
         type="text"
         value={receptor}
         onChange={(e) => setReceptor(e.target.value)}
-        placeholder="Nombre del invitado (opcional)"
+        placeholder="Guest's name (optional)"
         className={inputClass}
       />
 
-      <label className={labelClass}>Fecha</label>
+      <label className={labelClass}>Date</label>
       <input
         type="date"
         value={fecha}
@@ -74,7 +74,7 @@ export default function InvitacionSetup() {
         className={inputClass}
       />
 
-      <label className={labelClass}>Hora</label>
+      <label className={labelClass}>Time</label>
       <input
         type="time"
         value={hora}
@@ -86,7 +86,7 @@ export default function InvitacionSetup() {
         onClick={generar}
         className="mt-auto w-full bg-cafe-dark text-beige text-sm font-bold py-4 rounded-2xl active:scale-95 transition-transform"
       >
-        Generar invitación
+        Create invitation
       </button>
     </div>
   )

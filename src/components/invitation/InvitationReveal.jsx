@@ -1,0 +1,420 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+import confetti from 'canvas-confetti'
+import '@fontsource/pinyon-script/latin-400.css'
+import '@fontsource/cormorant-garamond/latin-500.css'
+import '@fontsource/cormorant-garamond/latin-600.css'
+import '@fontsource/cormorant-garamond/latin-400-italic.css'
+import '@fontsource/finger-paint/latin-400.css'
+import './invitation.css'
+
+/* The invitation reveal: a cream silk envelope sealed with an olive wax stamp.
+   A small foil sticker sits on the stamp. Scratch it off and the stamp cracks, the flap opens,
+   the letter rises, confetti, and the letter takes the screen.
+   Phases: idle -> crack -> open -> rise -> reveal -> done. */
+
+const W = 300
+const H = 204
+const FLAP_H = 140
+
+// Flap outline (rounded tip, like a euro flap). Front face: apex points down. Liner face is the same shape mirrored.
+const FLAP_FRONT = `M0 0 L${W} 0 L${W / 2 + 22} 118 Q${W / 2} 142 ${W / 2 - 22} 118 Z`
+const FLAP_BACK = `M0 ${FLAP_H} L${W} ${FLAP_H} L${W / 2 + 22} 22 Q${W / 2} -2 ${W / 2 - 22} 22 Z`
+const LINER = `M11 ${FLAP_H - 3} L${W - 11} ${FLAP_H - 3} L${W / 2 + 17} 33 Q${W / 2} 16 ${W / 2 - 17} 33 Z`
+
+const TEXT_CHUNK = 'ivr'
+
+function SilkDefs() {
+  return (
+    <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true" focusable="false">
+      <defs>
+        <filter id={`${TEXT_CHUNK}-fd`} x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency=".008 1.4" numOctaves="3" seed="3" />
+          <feColorMatrix values="0 0 0 0 .42  0 0 0 0 .30  0 0 0 0 .16  0 0 0 1.1 -.28" />
+        </filter>
+        <filter id={`${TEXT_CHUNK}-fl`} x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency=".01 1.9" numOctaves="3" seed="9" />
+          <feColorMatrix values="0 0 0 0 1  0 0 0 0 .97  0 0 0 0 .88  0 0 0 1 -.2" />
+        </filter>
+        <filter id={`${TEXT_CHUNK}-blur`} x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur stdDeviation="7" /></filter>
+        <filter id={`${TEXT_CHUNK}-wob`} x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="4" result="n" />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="9" />
+        </filter>
+        <filter id={`${TEXT_CHUNK}-emb`}>
+          <feDropShadow dx="-.8" dy="-.9" stdDeviation=".4" floodColor="#d8e28a" floodOpacity=".7" />
+          <feDropShadow dx=".9" dy="1.1" stdDeviation=".5" floodColor="#1d2308" floodOpacity=".8" />
+        </filter>
+        <radialGradient id={`${TEXT_CHUNK}-wg`} cx="35%" cy="28%" r="85%">
+          <stop offset="0" stopColor="#8e9a42" /><stop offset=".45" stopColor="#626d27" /><stop offset="1" stopColor="#3a4316" />
+        </radialGradient>
+        <radialGradient id={`${TEXT_CHUNK}-wd`} cx="50%" cy="50%" r="50%">
+          <stop offset=".7" stopColor="#2c3310" stopOpacity="0" /><stop offset="1" stopColor="#2c3310" stopOpacity=".55" />
+        </radialGradient>
+        <linearGradient id={`${TEXT_CHUNK}-sheen`} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#fff" stopOpacity="0" /><stop offset=".5" stopColor="#fffaf0" stopOpacity=".7" /><stop offset=".58" stopColor="#fff" stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id={`${TEXT_CHUNK}-fg`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fbf5e6" /><stop offset="1" stopColor="#eadcbc" /></linearGradient>
+        <linearGradient id={`${TEXT_CHUNK}-pl`} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#f1e8d3" /><stop offset="1" stopColor="#dccba6" /></linearGradient>
+        <linearGradient id={`${TEXT_CHUNK}-pr`} x1="1" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#f4ecd9" /><stop offset="1" stopColor="#d8c69f" /></linearGradient>
+        <linearGradient id={`${TEXT_CHUNK}-pb`} x1="0" y1="1" x2="0" y2="0"><stop offset="0" stopColor="#e6d8b8" /><stop offset="1" stopColor="#fbf4e4" /></linearGradient>
+        <linearGradient id={`${TEXT_CHUNK}-ln`} x1="0" y1="1" x2="0" y2="0"><stop offset="0" stopColor="#1c4a36" /><stop offset="1" stopColor="#0d2a1d" /></linearGradient>
+        <linearGradient id={`${TEXT_CHUNK}-gold`} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#f3dfae" /><stop offset=".5" stopColor="#c9a15a" /><stop offset="1" stopColor="#ecd49a" />
+        </linearGradient>
+        <pattern id={`${TEXT_CHUNK}-lat`} width="28" height="28" patternUnits="userSpaceOnUse">
+          <path d="M14 0 L28 14 L14 28 L0 14Z" fill="none" stroke="#d9b878" strokeOpacity=".38" strokeWidth=".7" />
+          <circle cx="14" cy="14" r="1" fill="#d9b878" fillOpacity=".5" />
+        </pattern>
+        <clipPath id={`${TEXT_CHUNK}-body`}><rect width={W} height={H} rx="4" /></clipPath>
+        <clipPath id={`${TEXT_CHUNK}-panels`}>
+          <path d={`M0 0 L${W / 2} 114 L0 ${H} Z M${W} 0 L${W / 2} 114 L${W} ${H} Z M0 ${H} L${W / 2} 96 L${W} ${H} Z`} />
+        </clipPath>
+        <clipPath id={`${TEXT_CHUNK}-flapc`}><path d={FLAP_FRONT} /></clipPath>
+        <clipPath id={`${TEXT_CHUNK}-flapb`}><path d={FLAP_BACK} /></clipPath>
+      </defs>
+    </svg>
+  )
+}
+
+const u = (id) => `url(#${TEXT_CHUNK}-${id})`
+
+// Silk: fine diagonal fibres, a warm shade and a light grain, plus a soft sheen band
+function Silk({ w, h, clip }) {
+  return (
+    <g clipPath={clip} className="iv-silk">
+      <g style={{ mixBlendMode: 'multiply' }} opacity=".6">
+        <rect x="-120" y="-120" width={w + 240} height={h + 240} transform={`rotate(-33 ${w / 2} ${h / 2})`} filter={u('fd')} />
+      </g>
+      <g style={{ mixBlendMode: 'soft-light' }} opacity=".9">
+        <rect x="-120" y="-120" width={w + 240} height={h + 240} transform={`rotate(-33 ${w / 2} ${h / 2})`} filter={u('fl')} />
+        <rect width={w} height={h} fill={u('sheen')} />
+      </g>
+    </g>
+  )
+}
+
+function Wax({ size, className, style }) {
+  return (
+    <svg className={className} style={style} width={size} height={size} viewBox="-50 -50 100 100" aria-hidden="true">
+      <ellipse cx="2" cy="7" rx="42" ry="38" fill="#000" opacity=".45" style={{ filter: 'blur(4px)' }} />
+      <g filter={u('wob')}>
+        <circle r="42" fill={u('wg')} />
+        <circle r="42" fill={u('wd')} />
+      </g>
+      <circle r="30" fill="none" stroke="#2f3711" strokeOpacity=".6" strokeWidth="2.4" transform="translate(.8 1)" />
+      <circle r="30" fill="none" stroke="#c7d27a" strokeOpacity=".5" strokeWidth="1.6" />
+      <g filter={u('emb')}>
+        <text y="13" textAnchor="middle" fontFamily="'Cormorant Garamond', Georgia, serif" fontSize="42" fontWeight="600" fill="#59641f">S</text>
+      </g>
+    </svg>
+  )
+}
+
+// ---- the scratch sticker --------------------------------------------------
+const STICKER = 70
+
+function paintSticker(ctx, S, dpr) {
+  ctx.save()
+  ctx.scale(dpr, dpr)
+  ctx.beginPath(); ctx.arc(S / 2, S / 2, S / 2 - 1, 0, Math.PI * 2); ctx.clip()
+  let g
+  if (ctx.createConicGradient) {
+    g = ctx.createConicGradient(0.5, S / 2, S / 2)
+    ;[[0, '#c7d27c'], [0.25, '#8d9a3c'], [0.5, '#dde5a2'], [0.75, '#7f8c33'], [1, '#c7d27c']].forEach(([o, c]) => g.addColorStop(o, c))
+  } else {
+    g = ctx.createRadialGradient(S * 0.35, S * 0.3, 0, S / 2, S / 2, S / 2)
+    g.addColorStop(0, '#dde5a2'); g.addColorStop(1, '#7f8c33')
+  }
+  ctx.fillStyle = g; ctx.fillRect(0, 0, S, S)
+  for (let i = 0; i < 260; i++) { ctx.globalAlpha = 0.1 + Math.random() * 0.2; ctx.fillStyle = i % 2 ? '#f4f7d6' : '#4b5a1c'; ctx.fillRect(Math.random() * S, Math.random() * S, 1.2, 1.2) }
+  ctx.globalAlpha = 1
+  ctx.setLineDash([3, 3]); ctx.lineWidth = 1.2; ctx.strokeStyle = 'rgba(244,246,214,.7)'
+  ctx.beginPath(); ctx.arc(S / 2, S / 2, S / 2 - 6, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([])
+  ctx.translate(S / 2, S / 2 + 4); ctx.rotate(-0.14)
+  ctx.font = '13px "Finger Paint", "Comic Sans MS", cursive'; ctx.textAlign = 'center'
+  ctx.fillStyle = 'rgba(255,255,255,.45)'; ctx.fillText('Scratch', 0.6, 1.2)
+  ctx.fillStyle = '#2f3a0f'; ctx.fillText('Scratch', 0, 0)
+  ctx.restore()
+  // bevel
+  const L = ctx.createLinearGradient(0, 0, S * dpr, S * dpr)
+  L.addColorStop(0, 'rgba(255,255,230,.4)'); L.addColorStop(0.5, 'rgba(255,255,230,0)'); L.addColorStop(1, 'rgba(20,28,4,.35)')
+  ctx.fillStyle = L; ctx.fillRect(0, 0, S * dpr, S * dpr)
+}
+
+function Sticker({ onDone, disabled }) {
+  const ref = useRef(null)
+  const state = useRef({ down: false, x: 0, y: 0, n: 0, done: false })
+
+  useEffect(() => {
+    const c = ref.current
+    const dpr = Math.min(2, window.devicePixelRatio || 1)
+    c.width = c.height = STICKER * dpr
+    const ctx = c.getContext('2d', { willReadFrequently: true })
+    const paint = () => paintSticker(ctx, STICKER, dpr)
+    paint()
+    // repaint once the crayon font is ready so the label never shows in the fallback font
+    document.fonts?.load('13px "Finger Paint"').then(() => { if (!state.current.done && state.current.n === 0) { ctx.clearRect(0, 0, c.width, c.height); paint() } }).catch(() => {})
+  }, [])
+
+  function pos(e) {
+    const r = ref.current.getBoundingClientRect()
+    return [((e.clientX - r.left) / r.width) * ref.current.width, ((e.clientY - r.top) / r.height) * ref.current.height]
+  }
+  function cleared() {
+    const c = ref.current, ctx = c.getContext('2d', { willReadFrequently: true })
+    const { data } = ctx.getImageData(0, 0, c.width, c.height)
+    let total = 0, gone = 0
+    const R = c.width / 2
+    for (let y = 0; y < c.height; y += 4) for (let x = 0; x < c.width; x += 4) {
+      if ((x - R) ** 2 + (y - R) ** 2 > (R - 2) ** 2) continue
+      total++
+      if (data[(y * c.width + x) * 4 + 3] < 30) gone++
+    }
+    return total ? gone / total : 0
+  }
+  function scratch(from, to) {
+    const c = ref.current, ctx = c.getContext('2d')
+    const dpr = c.width / STICKER
+    ctx.globalCompositeOperation = 'destination-out'
+    ctx.lineCap = ctx.lineJoin = 'round'; ctx.lineWidth = 17 * dpr
+    ctx.beginPath(); ctx.moveTo(from[0], from[1]); ctx.lineTo(to[0], to[1]); ctx.stroke()
+    ctx.globalCompositeOperation = 'source-over'
+  }
+  function down(e) {
+    if (disabled || state.current.done) return
+    e.currentTarget.setPointerCapture?.(e.pointerId)
+    const p = pos(e)
+    state.current.down = true; state.current.x = p[0]; state.current.y = p[1]
+    scratch(p, [p[0] + 0.1, p[1]])
+  }
+  function move(e) {
+    const s = state.current
+    if (!s.down || s.done) return
+    const p = pos(e)
+    scratch([s.x, s.y], p)
+    s.x = p[0]; s.y = p[1]
+    if (++s.n % 6 === 0 && cleared() > 0.55) finish()
+  }
+  function up() { state.current.down = false }
+  function finish() {
+    if (state.current.done) return
+    state.current.done = true
+    ref.current.classList.add('iv-sticker-gone')
+    navigator.vibrate?.(14)
+    onDone()
+  }
+
+  return (
+    <canvas
+      ref={ref}
+      className="iv-sticker"
+      style={{ width: STICKER, height: STICKER }}
+      onPointerDown={down}
+      onPointerMove={move}
+      onPointerUp={up}
+      onPointerCancel={up}
+      aria-hidden="true"
+    />
+  )
+}
+
+// ---- the letter -------------------------------------------------------------
+const DECO = (
+  <svg className="iv-frame" viewBox="0 0 248 440" fill="none" stroke={u('gold')} strokeLinecap="round" aria-hidden="true">
+    <rect x="10" y="10" width="228" height="420" strokeWidth="1.2" /><rect x="16" y="16" width="216" height="408" strokeWidth=".5" />
+    <path d="M16 62 L62 16 M16 76 L76 16" strokeWidth=".6" /><path d="M232 62 L186 16 M232 76 L172 16" strokeWidth=".6" />
+    <path d="M16 378 L62 424 M16 364 L76 424" strokeWidth=".6" /><path d="M232 378 L186 424 M232 364 L172 424" strokeWidth=".6" />
+    <path d="M16 38 L38 16 M232 38 L210 16 M16 402 L38 424 M232 402 L210 424" strokeWidth="1.4" />
+    <path d="M92 16 L124 40 L156 16" strokeWidth=".9" /><path d="M92 424 L124 400 L156 424" strokeWidth=".9" />
+    <rect x="119.5" y="379" width="9" height="9" transform="rotate(45 124 383.5)" strokeWidth=".9" />
+  </svg>
+)
+
+function dateParts(fecha) {
+  if (!fecha) return null
+  const d = new Date(fecha + 'T12:00:00')
+  if (Number.isNaN(d.getTime())) return null
+  return {
+    weekday: d.toLocaleDateString('en-US', { weekday: 'long' }),
+    day: d.getDate(),
+    month: d.toLocaleDateString('en-US', { month: 'long' }),
+  }
+}
+
+function formatTime(h) {
+  if (!h) return null
+  const [hh, mm] = h.split(':')
+  return `${+hh % 12 || 12}:${mm} ${+hh >= 12 ? 'pm' : 'am'}`
+}
+
+function Letter({ cafe, nombre, receptor, fecha, hora }) {
+  const parts = dateParts(fecha)
+  const time = formatTime(hora)
+  const len = cafe.nombre.length
+  const size = len > 22 ? 'iv-xs' : len > 14 ? 'iv-sm' : ''
+  return (
+    <div className="iv-letter">
+      {DECO}
+      <div className="iv-inner">
+        <Wax size={50} className="iv-stampsm" />
+        <p className="iv-from">{nombre ? <><b>{nombre}</b> invites you to</> : <>You are invited to</>}</p>
+        <h1 className={`iv-name ${size}`}>{cafe.nombre}</h1>
+        <div className="iv-hair"><i /><u /><i /></div>
+        <p className="iv-where">{cafe.barrio}</p>
+        {(parts || time) && (
+          <div className="iv-when">
+            {parts && (
+              <div className="iv-date"><span>{parts.weekday}</span><b>{parts.day}</b><span>{parts.month}</span></div>
+            )}
+            {time && <p className="iv-time">{parts ? <><em>at</em> {time}</> : time}</p>}
+          </div>
+        )}
+        {receptor && <p className="iv-for">For {receptor}</p>}
+      </div>
+    </div>
+  )
+}
+
+// ---- the whole reveal ---------------------------------------------------------
+export default function InvitationReveal({ cafe, nombre, receptor, fecha, hora, onPhase }) {
+  const [phase, setPhase] = useState('idle')
+  const [behind, setBehind] = useState(false) // flap has passed vertical: now it sits behind the letter
+  const [scale, setScale] = useState(1)
+  const timers = useRef([])
+  const started = useRef(false)
+  const onPhaseRef = useRef(onPhase)
+  useEffect(() => { onPhaseRef.current = onPhase })
+
+  useEffect(() => {
+    const fit = () => setScale(Math.max(0.72, Math.min(1.15, (window.innerHeight - 300) / 440)))
+    fit()
+    window.addEventListener('resize', fit)
+    const list = timers.current
+    return () => { window.removeEventListener('resize', fit); list.forEach(clearTimeout) }
+  }, [])
+
+  const at = (ms, fn) => { timers.current.push(setTimeout(fn, ms)) }
+
+  const burst = useCallback(() => {
+    const colors = ['#d9b878', '#f3e3b8', '#b8d04a', '#e8c872', '#fff6df', '#c9a45a']
+    const base = { colors, shapes: ['circle', 'square'], scalar: 0.9, gravity: 0.85, ticks: 220, disableForReducedMotion: true }
+    confetti({ ...base, particleCount: 70, spread: 75, origin: { x: 0.5, y: 0.42 }, startVelocity: 42 })
+    setTimeout(() => confetti({ ...base, particleCount: 40, angle: 62, spread: 55, origin: { x: 0, y: 0.7 } }), 160)
+    setTimeout(() => confetti({ ...base, particleCount: 40, angle: 118, spread: 55, origin: { x: 1, y: 0.7 } }), 160)
+  }, [])
+
+  const start = useCallback(() => {
+    if (started.current) return
+    started.current = true
+    onPhaseRef.current?.('abriendo')
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      setBehind(true); setPhase('done'); onPhaseRef.current?.('abierta')
+      return
+    }
+    setPhase('crack')
+    at(520, () => setPhase('open'))
+    at(840, () => setBehind(true))
+    at(980, burst)
+    at(1500, () => setPhase('rise'))
+    at(2650, () => setPhase('reveal'))
+    at(3750, () => { setPhase('done'); onPhaseRef.current?.('abierta') })
+  }, [burst])
+
+  const idle = phase === 'idle'
+  const flapOpen = phase !== 'idle' && phase !== 'crack'
+
+  return (
+    <div
+      className="iv-root"
+      data-phase={phase}
+      data-behind={behind}
+      style={{ '--cs': scale, '--fy': '-26px' }}
+    >
+      <SilkDefs />
+
+      <div className={`iv-hello ${idle ? '' : 'iv-out'}`}>
+        {receptor && (
+          <>
+            <p className="iv-hello-for">For</p>
+            <h2 className="iv-hello-name">{receptor.toUpperCase()}</h2>
+          </>
+        )}
+      </div>
+
+      <div className="iv-frame-box">
+        {/* back of the envelope + dark inside */}
+        <div className="iv-pc iv-z1">
+          <svg viewBox={`0 0 ${W} ${H}`} className="iv-layer" aria-hidden="true">
+            <ellipse cx={W / 2 + 6} cy={H + 14} rx={W * 0.5} ry="14" fill="#000" opacity=".6" filter={u('blur')} />
+            <g clipPath={u('body')}><rect width={W} height={H} fill="#0a1d14" /></g>
+          </svg>
+        </div>
+
+        {/* flap: front face is the cream silk, back face is the green liner */}
+        <div className={`iv-pc iv-flapw ${behind ? 'iv-z2' : 'iv-z5'}`}>
+          <div className="iv-flap" style={{ transform: `rotateX(${flapOpen ? -180 : 0}deg)` }}>
+            <svg viewBox={`0 0 ${W} ${FLAP_H}`} className="iv-face" aria-hidden="true">
+              <path d={FLAP_FRONT} fill="#000" opacity=".35" transform="translate(0 6)" style={{ filter: 'blur(4px)' }} />
+              <path d={FLAP_FRONT} fill={u('fg')} stroke="#f6edd8" strokeWidth="3" strokeLinejoin="round" />
+              <Silk w={W} h={FLAP_H} clip={u('flapc')} />
+              <path d="M2 1 L172 119 Q150 141 128 119 L298 1" fill="none" stroke="#fff" strokeOpacity=".6" strokeWidth="1.2" strokeLinejoin="round" />
+            </svg>
+            <svg viewBox={`0 0 ${W} ${FLAP_H}`} className="iv-face iv-faceb" aria-hidden="true">
+              <path d={FLAP_BACK} fill="#e9dcbd" stroke="#e9dcbd" strokeWidth="3" strokeLinejoin="round" />
+              <Silk w={W} h={FLAP_H} clip={u('flapb')} />
+              <path d={LINER} fill={u('ln')} />
+              <path d={LINER} fill={u('lat')} />
+              <path d={LINER} fill="none" stroke="#d9b878" strokeOpacity=".6" strokeWidth=".7" />
+            </svg>
+          </div>
+        </div>
+
+        {/* the letter, clipped so it never shows below the envelope until it takes the screen */}
+        <div className="iv-clip iv-z3">
+          <div className="iv-card">
+            <Letter cafe={cafe} nombre={nombre} receptor={receptor} fecha={fecha} hora={hora} />
+          </div>
+        </div>
+
+        {/* front of the envelope: the three folded panels */}
+        <div className="iv-pc iv-z4">
+          <svg viewBox={`0 0 ${W} ${H}`} className="iv-layer" aria-hidden="true">
+            <g clipPath={u('body')}>
+              <path d={`M0 0 L${W / 2} 114 L0 ${H}Z`} fill={u('pl')} />
+              <path d={`M${W} 0 L${W / 2} 114 L${W} ${H}Z`} fill={u('pr')} />
+              <path d={`M0 ${H} L${W / 2} 96 L${W} ${H}Z`} fill={u('pb')} />
+              <path d={`M0 ${H} L${W / 2} 96 L${W} ${H}`} fill="none" stroke="#fff" strokeOpacity=".5" />
+              <path d={`M0 ${H} L${W / 2} 96 L${W} ${H}`} fill="none" stroke="#000" strokeOpacity=".14" strokeWidth="2.4" transform="translate(0 -1.6)" />
+              <path d={`M0 0 L${W / 2} 114 M${W} 0 L${W / 2} 114`} stroke="#000" strokeOpacity=".12" />
+            </g>
+            <g clipPath={u('body')}><Silk w={W} h={H} clip={u('panels')} /></g>
+            <path d={`M0 0 V${H - 4} Q0 ${H} 4 ${H} H${W - 4} Q${W} ${H} ${W} ${H - 4} V0`} fill="none" stroke="#fff" strokeOpacity=".4" />
+            {receptor && (
+              <text x={W / 2} y="190" textAnchor="middle" fontFamily="'Pinyon Script', cursive" fontSize="21" fill="#4a3a24" opacity=".85">
+                for {receptor}
+              </text>
+            )}
+          </svg>
+        </div>
+
+        {/* the stamp, with the scratch sticker on top of it */}
+        <div className={`iv-stamp ${phase === 'crack' ? 'iv-shake' : ''}`}>
+          <div className="iv-half iv-left"><Wax size={104} /></div>
+          <div className="iv-half iv-right"><Wax size={104} /></div>
+          <svg className="iv-crack" viewBox="0 0 100 100" aria-hidden="true">
+            <path d="M54 4 L47 28 L57 46 L45 62 L53 96" fill="none" stroke="#1d2308" strokeWidth="2.2" strokeLinecap="round" pathLength="1" />
+            <path d="M54 4 L47 28 L57 46 L45 62 L53 96" fill="none" stroke="#c7d27a" strokeOpacity=".55" strokeWidth=".8" strokeLinecap="round" transform="translate(1.2 0)" pathLength="1" />
+          </svg>
+          {(idle || phase === 'crack') && <Sticker onDone={start} />}
+        </div>
+
+        <div className="iv-sheen" />
+      </div>
+
+      <div className={`iv-hint ${idle ? '' : 'iv-out'}`}>
+        <p>Scratch the sticker to open</p>
+        <button type="button" onClick={start}>or tap here</button>
+      </div>
+    </div>
+  )
+}

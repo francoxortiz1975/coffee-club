@@ -1,0 +1,97 @@
+/* Invitation reveal: cream silk envelope, olive wax stamp, scratch sticker, dark-green letter. */
+.iv-root { position: absolute; inset: 0; z-index: 30; display: flex; align-items: center; justify-content: center; pointer-events: none; font-family: 'Cormorant Garamond', Georgia, serif; }
+
+/* header + hint */
+.iv-hello { position: absolute; top: calc(56px + env(safe-area-inset-top)); left: 0; right: 0; text-align: center; transition: opacity .5s ease; }
+.iv-hello-for { font-style: italic; font-size: 15px; letter-spacing: .04em; color: #d8c9b0; }
+.iv-hello-name { font-weight: 500; font-size: 25px; letter-spacing: .24em; text-indent: .24em; color: #fff; margin-top: 6px; }
+.iv-hint { position: absolute; bottom: calc(60px + env(safe-area-inset-bottom)); left: 0; right: 0; text-align: center; transition: opacity .4s ease; }
+.iv-hint p { font-style: italic; font-size: 16px; color: #cdbba3; }
+.iv-hint button { pointer-events: auto; margin-top: 10px; font: 500 12px/1 system-ui, sans-serif; letter-spacing: .08em; color: #b8d04a; background: none; border: 0; padding: 8px 12px; text-decoration: underline; text-underline-offset: 3px; opacity: .85; cursor: pointer; }
+.iv-out { opacity: 0; pointer-events: none !important; }
+
+/* envelope frame: every part shares one 300x204 box so the letter can slide between back and front */
+.iv-frame-box { position: relative; width: 300px; height: 204px; transform: rotate(-2deg); flex: none; transition: transform 1s cubic-bezier(.3, .7, .2, 1); }
+.iv-root[data-phase='reveal'] .iv-frame-box, .iv-root[data-phase='done'] .iv-frame-box { transform: none; }
+.iv-pc, .iv-clip { position: absolute; left: 0; top: 0; width: 300px; height: 204px; }
+.iv-layer { display: block; width: 100%; height: 100%; overflow: visible; }
+.iv-z1 { z-index: 1; } .iv-z2 { z-index: 2; } .iv-z3 { z-index: 3; } .iv-z4 { z-index: 4; } .iv-z5 { z-index: 5; }
+
+/* flap, hinged on its top edge */
+.iv-flapw { height: 140px; perspective: 900px; perspective-origin: 50% 0; }
+.iv-flap { position: relative; width: 100%; height: 100%; transform-origin: 50% 0; transform-style: preserve-3d; transition: transform .9s cubic-bezier(.5, .05, .3, 1); will-change: transform; }
+.iv-face { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.iv-faceb { transform: rotateX(180deg); }
+
+/* the letter */
+.iv-clip { clip-path: inset(-700px -90px 0 -90px); pointer-events: none; }
+.iv-card { position: absolute; left: 50%; top: 50%; width: 248px; height: 440px; margin: -220px 0 0 -124px; opacity: 0; transform: translateY(120px) scale(.82); transform-origin: 50% 50%; }
+.iv-root[data-behind='true'] .iv-card { opacity: 1; transition: opacity .15s linear; }
+.iv-root[data-phase='rise'] .iv-card { transform: translateY(-92px) scale(.82); transition: transform 1.1s cubic-bezier(.2, .75, .25, 1), opacity .15s linear; }
+.iv-root[data-phase='reveal'] .iv-card,
+.iv-root[data-phase='done'] .iv-card { opacity: 1; transform: translateY(var(--fy)) scale(var(--cs)); transition: transform 1s cubic-bezier(.3, .7, .2, 1); }
+.iv-root[data-phase='reveal'] .iv-clip,
+.iv-root[data-phase='done'] .iv-clip { clip-path: inset(-700px -90px -700px -90px); transition: clip-path 1s; }
+.iv-root[data-phase='done'] .iv-clip { pointer-events: none; }
+
+/* envelope drops away when the letter takes the screen, then is removed so it costs nothing */
+.iv-root[data-phase='reveal'] .iv-pc,
+.iv-root[data-phase='done'] .iv-pc { transform: translateY(300px) scale(.94); opacity: 0; transition: transform .9s cubic-bezier(.5, 0, .8, .4) .05s, opacity .7s ease .15s; }
+.iv-root[data-phase='done'] .iv-pc,
+.iv-root[data-phase='done'] .iv-sheen,
+.iv-root[data-phase='done'] .iv-stamp { display: none; }
+
+/* wax stamp */
+.iv-stamp { position: absolute; left: 50%; top: 124px; width: 104px; height: 104px; margin: -52px 0 0 -52px; z-index: 6; pointer-events: none; filter: drop-shadow(0 6px 6px rgba(0, 0, 0, .35)); }
+.iv-half { position: absolute; inset: 0; transition: transform .75s cubic-bezier(.5, 0, .9, .5), opacity .6s ease .1s; }
+.iv-half svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.iv-left { clip-path: polygon(0 0, 54% 0, 47% 28%, 57% 46%, 45% 62%, 53% 100%, 0 100%); }
+.iv-right { clip-path: polygon(54% 0, 100% 0, 100% 100%, 53% 100%, 45% 62%, 57% 46%, 47% 28%); }
+.iv-root[data-phase='crack'] .iv-left { transform: translate(-2px, 1px) rotate(-3deg); }
+.iv-root[data-phase='crack'] .iv-right { transform: translate(2px, 1px) rotate(3deg); }
+.iv-root[data-phase='open'] .iv-left, .iv-root[data-phase='rise'] .iv-left, .iv-root[data-phase='reveal'] .iv-left { transform: translate(-10px, 90px) rotate(-26deg); opacity: 0; }
+.iv-root[data-phase='open'] .iv-right, .iv-root[data-phase='rise'] .iv-right, .iv-root[data-phase='reveal'] .iv-right { transform: translate(10px, 100px) rotate(30deg); opacity: 0; }
+.iv-crack { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }
+.iv-crack path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.iv-root[data-phase='crack'] .iv-crack { opacity: 1; }
+.iv-root[data-phase='crack'] .iv-crack path { animation: iv-draw .35s ease-out forwards; }
+.iv-shake { animation: iv-shake .5s linear; }
+@keyframes iv-draw { to { stroke-dashoffset: 0; } }
+@keyframes iv-shake { 0%, 100% { transform: translate(0, 0); } 15% { transform: translate(-2px, 1px) rotate(-1deg); } 35% { transform: translate(2px, -1px) rotate(1deg); } 55% { transform: translate(-2px, 0); } 75% { transform: translate(1px, 1px); } }
+
+/* scratch sticker */
+.iv-sticker { position: absolute; left: 50%; top: 50%; margin: -35px 0 0 -35px; border-radius: 50%; touch-action: none; cursor: grab; pointer-events: auto; box-shadow: 0 3px 8px rgba(0, 0, 0, .5); transition: opacity .3s ease; animation: iv-wiggle 5.5s ease-in-out infinite; }
+.iv-sticker:active { cursor: grabbing; animation: none; }
+.iv-sticker-gone { opacity: 0; pointer-events: none; }
+@keyframes iv-wiggle { 0%, 82%, 100% { transform: rotate(0); } 86% { transform: rotate(-7deg); } 90% { transform: rotate(6deg); } 94% { transform: rotate(-3deg); } }
+
+/* slow light sweep across the silk */
+.iv-sheen { position: absolute; left: 0; top: 0; width: 300px; height: 204px; border-radius: 4px; z-index: 7; pointer-events: none; background: linear-gradient(115deg, transparent 42%, rgba(255, 250, 235, .55) 50%, transparent 58%); background-size: 280% 100%; background-position: 130% 0; mix-blend-mode: soft-light; animation: iv-sheen 7s ease-in-out infinite; transition: opacity .3s; }
+.iv-root:not([data-phase='idle']):not([data-phase='crack']) .iv-sheen { opacity: 0; }
+@keyframes iv-sheen { 0%, 25% { background-position: 130% 0; } 70%, 100% { background-position: -30% 0; } }
+
+/* letter design: dark green, gold hairlines, deco corners, script name */
+.iv-letter { position: absolute; inset: 0; border-radius: 4px; background: radial-gradient(120% 70% at 50% 30%, #245a43, #133823 60%, #0b2015); box-shadow: 0 34px 60px rgba(0, 0, 0, .6), inset 0 0 0 1px rgba(255, 255, 255, .07); color: #ead9b0; }
+.iv-frame { position: absolute; inset: 0; width: 100%; height: 100%; }
+.iv-inner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; padding: 42px 26px 0; text-align: center; }
+.iv-stampsm { margin: 0 0 12px; flex: none; }
+.iv-from { font-style: italic; font-size: 16px; letter-spacing: .04em; color: #cdbb92; }
+.iv-from b { font-weight: 600; font-style: normal; color: #ead9b0; }
+.iv-name { font-family: 'Pinyon Script', cursive; font-weight: 400; font-size: 44px; line-height: 1.12; margin: 10px 0 8px; padding: 0 10px 6px; background: linear-gradient(#fbecc4, #d2ab62); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.iv-name.iv-sm { font-size: 36px; } .iv-name.iv-xs { font-size: 30px; }
+.iv-hair { display: flex; align-items: center; gap: 8px; margin: 2px 0 12px; }
+.iv-hair i { width: 34px; height: 1px; background: #c9a15a; }
+.iv-hair u { width: 5px; height: 5px; transform: rotate(45deg); border: 1px solid #c9a15a; }
+.iv-where { font: 600 10.5px/1 system-ui, sans-serif; letter-spacing: .32em; text-indent: .32em; text-transform: uppercase; color: #d9c18a; }
+.iv-when { margin-top: 24px; width: 100%; }
+.iv-date { display: flex; align-items: center; justify-content: center; gap: 9px; border-top: 1px dotted rgba(201, 161, 90, .6); border-bottom: 1px dotted rgba(201, 161, 90, .6); padding: 9px 4px; }
+.iv-date span { font: 600 9px/1 system-ui, sans-serif; letter-spacing: .2em; text-transform: uppercase; color: #d9c18a; }
+.iv-date b { font-weight: 500; font-size: 38px; line-height: 1; color: #f6e6b8; }
+.iv-time { margin-top: 12px; font-weight: 500; font-size: 22px; letter-spacing: .05em; color: #ead9b0; }
+.iv-time em { font-style: italic; color: #b99d62; font-size: 17px; }
+.iv-for { position: absolute; bottom: 30px; font-style: italic; font-size: 14px; letter-spacing: .06em; color: #b99d62; }
+
+@media (prefers-reduced-motion: reduce) {
+  .iv-sticker, .iv-sheen { animation: none; }
+  .iv-sheen { display: none; }
+}

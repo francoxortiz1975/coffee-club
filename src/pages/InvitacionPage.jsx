@@ -1,149 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import { toPng } from 'html-to-image'
-import confetti from 'canvas-confetti'
 import cafes from '../data/cafes.json'
 import { ShareIcon, ArrowLeftIcon } from '../components/Icons'
 import { useInvitaciones } from '../context/InvitacionesContext'
-
-function formatFecha(fechaStr) {
-  if (!fechaStr) return null
-  const d = new Date(fechaStr + 'T12:00:00')
-  return d.toLocaleDateString('es-EC', { weekday: 'long', day: 'numeric', month: 'long' })
-}
-
-// Carta cerrada con apertura reactiva al gesto.
-// El flap rota en tiempo real con el dedo; al soltar:
-//   ≥ 45% del recorrido → completa apertura (onOpen)
-//   < 45%              → vuelve elásticamente al origen
-function EnvelopeIntro({ receptor, abriendo, onOpen, logoDataUrl }) {
-  const startY = useRef(0)
-  const [dy, setDy] = useState(0)       // px arrastrados, 0 a -MAX_DRAG
-  const [dragging, setDragging] = useState(false)
-
-  const MAX_DRAG = 110
-  // progress: 0 (cerrado) → 1 (completamente abierto)
-  const progress = abriendo ? 1 : Math.min(1, Math.abs(dy) / MAX_DRAG)
-
-  function handleTouchStart(e) {
-    if (abriendo) return
-    startY.current = e.touches[0].clientY
-    setDragging(true)
-  }
-  function handleTouchMove(e) {
-    if (abriendo) return
-    const delta = e.touches[0].clientY - startY.current
-    if (delta < 0) setDy(Math.max(delta, -MAX_DRAG))
-  }
-  function handleTouchEnd() {
-    if (abriendo) return
-    setDragging(false)
-    if (Math.abs(dy) >= MAX_DRAG * 0.45) {
-      onOpen()
-    } else {
-      setDy(0)
-    }
-  }
-
-  // Transición: sin transición mientras arrastra (sigue el dedo),
-  // con ease al soltar (snap-back o commit).
-  const snapT = 'transform 0.38s cubic-bezier(0.34, 1.4, 0.64, 1)'
-  const noT = 'none'
-  const commitT = 'transform 0.9s cubic-bezier(0.4, 0, 0.2, 1)'
-
-  const flapStyle = {
-    background: 'linear-gradient(135deg, #d4c3a8 0%, #b09872 100%)',
-    clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
-    transformOrigin: 'top',
-    transform: `rotateX(${-180 * progress}deg)`,
-    transition: abriendo ? commitT : dragging ? noT : snapT,
-    backfaceVisibility: 'hidden',
-  }
-  const bodyStyle = {
-    background: 'linear-gradient(160deg, #faf4ec 0%, #e8dcc7 100%)',
-    opacity: abriendo ? 1 : 1 - progress * 0.55,
-    transition: dragging ? noT : 'opacity 0.38s ease',
-  }
-  // Zoom: durante el gesto escala levemente; al commit dispara a 6x llenando pantalla.
-  const containerStyle = {
-    transform: `translateY(${abriendo ? 0 : dy * 0.22}px) scale(${abriendo ? 6 : 1 + progress * 0.1})`,
-    transition: abriendo
-      ? 'transform 0.52s cubic-bezier(0.4, 0, 1, 1)'
-      : dragging ? noT : snapT,
-    opacity: 1,
-    perspective: abriendo ? 'none' : '1000px',
-  }
-
-  const fadeWithProgress = (base = 1, rate = 2) =>
-    abriendo ? 0 : Math.max(0, base - progress * rate)
-
-  return (
-    <div
-      className="absolute inset-0 z-30 flex flex-col items-center justify-center px-8 text-center select-none"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      onClick={() => !abriendo && onOpen()}
-      style={{ touchAction: 'none' }}
-    >
-      {/* Encabezado "Para X" — se desvanece al arrastrar */}
-      {receptor && (
-        <div style={{
-          opacity: fadeWithProgress(1, 2.5),
-          transition: abriendo ? 'opacity 0.3s' : dragging ? noT : 'opacity 0.38s',
-        }}>
-          <p className="text-white/60 font-serif italic text-sm mb-1">Para</p>
-          <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-10 tracking-tight">
-            {receptor.toUpperCase()}
-          </h2>
-        </div>
-      )}
-
-      {/* Carta */}
-      <div className="relative w-72 h-52" style={containerStyle}>
-        <div className="absolute inset-0 rounded-lg shadow-2xl" style={bodyStyle} />
-        <div className="absolute top-0 left-0 right-0 h-1/2" style={flapStyle} />
-        {logoDataUrl && (
-          <img
-            src={logoDataUrl}
-            alt="Sumay"
-            className="absolute z-20 object-contain"
-            style={{
-              top: 10,
-              right: 12,
-              width: 26,
-              height: 26,
-              opacity: fadeWithProgress(0.45, 1),
-              filter: 'sepia(0.15)',
-              transform: `scale(${abriendo ? 0.7 : 1})`,
-              transition: abriendo ? 'opacity 0.3s, transform 0.3s' : dragging ? noT : 'opacity 0.38s, transform 0.38s',
-            }}
-          />
-        )}
-      </div>
-
-      {/* Hint — desaparece rápido al primer arrastre */}
-      <div
-        className="mt-10"
-        style={{
-          opacity: fadeWithProgress(1, 4),
-          transition: abriendo ? 'opacity 0.3s' : dragging ? noT : 'opacity 0.38s',
-        }}
-      >
-        <p className="text-white/50 text-3xl leading-none animate-bounce">↑</p>
-        <p className="text-white/70 font-serif italic text-sm mt-2">Desliza para abrir</p>
-      </div>
-    </div>
-  )
-}
-
-function formatHora(horaStr) {
-  if (!horaStr) return null
-  const [h, m] = horaStr.split(':')
-  const suffix = +h >= 12 ? 'pm' : 'am'
-  const h12 = +h % 12 || 12
-  return `${h12}:${m} ${suffix}`
-}
+import InvitationReveal from '../components/invitation/InvitationReveal'
 
 async function srcToDataUrl(src) {
   try {
@@ -166,7 +27,6 @@ export default function InvitacionPage() {
   const cardRef = useRef(null)
   const [sharing, setSharing] = useState(false)
   const [coverDataUrl, setCoverDataUrl] = useState(null)
-  const [logoDataUrl, setLogoDataUrl] = useState(null)
   const cafe = cafes.find((c) => c.id === id)
   const { agregarRecibida } = useInvitaciones()
 
@@ -175,7 +35,7 @@ export default function InvitacionPage() {
   const fecha = params.get('fecha')
   const hora = params.get('hora')
 
-  // 'cerrada' (mostrar carta) | 'abriendo' (animando) | 'abierta' (invitación visible)
+  // 'cerrada' (sealed envelope) | 'abriendo' (animating) | 'abierta' (letter visible)
   const [estado, setEstado] = useState('cerrada')
 
   // Guardar como recibida la primera vez que se abre el link
@@ -186,30 +46,9 @@ export default function InvitacionPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, nombre, receptor, fecha, hora, cafe])
 
-  function abrirCarta() {
-    if (estado !== 'cerrada') return
-    setEstado('abriendo')
-    // Confetti justo antes de que el zoom complete (0.52s)
-    setTimeout(() => {
-      confetti({
-        particleCount: 100,
-        spread: 80,
-        origin: { y: 0.4 },
-        colors: ['#b8d04a', '#d4af37', '#f5f0e8', '#c8a96e', '#fff8e7'],
-        shapes: ['circle'],
-        scalar: 1,
-        gravity: 0.8,
-        ticks: 200,
-      })
-    }, 420)
-    // Revelar invitación cuando el zoom llena la pantalla
-    setTimeout(() => setEstado('abierta'), 540)
-  }
-
   // Preload images as data URLs so html-to-image can capture them
   useEffect(() => {
     if (cafe?.fotos?.[0]) srcToDataUrl(cafe.fotos[0]).then(setCoverDataUrl)
-    srcToDataUrl('/logo.png').then(setLogoDataUrl)
   }, [cafe])
 
   async function handleShare() {
@@ -219,20 +58,20 @@ export default function InvitacionPage() {
 
       const res = await fetch(dataUrl)
       const blob = await res.blob()
-      const file = new File([blob], 'invitacion-sumay.png', { type: 'image/png' })
+      const file = new File([blob], 'sumay-invitation.png', { type: 'image/png' })
 
       const mensaje = nombre
-        ? `${nombre} te invita a ${cafe.nombre} ☕\n${window.location.href}`
-        : `¡Estás invitado a ${cafe.nombre}! ☕\n${window.location.href}`
+        ? `${nombre} invites you to ${cafe.nombre} ☕\n${window.location.href}`
+        : `You're invited to ${cafe.nombre}! ☕\n${window.location.href}`
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({ files: [file], text: mensaje })
       } else if (navigator.share) {
-        await navigator.share({ title: `Invitación a ${cafe.nombre}`, text: mensaje })
+        await navigator.share({ title: `Invitation to ${cafe.nombre}`, text: mensaje })
       } else {
         const a = document.createElement('a')
         a.href = dataUrl
-        a.download = 'invitacion-sumay.png'
+        a.download = 'sumay-invitation.png'
         a.click()
         await navigator.clipboard.writeText(mensaje)
       }
@@ -245,103 +84,73 @@ export default function InvitacionPage() {
 
   if (!cafe) return null
 
+  const sealed = estado !== 'abierta'
+
   return (
     <div ref={cardRef} className="min-h-screen relative flex flex-col overflow-hidden">
 
-      {/* Fondo — foto (data URL) o degradado */}
+      {/* Background: the café's own photo, soft while sealed and clearer once the letter is open */}
       {coverDataUrl ? (
-        <img src={coverDataUrl} alt={cafe.nombre} className="absolute inset-0 w-full h-full object-cover" />
+        <img
+          src={coverDataUrl}
+          alt=""
+          className="absolute object-cover"
+          style={{
+            inset: -24,
+            width: 'calc(100% + 48px)',
+            height: 'calc(100% + 48px)',
+            filter: `blur(${sealed ? 5 : 2}px)`,
+            transition: 'filter 1.4s ease',
+          }}
+        />
       ) : (
         <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #1e0f0b 100%)' }} />
       )}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/85" />
 
-      {/* Overlay oscuro elegante */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/80" />
-
-      {/* Botón regresar — lleva a Descubrir (onboarding suave para receptores nuevos) */}
       <button
         onClick={() => navigate('/')}
+        aria-label="Back"
         className="absolute left-5 z-40 text-white/60 hover:text-white transition-colors"
         style={{ top: 'calc(16px + env(safe-area-inset-top))' }}
       >
         <ArrowLeftIcon size={20} />
       </button>
 
-      {/* Carta cerrada — visible mientras estado !== 'abierta' */}
-      {estado !== 'abierta' && (
-        <EnvelopeIntro
-          receptor={receptor}
-          abriendo={estado === 'abriendo'}
-          onOpen={abrirCarta}
-          logoDataUrl={logoDataUrl}
-        />
-      )}
+      <InvitationReveal
+        cafe={cafe}
+        nombre={nombre}
+        receptor={receptor}
+        fecha={fecha}
+        hora={hora}
+        onPhase={setEstado}
+      />
 
-      {/* Contenido — aparece directo tras el zoom; elementos entran con fadeUp propio */}
+      <div className="flex-1" />
+
       <div
-        className="relative z-10 flex-1 flex flex-col items-center justify-center px-8 text-center gap-4"
+        className="relative z-40 px-6 flex flex-col gap-3"
         style={{
+          paddingBottom: 'calc(40px + env(safe-area-inset-bottom))',
           opacity: estado === 'abierta' ? 1 : 0,
           pointerEvents: estado === 'abierta' ? 'auto' : 'none',
-        }}
-      >
-
-        {logoDataUrl && (
-          <img src={logoDataUrl} alt="Sumay" className="h-8 w-auto object-contain opacity-70 mb-2 animate-[fadeUp_0.8s_ease_0.2s_both]" />
-        )}
-
-        {receptor && (
-          <h2 className="text-3xl font-serif font-bold text-white leading-tight tracking-tight animate-[fadeUp_0.8s_ease_0.4s_both]">
-            ¡{receptor.toUpperCase()}!
-          </h2>
-        )}
-        {nombre ? (
-          <p className="text-white/85 text-lg font-light tracking-wide animate-[fadeUp_0.8s_ease_0.5s_both]">
-            <span className="text-white font-semibold">{nombre}</span> te invita a
-          </p>
-        ) : (
-          <p className="text-white/80 text-lg font-light tracking-wide animate-[fadeUp_0.8s_ease_0.5s_both]">
-            Tienes una invitación a
-          </p>
-        )}
-
-        <h1 className="text-5xl font-serif font-bold text-white leading-tight tracking-tight animate-[fadeUp_0.8s_ease_0.8s_both]">
-          {cafe.nombre}
-        </h1>
-
-        <p className="text-white/60 text-sm tracking-widest uppercase animate-[fadeUp_0.8s_ease_1s_both]">
-          {cafe.barrio}
-        </p>
-
-        {(fecha || hora) && (
-          <div className="mt-3 border border-white/25 rounded-2xl px-7 py-4 animate-[fadeUp_0.8s_ease_1.2s_both]">
-            {fecha && <p className="text-white text-base font-semibold capitalize">{formatFecha(fecha)}</p>}
-            {hora && <p className="text-white/75 text-base mt-1">{formatHora(hora)}</p>}
-          </div>
-        )}
-      </div>
-
-      {/* Acciones */}
-      <div
-        className="relative z-10 px-6 pb-12 flex flex-col gap-3"
-        style={{
-          opacity: estado === 'abierta' ? 1 : 0,
-          pointerEvents: estado === 'abierta' ? 'auto' : 'none',
+          transition: 'opacity .6s ease .1s',
         }}
       >
         <button
           onClick={handleShare}
           disabled={sharing}
-          className="w-full bg-cafe-dark text-[#b8d04a] text-base font-bold py-4 rounded-2xl shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform disabled:opacity-50 flex items-center justify-center gap-2"
+          className="w-full text-sm font-semibold tracking-[0.14em] uppercase py-4 rounded-full shadow-lg active:scale-95 transition-transform disabled:opacity-50 flex items-center justify-center gap-2"
+          style={{ background: '#b8d04a', color: '#1f1409' }}
         >
           <ShareIcon size={18} />
-          {sharing ? 'Preparando...' : 'Compartir invitación'}
+          {sharing ? 'Preparing…' : 'Share invitation'}
         </button>
         <button
           onClick={() => navigate(`/cafe/${id}`)}
-          className="w-full bg-beige text-cafe-dark text-sm font-semibold py-3 rounded-2xl active:scale-95 transition-transform"
+          className="w-full text-white/70 text-xs tracking-[0.08em] py-2 active:scale-95 transition-transform"
         >
-          Ver más...
+          See more about the café
         </button>
       </div>
     </div>

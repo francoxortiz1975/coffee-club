@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import confetti from 'canvas-confetti'
 import '@fontsource/pinyon-script/latin-400.css'
 import '@fontsource/cormorant-garamond/latin-500.css'
@@ -308,41 +308,69 @@ function formatTime(h) {
   return `${+hh % 12 || 12}:${mm} ${+hh >= 12 ? 'pm' : 'am'}`
 }
 
+// Fit the café name to the letter: one line at up to 44px, shrinking for longer names.
+// Very long names stop shrinking at 28px and wrap to two lines instead of becoming unreadable.
+function useFitName(text) {
+  const ref = useRef(null)
+  const fit = useCallback(() => {
+    const el = ref.current
+    if (!el) return
+    const box = el.parentElement, cs = getComputedStyle(box)
+    const room = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 6 // keeps clear of the gold frame
+    el.style.whiteSpace = 'nowrap'
+    el.style.fontSize = '44px'
+    const natural = el.scrollWidth
+    let size = Math.min(44, Math.floor((44 * room) / natural))
+    if (size < 28) { size = 30; el.style.whiteSpace = 'normal' }
+    el.style.fontSize = `${size}px`
+  }, [])
+  useLayoutEffect(() => {
+    fit()
+    document.fonts?.ready.then(fit).catch(() => {})
+  }, [fit, text])
+  return ref
+}
+
 function Letter({ cafe, nombre, receptor, fecha, hora }) {
   const parts = dateParts(fecha)
   const time = formatTime(hora)
-  const len = cafe.nombre.length
-  const size = len > 22 ? 'iv-xs' : len > 14 ? 'iv-sm' : ''
+  const nameRef = useFitName(cafe.nombre)
   return (
     <div className="iv-letter">
       <LetterDefs />
       {DECO}
       <div className="iv-inner">
         <Wax size={50} className="iv-stampsm" pf={LP} />
-        <p className="iv-from">{nombre ? <><b>{nombre}</b> invites you to</> : <>You are invited to</>}</p>
-        <h1 className={`iv-name ${size}`}>{cafe.nombre}</h1>
+        <div className="iv-from">{nombre ? <><b>{nombre}</b> invites you to</> : <>You are invited to</>}</div>
+        <div ref={nameRef} className="iv-name" role="heading" aria-level={1}>{cafe.nombre}</div>
         <div className="iv-hair"><i /><u /><i /></div>
-        <p className="iv-where">{cafe.barrio}</p>
+        <div className="iv-where">{cafe.barrio}</div>
         {(parts || time) && (
           <div className="iv-when">
             {parts && (
               <div className="iv-date"><span>{parts.weekday}</span><b>{parts.day}</b><span>{parts.month}</span></div>
             )}
-            {time && <p className="iv-time">{parts ? <><em>at</em> {time}</> : time}</p>}
+            {time && <div className="iv-time">{parts ? <><em>at</em> {time}</> : time}</div>}
           </div>
         )}
-        {receptor && <p className="iv-for">For {receptor}</p>}
+        {receptor && <div className="iv-for">For {receptor}</div>}
       </div>
     </div>
   )
 }
 
 // ---- the whole reveal ---------------------------------------------------------
-export default function InvitationReveal({ cafe, nombre, receptor, fecha, hora, onPhase, onZoom }) {
+// contained: the scene lives inside a smaller box (the landing phone) instead of the whole screen,
+// so it sizes itself to that box and keeps its confetti inside it. reserve: pixels kept free below the letter.
+export default function InvitationReveal({ cafe, nombre, receptor, fecha, hora, onPhase, onZoom, contained = false, reserve = 260 }) {
   const [phase, setPhase] = useState('idle')
   const [behind, setBehind] = useState(false) // flap has passed vertical: now it sits behind the letter
   const [scale, setScale] = useState(1)
   const [zscale, setZscale] = useState(1.4)
+  const [es, setEs] = useState(1) // how much the 300px envelope has to shrink to fit its box
+  const rootRef = useRef(null)
+  const confRef = useRef(null)
+  const canvasRef = useRef(null)
   const [zoom, setZoom] = useState(false) // the letter is blown up to fill the screen
   const timers = useRef([])
   const started = useRef(false)
@@ -351,16 +379,28 @@ export default function InvitationReveal({ cafe, nombre, receptor, fecha, hora, 
   useEffect(() => { onPhaseRef.current = onPhase; onZoomRef.current = onZoom })
 
   useEffect(() => {
+    const root = rootRef.current
     const fit = () => {
-      const w = window.innerWidth, h = window.innerHeight
-      setScale(Math.max(0.74, Math.min(1.28, (h - 260) / 440, (w - 44) / 248)))
-      setZscale(Math.max(0.9, Math.min((h - 28) / 440, (w - 20) / 248)))
+      const w = root.clientWidth || window.innerWidth, h = root.clientHeight || window.innerHeight
+      const e = Math.min(1, (w - 24) / W)
+      setEs(e)
+      // card scales are in screen pixels, but the frame they live in is already shrunk by e
+      setScale(Math.max(0.74, Math.min(1.28, (h - reserve) / 440, (w - 44) / 248)) / e)
+      setZscale(Math.max(0.9, Math.min((h - 28) / 440, (w - 20) / 248)) / e)
     }
     fit()
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(fit) : null
+    ro?.observe(root)
     window.addEventListener('resize', fit)
     const list = timers.current
-    return () => { window.removeEventListener('resize', fit); list.forEach(clearTimeout) }
-  }, [])
+    return () => { ro?.disconnect(); window.removeEventListener('resize', fit); list.forEach(clearTimeout) }
+  }, [reserve])
+
+  useEffect(() => {
+    if (!contained || !canvasRef.current) return undefined
+    confRef.current = confetti.create(canvasRef.current, { resize: true, useWorker: false })
+    return () => { confRef.current?.reset?.(); confRef.current = null }
+  }, [contained])
 
   const toggleZoom = useCallback(() => {
     setZoom((z) => { onZoomRef.current?.(!z); return !z })
@@ -377,9 +417,10 @@ export default function InvitationReveal({ cafe, nombre, receptor, fecha, hora, 
   const burst = useCallback(() => {
     const colors = ['#d9b878', '#f3e3b8', '#b8d04a', '#e8c872', '#fff6df', '#c9a45a']
     const base = { colors, shapes: ['circle', 'square'], scalar: 0.9, gravity: 0.85, ticks: 220, disableForReducedMotion: true }
-    confetti({ ...base, particleCount: 70, spread: 75, origin: { x: 0.5, y: 0.42 }, startVelocity: 42 })
-    setTimeout(() => confetti({ ...base, particleCount: 40, angle: 62, spread: 55, origin: { x: 0, y: 0.7 } }), 160)
-    setTimeout(() => confetti({ ...base, particleCount: 40, angle: 118, spread: 55, origin: { x: 1, y: 0.7 } }), 160)
+    const fire = (o) => (confRef.current || confetti)(o)
+    fire({ ...base, particleCount: 70, spread: 75, origin: { x: 0.5, y: 0.42 }, startVelocity: 42 })
+    setTimeout(() => fire({ ...base, particleCount: 40, angle: 62, spread: 55, origin: { x: 0, y: 0.7 } }), 160)
+    setTimeout(() => fire({ ...base, particleCount: 40, angle: 118, spread: 55, origin: { x: 1, y: 0.7 } }), 160)
   }, [])
 
   const start = useCallback(() => {
@@ -404,20 +445,22 @@ export default function InvitationReveal({ cafe, nombre, receptor, fecha, hora, 
 
   return (
     <div
-      className="iv-root"
+      ref={rootRef}
+      className={`iv-root ${contained ? 'iv-contained' : ''}`}
       data-phase={phase}
       data-behind={behind}
       data-zoom={zoom}
-      style={{ '--cs': scale, '--cz': zscale, '--fy': '-26px' }}
+      style={{ '--cs': scale, '--cz': zscale, '--es': es, '--fy': `${-26 / es}px` }}
     >
       <div className="iv-glow" />
+      {contained && <canvas ref={canvasRef} className="iv-conf" aria-hidden="true" />}
       <SilkDefs />
 
       <div className={`iv-hello ${idle ? '' : 'iv-out'}`}>
         {receptor && (
           <>
-            <p className="iv-hello-for">For</p>
-            <h2 className="iv-hello-name">{receptor.toUpperCase()}</h2>
+            <div className="iv-hello-for">For</div>
+            <div className="iv-hello-name">{receptor.toUpperCase()}</div>
           </>
         )}
       </div>
@@ -498,7 +541,7 @@ export default function InvitationReveal({ cafe, nombre, receptor, fecha, hora, 
       </div>
 
       <div className={`iv-hint ${idle ? '' : 'iv-out'}`}>
-        <p>Scratch the stamp to open</p>
+        <div className="iv-hint-text">Scratch the stamp to open</div>
         <button type="button" onClick={start}>or tap here</button>
       </div>
     </div>

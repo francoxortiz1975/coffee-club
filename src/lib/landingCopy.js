@@ -57,7 +57,8 @@ export const copy = {
       invite: {
         title: 'Invita',
         body: 'Genera una invitación bien elegante, con fecha y nombre. La mandas por WhatsApp ¡de una!',
-        alt: 'App de Sumay: un sobre cerrado dirigido a María',
+        alt: 'App de Sumay: rasca el sello de cera del sobre y sale la carta de invitación',
+        replay: 'Otra vez',
       },
     },
 
@@ -165,7 +166,8 @@ export const copy = {
       invite: {
         title: 'Invite',
         body: 'Create a beautiful invitation with a date and a name. Send it over WhatsApp in one tap.',
-        alt: 'Sumay app: a sealed envelope addressed to Maria',
+        alt: 'Sumay app: scratch the wax stamp on the envelope and the invitation letter comes out',
+        replay: 'Play again',
       },
     },
 

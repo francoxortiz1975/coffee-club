@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import '@fontsource-variable/bricolage-grotesque'
 import '@fontsource-variable/geist'
@@ -13,6 +13,21 @@ import { useTheme } from '../lib/useTheme'
 import { ThemeToggle } from '../components/LandingChrome'
 import LoopVideo from '../components/LoopVideo'
 import ScratchCard from '../components/ScratchCard'
+
+// The playable invitation only loads when its panel is near the screen (it brings its own fonts and art).
+const InvitationDemo = lazy(() => import('../components/invitation/InvitationDemo'))
+
+function NearScreen({ children, fallback = null }) {
+  const ref = useRef(null)
+  const [near, setNear] = useState(() => typeof window !== 'undefined' && !('IntersectionObserver' in window))
+  useEffect(() => {
+    if (near) return undefined
+    const io = new IntersectionObserver((e) => { if (e.some((x) => x.isIntersecting)) { setNear(true); io.disconnect() } }, { rootMargin: '600px 0px' })
+    io.observe(ref.current)
+    return () => io.disconnect()
+  }, [near])
+  return <div ref={ref} style={{ position: 'absolute', inset: 0 }}>{near ? <Suspense fallback={fallback}>{children}</Suspense> : fallback}</div>
+}
 import { getRef } from '../lib/waitlist'
 
 const WAITLIST_KEY = 'samay_waitlist_email'
@@ -286,7 +301,9 @@ export default function Landing() {
             </div>
             <div className="panel-visual">
               <Phone className="bleed-phone">
-                <img src="/landing/app-envelope.webp" alt={t.panels.invite.alt} loading="lazy" decoding="async" />
+                <NearScreen fallback={<img src="/landing/app-envelope.webp" alt={t.panels.invite.alt} loading="lazy" decoding="async" />}>
+                  <InvitationDemo replay={t.panels.invite.replay} />
+                </NearScreen>
               </Phone>
             </div>
           </article>

@@ -1,0 +1,60 @@
+/* Loyalty card board (burlap cloth, stitched empty boxes, 3D beans, the cup as the reward). */
+.lc { --lc-hand: var(--font-hand, 'Parisienne', cursive); }
+.lc svg { overflow: visible; }
+.lc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 4px 10px; }
+.lc-title { font: 600 0.72rem/1 var(--font-sans, system-ui); letter-spacing: 0.1em; text-transform: uppercase; color: rgba(107, 76, 59, 0.85); }
+.lc-cups { font: 600 0.8rem/1 var(--font-sans, system-ui); color: #46540a; background: rgba(184, 208, 74, 0.35); padding: 6px 10px; border-radius: 999px; }
+
+.lc-board {
+  border-radius: 24px; padding: 16px 14px 12px;
+  background-color: #8f6a3f;
+  background-image: radial-gradient(ellipse 90% 70% at 25% 0%, rgba(255, 236, 200, 0.28), rgba(255, 236, 200, 0) 65%), linear-gradient(135deg, rgba(255, 240, 210, 0.1) 0%, rgba(30, 14, 2, 0.34) 100%), linear-gradient(rgba(150, 110, 62, 0.3), rgba(150, 110, 62, 0.3)), url('/landing/burlap.webp');
+  background-size: auto, auto, auto, 200px 200px;
+  border: 1px solid rgba(20, 10, 4, 0.5);
+  box-shadow: 0 18px 30px -22px rgba(6, 3, 1, 0.9), inset 1px 1px 0 rgba(255, 236, 200, 0.35), inset -1px -2px 3px rgba(20, 8, 0, 0.4);
+}
+.lc-slots { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 7px; aspect-ratio: 2.6 / 1; }
+.lc-slot { position: relative; aspect-ratio: 1; display: grid; place-items: center; overflow: visible; background: none; border: 0; padding: 0; cursor: default; -webkit-tap-highlight-color: transparent; }
+.lc-slot.on { cursor: pointer; }
+.lc-face { display: grid; place-items: center; width: 100%; height: 100%; }
+.lc-face svg { width: 88%; height: 88%; grid-area: 1 / 1; display: block; filter: drop-shadow(2px 4px 3px rgba(30, 14, 2, 0.55)); }
+.lc-face svg.out { filter: none; width: 90%; height: 90%; opacity: 0.8; }
+.lc-slot.next .lc-face svg.out { opacity: 1; }
+
+/* a newly earned bean drops in and settles; on first show they are dealt in one after another */
+.lc-land { animation: lc-drop 0.75s cubic-bezier(0.3, 1.4, 0.5, 1) var(--in, 0ms) both; }
+@keyframes lc-drop { 0% { opacity: 0; transform: translateY(-140%) scale(1.5) rotate(-40deg); } 55% { opacity: 1; } 100% { opacity: 1; transform: none; } }
+/* idle: each bean gives a tiny wiggle now and then, never all at once; a tap turns it */
+.lc-slot.on .lc-face svg:not(.out) { animation: lc-tickle 7s ease-in-out infinite; animation-delay: var(--td, 0s); transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.lc-slot.spin .lc-face svg:not(.out) { animation: none; transform: rotate(60deg) scale(1.06); }
+@keyframes lc-tickle { 0%, 84%, 100% { transform: none; } 88% { transform: rotate(-6deg) scale(1.04); } 92% { transform: rotate(5deg) scale(1.03); } 96% { transform: rotate(-2deg); } }
+/* the cup: bigger than a bean, with a jelly hop every few seconds */
+.lc-slot.cup .lc-face svg { width: 144%; height: 144%; translate: -3% -5%; }
+.lc-slot.cup .lc-face svg.out { opacity: 0.85; }
+.lc-slot.cup .lc-face svg.cup3d:not(.out) { filter: none; }
+.lc-slot.cup.on .lc-face svg:not(.out) { animation: lc-cuppop 3.6s linear infinite; animation-delay: 0.6s; transform-origin: 50% 88%; }
+@keyframes lc-cuppop {
+  0%, 52%, 100% { transform: none; animation-timing-function: ease-out; }
+  6% { transform: scale(1.1, 0.88); animation-timing-function: cubic-bezier(0.2, 0.8, 0.3, 1); }
+  20% { transform: translateY(-16%) scale(0.95, 1.1) rotate(-5deg); animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.4); }
+  33% { transform: scale(1.14, 0.86); animation-timing-function: ease-out; }
+  41% { transform: scale(0.97, 1.05) rotate(3deg); animation-timing-function: ease-in-out; }
+  47% { transform: scale(1.02, 0.99) rotate(-1.5deg); }
+}
+/* a white glint sweeps across the stitched outlines, box by box */
+.lc .glint { animation: lc-glint 4.4s ease-in-out infinite; animation-delay: var(--gd, 0s); }
+@keyframes lc-glint { 0% { transform: translateX(-170px); } 32%, 100% { transform: translateX(170px); } }
+
+.lc-count { margin: 10px 4px 0; min-height: 2.1rem; font-family: var(--lc-hand); font-size: 1.6rem; line-height: 1.2; color: #f7ecd2; text-shadow: 0 1px 0 rgba(40, 20, 4, 0.7), 0 2px 6px rgba(30, 14, 2, 0.5); text-align: center; }
+
+/* mini row inside each barrio card */
+.lc-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.lc-mini { width: 30px; height: 30px; display: grid; place-items: center; }
+.lc-mini svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.lc-mini.on svg { filter: drop-shadow(1px 2px 1.5px rgba(30, 14, 2, 0.45)); }
+.lc-mini:not(.on) svg { opacity: 0.55; filter: invert(0.35) sepia(0.4) saturate(0.8); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lc-land, .lc-slot.on .lc-face svg:not(.out), .lc-slot.cup.on .lc-face svg:not(.out) { animation: none; }
+  .lc .glint { animation: none; transform: translateX(-170px); }
+}

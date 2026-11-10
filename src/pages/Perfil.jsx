@@ -8,8 +8,9 @@ import { useAuth } from '../context/AuthContext'
 import { useCafeteros } from '../context/CafeterosContext'
 import { useRecuerdos } from '../context/RecuerdosContext'
 import RecuerdoModal from '../components/RecuerdoModal'
+import LoyaltyCard, { BeanRow } from '../components/LoyaltyCard'
 import {
-  CoffeeCupIcon, CoffeeBeanIcon, CoffeeMugIcon, InviteIcon, PinIcon, UserIcon, CameraIcon,
+  CoffeeCupIcon, CoffeeBeanIcon, InviteIcon, PinIcon, UserIcon, CameraIcon,
 } from '../components/Icons'
 
 const barrios = [...new Set(cafes.map((c) => c.barrio))]
@@ -53,22 +54,9 @@ function ColeccionBarrio({ barrio }) {
         <span className={`text-cafe-accent/40 transition-transform text-xs ${abierto ? 'rotate-180' : ''}`}>▼</span>
       </button>
 
-      {/* Loyalty card — un stamp por cafetería del barrio */}
-      <div className="px-4 pb-3 flex flex-wrap gap-1.5">
-        {cafesBarrio.map((c) => {
-          const v = visitas.includes(c.id)
-          return (
-            <div
-              key={c.id}
-              className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${
-                v ? 'bg-beige border border-cafe-dark/30' : 'bg-white/40 border border-dashed border-cafe-accent/30'
-              }`}
-              title={c.nombre}
-            >
-              {v && <CoffeeBeanIcon size={16} />}
-            </div>
-          )
-        })}
+      {/* One small bean per café of the barrio: a 3D bean once visited, a stitched outline until then */}
+      <div className="px-4 pb-3">
+        <BeanRow items={cafesBarrio.map((c) => ({ id: c.id, visited: visitas.includes(c.id), title: c.nombre }))} />
       </div>
 
       {abierto && (
@@ -202,35 +190,6 @@ function InvitacionRow({ inv, tipo, onEliminar }) {
   )
 }
 
-// Visualización: número a la izquierda + tazas (cada una = 10) + beans sueltos.
-// Si supera 100 visitas, muestra 10 tazas + "+" como indicador.
-function ColeccionBeans({ total }) {
-  if (total === 0) {
-    return <p className="text-xs text-cafe-accent/50">Aún no has visitado ninguna cafetería</p>
-  }
-
-  const tazasCompletas = Math.min(10, Math.floor(total / 10))
-  const beansSueltos = total >= 100 ? 0 : total % 10
-  const rebasaMaximo = total > 100
-
-  return (
-    <div className="flex items-center gap-3 flex-wrap">
-      <span className="text-2xl font-display font-bold text-cafe-dark tabular-nums">{total}</span>
-      <div className="flex items-center gap-1.5 flex-wrap">
-        {Array.from({ length: tazasCompletas }).map((_, i) => (
-          <CoffeeMugIcon key={`m-${i}`} size={28} />
-        ))}
-        {Array.from({ length: beansSueltos }).map((_, i) => (
-          <CoffeeBeanIcon key={`b-${i}`} size={22} />
-        ))}
-        {rebasaMaximo && (
-          <span className="text-2xl font-display font-bold text-cafe-dark/60 ml-1">+</span>
-        )}
-      </div>
-    </div>
-  )
-}
-
 export default function Perfil() {
   const { visitas } = useVisitas()
   const { enviadas, recibidas, eliminar, invKey } = useInvitaciones()
@@ -329,14 +288,13 @@ export default function Perfil() {
           <p className="text-sm font-sans font-bold text-cafe-dark line-clamp-1 px-2">
             {cafeFavorito ? cafeFavorito.nombre : 'Elegir'}
           </p>
-          <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mt-1">Cafetería favorita</p>
+          <p className="text-[10px] uppercase tracking-wider text-cafe-accent/70 mt-1 px-2 text-center leading-tight">Cafetería favorita</p>
         </button>
       </div>
 
-      {/* Coffee Beans / Tazas */}
-      <div className="bg-[#faf4ec] rounded-2xl px-4 py-4 shadow-sm mb-6">
-        <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-3">Coffee beans</p>
-        <ColeccionBeans total={visitas.length} />
+      {/* Loyalty card: beans from the real visit count, a cup every ten */}
+      <div className="mb-6">
+        <LoyaltyCard total={visitas.length} />
       </div>
 
       {/* Invitaciones */}

@@ -160,7 +160,7 @@ export default function SwipePage() {
                           e.stopPropagation()
                           navigate('/decidir')
                         }}
-                        className="flex items-center gap-1 text-[#6b4c3b] hover:text-[#3d2b1f] font-serif transition-colors py-0.5 px-1 font-semibold"
+                        className="flex items-center gap-1 text-[#6b4c3b] hover:text-[#3d2b1f] font-display transition-colors py-0.5 px-1 font-semibold"
                       >
                         <ArrowLeftIcon size={15} />
                         <span className="text-xs">Decidir</span>
@@ -168,10 +168,10 @@ export default function SwipePage() {
 
                       {/* Título de la Guía y Folio */}
                       <div className="text-center">
-                        <span className="font-bold text-[#3d2b1f] block leading-tight text-xs tracking-wider uppercase font-serif">
+                        <span className="font-bold text-[#3d2b1f] block leading-tight text-xs tracking-wider uppercase font-display">
                           Libro de Cafeterías
                         </span>
-                        <span className="text-[10px] text-[#8b5a2b]/70 block font-serif">
+                        <span className="text-[10px] text-[#8b5a2b]/70 block font-display">
                           Pág. {i + 1} de {cafes.length}
                         </span>
                       </div>
@@ -183,7 +183,7 @@ export default function SwipePage() {
                           e.stopPropagation()
                           handleTerminar()
                         }}
-                        className="relative z-30 bg-[#7a2e1d] hover:bg-[#913723] text-beige text-[11px] font-serif font-semibold px-2.5 py-1.5 rounded-b-md shadow-md border-t-0 border border-red-950/40 flex items-center gap-1 -mt-2 transition-transform active:translate-y-0.5"
+                        className="relative z-30 bg-[#7a2e1d] hover:bg-[#913723] text-beige text-[11px] font-display font-semibold px-2.5 py-1.5 rounded-b-md shadow-md border-t-0 border border-red-950/40 flex items-center gap-1 -mt-2 transition-transform active:translate-y-0.5"
                       >
                         <span>Seleccionados</span>
                         <span className="bg-amber-300 text-amber-950 text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
@@ -207,23 +207,23 @@ export default function SwipePage() {
                             <CoffeeCupIcon size={56} />
                           </div>
                         )}
-                        <span className="absolute bottom-2.5 right-2.5 bg-[#2a1a10]/85 backdrop-blur-md text-amber-200 text-xs font-serif px-3 py-1 rounded-full border border-amber-500/30 font-semibold">
+                        <span className="absolute bottom-2.5 right-2.5 bg-[#2a1a10]/85 backdrop-blur-md text-amber-200 text-xs font-display px-3 py-1 rounded-full border border-amber-500/30 font-semibold">
                           {cafe.precio}
                         </span>
                       </div>
 
                       {/* Detalles del café */}
                       <div className="mt-3 flex-1 flex flex-col justify-center">
-                        <h2 className="text-2xl font-serif font-bold text-[#3d2b1f] leading-tight">
+                        <h2 className="text-2xl font-display font-bold text-[#3d2b1f] leading-tight">
                           {cafe.nombre}
                         </h2>
-                        <p className="text-xs text-[#6b4c3b] font-serif flex items-center gap-1 mt-1">
+                        <p className="text-xs text-[#6b4c3b] font-display flex items-center gap-1 mt-1">
                           <PinIcon size={12} className="text-[#8b5a2b]" /> {cafe.barrio}
                         </p>
                         <p className="text-xs font-medium text-[#5c3a21] mt-1.5 italic">
                           ✨ {cafe.especialidad}
                         </p>
-                        <p className="text-xs text-[#6b4c3b]/85 mt-2 line-clamp-3 leading-relaxed font-serif">
+                        <p className="text-xs text-[#6b4c3b]/85 mt-2 line-clamp-3 leading-relaxed font-display">
                           {cafe.historia}
                         </p>
                       </div>
@@ -260,12 +260,12 @@ export default function SwipePage() {
                               <polyline points="20 6 9 17 4 12" />
                             </svg>
                           ) : (
-                            <span className="font-rustic text-[#8b5a2b]/40 text-xs">✓</span>
+                            <span className="text-[#8b5a2b]/40 text-xs">✓</span>
                           )}
                         </div>
 
                         <div className="flex-1 min-w-0">
-                          <p className="font-rustic text-2xl text-[#3d2b1f] font-bold leading-none tracking-wide">
+                          <p className="text-lg text-[#3d2b1f] font-semibold leading-none">
                             {isSelected ? '✓ Me interesa este café' : 'Me interesa este café'}
                           </p>
                         </div>
@@ -277,16 +277,16 @@ export default function SwipePage() {
                   <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-6 flex flex-col items-center justify-between text-center overflow-hidden backface-hidden rotate-y-180 z-0">
                     <div className="absolute inset-y-0 right-0 w-6 book-spine-gradient pointer-events-none z-20" />
                     
-                    <div className="w-full text-right text-[9px] font-serif text-[#6b4c3b]/40 uppercase tracking-widest">
+                    <div className="w-full text-right text-[9px] font-display text-[#6b4c3b]/40 uppercase tracking-widest">
                       SUMAY COFFEE CLUB
                     </div>
 
                     <div className="flex flex-col items-center gap-3 my-auto opacity-35">
                       <CoffeeCupIcon size={48} className="text-[#8b5a2b]" />
-                      <span className="text-xs font-serif text-[#6b4c3b] tracking-widest uppercase">SUMAY GUÍA</span>
+                      <span className="text-xs font-display text-[#6b4c3b] tracking-widest uppercase">SUMAY GUÍA</span>
                     </div>
 
-                    <div className="text-[9px] font-serif text-[#6b4c3b]/40 tracking-wider">
+                    <div className="text-[9px] font-display text-[#6b4c3b]/40 tracking-wider">
                       QUITO • COLECCIÓN DE CAFETERÍAS
                     </div>
                   </div>
@@ -303,7 +303,7 @@ export default function SwipePage() {
               <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-6 flex flex-col items-center justify-between text-center overflow-hidden backface-hidden z-10">
                 <div className="absolute inset-y-0 left-0 w-6 book-spine-gradient pointer-events-none z-20" />
 
-                <div className="text-[9px] font-serif text-[#6b4c3b]/50 uppercase tracking-widest">
+                <div className="text-[9px] font-display text-[#6b4c3b]/50 uppercase tracking-widest">
                   PORTADA TRASERA
                 </div>
 
@@ -311,20 +311,20 @@ export default function SwipePage() {
                   <div className="w-20 h-20 rounded-full bg-[#ebdccb] flex items-center justify-center text-[#5c3a21] shadow-inner">
                     <CoffeeCupIcon size={40} />
                   </div>
-                  <h2 className="text-2xl font-serif font-bold text-[#3d2b1f]">¡Has llegado al final!</h2>
-                  <p className="font-rustic text-3xl text-[#8b5a2b] font-bold">
+                  <h2 className="text-2xl font-display font-bold text-[#3d2b1f]">¡Has llegado al final!</h2>
+                  <p className="font-hand text-3xl text-[#8b5a2b]">
                     Guardaste {seleccionados.length} cafeterías
                   </p>
                   <button
                     type="button"
                     onClick={handleTerminar}
-                    className="mt-2 bg-[#3d2b1f] hover:bg-[#523b2c] text-beige font-serif text-sm font-semibold px-8 py-3.5 rounded-full shadow-md active:scale-95 transition-transform"
+                    className="mt-2 bg-[#3d2b1f] hover:bg-[#523b2c] text-beige font-display text-sm font-semibold px-8 py-3.5 rounded-full shadow-md active:scale-95 transition-transform"
                   >
                     Ver mis cafeterías seleccionadas
                   </button>
                 </div>
 
-                <div className="text-[9px] font-serif text-[#6b4c3b]/40 tracking-wider">
+                <div className="text-[9px] font-display text-[#6b4c3b]/40 tracking-wider">
                   SUMAY COFFEE CLUB • QUITO
                 </div>
               </div>

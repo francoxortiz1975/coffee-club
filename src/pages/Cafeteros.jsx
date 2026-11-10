@@ -22,7 +22,7 @@ function UserRow({ user, accion, badge }) {
     <div className="flex items-center gap-3 py-2.5">
       <Avatar user={user} />
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-serif font-bold text-cafe-dark truncate">{user.nombre}</p>
+        <p className="text-sm font-display font-bold text-cafe-dark truncate">{user.nombre}</p>
         <p className="text-[11px] text-cafe-accent/60 truncate">@{user.username}</p>
       </div>
       {badge}
@@ -135,7 +135,7 @@ export default function Cafeteros() {
         className="min-h-screen flex flex-col items-center justify-center px-6 text-center"
         style={{ paddingTop: 'calc(16px + env(safe-area-inset-top))' }}
       >
-        <p className="text-cafe-dark font-serif text-lg mb-4">
+        <p className="text-cafe-dark font-display text-lg mb-4">
           Inicia sesión para conectar con cafeteros
         </p>
         <Link
@@ -157,7 +157,7 @@ export default function Cafeteros() {
         <button onClick={() => navigate(-1)} className="text-cafe-accent/60">
           <ArrowLeftIcon size={20} />
         </button>
-        <h1 className="text-2xl font-serif font-bold text-cafe-dark">Cafeteros</h1>
+        <h1 className="text-2xl font-display font-bold text-cafe-dark">Cafeteros</h1>
       </div>
 
       {/* Solicitudes recibidas */}
@@ -265,7 +265,7 @@ export default function Cafeteros() {
           onClick={() => setConfirmandoEliminar(null)}
         >
           <div className="bg-[#faf4ec] rounded-2xl p-6 max-w-xs w-full shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-lg font-serif font-bold text-cafe-dark mb-2">¿Quitar cafetero?</h3>
+            <h3 className="text-lg font-display font-bold text-cafe-dark mb-2">¿Quitar cafetero?</h3>
             <p className="text-sm text-cafe-accent/70 mb-5">
               Vas a quitar a <span className="font-semibold text-cafe-dark">{confirmandoEliminar.nombre}</span> de tus cafeteros.
               Si después se reconectan, hay que mandar la solicitud de nuevo.

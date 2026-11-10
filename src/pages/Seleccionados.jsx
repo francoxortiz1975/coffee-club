@@ -19,7 +19,7 @@ export default function Seleccionados() {
           <ArrowLeftIcon size={20} />
         </button>
         <div>
-          <h1 className="text-xl font-serif font-bold text-cafe-dark">Tus seleccionados</h1>
+          <h1 className="text-xl font-display font-bold text-cafe-dark">Tus seleccionados</h1>
           <p className="text-xs text-cafe-accent/50">{cafesSeleccionados.length} cafeterías</p>
         </div>
       </div>
@@ -39,7 +39,7 @@ export default function Seleccionados() {
                     </div>
                     <div className="px-4 pt-4 pb-3">
                       <div className="flex items-start justify-between mb-0.5">
-                        <h2 className="text-base font-serif font-bold text-cafe-dark">{cafe.nombre}</h2>
+                        <h2 className="text-base font-display font-bold text-cafe-dark">{cafe.nombre}</h2>
                         <span className="text-sm text-cafe-accent font-semibold ml-2">{cafe.precio}</span>
                       </div>
                       <p className="text-xs text-cafe-accent/60 mb-2 flex items-center gap-1">
@@ -69,7 +69,7 @@ export default function Seleccionados() {
         ) : (
           <div className="flex flex-col items-center text-center gap-3 pt-16">
             <CoffeeCupIcon size={44} className="text-cafe-accent/25" />
-            <p className="text-cafe-dark font-serif font-bold">No seleccionaste ninguna</p>
+            <p className="text-cafe-dark font-display font-bold">No seleccionaste ninguna</p>
             <p className="text-cafe-accent/50 text-sm">Vuelve al swipe y marca las que te interesen</p>
             <button
               onClick={() => navigate('/decidir/swipe')}

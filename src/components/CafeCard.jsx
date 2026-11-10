@@ -23,7 +23,7 @@ export default function CafeCard({ cafe }) {
 
       <div className="p-4">
         <div className="flex items-start justify-between mb-1">
-          <h2 className="text-lg font-serif font-bold text-cafe-dark leading-tight">{nombre}</h2>
+          <h2 className="text-lg font-display font-bold text-cafe-dark leading-tight">{nombre}</h2>
           <span className="text-sm text-cafe-accent font-medium ml-2 shrink-0">{precio}</span>
         </div>
         <p className="text-xs text-cafe-accent/70 mb-3">{barrio}</p>

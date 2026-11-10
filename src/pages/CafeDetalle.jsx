@@ -102,7 +102,7 @@ export default function CafeDetalle() {
 
       <div className="relative z-10 px-5 py-5">
         <div className="flex items-start justify-between mb-1">
-          <h1 className="text-2xl font-serif font-bold text-cafe-dark leading-tight">{cafe.nombre}</h1>
+          <h1 className="text-2xl font-display font-bold text-cafe-dark leading-tight">{cafe.nombre}</h1>
           <span className="text-base text-cafe-accent font-semibold ml-3 shrink-0 mt-1">{cafe.precio}</span>
         </div>
 
@@ -147,7 +147,7 @@ export default function CafeDetalle() {
                 <div className="relative z-10 h-full flex flex-col justify-end p-3 text-left min-h-[100px]">
                   <p className="text-[9px] uppercase tracking-widest text-white/70">Mi recuerdo</p>
                   {recuerdo.nota
-                    ? <p className="text-xs text-white font-serif italic line-clamp-2 leading-tight mt-1">"{recuerdo.nota}"</p>
+                    ? <p className="text-xs text-white font-display italic line-clamp-2 leading-tight mt-1">"{recuerdo.nota}"</p>
                     : <p className="text-[10px] text-white/60 italic mt-1">Toca para editar</p>}
                 </div>
               </button>

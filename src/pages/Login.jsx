@@ -64,7 +64,7 @@ export default function Login() {
         <ArrowLeftIcon size={20} />
       </button>
 
-      <h1 className="text-3xl font-serif font-bold text-cafe-dark mb-2">Entrar a Sumay</h1>
+      <h1 className="text-3xl font-display font-bold text-cafe-dark mb-2">Entrar a Sumay</h1>
 
       {/* PASO 1 — Email */}
       {estado === 'pidiendoEmail' || (estado === 'enviando' && !codigo) ? (
@@ -73,7 +73,7 @@ export default function Login() {
             Ingresa tu email. Te mandamos un código y un enlace para entrar sin contraseña.
           </p>
           <form onSubmit={pedirCodigo} className="flex flex-col gap-3">
-            <label className="text-lg font-serif font-bold text-cafe-dark">Email</label>
+            <label className="text-lg font-display font-bold text-cafe-dark">Email</label>
             <input
               type="email"
               value={email}
@@ -108,7 +108,7 @@ export default function Login() {
           </p>
 
           <form onSubmit={verificar} className="flex flex-col gap-3">
-            <label className="text-lg font-serif font-bold text-cafe-dark">Código</label>
+            <label className="text-lg font-display font-bold text-cafe-dark">Código</label>
             <input
               type="text"
               inputMode="numeric"

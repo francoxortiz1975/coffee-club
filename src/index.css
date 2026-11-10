@@ -4,10 +4,14 @@
   --color-beige: #f5f0e8;
   --color-cafe-dark: #3d2b1f;
   --color-cafe-accent: #6b4c3b;
-  --font-serif: 'Inika', Georgia, serif;
-  --font-handwriting: 'Caveat', cursive, sans-serif;
-  --font-rustic: 'Patrick Hand', 'Architects Daughter', cursive, sans-serif;
+  /* One type system, shared with the landing: Bricolage for headings, Geist for everything you read or tap,
+     Parisienne for the rare handwritten note. */
+  --font-display: 'Bricolage Grotesque Variable', 'Geist Variable', system-ui, sans-serif;
+  --font-sans: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-hand: 'Parisienne', 'Bradley Hand', cursive;
 }
+
+.font-display { letter-spacing: -0.02em; }
 
 body {
   margin: 0;
@@ -17,14 +21,6 @@ body {
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-.font-handwriting {
-  font-family: 'Caveat', cursive, sans-serif;
-}
-
-.font-rustic {
-  font-family: 'Patrick Hand', 'Architects Daughter', cursive, sans-serif;
-}
 
 /* Sombra y textura de hoja de libro */
 .book-paper-texture {

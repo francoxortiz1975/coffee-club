@@ -30,13 +30,13 @@ export default function AuthCallback() {
       {!error ? (
         <>
           <div className="text-5xl mb-4 animate-pulse">☕</div>
-          <p className="text-lg font-serif font-bold text-cafe-dark">Entrando…</p>
+          <p className="text-lg font-display font-bold text-cafe-dark">Entrando…</p>
           <p className="text-sm text-cafe-accent/60 mt-2">Verificando tu enlace</p>
         </>
       ) : (
         <>
           <div className="text-5xl mb-4">😶</div>
-          <p className="text-lg font-serif font-bold text-cafe-dark">{error}</p>
+          <p className="text-lg font-display font-bold text-cafe-dark">{error}</p>
           <button
             onClick={() => navigate('/login', { replace: true })}
             className="mt-6 bg-cafe-dark text-[#b8d04a] text-sm font-bold px-6 py-3 rounded-2xl ring-2 ring-[#b8d04a]/40"

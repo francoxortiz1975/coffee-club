@@ -32,7 +32,7 @@ export default function ShufflePage() {
         <button onClick={() => navigate(-1)} className="text-beige/60 mr-4">
           <ArrowLeftIcon size={20} />
         </button>
-        <h1 className="text-xl font-serif font-bold text-beige">Aleatorio</h1>
+        <h1 className="text-xl font-display font-bold text-beige">Aleatorio</h1>
       </div>
 
       <div className="flex-1 flex flex-col items-center px-5">
@@ -65,7 +65,7 @@ export default function ShufflePage() {
             </div>
             <div className="p-4">
               <div className="flex items-start justify-between mb-1">
-                <h2 className="text-lg font-serif font-bold text-cafe-dark">{cafe.nombre}</h2>
+                <h2 className="text-lg font-display font-bold text-cafe-dark">{cafe.nombre}</h2>
                 <span className="text-sm text-cafe-accent font-semibold ml-2">{cafe.precio}</span>
               </div>
               <p className="text-xs text-cafe-accent/60 mb-3 flex items-center gap-1">

@@ -55,7 +55,7 @@ function ShuffleCard({ cafe, onReshuffle }) {
 
       <div className="p-4">
         <div className="flex items-start justify-between mb-0.5">
-          <h2 className="text-lg font-serif font-bold text-cafe-dark">{cafe.nombre}</h2>
+          <h2 className="text-lg font-display font-bold text-cafe-dark">{cafe.nombre}</h2>
           <span className="text-sm text-cafe-accent font-semibold ml-2">{cafe.precio}</span>
         </div>
         <p className="text-xs text-cafe-accent/60 mb-2">📍 {cafe.barrio}</p>
@@ -124,7 +124,7 @@ function SwipeMode() {
     return (
       <div className="flex flex-col items-center justify-center flex-1 px-8 text-center gap-4">
         <span className="text-5xl">☕</span>
-        <p className="text-cafe-dark font-serif font-bold text-lg">Ya viste todo el Centro Histórico</p>
+        <p className="text-cafe-dark font-display font-bold text-lg">Ya viste todo el Centro Histórico</p>
         <p className="text-cafe-accent/60 text-sm">Pronto habrá más cafeterías</p>
         <button
           onClick={() => setIndex(0)}
@@ -179,7 +179,7 @@ function SwipeMode() {
           </div>
           <div className="p-4">
             <div className="flex items-start justify-between mb-0.5">
-              <h2 className="text-lg font-serif font-bold text-cafe-dark">{cafe.nombre}</h2>
+              <h2 className="text-lg font-display font-bold text-cafe-dark">{cafe.nombre}</h2>
               <span className="text-sm text-cafe-accent font-semibold ml-2">{cafe.precio}</span>
             </div>
             <p className="text-xs text-cafe-accent/60 mb-2">📍 {cafe.barrio}</p>
@@ -221,7 +221,7 @@ export default function Shuffle() {
   return (
     <div className="flex flex-col min-h-screen pb-4">
       <div className="px-4 pt-6 pb-4">
-        <h1 className="text-2xl font-serif font-bold text-cafe-dark mb-4">Shuffle</h1>
+        <h1 className="text-2xl font-display font-bold text-cafe-dark mb-4">Shuffle</h1>
 
         {/* Tabs */}
         <div className="flex bg-white rounded-2xl p-1 shadow-sm">

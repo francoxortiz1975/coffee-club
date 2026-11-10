@@ -48,7 +48,7 @@ export default function MigrationRunner() {
       <div className="fixed inset-0 z-[80] bg-black/40 backdrop-blur-sm flex items-center justify-center px-6">
         <div className="bg-[#faf4ec] rounded-3xl px-8 py-7 max-w-xs w-full shadow-2xl flex flex-col items-center gap-4">
           <Spinner />
-          <p className="text-cafe-dark font-serif font-bold text-lg text-center">
+          <p className="text-cafe-dark font-display font-bold text-lg text-center">
             {estado.mensaje}
           </p>
           <p className="text-xs text-cafe-accent/60 text-center leading-relaxed">

@@ -34,7 +34,7 @@ export default function InvitacionSetup() {
   }
 
   const inputClass = 'w-full bg-transparent border border-cafe-accent/25 rounded-xl px-4 py-2.5 text-sm text-cafe-dark outline-none focus:border-cafe-accent/60 mb-5'
-  const labelClass = 'text-lg font-serif font-bold text-cafe-dark block mb-1.5'
+  const labelClass = 'text-lg font-display font-bold text-cafe-dark block mb-1.5'
 
   return (
     <div
@@ -46,7 +46,7 @@ export default function InvitacionSetup() {
       </button>
 
       <p className="text-xs text-cafe-accent/50 uppercase tracking-widest mb-2">Invitation to</p>
-      <h1 className="text-2xl font-serif font-bold text-cafe-dark mb-8">{cafe.nombre}</h1>
+      <h1 className="text-2xl font-display font-bold text-cafe-dark mb-8">{cafe.nombre}</h1>
 
       <label className={labelClass}>From</label>
       <input

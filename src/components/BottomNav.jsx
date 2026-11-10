@@ -44,7 +44,7 @@ export default function BottomNav() {
             className={({ isActive }) =>
               `flex items-center gap-1.5 transition-all duration-200 ${
                 expanded
-                  ? `flex-col text-xs font-serif font-medium ${
+                  ? `flex-col text-xs font-display font-medium ${
                       isActive ? 'text-cafe-dark font-bold' : 'text-cafe-accent/50 hover:text-cafe-dark'
                     }`
                   : `text-xs ${
@@ -64,7 +64,7 @@ export default function BottomNav() {
                 {expanded ? (
                   <span>{label}</span>
                 ) : (
-                  isActive && <span className="text-[11px] font-serif font-semibold">{label}</span>
+                  isActive && <span className="text-[11px] font-display font-semibold">{label}</span>
                 )}
               </>
             )}

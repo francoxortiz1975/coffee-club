@@ -62,7 +62,7 @@ export default function RecuerdoModal({ cafe, onClose }) {
       >
         <div className="px-5 pt-5 pb-2">
           <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-1">Recuerdo</p>
-          <h3 className="text-xl font-serif font-bold text-cafe-dark leading-tight">{cafe.nombre}</h3>
+          <h3 className="text-xl font-display font-bold text-cafe-dark leading-tight">{cafe.nombre}</h3>
         </div>
 
         <div className="px-5 pb-5 overflow-y-auto">
@@ -115,7 +115,7 @@ export default function RecuerdoModal({ cafe, onClose }) {
                 placeholder='"Fui con María, pedí latte…"'
                 rows={1}
                 maxLength={280}
-                className="w-full bg-transparent text-beige font-serif italic text-center text-sm leading-snug px-4 py-2 outline-none resize-none placeholder:text-beige/45 overflow-hidden"
+                className="w-full bg-transparent text-beige font-display italic text-center text-sm leading-snug px-4 py-2 outline-none resize-none placeholder:text-beige/45 overflow-hidden"
               />
             </div>
           </div>

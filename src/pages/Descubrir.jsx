@@ -19,7 +19,7 @@ function CafesRow({ titulo, cafesList }) {
   if (!cafesList || cafesList.length === 0) return null
   return (
     <section className="mt-8 px-4">
-      <h2 className="text-base font-serif font-bold text-cafe-dark mb-3">{titulo}</h2>
+      <h2 className="text-base font-display font-bold text-cafe-dark mb-3">{titulo}</h2>
       <div className="flex gap-3 overflow-x-auto -mx-4 px-4 scroll-pl-4 pb-2 snap-x snap-mandatory no-scrollbar">
         {cafesList.map((cafe) => (
           <CafeCardSmall key={cafe.id} cafe={cafe} />
@@ -135,7 +135,7 @@ export default function Descubrir() {
       {filterActivo ? (
         /* ── MODO FILTRO ── grid plano con los resultados ──────── */
         <section className="mt-6 px-4">
-          <h2 className="text-base font-serif font-bold text-cafe-dark mb-3">
+          <h2 className="text-base font-display font-bold text-cafe-dark mb-3">
             Resultados {cafesFiltrados.length > 0 && `(${cafesFiltrados.length})`}
           </h2>
           {cafesFiltrados.length > 0 ? (
@@ -147,7 +147,7 @@ export default function Descubrir() {
           ) : (
             <div className="bg-[#faf4ec] rounded-2xl px-4 py-8 text-center">
               <CoffeeCupIcon size={32} className="text-cafe-accent/30 mx-auto mb-3" />
-              <p className="text-sm font-serif font-bold text-cafe-dark mb-1">
+              <p className="text-sm font-display font-bold text-cafe-dark mb-1">
                 Sin coincidencias
               </p>
               <p className="text-xs text-cafe-accent/60">
@@ -168,7 +168,7 @@ export default function Descubrir() {
 
           {/* Sobre el café ecuatoriano */}
           <section className="mt-8 px-4">
-            <h2 className="text-base font-serif font-bold text-cafe-dark mb-3">Sobre el café ecuatoriano</h2>
+            <h2 className="text-base font-display font-bold text-cafe-dark mb-3">Sobre el café ecuatoriano</h2>
             <div className="flex gap-3 overflow-x-auto -mx-4 px-4 scroll-pl-4 pb-2 snap-x snap-mandatory no-scrollbar">
               {historias.map((h) => (
                 <CafeHistoriaCard key={h.id} historia={h} />

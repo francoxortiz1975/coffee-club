@@ -7,7 +7,7 @@
 .iv-hello-name { font-weight: 500; font-size: 25px; letter-spacing: .24em; text-indent: .24em; color: #fff; margin-top: 6px; }
 .iv-hint { position: absolute; bottom: calc(60px + env(safe-area-inset-bottom)); left: 0; right: 0; text-align: center; transition: opacity .4s ease; }
 .iv-hint-text { font-style: italic; font-size: 16px; color: #cdbba3; }
-.iv-hint button { pointer-events: auto; margin-top: 10px; font: 500 12px/1 system-ui, sans-serif; letter-spacing: .08em; color: #b8d04a; background: none; border: 0; padding: 8px 12px; text-decoration: underline; text-underline-offset: 3px; opacity: .85; cursor: pointer; }
+.iv-hint button { pointer-events: auto; margin-top: 10px; font: 500 12px/1 'Geist Variable', system-ui, sans-serif; letter-spacing: .08em; color: #b8d04a; background: none; border: 0; padding: 8px 12px; text-decoration: underline; text-underline-offset: 3px; opacity: .85; cursor: pointer; }
 .iv-out { opacity: 0; pointer-events: none !important; }
 
 /* envelope frame: every part shares one 300x204 box so the letter can slide between back and front */
@@ -74,10 +74,10 @@
 .iv-hair { display: flex; align-items: center; gap: 8px; margin: 2px 0 12px; }
 .iv-hair i { width: 34px; height: 1px; background: #c9a15a; }
 .iv-hair u { width: 5px; height: 5px; transform: rotate(45deg); border: 1px solid #c9a15a; }
-.iv-where { font: 600 10.5px/1 system-ui, sans-serif; letter-spacing: .32em; text-indent: .32em; text-transform: uppercase; color: #d9c18a; }
+.iv-where { font: 600 10.5px/1 'Geist Variable', system-ui, sans-serif; letter-spacing: .32em; text-indent: .32em; text-transform: uppercase; color: #d9c18a; }
 .iv-when { margin-top: 24px; width: 100%; }
 .iv-date { display: flex; align-items: center; justify-content: center; gap: 9px; border-top: 1px dotted rgba(201, 161, 90, .6); border-bottom: 1px dotted rgba(201, 161, 90, .6); padding: 9px 4px; }
-.iv-date span { font: 600 9px/1 system-ui, sans-serif; letter-spacing: .2em; text-transform: uppercase; color: #d9c18a; }
+.iv-date span { font: 600 9px/1 'Geist Variable', system-ui, sans-serif; letter-spacing: .2em; text-transform: uppercase; color: #d9c18a; }
 .iv-date b { font-weight: 500; font-size: 38px; line-height: 1; color: #f6e6b8; }
 .iv-time { margin-top: 12px; font-weight: 500; font-size: 22px; letter-spacing: .05em; color: #ead9b0; }
 .iv-time em { font-style: italic; color: #b99d62; font-size: 17px; }
@@ -101,7 +101,7 @@
 .ivd-bg { position: absolute; inset: -14px; background-size: cover; background-position: center; transition: filter 1.2s ease; }
 .ivd-ov { position: absolute; inset: 0; background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .55) 40%, rgba(0, 0, 0, .85)); }
 .ivd .iv-hello-name { font-size: 20px; }
-.ivd-replay { position: absolute; left: 50%; bottom: 18%; transform: translateX(-50%); z-index: 50; border: 0; border-radius: 999px; padding: 10px 18px; background: rgba(255, 255, 255, .14); color: #f4ede0; font: 600 12px/1 system-ui, sans-serif; letter-spacing: .1em; text-transform: uppercase; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); cursor: pointer; animation: ivd-in .5s ease .2s both; }
+.ivd-replay { position: absolute; left: 50%; bottom: 18%; transform: translateX(-50%); z-index: 50; border: 0; border-radius: 999px; padding: 10px 18px; background: rgba(255, 255, 255, .14); color: #f4ede0; font: 600 12px/1 'Geist Variable', system-ui, sans-serif; letter-spacing: .1em; text-transform: uppercase; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); cursor: pointer; animation: ivd-in .5s ease .2s both; }
 .ivd-replay:hover { background: rgba(255, 255, 255, .22); }
 @keyframes ivd-in { from { opacity: 0; transform: translate(-50%, 6px); } }
 

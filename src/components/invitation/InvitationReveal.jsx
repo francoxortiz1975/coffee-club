@@ -4,7 +4,6 @@ import '@fontsource/pinyon-script/latin-400.css'
 import '@fontsource/cormorant-garamond/latin-500.css'
 import '@fontsource/cormorant-garamond/latin-600.css'
 import '@fontsource/cormorant-garamond/latin-400-italic.css'
-import '@fontsource/finger-paint/latin-400.css'
 import './invitation.css'
 
 /* The invitation reveal: a cream silk envelope sealed with an olive wax stamp.

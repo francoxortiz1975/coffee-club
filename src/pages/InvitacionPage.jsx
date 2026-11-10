@@ -37,6 +37,7 @@ export default function InvitacionPage() {
 
   // 'cerrada' (sealed envelope) | 'abriendo' (animating) | 'abierta' (letter visible)
   const [estado, setEstado] = useState('cerrada')
+  const [zoomed, setZoomed] = useState(false) // the letter is blown up: hide the buttons so it has the whole screen
 
   // Guardar como recibida la primera vez que se abre el link
   // (si yo la envié, el context la ignora).
@@ -107,12 +108,13 @@ export default function InvitacionPage() {
         <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #1e0f0b 100%)' }} />
       )}
       <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/85" />
+      <div className="absolute inset-0 bg-black pointer-events-none" style={{ opacity: zoomed ? 0.35 : 0, transition: 'opacity .5s ease' }} />
 
       <button
         onClick={() => navigate('/')}
         aria-label="Back"
         className="absolute left-5 z-40 text-white/60 hover:text-white transition-colors"
-        style={{ top: 'calc(16px + env(safe-area-inset-top))' }}
+        style={{ top: 'calc(16px + env(safe-area-inset-top))', opacity: zoomed ? 0 : 1, pointerEvents: zoomed ? 'none' : 'auto', transition: 'opacity .3s ease' }}
       >
         <ArrowLeftIcon size={20} />
       </button>
@@ -124,6 +126,7 @@ export default function InvitacionPage() {
         fecha={fecha}
         hora={hora}
         onPhase={setEstado}
+        onZoom={setZoomed}
       />
 
       <div className="flex-1" />
@@ -132,9 +135,9 @@ export default function InvitacionPage() {
         className="relative z-40 px-6 flex flex-col gap-3"
         style={{
           paddingBottom: 'calc(40px + env(safe-area-inset-bottom))',
-          opacity: estado === 'abierta' ? 1 : 0,
-          pointerEvents: estado === 'abierta' ? 'auto' : 'none',
-          transition: 'opacity .6s ease .1s',
+          opacity: estado === 'abierta' && !zoomed ? 1 : 0,
+          pointerEvents: estado === 'abierta' && !zoomed ? 'auto' : 'none',
+          transition: zoomed ? 'opacity .25s ease' : 'opacity .6s ease .1s',
         }}
       >
         <button

@@ -307,22 +307,39 @@ function Letter({ cafe, nombre, receptor, fecha, hora }) {
 }
 
 // ---- the whole reveal ---------------------------------------------------------
-export default function InvitationReveal({ cafe, nombre, receptor, fecha, hora, onPhase }) {
+export default function InvitationReveal({ cafe, nombre, receptor, fecha, hora, onPhase, onZoom }) {
   const [phase, setPhase] = useState('idle')
   const [behind, setBehind] = useState(false) // flap has passed vertical: now it sits behind the letter
   const [scale, setScale] = useState(1)
+  const [zscale, setZscale] = useState(1.4)
+  const [zoom, setZoom] = useState(false) // the letter is blown up to fill the screen
   const timers = useRef([])
   const started = useRef(false)
   const onPhaseRef = useRef(onPhase)
-  useEffect(() => { onPhaseRef.current = onPhase })
+  const onZoomRef = useRef(onZoom)
+  useEffect(() => { onPhaseRef.current = onPhase; onZoomRef.current = onZoom })
 
   useEffect(() => {
-    const fit = () => setScale(Math.max(0.72, Math.min(1.15, (window.innerHeight - 300) / 440)))
+    const fit = () => {
+      const w = window.innerWidth, h = window.innerHeight
+      setScale(Math.max(0.74, Math.min(1.28, (h - 260) / 440, (w - 44) / 248)))
+      setZscale(Math.max(0.9, Math.min((h - 28) / 440, (w - 20) / 248)))
+    }
     fit()
     window.addEventListener('resize', fit)
     const list = timers.current
     return () => { window.removeEventListener('resize', fit); list.forEach(clearTimeout) }
   }, [])
+
+  const toggleZoom = useCallback(() => {
+    setZoom((z) => { onZoomRef.current?.(!z); return !z })
+  }, [])
+  useEffect(() => {
+    if (!zoom) return undefined
+    const onKey = (e) => { if (e.key === 'Escape') { setZoom(false); onZoomRef.current?.(false) } }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [zoom])
 
   const at = (ms, fn) => { timers.current.push(setTimeout(fn, ms)) }
 
@@ -359,8 +376,10 @@ export default function InvitationReveal({ cafe, nombre, receptor, fecha, hora, 
       className="iv-root"
       data-phase={phase}
       data-behind={behind}
-      style={{ '--cs': scale, '--fy': '-26px' }}
+      data-zoom={zoom}
+      style={{ '--cs': scale, '--cz': zscale, '--fy': '-26px' }}
     >
+      <div className="iv-glow" />
       <SilkDefs />
 
       <div className={`iv-hello ${idle ? '' : 'iv-out'}`}>
@@ -402,7 +421,18 @@ export default function InvitationReveal({ cafe, nombre, receptor, fecha, hora, 
 
         {/* the letter, clipped so it never shows below the envelope until it takes the screen */}
         <div className="iv-clip iv-z3">
-          <div className="iv-card">
+          <div
+            className="iv-card"
+            {...(phase === 'done'
+              ? {
+                  role: 'button',
+                  tabIndex: 0,
+                  'aria-label': zoom ? 'Shrink the invitation' : 'Enlarge the invitation',
+                  onClick: toggleZoom,
+                  onKeyDown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleZoom() } },
+                }
+              : {})}
+          >
             <Letter cafe={cafe} nombre={nombre} receptor={receptor} fecha={fecha} hora={hora} />
           </div>
         </div>

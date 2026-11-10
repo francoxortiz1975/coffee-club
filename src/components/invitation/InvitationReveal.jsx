@@ -8,9 +8,9 @@ import '@fontsource/finger-paint/latin-400.css'
 import './invitation.css'
 
 /* The invitation reveal: a cream silk envelope sealed with an olive wax stamp.
-   A small foil sticker sits on the stamp. Scratch it off and the stamp cracks, the flap opens,
+   The stamp is the scratch surface: rub it away (it leaves traces), the rest vanishes, the flap opens,
    the letter rises, confetti, and the letter takes the screen.
-   Phases: idle -> crack -> open -> rise -> reveal -> done. */
+   Phases: idle -> vanish -> open -> rise -> reveal -> done. */
 
 const W = 300
 const H = 204
@@ -110,50 +110,63 @@ function Wax({ size, className, style }) {
   )
 }
 
-// ---- the scratch sticker --------------------------------------------------
-const STICKER = 70
+// ---- the stamp is the scratch surface -------------------------------------------
+// Scratching rubs the wax away and leaves traces on the paper (a faint stain and little flecks).
+const STAMP = 112
+const FLECKS = ['#6b7829', '#4a5520', '#8e9a42', '#3a4316', '#59641f']
 
-function paintSticker(ctx, S, dpr) {
-  ctx.save()
-  ctx.scale(dpr, dpr)
-  ctx.beginPath(); ctx.arc(S / 2, S / 2, S / 2 - 1, 0, Math.PI * 2); ctx.clip()
-  let g
-  if (ctx.createConicGradient) {
-    g = ctx.createConicGradient(0.5, S / 2, S / 2)
-    ;[[0, '#c7d27c'], [0.25, '#8d9a3c'], [0.5, '#dde5a2'], [0.75, '#7f8c33'], [1, '#c7d27c']].forEach(([o, c]) => g.addColorStop(o, c))
-  } else {
-    g = ctx.createRadialGradient(S * 0.35, S * 0.3, 0, S / 2, S / 2, S / 2)
-    g.addColorStop(0, '#dde5a2'); g.addColorStop(1, '#7f8c33')
+function paintStamp(ctx, S, dpr) {
+  const c = S / 2, R = 42 * (S / 104)
+  ctx.save(); ctx.scale(dpr, dpr)
+  const ph = [0.7, 2.1, 4.0, 5.3]
+  const rad = (t) => R * (1 + 0.03 * Math.sin(3 * t + ph[0]) + 0.026 * Math.sin(5 * t + ph[1]) + 0.016 * Math.sin(9 * t + ph[2]) + 0.01 * Math.sin(17 * t + ph[3]))
+  ctx.beginPath()
+  for (let i = 0; i <= 120; i++) {
+    const t = (i / 120) * Math.PI * 2, r = rad(t)
+    const x = c + Math.cos(t) * r, y = c + Math.sin(t) * r
+    if (i) ctx.lineTo(x, y); else ctx.moveTo(x, y)
   }
-  ctx.fillStyle = g; ctx.fillRect(0, 0, S, S)
-  for (let i = 0; i < 260; i++) { ctx.globalAlpha = 0.1 + Math.random() * 0.2; ctx.fillStyle = i % 2 ? '#f4f7d6' : '#4b5a1c'; ctx.fillRect(Math.random() * S, Math.random() * S, 1.2, 1.2) }
-  ctx.globalAlpha = 1
-  ctx.setLineDash([3, 3]); ctx.lineWidth = 1.2; ctx.strokeStyle = 'rgba(244,246,214,.7)'
-  ctx.beginPath(); ctx.arc(S / 2, S / 2, S / 2 - 6, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([])
-  ctx.translate(S / 2, S / 2 + 4); ctx.rotate(-0.14)
-  ctx.font = '13px "Finger Paint", "Comic Sans MS", cursive'; ctx.textAlign = 'center'
-  ctx.fillStyle = 'rgba(255,255,255,.45)'; ctx.fillText('Scratch', 0.6, 1.2)
-  ctx.fillStyle = '#2f3a0f'; ctx.fillText('Scratch', 0, 0)
+  ctx.closePath()
+  const g = ctx.createRadialGradient(c - R * 0.3, c - R * 0.44, 0, c - R * 0.1, c - R * 0.1, R * 1.5)
+  g.addColorStop(0, '#8e9a42'); g.addColorStop(0.45, '#626d27'); g.addColorStop(1, '#3a4316')
+  ctx.fillStyle = g; ctx.fill()
+  ctx.save(); ctx.clip()
+  const d = ctx.createRadialGradient(c, c, R * 0.7, c, c, R * 1.05)
+  d.addColorStop(0, 'rgba(44,51,16,0)'); d.addColorStop(1, 'rgba(44,51,16,.55)')
+  ctx.fillStyle = d; ctx.fillRect(0, 0, S, S)
+  for (let i = 0; i < 220; i++) {
+    ctx.globalAlpha = 0.08 + Math.random() * 0.16
+    ctx.fillStyle = i % 2 ? '#c7d27a' : '#2c3310'
+    ctx.fillRect(c + (Math.random() - 0.5) * 2 * R, c + (Math.random() - 0.5) * 2 * R, 1.2, 1.2)
+  }
   ctx.restore()
-  // bevel
-  const L = ctx.createLinearGradient(0, 0, S * dpr, S * dpr)
-  L.addColorStop(0, 'rgba(255,255,230,.4)'); L.addColorStop(0.5, 'rgba(255,255,230,0)'); L.addColorStop(1, 'rgba(20,28,4,.35)')
-  ctx.fillStyle = L; ctx.fillRect(0, 0, S * dpr, S * dpr)
+  const rr = R * 0.715
+  ctx.lineWidth = 2.4; ctx.strokeStyle = 'rgba(47,55,17,.6)'
+  ctx.beginPath(); ctx.arc(c + 0.8, c + 1, rr, 0, 7); ctx.stroke()
+  ctx.lineWidth = 1.6; ctx.strokeStyle = 'rgba(199,210,122,.5)'
+  ctx.beginPath(); ctx.arc(c, c, rr, 0, 7); ctx.stroke()
+  ctx.font = `600 ${R}px "Cormorant Garamond", Georgia, serif`; ctx.textAlign = 'center'
+  const y = c + R * 0.31
+  ctx.fillStyle = 'rgba(216,226,138,.7)'; ctx.fillText('S', c - 0.8, y - 0.9)
+  ctx.fillStyle = 'rgba(29,35,8,.8)'; ctx.fillText('S', c + 0.9, y + 1.1)
+  ctx.fillStyle = '#59641f'; ctx.fillText('S', c, y)
+  ctx.restore()
 }
 
-function Sticker({ onDone, disabled }) {
+function StampScratch({ onDone }) {
   const ref = useRef(null)
+  const trace = useRef(null)
   const state = useRef({ down: false, x: 0, y: 0, n: 0, done: false })
 
   useEffect(() => {
-    const c = ref.current
     const dpr = Math.min(2, window.devicePixelRatio || 1)
-    c.width = c.height = STICKER * dpr
-    const ctx = c.getContext('2d', { willReadFrequently: true })
-    const paint = () => paintSticker(ctx, STICKER, dpr)
-    paint()
-    // repaint once the crayon font is ready so the label never shows in the fallback font
-    document.fonts?.load('13px "Finger Paint"').then(() => { if (!state.current.done && state.current.n === 0) { ctx.clearRect(0, 0, c.width, c.height); paint() } }).catch(() => {})
+    for (const c of [ref.current, trace.current]) c.width = c.height = STAMP * dpr
+    const ctx = ref.current.getContext('2d', { willReadFrequently: true })
+    paintStamp(ctx, STAMP, dpr)
+    // repaint once the serif is ready so the monogram never shows in a fallback font
+    document.fonts?.load('600 42px "Cormorant Garamond"').then(() => {
+      if (state.current.n === 0) { ctx.clearRect(0, 0, ref.current.width, ref.current.height); paintStamp(ctx, STAMP, dpr) }
+    }).catch(() => {})
   }, [])
 
   function pos(e) {
@@ -163,10 +176,10 @@ function Sticker({ onDone, disabled }) {
   function cleared() {
     const c = ref.current, ctx = c.getContext('2d', { willReadFrequently: true })
     const { data } = ctx.getImageData(0, 0, c.width, c.height)
+    const R = c.width / 2, lim = (R * 0.8) ** 2
     let total = 0, gone = 0
-    const R = c.width / 2
     for (let y = 0; y < c.height; y += 4) for (let x = 0; x < c.width; x += 4) {
-      if ((x - R) ** 2 + (y - R) ** 2 > (R - 2) ** 2) continue
+      if ((x - R) ** 2 + (y - R) ** 2 > lim) continue
       total++
       if (data[(y * c.width + x) * 4 + 3] < 30) gone++
     }
@@ -174,14 +187,39 @@ function Sticker({ onDone, disabled }) {
   }
   function scratch(from, to) {
     const c = ref.current, ctx = c.getContext('2d')
-    const dpr = c.width / STICKER
+    const dpr = c.width / STAMP
     ctx.globalCompositeOperation = 'destination-out'
     ctx.lineCap = ctx.lineJoin = 'round'; ctx.lineWidth = 17 * dpr
     ctx.beginPath(); ctx.moveTo(from[0], from[1]); ctx.lineTo(to[0], to[1]); ctx.stroke()
     ctx.globalCompositeOperation = 'source-over'
+    // traces left on the paper: fine wax crumbs and a few short smears, only where the stamp was
+    const t = trace.current.getContext('2d')
+    const dx = to[0] - from[0], dy = to[1] - from[1]
+    const steps = Math.max(1, Math.floor(Math.hypot(dx, dy) / (2.5 * dpr)))
+    const R = c.width / 2
+    for (let i = 0; i < steps; i++) {
+      const cx = from[0] + (dx * i) / steps, cy = from[1] + (dy * i) / steps
+      for (let k = 0; k < 2; k++) {
+        if (Math.random() > 0.55) continue
+        const a = Math.random() * Math.PI * 2, d = Math.random() * 11 * dpr
+        const px = cx + Math.cos(a) * d, py = cy + Math.sin(a) * d
+        if ((px - R) ** 2 + (py - R) ** 2 > (R * 0.82) ** 2) continue
+        t.fillStyle = FLECKS[Math.floor(Math.random() * FLECKS.length)]
+        if (Math.random() < 0.12) {
+          const ang = Math.atan2(dy, dx) + (Math.random() - 0.5) * 1.2, len = (2.5 + Math.random() * 4) * dpr
+          t.globalAlpha = 0.3 + Math.random() * 0.25
+          t.strokeStyle = t.fillStyle; t.lineWidth = (0.8 + Math.random() * 0.9) * dpr; t.lineCap = 'round'
+          t.beginPath(); t.moveTo(px, py); t.lineTo(px + Math.cos(ang) * len, py + Math.sin(ang) * len); t.stroke()
+        } else {
+          t.globalAlpha = 0.5 + Math.random() * 0.45
+          t.beginPath(); t.arc(px, py, (0.35 + Math.random() * 0.9) * dpr, 0, 7); t.fill()
+        }
+      }
+    }
+    t.globalAlpha = 1
   }
   function down(e) {
-    if (disabled || state.current.done) return
+    if (state.current.done) return
     e.currentTarget.setPointerCapture?.(e.pointerId)
     const p = pos(e)
     state.current.down = true; state.current.x = p[0]; state.current.y = p[1]
@@ -193,28 +231,21 @@ function Sticker({ onDone, disabled }) {
     const p = pos(e)
     scratch([s.x, s.y], p)
     s.x = p[0]; s.y = p[1]
-    if (++s.n % 6 === 0 && cleared() > 0.55) finish()
+    if (++s.n % 6 === 0 && cleared() > 0.5) finish()
   }
   function up() { state.current.down = false }
   function finish() {
     if (state.current.done) return
     state.current.done = true
-    ref.current.classList.add('iv-sticker-gone')
     navigator.vibrate?.(14)
     onDone()
   }
 
   return (
-    <canvas
-      ref={ref}
-      className="iv-sticker"
-      style={{ width: STICKER, height: STICKER }}
-      onPointerDown={down}
-      onPointerMove={move}
-      onPointerUp={up}
-      onPointerCancel={up}
-      aria-hidden="true"
-    />
+    <>
+      <canvas ref={trace} className="iv-trace" aria-hidden="true" />
+      <canvas ref={ref} className="iv-stampc" onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} aria-hidden="true" />
+    </>
   )
 }
 
@@ -311,17 +342,17 @@ export default function InvitationReveal({ cafe, nombre, receptor, fecha, hora, 
       setBehind(true); setPhase('done'); onPhaseRef.current?.('abierta')
       return
     }
-    setPhase('crack')
-    at(520, () => setPhase('open'))
-    at(840, () => setBehind(true))
-    at(980, burst)
-    at(1500, () => setPhase('rise'))
-    at(2650, () => setPhase('reveal'))
-    at(3750, () => { setPhase('done'); onPhaseRef.current?.('abierta') })
+    setPhase('vanish')
+    at(380, () => setPhase('open'))
+    at(700, () => setBehind(true))
+    at(840, burst)
+    at(1360, () => setPhase('rise'))
+    at(2510, () => setPhase('reveal'))
+    at(3610, () => { setPhase('done'); onPhaseRef.current?.('abierta') })
   }, [burst])
 
   const idle = phase === 'idle'
-  const flapOpen = phase !== 'idle' && phase !== 'crack'
+  const flapOpen = phase !== 'idle' && phase !== 'vanish'
 
   return (
     <div
@@ -397,22 +428,16 @@ export default function InvitationReveal({ cafe, nombre, receptor, fecha, hora, 
           </svg>
         </div>
 
-        {/* the stamp, with the scratch sticker on top of it */}
-        <div className={`iv-stamp ${phase === 'crack' ? 'iv-shake' : ''}`}>
-          <div className="iv-half iv-left"><Wax size={104} /></div>
-          <div className="iv-half iv-right"><Wax size={104} /></div>
-          <svg className="iv-crack" viewBox="0 0 100 100" aria-hidden="true">
-            <path d="M54 4 L47 28 L57 46 L45 62 L53 96" fill="none" stroke="#1d2308" strokeWidth="2.2" strokeLinecap="round" pathLength="1" />
-            <path d="M54 4 L47 28 L57 46 L45 62 L53 96" fill="none" stroke="#c7d27a" strokeOpacity=".55" strokeWidth=".8" strokeLinecap="round" transform="translate(1.2 0)" pathLength="1" />
-          </svg>
-          {(idle || phase === 'crack') && <Sticker onDone={start} />}
+        {/* the wax stamp: scratch it away and it leaves traces on the paper */}
+        <div className="iv-stamp">
+          <StampScratch onDone={start} />
         </div>
 
         <div className="iv-sheen" />
       </div>
 
       <div className={`iv-hint ${idle ? '' : 'iv-out'}`}>
-        <p>Scratch the sticker to open</p>
+        <p>Scratch the stamp to open</p>
         <button type="button" onClick={start}>or tap here</button>
       </div>
     </div>

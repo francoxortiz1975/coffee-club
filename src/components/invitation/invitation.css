@@ -1,4 +1,4 @@
-/* Invitation reveal: cream silk envelope, olive wax stamp, scratch sticker, dark-green letter. */
+/* Invitation reveal: cream silk envelope, olive wax stamp you scratch away, dark-green letter. */
 .iv-root { position: absolute; inset: 0; z-index: 30; display: flex; align-items: center; justify-content: center; pointer-events: none; font-family: 'Cormorant Garamond', Georgia, serif; }
 
 /* header + hint */
@@ -41,33 +41,17 @@
 .iv-root[data-phase='done'] .iv-sheen,
 .iv-root[data-phase='done'] .iv-stamp { display: none; }
 
-/* wax stamp */
-.iv-stamp { position: absolute; left: 50%; top: 124px; width: 104px; height: 104px; margin: -52px 0 0 -52px; z-index: 6; pointer-events: none; filter: drop-shadow(0 6px 6px rgba(0, 0, 0, .35)); }
-.iv-half { position: absolute; inset: 0; transition: transform .75s cubic-bezier(.5, 0, .9, .5), opacity .6s ease .1s; }
-.iv-half svg { width: 100%; height: 100%; display: block; overflow: visible; }
-.iv-left { clip-path: polygon(0 0, 54% 0, 47% 28%, 57% 46%, 45% 62%, 53% 100%, 0 100%); }
-.iv-right { clip-path: polygon(54% 0, 100% 0, 100% 100%, 53% 100%, 45% 62%, 57% 46%, 47% 28%); }
-.iv-root[data-phase='crack'] .iv-left { transform: translate(-2px, 1px) rotate(-3deg); }
-.iv-root[data-phase='crack'] .iv-right { transform: translate(2px, 1px) rotate(3deg); }
-.iv-root[data-phase='open'] .iv-left, .iv-root[data-phase='rise'] .iv-left, .iv-root[data-phase='reveal'] .iv-left { transform: translate(-10px, 90px) rotate(-26deg); opacity: 0; }
-.iv-root[data-phase='open'] .iv-right, .iv-root[data-phase='rise'] .iv-right, .iv-root[data-phase='reveal'] .iv-right { transform: translate(10px, 100px) rotate(30deg); opacity: 0; }
-.iv-crack { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }
-.iv-crack path { stroke-dasharray: 1; stroke-dashoffset: 1; }
-.iv-root[data-phase='crack'] .iv-crack { opacity: 1; }
-.iv-root[data-phase='crack'] .iv-crack path { animation: iv-draw .35s ease-out forwards; }
-.iv-shake { animation: iv-shake .5s linear; }
-@keyframes iv-draw { to { stroke-dashoffset: 0; } }
-@keyframes iv-shake { 0%, 100% { transform: translate(0, 0); } 15% { transform: translate(-2px, 1px) rotate(-1deg); } 35% { transform: translate(2px, -1px) rotate(1deg); } 55% { transform: translate(-2px, 0); } 75% { transform: translate(1px, 1px); } }
-
-/* scratch sticker */
-.iv-sticker { position: absolute; left: 50%; top: 50%; margin: -35px 0 0 -35px; border-radius: 50%; touch-action: none; cursor: grab; pointer-events: auto; box-shadow: 0 3px 8px rgba(0, 0, 0, .5); transition: opacity .3s ease; animation: iv-wiggle 5.5s ease-in-out infinite; }
-.iv-sticker:active { cursor: grabbing; animation: none; }
-.iv-sticker-gone { opacity: 0; pointer-events: none; }
-@keyframes iv-wiggle { 0%, 82%, 100% { transform: rotate(0); } 86% { transform: rotate(-7deg); } 90% { transform: rotate(6deg); } 94% { transform: rotate(-3deg); } }
+/* wax stamp: the scratch surface itself */
+.iv-stamp { position: absolute; left: 50%; top: 124px; width: 112px; height: 112px; margin: -56px 0 0 -56px; z-index: 6; pointer-events: none; }
+.iv-trace, .iv-stampc { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; }
+.iv-stampc { touch-action: none; cursor: grab; pointer-events: auto; filter: drop-shadow(0 5px 5px rgba(0, 0, 0, .4)); transition: opacity .4s ease, transform .4s ease; animation: iv-wiggle 5.5s ease-in-out infinite; }
+.iv-stampc:active { cursor: grabbing; animation: none; }
+.iv-root:not([data-phase='idle']) .iv-stampc { opacity: 0; transform: scale(.94); pointer-events: none; animation: none; }
+@keyframes iv-wiggle { 0%, 82%, 100% { transform: rotate(0); } 86% { transform: rotate(-5deg); } 90% { transform: rotate(4deg); } 94% { transform: rotate(-2deg); } }
 
 /* slow light sweep across the silk */
 .iv-sheen { position: absolute; left: 0; top: 0; width: 300px; height: 204px; border-radius: 4px; z-index: 7; pointer-events: none; background: linear-gradient(115deg, transparent 42%, rgba(255, 250, 235, .55) 50%, transparent 58%); background-size: 280% 100%; background-position: 130% 0; mix-blend-mode: soft-light; animation: iv-sheen 7s ease-in-out infinite; transition: opacity .3s; }
-.iv-root:not([data-phase='idle']):not([data-phase='crack']) .iv-sheen { opacity: 0; }
+.iv-root:not([data-phase='idle']):not([data-phase='vanish']) .iv-sheen { opacity: 0; }
 @keyframes iv-sheen { 0%, 25% { background-position: 130% 0; } 70%, 100% { background-position: -30% 0; } }
 
 /* letter design: dark green, gold hairlines, deco corners, script name */
@@ -92,6 +76,6 @@
 .iv-for { position: absolute; bottom: 30px; font-style: italic; font-size: 14px; letter-spacing: .06em; color: #b99d62; }
 
 @media (prefers-reduced-motion: reduce) {
-  .iv-sticker, .iv-sheen { animation: none; }
+  .iv-stampc, .iv-sheen { animation: none; }
   .iv-sheen { display: none; }
 }

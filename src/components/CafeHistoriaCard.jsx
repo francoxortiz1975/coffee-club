@@ -19,7 +19,7 @@ export default function CafeHistoriaCard({ historia }) {
         {IconComp && <IconComp size={22} className="text-cafe-accent/70" />}
         <span className="text-[10px] font-semibold text-cafe-accent/50 tracking-wide uppercase">{año}</span>
       </div>
-      <h3 className="text-sm font-display font-bold text-cafe-dark mb-1 leading-tight">{titulo}</h3>
+      <h3 className="text-sm font-sans font-bold text-cafe-dark mb-1 leading-tight">{titulo}</h3>
       <p className="text-[11px] text-cafe-dark/60 leading-relaxed">{texto}</p>
     </div>
   )

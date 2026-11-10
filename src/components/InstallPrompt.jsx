@@ -106,7 +106,7 @@ export default function InstallPrompt() {
       <div className="fixed bottom-28 left-4 right-4 max-w-md mx-auto z-40 bg-cafe-dark text-beige rounded-2xl p-4 shadow-2xl flex items-center gap-3 animate-[fadeUp_0.5s_ease]">
         <img src="/icons/icon-180.png" alt="" className="w-12 h-12 rounded-xl shrink-0" />
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-display font-bold">Instalar Sumay</p>
+          <p className="text-sm font-sans font-bold">Instalar Sumay</p>
           <p className="text-[11px] text-beige/60">Acceso rápido desde tu pantalla de inicio</p>
         </div>
         <button onClick={descartar} className="text-beige/40 px-2 py-1 text-sm" aria-label="Cerrar">×</button>

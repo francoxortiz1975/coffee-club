@@ -102,7 +102,7 @@ export default function Descubrir() {
           <img src="/logo.png" alt="Sumay Coffee Club" className="h-20 w-auto object-contain" />
         </div>
         <div className="relative">
-          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-beige/30">
+          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-beige/60">
             <SearchIcon size={15} />
           </span>
           <input
@@ -110,7 +110,7 @@ export default function Descubrir() {
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Buscar cafetería..."
-            className="w-full bg-white/10 text-beige placeholder-beige/30 rounded-2xl pl-9 pr-4 py-2.5 text-sm outline-none focus:bg-white/15 transition-colors"
+            className="w-full bg-white/10 text-beige placeholder-beige/60 rounded-2xl pl-10 pr-4 min-h-11 text-base outline-none focus:bg-white/15 transition-colors"
           />
         </div>
       </div>
@@ -147,7 +147,7 @@ export default function Descubrir() {
           ) : (
             <div className="bg-[#faf4ec] rounded-2xl px-4 py-8 text-center">
               <CoffeeCupIcon size={32} className="text-cafe-accent/30 mx-auto mb-3" />
-              <p className="text-sm font-display font-bold text-cafe-dark mb-1">
+              <p className="text-sm font-sans font-bold text-cafe-dark mb-1">
                 Sin coincidencias
               </p>
               <p className="text-xs text-cafe-accent/60">

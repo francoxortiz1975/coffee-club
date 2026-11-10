@@ -147,7 +147,7 @@ export default function CafeDetalle() {
                 <div className="relative z-10 h-full flex flex-col justify-end p-3 text-left min-h-[100px]">
                   <p className="text-[9px] uppercase tracking-widest text-white/70">Mi recuerdo</p>
                   {recuerdo.nota
-                    ? <p className="text-xs text-white font-display italic line-clamp-2 leading-tight mt-1">"{recuerdo.nota}"</p>
+                    ? <p className="text-xs text-white font-sans italic line-clamp-2 leading-tight mt-1">"{recuerdo.nota}"</p>
                     : <p className="text-[10px] text-white/60 italic mt-1">Toca para editar</p>}
                 </div>
               </button>

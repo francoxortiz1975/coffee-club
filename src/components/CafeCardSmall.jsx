@@ -36,7 +36,9 @@ export default function CafeCardSmall({ cafe, fullWidth = false }) {
         )}
         <button
           onClick={handleHeart}
-          className={`absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm transition-colors ${esFavorito ? 'text-[#b8d04a]' : 'text-cafe-accent/40'}`}
+          aria-label={esFavorito ? 'Quitar de favoritos' : 'Guardar en favoritos'}
+          aria-pressed={esFavorito}
+          className={`absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm transition-colors before:absolute before:-inset-2 before:content-[''] ${esFavorito ? 'text-[#b8d04a]' : 'text-cafe-accent/70'}`}
         >
           <HeartIcon size={14} filled={esFavorito} />
         </button>
@@ -44,7 +46,7 @@ export default function CafeCardSmall({ cafe, fullWidth = false }) {
 
       <div className="p-3">
         <div className="flex items-start justify-between mb-0.5">
-          <h3 className="text-sm font-display font-bold text-cafe-dark leading-tight">{nombre}</h3>
+          <h3 className="text-sm font-sans font-bold text-cafe-dark leading-tight">{nombre}</h3>
           <span className="text-xs text-cafe-accent font-semibold ml-2 shrink-0">{precio}</span>
         </div>
         <p className="text-[11px] text-cafe-accent/60 mb-2 flex items-center gap-1">

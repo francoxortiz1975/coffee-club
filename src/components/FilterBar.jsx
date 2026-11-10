@@ -18,7 +18,7 @@ export default function FilterBar({ activo, onChange, onEspecialidad }) {
           <button
             key={id}
             onClick={() => onChange(id)}
-            className={`shrink-0 flex items-center gap-1.5 text-sm px-3.5 py-1.5 rounded-full border transition-colors ${
+            className={`relative shrink-0 flex items-center gap-1.5 text-sm px-3.5 py-1.5 rounded-full border transition-colors before:absolute before:-inset-x-1 before:-inset-y-[5px] before:content-[''] ${
               isActive
                 ? 'bg-cafe-dark text-beige border-cafe-dark'
                 : 'bg-white/80 text-cafe-accent border-cafe-accent/20'
@@ -32,7 +32,8 @@ export default function FilterBar({ activo, onChange, onEspecialidad }) {
 
       <button
         onClick={onEspecialidad}
-        className="shrink-0 text-sm px-4 py-1.5 rounded-full border bg-white/80 text-cafe-accent border-cafe-accent/20"
+        aria-label="More filters"
+        className="relative shrink-0 text-sm px-4 py-1.5 rounded-full border bg-white/80 text-cafe-accent border-cafe-accent/20 before:absolute before:-inset-x-1 before:-inset-y-[5px] before:content-['']"
       >
         •••
       </button>

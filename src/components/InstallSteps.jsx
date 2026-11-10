@@ -82,7 +82,7 @@ export default function InstallSteps() {
               </span>
               <Icono size={18} className="text-cafe-accent/70" />
             </div>
-            <h3 className="text-sm font-display font-bold text-cafe-dark mb-1 leading-tight">{titulo}</h3>
+            <h3 className="text-sm font-sans font-bold text-cafe-dark mb-1 leading-tight">{titulo}</h3>
             <p className="text-[11px] text-cafe-dark/60 leading-relaxed">{texto}</p>
           </div>
         ))}

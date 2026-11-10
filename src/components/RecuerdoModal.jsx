@@ -115,7 +115,7 @@ export default function RecuerdoModal({ cafe, onClose }) {
                 placeholder='"Fui con María, pedí latte…"'
                 rows={1}
                 maxLength={280}
-                className="w-full bg-transparent text-beige font-display italic text-center text-sm leading-snug px-4 py-2 outline-none resize-none placeholder:text-beige/45 overflow-hidden"
+                className="w-full bg-transparent text-beige font-sans italic text-center text-sm leading-snug px-4 py-2 outline-none resize-none placeholder:text-beige/45 overflow-hidden"
               />
             </div>
           </div>

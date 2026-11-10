@@ -24,15 +24,15 @@ export default function BottomNav() {
   }, [pathname, isFeaturePage])
 
   return (
-    <div className="fixed bottom-3 left-0 right-0 z-50 max-w-md mx-auto px-4 flex justify-center pointer-events-none">
+    <div className="fixed left-0 right-0 z-50 max-w-md mx-auto px-4 flex justify-center pointer-events-none" style={{ bottom: 'calc(env(safe-area-inset-bottom) + 12px)' }}>
       <nav
         onClick={() => !expanded && setExpanded(true)}
         onMouseEnter={() => setExpanded(true)}
         onMouseLeave={() => isFeaturePage && setExpanded(false)}
         className={`pointer-events-auto transition-all duration-300 ease-out shadow-2xl border backdrop-blur-xl flex items-center justify-around select-none ${
           expanded
-            ? 'w-full bg-white/85 border-cafe-dark/15 rounded-2xl py-2.5 px-3'
-            : 'w-auto bg-[#241710]/90 border-amber-700/30 text-beige rounded-full py-1.5 px-5 gap-6 cursor-pointer active:scale-95'
+            ? 'w-full bg-white/85 border-cafe-dark/15 rounded-2xl py-1 px-2'
+            : 'w-auto bg-[#241710]/90 border-amber-700/30 text-beige rounded-full py-0 px-2 gap-1 cursor-pointer active:scale-95'
         }`}
       >
         {tabs.map(({ to, label, Icon }) => (
@@ -42,15 +42,15 @@ export default function BottomNav() {
             end={to === '/'}
             onClick={() => isFeaturePage && setExpanded(false)}
             className={({ isActive }) =>
-              `flex items-center gap-1.5 transition-all duration-200 ${
+              `flex items-center justify-center transition-all duration-200 min-h-11 ${
                 expanded
-                  ? `flex-col text-xs font-display font-medium ${
-                      isActive ? 'text-cafe-dark font-bold' : 'text-cafe-accent/50 hover:text-cafe-dark'
+                  ? `flex-1 flex-col gap-0.5 text-xs font-sans font-medium ${
+                      isActive ? 'text-cafe-dark font-bold' : 'text-cafe-accent hover:text-cafe-dark'
                     }`
-                  : `text-xs ${
+                  : `gap-1.5 min-w-11 px-2.5 text-xs ${
                       isActive
-                        ? 'text-amber-300 font-bold scale-110'
-                        : 'text-beige/50 hover:text-beige'
+                        ? 'text-amber-300 font-bold'
+                        : 'text-beige/70 hover:text-beige'
                     }`
               }`
             }
@@ -58,13 +58,13 @@ export default function BottomNav() {
             {({ isActive }) => (
               <>
                 <Icon
-                  size={expanded ? 20 : 16}
+                  size={expanded ? 22 : 18}
                   className={isActive ? 'stroke-[2.2]' : 'stroke-[1.5]'}
                 />
                 {expanded ? (
                   <span>{label}</span>
                 ) : (
-                  isActive && <span className="text-[11px] font-display font-semibold">{label}</span>
+                  isActive && <span className="text-xs font-sans font-semibold">{label}</span>
                 )}
               </>
             )}
@@ -73,7 +73,7 @@ export default function BottomNav() {
 
         {/* Indicador sutil para expandir cuando está minificada */}
         {!expanded && (
-          <div className="w-1.5 h-1.5 rounded-full bg-amber-400/80 animate-pulse ml-[-8px]" />
+          <div className="w-1.5 h-1.5 rounded-full bg-amber-400/80 animate-pulse mr-2" />
         )}
       </nav>
     </div>

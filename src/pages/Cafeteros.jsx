@@ -22,7 +22,7 @@ function UserRow({ user, accion, badge }) {
     <div className="flex items-center gap-3 py-2.5">
       <Avatar user={user} />
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-display font-bold text-cafe-dark truncate">{user.nombre}</p>
+        <p className="text-sm font-sans font-bold text-cafe-dark truncate">{user.nombre}</p>
         <p className="text-[11px] text-cafe-accent/60 truncate">@{user.username}</p>
       </div>
       {badge}

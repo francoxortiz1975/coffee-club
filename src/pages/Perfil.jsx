@@ -47,7 +47,7 @@ function ColeccionBarrio({ barrio }) {
         className="w-full flex items-center justify-between px-4 py-3.5"
       >
         <div className="text-left">
-          <p className="text-sm font-display font-bold text-cafe-dark">{barrio}</p>
+          <p className="text-sm font-sans font-bold text-cafe-dark">{barrio}</p>
           <p className="text-xs text-cafe-accent/50 mt-0.5">{visitados} / {cafesBarrio.length} visitadas</p>
         </div>
         <span className={`text-cafe-accent/40 transition-transform text-xs ${abierto ? 'rotate-180' : ''}`}>▼</span>
@@ -185,7 +185,7 @@ function InvitacionRow({ inv, tipo, onEliminar }) {
             : <CoffeeCupIcon size={20} className="text-cafe-accent/30" />}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-display font-bold text-cafe-dark truncate">{cafe.nombre}</p>
+          <p className="text-sm font-sans font-bold text-cafe-dark truncate">{cafe.nombre}</p>
           <p className="text-[11px] text-cafe-accent/60 flex items-center gap-1 truncate">
             <PinIcon size={10} className="shrink-0" />
             <span className="truncate">{cafe.barrio}</span>
@@ -317,7 +317,7 @@ export default function Perfil() {
           onClick={() => setEligiendoCafe(true)}
           className="flex-1 flex flex-col items-center justify-center py-3 active:bg-black/5 transition-colors"
         >
-          <p className="text-sm font-display font-bold text-cafe-dark line-clamp-1 px-2">
+          <p className="text-sm font-sans font-bold text-cafe-dark line-clamp-1 px-2">
             {usuario.cafeFavorito || 'Elegir'}
           </p>
           <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mt-1">Café favorito</p>
@@ -326,7 +326,7 @@ export default function Perfil() {
           onClick={() => setEligiendoFavorita(true)}
           className="flex-1 flex flex-col items-center justify-center py-3 active:bg-black/5 transition-colors"
         >
-          <p className="text-sm font-display font-bold text-cafe-dark line-clamp-1 px-2">
+          <p className="text-sm font-sans font-bold text-cafe-dark line-clamp-1 px-2">
             {cafeFavorito ? cafeFavorito.nombre : 'Elegir'}
           </p>
           <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mt-1">Cafetería favorita</p>
@@ -344,7 +344,7 @@ export default function Perfil() {
         <div className="bg-[#faf4ec] rounded-2xl px-4 py-3 shadow-sm mb-6">
           <div className="flex items-center gap-2 mb-3">
             <InviteIcon size={16} className="text-cafe-dark" />
-            <p className="text-sm font-display font-bold text-cafe-dark">Invitaciones</p>
+            <p className="text-sm font-sans font-bold text-cafe-dark">Invitaciones</p>
           </div>
 
           {recibidas.length > 0 && (
@@ -460,7 +460,7 @@ function ElegirCafeModal({ actual, onSelect, onClose }) {
                 <button
                   key={tipo}
                   onClick={() => onSelect(tipo)}
-                  className={`py-3 rounded-xl text-sm font-display font-bold transition-colors ${
+                  className={`py-3 rounded-xl text-sm font-sans font-bold transition-colors ${
                     seleccionado
                       ? 'bg-cafe-dark text-beige'
                       : 'bg-white border border-cafe-accent/20 text-cafe-dark active:bg-cafe-dark/5'
@@ -604,7 +604,7 @@ function ElegirCafeteriaModal({ actualId, onSelect, onClose }) {
                       : <CoffeeCupIcon size={18} className="text-cafe-accent/30" />}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-display font-bold text-cafe-dark truncate">{cafe.nombre}</p>
+                    <p className="text-sm font-sans font-bold text-cafe-dark truncate">{cafe.nombre}</p>
                     <p className="text-[11px] text-cafe-accent/60 truncate">{cafe.barrio}</p>
                   </div>
                   {seleccionado && <span className="text-cafe-dark text-sm">✓</span>}

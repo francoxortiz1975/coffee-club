@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
-import { CoffeeCupIcon, HeartIcon, PinIcon } from './Icons'
+import { CoffeeCupIcon, HeartIcon } from './Icons'
 import { useFavoritos } from '../context/FavoritosContext'
+import './slurpTag.css'
 
 const OCASION_LABELS = {
   couple: 'Couple',
@@ -23,10 +24,13 @@ export default function CafeCardSmall({ cafe, fullWidth = false }) {
 
   const sizing = fullWidth ? 'w-full' : 'shrink-0 w-64 snap-start'
 
+  const tags = ocasiones.slice(0, 2).map((o) => OCASION_LABELS[o] ?? o)
+  const sub = especialidad || cafe.tipo
+
   return (
     <Link
       to={`/cafe/${id}`}
-      className={`${sizing} bg-[#faf4ec] rounded-2xl overflow-hidden shadow-sm block active:scale-[0.98] transition-transform`}
+      className={`${sizing} tag tag-paper rounded-md overflow-hidden shadow-sm block active:scale-[0.98] transition-transform`}
     >
       <div className="w-full h-36 bg-cafe-accent/10 flex items-center justify-center relative">
         {fotos?.[0] ? (
@@ -44,21 +48,16 @@ export default function CafeCardSmall({ cafe, fullWidth = false }) {
         </button>
       </div>
 
-      <div className="p-3">
-        <div className="flex items-start justify-between mb-0.5">
-          <h3 className="text-sm font-sans font-bold text-cafe-dark leading-tight">{nombre}</h3>
-          <span className="text-xs text-cafe-accent font-semibold ml-2 shrink-0">{precio}</span>
+      <div className="px-3.5 pt-3 pb-3.5">
+        <span className="tag-rule" style={{ height: 6 }} />
+        <div className="flex items-start justify-between gap-2 mt-2.5">
+          <h3 className="font-sans font-bold text-[19px] leading-[1.1] tracking-tight">{nombre}</h3>
+          {precio && <span className="tag-stamp shrink-0 !text-[11px] !px-2">{precio}</span>}
         </div>
-        <p className="text-[11px] text-cafe-accent/60 mb-2 flex items-center gap-1">
-          <PinIcon size={11} className="shrink-0" />{barrio}
-        </p>
-        <p className="text-[11px] text-cafe-dark/70 mb-2 line-clamp-1">{especialidad}</p>
-        <div className="flex gap-1.5">
-          {ocasiones.slice(0, 2).map((o) => (
-            <span key={o} className="text-[10px] bg-cafe-accent/8 text-cafe-accent border border-cafe-accent/15 rounded-full px-2 py-0.5">
-              {OCASION_LABELS[o] ?? o}
-            </span>
-          ))}
+        <span className="tag-rule thin mt-2.5" />
+        <div className="flex items-end justify-between gap-2 mt-2.5 font-sans">
+          <p className="text-[10px] font-semibold tracking-[0.12em] uppercase line-clamp-2 flex-1">{[sub, ...tags].filter(Boolean).join(' · ')}</p>
+          <p className="font-bold text-[15px] leading-tight text-right shrink-0">{barrio}</p>
         </div>
       </div>
     </Link>

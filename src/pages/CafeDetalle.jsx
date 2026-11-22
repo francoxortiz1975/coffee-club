@@ -9,6 +9,7 @@ import { useRecuerdos } from '../context/RecuerdosContext'
 import { useAuth } from '../context/AuthContext'
 import RecuerdoModal from '../components/RecuerdoModal'
 import PhotoLightbox from '../components/PhotoLightbox'
+import '../components/slurpTag.css'
 
 const PLACEHOLDER_FOTOS = [null, null, null]
 
@@ -54,7 +55,7 @@ export default function CafeDetalle() {
   const fotos = cafe.fotos.length > 0 ? cafe.fotos : PLACEHOLDER_FOTOS
 
   return (
-    <div className="relative min-h-screen">
+    <div className="tag tag-paper relative min-h-screen pb-24 -mb-24">
       {/* Hero foto */}
       <div className="relative z-10 w-full h-64 bg-cafe-accent/10 flex items-center justify-center">
         {cafe.fotos[0] ? (
@@ -101,32 +102,24 @@ export default function CafeDetalle() {
       </div>
 
       <div className="relative z-10 px-5 py-5">
-        <div className="flex items-start justify-between mb-1">
-          <h1 className="text-2xl font-display font-bold text-cafe-dark leading-tight">{cafe.nombre}</h1>
-          <span className="text-base text-cafe-accent font-semibold ml-3 shrink-0 mt-1">{cafe.precio}</span>
+        <div className="flex items-start justify-between">
+          <p className="text-[11px] font-sans font-semibold tracking-[0.12em] mt-1">{cafe.tipo.toUpperCase()}</p>
+          {cafe.precio && <span className="tag-stamp">{cafe.precio}</span>}
         </div>
-
-        <p className="text-xs text-cafe-accent/60 mb-3 flex items-center gap-1">
-          <PinIcon size={12} />{cafe.barrio}
-        </p>
-
-        <div className="mb-3 text-amber-500">
-          {cafe.rating != null && <StarRating rating={cafe.rating} />}
-        </div>
-
-        <span className="inline-block text-xs bg-beige border border-cafe-accent/30 text-cafe-accent rounded-full px-3 py-1 mb-4">
-          {cafe.tipo}
-        </span>
+        <span className="tag-rule mt-3" />
+        <p className="font-sans text-[20px] mt-3">{cafe.barrio} · {cafe.ciudad}</p>
+        <span className="tag-rule thin mt-2" />
+        <h1 className="font-sans font-bold text-[38px] leading-[1.02] tracking-tight mt-4">{cafe.nombre}</h1>
+        {cafe.rating != null && <div className="mt-3 text-amber-500"><StarRating rating={cafe.rating} /></div>}
+        <span className="tag-rule mt-5 mb-5" />
 
         {/* Visited toggle + Recuerdo — grid 2 columnas */}
         <div className="grid grid-cols-2 gap-2.5 mb-5">
           {/* Izquierda: visited toggle */}
           <button
             onClick={() => toggleVisita(cafe.id)}
-            className={`flex flex-col items-center justify-center gap-1.5 rounded-2xl py-4 px-2 transition-colors ${
-              yaVisitado
-                ? 'bg-cafe-dark text-beige'
-                : 'bg-[#faf4ec] border border-dashed border-cafe-accent/30 text-cafe-accent/70'
+            className={`flex flex-col items-center justify-center gap-1.5 rounded-md py-4 px-2 border-[2.5px] border-[var(--ink)] transition-colors ${
+              yaVisitado ? 'bg-[var(--ink)] text-[#b8d04a]' : 'text-[var(--ink)]'
             }`}
           >
             <CoffeeBeanIcon size={26} className={yaVisitado ? '' : 'opacity-30'} />
@@ -140,7 +133,7 @@ export default function CafeDetalle() {
             recuerdo?.foto_url ? (
               <button
                 onClick={() => setRecuerdoAbierto(true)}
-                className="relative rounded-2xl overflow-hidden bg-[#faf4ec] shadow-sm active:scale-[0.98] transition-transform"
+                className="relative rounded-md overflow-hidden shadow-sm active:scale-[0.98] transition-transform"
               >
                 <img src={recuerdo.foto_url} alt="" className="w-full h-full object-cover absolute inset-0" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
@@ -154,26 +147,26 @@ export default function CafeDetalle() {
             ) : (
               <button
                 onClick={() => setRecuerdoAbierto(true)}
-                className="flex flex-col items-center justify-center gap-1.5 rounded-2xl py-4 px-2 bg-[#faf4ec] border border-dashed border-cafe-accent/30 active:scale-[0.98] transition-transform"
+                className="flex flex-col items-center justify-center gap-1.5 rounded-md py-4 px-2 border-[2.5px] border-[var(--ink)] active:scale-[0.98] transition-transform"
               >
-                <CameraIcon size={26} className="text-cafe-accent/70" />
-                <span className="text-xs font-semibold text-cafe-accent/80 leading-tight">Add a memory</span>
+                <CameraIcon size={26} />
+                <span className="text-xs font-semibold leading-tight">Add a memory</span>
               </button>
             )
           ) : (
-            <div className="flex flex-col items-center justify-center gap-1.5 rounded-2xl py-4 px-2 bg-[#faf4ec]/40 border border-dashed border-cafe-accent/15 opacity-50">
-              <CameraIcon size={26} className="text-cafe-accent/40" />
-              <span className="text-[10px] text-cafe-accent/50 leading-tight text-center">
+            <div className="flex flex-col items-center justify-center gap-1.5 rounded-md py-4 px-2 border-2 border-dashed border-[var(--ink)]/30 opacity-60">
+              <CameraIcon size={26} className="opacity-50" />
+              <span className="text-[11px] leading-tight text-center">
                 {user ? 'Mark as visited first' : 'Sign in to save memories'}
               </span>
             </div>
           )}
         </div>
 
-        <p className="text-sm text-cafe-dark/75 leading-relaxed mb-6">{cafe.descripcion}</p>
+        {cafe.descripcion && <p className="font-sans font-medium text-[17px] leading-snug border-l-[5px] border-[var(--ink)] pl-4 mb-6">{cafe.descripcion}</p>}
 
         {/* Slide de fotos — tap abre lightbox fullscreen */}
-        <h2 className="text-sm font-semibold text-cafe-dark mb-3">Photos</h2>
+        <p className="text-[11px] font-sans font-semibold tracking-[0.12em] mb-3">PHOTOS</p>
         <div className="flex gap-3 overflow-x-auto pb-3 -mx-5 px-5 snap-x snap-mandatory no-scrollbar">
           {fotos.map((foto, i) => (
             <button
@@ -181,7 +174,7 @@ export default function CafeDetalle() {
               type="button"
               onClick={() => foto && setLightboxIndex(i)}
               disabled={!foto}
-              className="shrink-0 w-44 h-32 rounded-xl overflow-hidden bg-cafe-accent/10 flex items-center justify-center snap-start active:scale-[0.97] transition-transform"
+              className="shrink-0 w-44 h-32 rounded-md overflow-hidden bg-[var(--ink)]/10 flex items-center justify-center snap-start active:scale-[0.97] transition-transform"
             >
               {foto
                 ? <img src={foto} alt={`${cafe.nombre} ${i + 1}`} className="w-full h-full object-cover" />
@@ -193,14 +186,14 @@ export default function CafeDetalle() {
 
         {cafe.googleMaps && (
           <a href={cafe.googleMaps} target="_blank" rel="noopener noreferrer"
-            className="mt-6 flex items-center justify-center gap-2 w-full bg-cafe-dark text-beige text-sm font-semibold py-3 rounded-2xl active:scale-95 transition-transform">
+            className="tag-btn solid mt-6 flex items-center justify-center gap-2 w-full text-sm">
             <PinIcon size={15} /> Directions & hours
           </a>
         )}
 
         {cafe.instagram && (
           <a href={cafe.instagram.startsWith('http') ? cafe.instagram : `https://instagram.com/${cafe.instagram.replace('@', '')}`} target="_blank" rel="noopener noreferrer"
-            className="mt-3 flex items-center justify-center gap-2 w-full border border-cafe-accent/30 text-cafe-accent text-sm font-medium py-3 rounded-2xl active:scale-95 transition-transform">
+            className="tag-btn mt-3 flex items-center justify-center gap-2 w-full text-sm">
             <ExternalLinkIcon size={15} /> Instagram
           </a>
         )}

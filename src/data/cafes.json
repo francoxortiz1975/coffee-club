@@ -105,11 +105,11 @@
     "lat": 48.8512,
     "lng": 2.3772,
     "coordsApprox": true,
-    "tipo": "Coffee shop",
+    "tipo": "Coffee station",
     "ocasiones": [],
-    "especialidad": "",
-    "historia": "",
-    "descripcion": "",
+    "especialidad": "Seasonal coffee, ceremonial matcha, homemade pastries",
+    "historia": "A tiny 27 m² shop in the 9th that grew into a Paris coffee community: seasonal coffee, ceremonial matcha, daily homemade pastries.",
+    "descripcion": "Born in Paris, adopted everywhere. Cuvée Noire started in 2023 in a tiny 27 m² space on Rue Saint-Lazare in the 9th and has been building a community around carefully chosen coffee ever since. The coffee is sourced season by season, the ceremonial matcha is imported directly, and the pastries are homemade every day. Made for the mornings that matter, the breaks that do you good, and the meetups you improvise. Nothing too much, just what is needed. Their motto: Do Not Disturb Unless It’s For A Coffee.",
     "fotos": [
       "/images/cuvee-noire/cover.jpg"
     ],

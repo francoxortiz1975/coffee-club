@@ -15,7 +15,7 @@ import InstallSteps from '../components/InstallSteps'
 import { SearchIcon, CoffeeCupIcon } from '../components/Icons'
 import { useFavoritos } from '../context/FavoritosContext'
 
-const especialidades = [...new Set(cafes.map((c) => c.especialidad))]
+const especialidades = [...new Set(cafes.map((c) => c.especialidad).filter(Boolean))]
 
 // Carrusel horizontal de cafés. No renderiza si la lista está vacía.
 function CafesRow({ id, titulo, cafesList }) {

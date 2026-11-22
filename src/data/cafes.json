@@ -21,7 +21,8 @@
     "googleMaps": "https://maps.app.goo.gl/gusps5Wu3tpMn7ko6",
     "instagram": "https://www.instagram.com/republicadelcacao?igsh=MWQzcmV3aDBoNjdhbw==",
     "precio": "$$",
-    "rating": 4.7
+    "rating": 4.7,
+    "ciudad": "Quito"
   },
   {
     "id": "coffee-factory",
@@ -45,7 +46,8 @@
     "googleMaps": "https://maps.app.goo.gl/jrzsZsr15V8xEZaM9",
     "instagram": "https://www.instagram.com/coffeefactoryecuador/?hl=es",
     "precio": "$$$",
-    "rating": 4.9
+    "rating": 4.9,
+    "ciudad": "Quito"
   },
   {
     "id": "quito-deli",
@@ -70,6 +72,66 @@
     "googleMaps": "https://maps.app.goo.gl/xydq9tk4A5FzaNf17",
     "instagram": "https://www.instagram.com/quitodeliuio/",
     "precio": "$$",
-    "rating": 4.8
+    "rating": 4.8,
+    "ciudad": "Quito"
+  },
+  {
+    "id": "ceramicafe-genevieve",
+    "nombre": "Céramicafé Geneviève",
+    "barrio": "Paris 11",
+    "ciudad": "Paris",
+    "direccion": "",
+    "lat": 48.850815,
+    "lng": 2.381645,
+    "tipo": "Coffee shop",
+    "ocasiones": [],
+    "especialidad": "",
+    "historia": "",
+    "descripcion": "",
+    "fotos": [],
+    "googleMaps": "https://www.google.com/maps/place/Céramicafé+Geneviève+-+Paris+11/@48.8521349,2.3799442,17.16z",
+    "instagram": "",
+    "precio": "",
+    "rating": null
+  },
+  {
+    "id": "cuvee-noire",
+    "nombre": "Cuvée Noire",
+    "barrio": "Paris 12",
+    "ciudad": "Paris",
+    "direccion": "106 Rue du Faubourg Saint-Antoine, 75012 Paris",
+    "lat": 48.8512,
+    "lng": 2.3772,
+    "coordsApprox": true,
+    "tipo": "Coffee shop",
+    "ocasiones": [],
+    "especialidad": "",
+    "historia": "",
+    "descripcion": "",
+    "fotos": [],
+    "googleMaps": "https://www.google.com/maps?q=Cuvée+Noire+-+Faubourg+Saint-Antoine+-+Coffee+Shop,+106+Rue+du+Faubourg+Saint-Antoine,+75012+Paris&ftid=0x47e6734bb20c52b7:0xf9ceb124a5566101",
+    "instagram": "",
+    "precio": "",
+    "rating": null
+  },
+  {
+    "id": "bo-mie-bastille",
+    "nombre": "BO&MIE Bastille",
+    "barrio": "Paris 11",
+    "ciudad": "Paris",
+    "direccion": "47 Rue du Faubourg Saint-Antoine, 75011 Paris",
+    "lat": 48.8526,
+    "lng": 2.3738,
+    "coordsApprox": true,
+    "tipo": "Bakery & coffee",
+    "ocasiones": [],
+    "especialidad": "",
+    "historia": "",
+    "descripcion": "",
+    "fotos": [],
+    "googleMaps": "https://www.google.com/maps?q=BO%26MIE+Bastille,+47+Rue+du+Faubourg+Saint-Antoine,+75011+Paris&ftid=0x47e673481bffd9ef:0xceb5cf97fe6d9cb9",
+    "instagram": "",
+    "precio": "",
+    "rating": null
   }
 ]

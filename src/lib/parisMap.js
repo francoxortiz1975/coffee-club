@@ -1,14 +1,21 @@
-/* Paris as a stylized outline, in a 300 x 230 box. This is a hand-made approximation (placeholder) so the
-   screens have a shape to draw. The real map will replace these points with the official Paris outline. */
-export const PARIS_W = 300
-export const PARIS_H = 230
+import { PARIS_OUTLINE_LNGLAT } from '../data/parisOutline'
 
-const OUTLINE = [[40, 14], [78, 10], [120, 8], [166, 12], [208, 24], [246, 40], [272, 58], [290, 84], [298, 114], [290, 142], [270, 162], [246, 178], [226, 198], [196, 214], [156, 222], [112, 218], [78, 204], [48, 182], [26, 156], [10, 126], [8, 96], [14, 66], [24, 40]]
-const SEINE = [[262, 176], [236, 158], [208, 142], [182, 128], [162, 120], [142, 112], [124, 104], [106, 108], [92, 120], [78, 134], [64, 152], [46, 168], [24, 184]]
+/* Paris on a flat map. Everything is in "map units" of 100 m, with north up.
+   The outline is the real boundary of Paris. The Seine is hand-placed from the bridges, accurate to a few
+   hundred metres, which is plenty for a drawn map. */
+
+const LAT0 = 48.86
+const LNG0 = 2.35
+const KX = (111320 * Math.cos((LAT0 * Math.PI) / 180)) / 100 // units per degree of longitude
+const KY = 110574 / 100 // units per degree of latitude
+
+export function project(lat, lng) {
+  return { x: (lng - LNG0) * KX, y: -(lat - LAT0) * KY }
+}
 
 const r1 = (n) => Math.round(n * 10) / 10
 
-// Catmull-Rom through the points, as one SVG path
+// Catmull-Rom through points, as one SVG path
 export function smoothPath(p, closed = false) {
   const n = p.length
   const g = (i) => p[(i + n) % n]
@@ -24,5 +31,48 @@ export function smoothPath(p, closed = false) {
   return d + (closed ? 'Z' : '')
 }
 
-export const PARIS_OUTLINE_D = smoothPath(OUTLINE, true)
-export const PARIS_SEINE_D = smoothPath(SEINE, false)
+const outlinePts = PARIS_OUTLINE_LNGLAT.map(([lng, lat]) => {
+  const { x, y } = project(lat, lng)
+  return [x, y]
+})
+export const OUTLINE_D = 'M' + outlinePts.map((p) => `${r1(p[0])} ${r1(p[1])}`).join('L') + 'Z'
+
+// The Seine through Paris, east to west: [lat, lng]
+const SEINE_LATLNG = [
+  [48.8200, 2.3860], [48.8310, 2.3835], [48.8372, 2.3772], [48.8433, 2.3682], [48.8500, 2.3622],
+  [48.8531, 2.3535], [48.8553, 2.3470], [48.8576, 2.3395], [48.8605, 2.3272], [48.8628, 2.3182],
+  [48.8640, 2.3012], [48.8610, 2.2930], [48.8558, 2.2877], [48.8512, 2.2815], [48.8462, 2.2740],
+  [48.8392, 2.2714], [48.8350, 2.2660],
+]
+export const SEINE_D = smoothPath(SEINE_LATLNG.map(([la, ln]) => { const p = project(la, ln); return [p.x, p.y] }))
+
+// The two islands in the middle of the city
+export const ISLANDS = [
+  { ...project(48.8553, 2.3470), rx: 2.5, ry: 0.75, rot: -14 }, // Île de la Cité
+  { ...project(48.8517, 2.3565), rx: 1.25, ry: 0.55, rot: -30 }, // Île Saint-Louis
+]
+
+export const LANDMARKS = [
+  { id: 'eiffel', name: 'Eiffel Tower', ...project(48.8584, 2.2945) },
+  { id: 'arc', name: 'Arc de Triomphe', ...project(48.8738, 2.2950) },
+  { id: 'notredame', name: 'Notre-Dame', ...project(48.8530, 2.3499) },
+  { id: 'sacrecoeur', name: 'Sacré-Cœur', ...project(48.8867, 2.3431) },
+  { id: 'louvre', name: 'Louvre', ...project(48.8606, 2.3376) },
+  { id: 'bastille', name: 'Bastille', ...project(48.8533, 2.3692) },
+]
+
+// The drawing area: the outline plus a margin
+const xs = outlinePts.map((p) => p[0])
+const ys = outlinePts.map((p) => p[1])
+const PAD = 4
+export const WORLD = {
+  minX: Math.min(...xs) - PAD,
+  minY: Math.min(...ys) - PAD,
+  w: Math.max(...xs) - Math.min(...xs) + PAD * 2,
+  h: Math.max(...ys) - Math.min(...ys) + PAD * 2,
+}
+export const WORLD_VIEWBOX = `${r1(WORLD.minX)} ${r1(WORLD.minY)} ${r1(WORLD.w)} ${r1(WORLD.h)}`
+
+// Old names, still used by the small preview on the Collect tab
+export const PARIS_OUTLINE_D = OUTLINE_D
+export const PARIS_SEINE_D = SEINE_D

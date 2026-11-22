@@ -111,7 +111,7 @@ export default function CafeDetalle() {
         </p>
 
         <div className="mb-3 text-amber-500">
-          <StarRating rating={cafe.rating} />
+          {cafe.rating != null && <StarRating rating={cafe.rating} />}
         </div>
 
         <span className="inline-block text-xs bg-beige border border-cafe-accent/30 text-cafe-accent rounded-full px-3 py-1 mb-4">

@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import cafes from '../data/cafes.json'
+import { useCityCafes } from '../lib/city'
 import { useUsuario, generarUsername, TIPOS_CAFE } from '../context/UsuarioContext'
 import { useAuth } from '../context/AuthContext'
 import { useCafeteros } from '../context/CafeterosContext'
@@ -252,7 +253,8 @@ function EditarPerfilModal({ usuario, onSave, onClose }) {
 
 function ElegirCafeteriaModal({ actualId, onSelect, onClose }) {
   const [busqueda, setBusqueda] = useState('')
-  const filtrados = cafes.filter((c) => c.nombre.toLowerCase().includes(busqueda.toLowerCase()))
+  const cityCafes = useCityCafes()
+  const filtrados = cityCafes.filter((c) => c.nombre.toLowerCase().includes(busqueda.toLowerCase()))
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-6" onClick={onClose}>

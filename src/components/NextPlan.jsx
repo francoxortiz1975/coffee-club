@@ -34,7 +34,7 @@ export default function NextPlan({ variant = 'strip' }) {
     <Link to="/invite" className="flex items-center gap-3 rounded-2xl px-4 py-3 bg-[#2a1a10] text-beige shadow-md active:scale-[0.99] transition-transform">
       <div className="flex-1 min-w-0">
         <p className="text-[11px] font-sans font-semibold tracking-widest text-[#b8d04a] truncate">NEXT PLAN · {formatWhen(plan).toUpperCase()}</p>
-        <p className="text-sm font-display font-bold truncate">{cafe.nombre}{who ? ` with ${who}` : ''}</p>
+        <p className="text-sm font-sans font-bold truncate">{cafe.nombre}{who ? ` with ${who}` : ''}</p>
       </div>
       <span className="text-[#b8d04a] text-lg" aria-hidden="true">›</span>
     </Link>

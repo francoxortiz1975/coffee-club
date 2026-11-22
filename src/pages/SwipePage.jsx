@@ -184,7 +184,7 @@ export default function SwipePage() {
                         <span className="font-bold text-[#3d2b1f] block leading-tight text-xs tracking-wider uppercase font-sans">
                           Coffee Shop Book
                         </span>
-                        <span className="text-[10px] text-[#8b5a2b]/70 block font-sans">
+                        <span className="text-[11px] text-[#8b5a2b]/70 block font-sans">
                           Page {i + 1} of {cafes.length}
                         </span>
                       </div>
@@ -199,7 +199,7 @@ export default function SwipePage() {
                         className="relative z-30 bg-[#7a2e1d] hover:bg-[#913723] text-beige text-xs font-sans font-semibold px-3 py-2.5 rounded-b-lg shadow-md border-t-0 border border-red-950/40 flex items-center gap-1 -mt-3 min-h-11 transition-transform active:translate-y-0.5"
                       >
                         <span>Picks</span>
-                        <span className="bg-amber-300 text-amber-950 text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                        <span className="bg-amber-300 text-amber-950 text-[11px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
                           {seleccionados.length}
                         </span>
                       </button>
@@ -293,7 +293,7 @@ export default function SwipePage() {
                   <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-6 flex flex-col items-center justify-between text-center overflow-hidden backface-hidden rotate-y-180 z-0">
                     <div className="absolute inset-y-0 right-0 w-6 book-spine-gradient pointer-events-none z-20" />
                     
-                    <div className="w-full text-right text-[9px] font-sans text-[#6b4c3b]/40 uppercase tracking-widest">
+                    <div className="w-full text-right text-[11px] font-sans text-[#6b4c3b]/40 uppercase tracking-widest">
                       SUMAY COFFEE CLUB
                     </div>
 
@@ -302,7 +302,7 @@ export default function SwipePage() {
                       <span className="text-xs font-sans text-[#6b4c3b] tracking-widest uppercase">SUMAY GUIDE</span>
                     </div>
 
-                    <div className="text-[9px] font-sans text-[#6b4c3b]/40 tracking-wider">
+                    <div className="text-[11px] font-sans text-[#6b4c3b]/40 tracking-wider">
                       QUITO • COFFEE SHOP COLLECTION
                     </div>
                   </div>
@@ -319,7 +319,7 @@ export default function SwipePage() {
               <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-6 flex flex-col items-center justify-between text-center overflow-hidden backface-hidden z-10">
                 <div className="absolute inset-y-0 left-0 w-6 book-spine-gradient pointer-events-none z-20" />
 
-                <div className="text-[9px] font-sans text-[#6b4c3b]/50 uppercase tracking-widest">
+                <div className="text-[11px] font-sans text-[#6b4c3b]/50 uppercase tracking-widest">
                   BACK COVER
                 </div>
 
@@ -340,7 +340,7 @@ export default function SwipePage() {
                   </button>
                 </div>
 
-                <div className="text-[9px] font-sans text-[#6b4c3b]/40 tracking-wider">
+                <div className="text-[11px] font-sans text-[#6b4c3b]/40 tracking-wider">
                   SUMAY COFFEE CLUB • QUITO
                 </div>
               </div>

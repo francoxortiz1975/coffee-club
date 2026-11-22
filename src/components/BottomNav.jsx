@@ -70,7 +70,7 @@ export default function BottomNav() {
               <span className="relative">
                 <Icon size={expanded ? 22 : 18} className={isActive ? 'stroke-[2.2]' : 'stroke-[1.5]'} />
                 {badge > 0 && (
-                  <span className="absolute -top-1.5 -right-2.5 min-w-4 h-4 px-1 rounded-full bg-[#7a2e1d] text-beige text-[10px] font-bold flex items-center justify-center">{badge}</span>
+                  <span className="absolute -top-1.5 -right-2.5 min-w-4 h-4 px-1 rounded-full bg-[#7a2e1d] text-beige text-[11px] font-bold flex items-center justify-center">{badge}</span>
                 )}
               </span>
               {expanded ? <span>{label}</span> : isActive && <span className="text-xs font-sans font-semibold">{label}</span>}

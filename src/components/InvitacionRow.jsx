@@ -36,7 +36,7 @@ export default function InvitacionRow({ inv, tipo, onEliminar }) {
           </p>
         </div>
       </Link>
-      <button onClick={onEliminar} aria-label="Delete invitation" className="w-7 h-7 rounded-full text-cafe-accent/40 active:text-cafe-accent/80 shrink-0">
+      <button onClick={onEliminar} aria-label="Delete invitation" className="relative w-7 h-7 rounded-full text-cafe-accent/40 active:text-cafe-accent/80 shrink-0 before:absolute before:-inset-2 before:content-['']">
         ×
       </button>
     </div>

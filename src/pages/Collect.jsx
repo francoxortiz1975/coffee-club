@@ -51,7 +51,7 @@ function Souvenirs() {
             <div className="aspect-square overflow-hidden rounded-sm bg-cafe-accent/10">
               <img src={foto_url} alt={cafe.nombre} className="w-full h-full object-cover" />
             </div>
-            <p className="text-sm font-display font-bold text-cafe-dark mt-2 leading-tight">{cafe.nombre}</p>
+            <p className="text-sm font-sans font-bold text-cafe-dark mt-2 leading-tight">{cafe.nombre}</p>
             {fecha && <p className="text-[11px] text-cafe-accent/60">{new Date(fecha).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>}
             {nota && <p className="text-xs text-cafe-dark/80 italic line-clamp-2 mt-1">“{nota}”</p>}
           </button>

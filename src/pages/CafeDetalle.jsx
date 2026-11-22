@@ -147,10 +147,10 @@ export default function CafeDetalle() {
                 <img src={recuerdo.foto_url} alt="" className="w-full h-full object-cover absolute inset-0" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 <div className="relative z-10 h-full flex flex-col justify-end p-3 text-left min-h-[100px]">
-                  <p className="text-[9px] uppercase tracking-widest text-white/70">My memory</p>
+                  <p className="text-[11px] uppercase tracking-widest text-white/70">My memory</p>
                   {recuerdo.nota
                     ? <p className="text-xs text-white font-sans italic line-clamp-2 leading-tight mt-1">"{recuerdo.nota}"</p>
-                    : <p className="text-[10px] text-white/60 italic mt-1">Tap to edit</p>}
+                    : <p className="text-[11px] text-white/60 italic mt-1">Tap to edit</p>}
                 </div>
               </button>
             ) : (
@@ -165,7 +165,7 @@ export default function CafeDetalle() {
           ) : (
             <div className="flex flex-col items-center justify-center gap-1.5 rounded-2xl py-4 px-2 bg-[#faf4ec]/40 border border-dashed border-cafe-accent/15 opacity-50">
               <CameraIcon size={26} className="text-cafe-accent/40" />
-              <span className="text-[10px] text-cafe-accent/50 leading-tight text-center">
+              <span className="text-[11px] text-cafe-accent/50 leading-tight text-center">
                 {user ? 'Mark as visited first' : 'Sign in to save memories'}
               </span>
             </div>

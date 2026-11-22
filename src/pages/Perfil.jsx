@@ -73,9 +73,9 @@ export default function Perfil() {
           className="flex-1 flex flex-col items-center justify-center py-3 active:bg-black/5 transition-colors relative"
         >
           <p className="text-base font-display font-bold text-cafe-dark tabular-nums">{cafeteros.length}</p>
-          <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mt-1">Coffee friends</p>
+          <p className="text-[11px] uppercase tracking-widest text-cafe-accent/50 mt-1">Coffee friends</p>
           {pendientesRecibidas.length > 0 && (
-            <span className="absolute top-2 right-2 bg-[#b8d04a] text-cafe-dark text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+            <span className="absolute top-2 right-2 bg-[#b8d04a] text-cafe-dark text-[11px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
               {pendientesRecibidas.length}
             </span>
           )}
@@ -87,7 +87,7 @@ export default function Perfil() {
           <p className="text-sm font-sans font-bold text-cafe-dark line-clamp-1 px-2">
             {usuario.cafeFavorito || 'Choose'}
           </p>
-          <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mt-1">Favorite coffee</p>
+          <p className="text-[11px] uppercase tracking-widest text-cafe-accent/50 mt-1">Favorite coffee</p>
         </button>
         <button
           onClick={() => setEligiendoFavorita(true)}
@@ -96,7 +96,7 @@ export default function Perfil() {
           <p className="text-sm font-sans font-bold text-cafe-dark line-clamp-1 px-2">
             {cafeFavorito ? cafeFavorito.nombre : 'Choose'}
           </p>
-          <p className="text-[10px] uppercase tracking-wider text-cafe-accent/70 mt-1 px-2 text-center leading-tight">Favorite coffee shop</p>
+          <p className="text-[11px] uppercase tracking-wider text-cafe-accent/70 mt-1 px-2 text-center leading-tight">Favorite coffee shop</p>
         </button>
       </div>
 
@@ -200,7 +200,7 @@ function EditarPerfilModal({ usuario, onSave, onClose }) {
                 ? <img src={foto} alt="" className="w-full h-full object-cover" />
                 : <UserIcon size={32} className="text-cafe-accent/40" />}
             </div>
-            <div className="absolute -bottom-0.5 -right-0.5 w-6 h-6 rounded-full bg-cafe-dark text-beige text-[10px] flex items-center justify-center border-2 border-[#faf4ec] shadow">
+            <div className="absolute -bottom-0.5 -right-0.5 w-6 h-6 rounded-full bg-cafe-dark text-beige text-[11px] flex items-center justify-center border-2 border-[#faf4ec] shadow">
               ✎
             </div>
           </button>

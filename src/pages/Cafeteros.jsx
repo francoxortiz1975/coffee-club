@@ -63,7 +63,7 @@ function Buscar() {
   function botonPara(u) {
     const rel = relacionCon(u.id)
     if (rel === 'confirmado') {
-      return <span className="text-[10px] uppercase tracking-widest text-[#b8d04a] font-bold">coffee friend</span>
+      return <span className="text-[11px] uppercase tracking-widest text-[#b8d04a] font-bold">coffee friend</span>
     }
     if (rel === 'enviada') {
       return (
@@ -76,7 +76,7 @@ function Buscar() {
       )
     }
     if (rel === 'recibida') {
-      return <span className="text-[10px] uppercase tracking-widest text-cafe-accent/60">invited you</span>
+      return <span className="text-[11px] uppercase tracking-widest text-cafe-accent/60">invited you</span>
     }
     return (
       <button
@@ -163,7 +163,7 @@ export default function Cafeteros() {
       {/* Solicitudes recibidas */}
       {pendientesRecibidas.length > 0 && (
         <div className="mb-6">
-          <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-2">
+          <p className="text-[11px] uppercase tracking-widest text-cafe-accent/50 mb-2">
             Solicitudes ({pendientesRecibidas.length})
           </p>
           <div className="bg-[#faf4ec] rounded-2xl px-4 shadow-sm">
@@ -195,7 +195,7 @@ export default function Cafeteros() {
 
       {/* Mis cafeteros */}
       <div className="mb-6">
-        <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-2">
+        <p className="text-[11px] uppercase tracking-widest text-cafe-accent/50 mb-2">
           Your coffee friends ({confirmados.length})
         </p>
         {confirmados.length === 0 ? (
@@ -228,7 +228,7 @@ export default function Cafeteros() {
       {/* Solicitudes enviadas pendientes */}
       {pendientesEnviadas.length > 0 && (
         <div className="mb-6">
-          <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-2">
+          <p className="text-[11px] uppercase tracking-widest text-cafe-accent/50 mb-2">
             Esperando respuesta ({pendientesEnviadas.length})
           </p>
           <div className="bg-[#faf4ec] rounded-2xl px-4 shadow-sm">
@@ -252,7 +252,7 @@ export default function Cafeteros() {
 
       {/* Buscar */}
       <div>
-        <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-2">
+        <p className="text-[11px] uppercase tracking-widest text-cafe-accent/50 mb-2">
           Find coffee friends
         </p>
         <Buscar />

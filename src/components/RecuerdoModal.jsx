@@ -61,7 +61,7 @@ export default function RecuerdoModal({ cafe, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="px-5 pt-5 pb-2">
-          <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-1">Memory</p>
+          <p className="text-[11px] uppercase tracking-widest text-cafe-accent/50 mb-1">Memory</p>
           <h3 className="text-xl font-display font-bold text-cafe-dark leading-tight">{cafe.nombre}</h3>
         </div>
 

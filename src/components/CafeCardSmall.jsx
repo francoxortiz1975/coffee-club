@@ -55,7 +55,7 @@ export default function CafeCardSmall({ cafe, fullWidth = false }) {
         <p className="text-[11px] text-cafe-dark/70 mb-2 line-clamp-1">{especialidad}</p>
         <div className="flex gap-1.5">
           {ocasiones.slice(0, 2).map((o) => (
-            <span key={o} className="text-[10px] bg-cafe-accent/8 text-cafe-accent border border-cafe-accent/15 rounded-full px-2 py-0.5">
+            <span key={o} className="text-[11px] bg-cafe-accent/8 text-cafe-accent border border-cafe-accent/15 rounded-full px-2 py-0.5">
               {OCASION_LABELS[o] ?? o}
             </span>
           ))}

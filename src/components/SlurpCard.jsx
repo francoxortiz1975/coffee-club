@@ -12,7 +12,7 @@ export default function SlurpCard({ slurp, read = false, variant = 'card' }) {
       style={{ background: `linear-gradient(150deg, ${k.from}, ${k.to})` }}
     >
       <span className="absolute right-3 top-2 text-3xl opacity-90" aria-hidden="true">{slurp.emoji || k.emoji}</span>
-      <p className="text-[10px] font-sans font-semibold tracking-widest opacity-85">{slurp.kind.toUpperCase()} · {slurp.minutes} MIN</p>
+      <p className="text-[11px] font-sans font-semibold tracking-widest opacity-85">{slurp.kind.toUpperCase()} · {slurp.minutes} MIN</p>
       <h3 className={`font-display font-bold leading-tight mt-1.5 pr-10 ${mini ? 'text-base' : 'text-lg'}`}>{slurp.title}</h3>
       {!mini && <p className="text-sm opacity-85 mt-1.5 line-clamp-2">{slurp.body[0]}</p>}
       {read && <p className="text-[11px] font-sans font-semibold mt-2 text-[#b8d04a]">✓ Slurped</p>}

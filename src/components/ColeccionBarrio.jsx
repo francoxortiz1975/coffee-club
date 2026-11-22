@@ -93,7 +93,7 @@ export default function ColeccionBarrio({ barrio }) {
                       : <CoffeeBeanIcon size={18} className="opacity-25" />}
                   </button>
                 </div>
-                <p className="text-[10px] text-cafe-dark/70 text-center leading-tight line-clamp-2">{cafe.nombre}</p>
+                <p className="text-[11px] text-cafe-dark/70 text-center leading-tight line-clamp-2">{cafe.nombre}</p>
               </Link>
             )
           })}

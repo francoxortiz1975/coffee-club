@@ -136,15 +136,29 @@ export default function Descubrir() {
         <>
           {shelves.map((s) => <CafesRow key={s.id} id={s.id} titulo={s.title} cafesList={s.cafes} />)}
 
-          {/* Can't decide? Two ways to let the app choose */}
+          {/* Can't decide? Two separate cards: swipe through the book, or let the app pick at random */}
           <section className="mt-8 px-4">
-            <div className="rounded-3xl p-4 text-beige shadow-md" style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #2a1510 60%, #1e0f0b 100%)' }}>
-              <p className="font-display font-bold text-xl">Can’t decide?</p>
-              <p className="text-sm text-beige/75 mt-0.5">Let the app pick a coffee shop for you.</p>
-              <div className="grid grid-cols-2 gap-3 mt-4">
-                <Link to="/decidir/swipe" className="min-h-14 rounded-2xl bg-[#b8d04a] text-[#1f1409] font-sans font-bold text-base flex items-center justify-center gap-2 active:scale-95 transition-transform">Swipe</Link>
-                <Link to="/decidir/aleatorio" className="min-h-14 rounded-2xl bg-white/10 border border-white/20 text-beige font-sans font-bold text-base flex items-center justify-center gap-2 active:scale-95 transition-transform"><DiceIcon size={20} />Random</Link>
-              </div>
+            <h2 className="text-base font-display font-bold text-cafe-dark mb-3">Can’t decide?</h2>
+            <div className="grid grid-cols-2 gap-3">
+              <Link to="/decidir/swipe" className="aspect-[4/5] rounded-3xl overflow-hidden shadow-md active:scale-[0.98] transition-transform flex items-center justify-center p-3" style={{ background: "url('/texture-bg.webp') center/cover" }}>
+                <div className="flex flex-col items-center gap-3 bg-[#2a1510]/85 backdrop-blur-md rounded-2xl px-4 py-5 text-beige text-center">
+                  <svg width="52" height="30" viewBox="0 0 64 36" fill="none" aria-hidden="true">
+                    <path d="M22 6 L10 18 L22 30" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M42 6 L54 18 L42 30" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <div>
+                    <p className="text-xl font-display font-bold tracking-tight">Swipe</p>
+                    <p className="text-xs text-beige/80 mt-0.5 font-sans">Interested or not</p>
+                  </div>
+                </div>
+              </Link>
+              <Link to="/decidir/aleatorio" className="aspect-[4/5] rounded-3xl shadow-md active:scale-[0.98] transition-transform flex flex-col items-center justify-center gap-3 text-beige text-center p-3" style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #2a1510 60%, #1e0f0b 100%)' }}>
+                <DiceIcon size={44} className="opacity-85" />
+                <div>
+                  <p className="text-xl font-display font-bold tracking-tight">Random</p>
+                  <p className="text-xs text-beige/80 mt-0.5 font-sans">One coffee shop, at random</p>
+                </div>
+              </Link>
             </div>
           </section>
 

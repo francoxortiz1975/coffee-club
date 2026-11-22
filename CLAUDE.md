@@ -24,8 +24,7 @@ Product/marketing context lives in `docs/PRODUCT.md`. Read that first for the "w
 - Key components: `components/invitation/` (envelope reveal + landing demo), `components/LoyaltyCard.jsx` (+ `lib/beanArt.js` 3D bean/cup SVG), `components/ScratchCard.jsx` + `lib/scratchCard.js` (landing's playable card), `components/BottomNav.jsx` (4 tabs), `components/AppHeader.jsx` + `AvatarButton.jsx` + `Segmented.jsx` (shared header, profile avatar, iOS-style switch), `lib/parisMap.js` (placeholder Paris outline), `lib/plans.js` (next plan / past helpers).
 
 ## Design system
-- Fonts (bundled via `@fontsource`, no CDN): Bricolage Grotesque = headings (`font-display`), Geist = body/UI (`font-sans`, default), Parisienne = rare handwritten note (`font-hand`). Scoped exceptions: Cormorant Garamond + Pinyon Script only inside the invitation letter, Finger Paint only on the landing card's crayon label. Do not add new families.
-- Rule: text under ~14px uses Geist, not Bricolage.
+- Fonts (bundled via `@fontsource`, no CDN): in the app Geist is used for everything, titles included (`font-display` is also Geist, bold and tight; `font-sans` is the default), Parisienne = rare handwritten note (`font-hand`). Bricolage Grotesque is only for headings on the landing, quiz and privacy pages (their own CSS). Scoped exceptions: Cormorant Garamond + Pinyon Script only inside the invitation letter, Finger Paint only on the landing card's crayon label. Do not add new families.
 - Colors: espresso browns (`#2a1a10`, `#3d2b1f`, `#6b4c3b`), cream/beige (`#f5f0e8`), single brand accent lime `#b8d04a`. Invitation letter is dark green with gold hairlines; envelope is cream silk with an olive wax stamp.
 - Touch targets: 44px minimum (use `min-h-11`, or a `before:` pseudo-element to extend the hit area without changing the look). Respect `env(safe-area-inset-*)`.
 - Always honor `prefers-reduced-motion`.

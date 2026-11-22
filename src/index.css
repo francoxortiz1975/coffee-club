@@ -4,9 +4,10 @@
   --color-beige: #f5f0e8;
   --color-cafe-dark: #3d2b1f;
   --color-cafe-accent: #6b4c3b;
-  /* One type system, shared with the landing: Bricolage for headings, Geist for everything you read or tap,
-     Parisienne for the rare handwritten note. */
-  --font-display: 'Bricolage Grotesque Variable', 'Geist Variable', system-ui, sans-serif;
+  /* The app is Geist for everything, titles included (bold and tight). Parisienne for the rare handwritten note.
+     font-display stays as a name so a heading can be restyled in one place. The landing, quiz and privacy pages keep
+     Bricolage for headings in their own CSS. */
+  --font-display: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-sans: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-hand: 'Parisienne', 'Bradley Hand', cursive;
 }

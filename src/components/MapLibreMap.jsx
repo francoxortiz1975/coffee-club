@@ -15,7 +15,7 @@ setWorkerUrl(workerUrl)
 
 const PADDING = { top: 80, bottom: 230, left: 40, right: 60 }
 
-export default function MapLibreMap({ cafes, stamped, mode, selectedId, onSelect, offline = false }) {
+export default function MapLibreMap({ cafes, stamped, mode, selectedId, onSelect, offline = false, badge }) {
   const boxRef = useRef(null)
   const canvasRef = useRef(null)
   const mapRef = useRef(null)
@@ -59,6 +59,8 @@ export default function MapLibreMap({ cafes, stamped, mode, selectedId, onSelect
       })
       map.touchZoomRotate.disableRotation()
       map.addControl(new AttributionControl({ compact: true, customAttribution: src === 'fallback' ? 'Paris boundary: IGN' : undefined }), 'top-left')
+      // The credits stay (the map data licences ask for them) but start folded into a small "i" you can tap.
+      setTimeout(() => { const a = canvasRef.current?.parentElement?.querySelector('.maplibregl-ctrl-attrib'); a?.classList.remove('maplibregl-compact-show'); a?.removeAttribute('open') }, 0)
       const schedule = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; refresh() }) }
       map.on('move', schedule)
       map.on('load', () => { setReady(true); refresh() })
@@ -110,6 +112,7 @@ export default function MapLibreMap({ cafes, stamped, mode, selectedId, onSelect
         onZoomOut={() => mapRef.current?.zoomOut({ duration: 250 })}
         onFit={() => fitTo(cafes)}
         onAll={() => mapRef.current?.fitBounds(PARIS_BOUNDS, { padding: 24, duration: 600 })}
+        badge={badge}
       />
     </div>
   )

@@ -1,7 +1,7 @@
 import './parisMap.css'
 
 // The parts of the parchment look that sit on top of any map: old paper edges, ribbon title, compass, zoom buttons.
-export default function MapDecor({ onZoomIn, onZoomOut, onFit, onAll }) {
+export default function MapDecor({ onZoomIn, onZoomOut, onFit, onAll, badge }) {
   const stop = (e) => e.stopPropagation()
   return (
     <>
@@ -22,6 +22,7 @@ export default function MapDecor({ onZoomIn, onZoomOut, onFit, onAll }) {
         <button type="button" aria-label="Zoom out" onPointerDown={stop} onClick={onZoomOut}>−</button>
         <button type="button" aria-label="Show the cafés" onPointerDown={stop} onClick={onFit}>◎</button>
         <button type="button" aria-label="Show all of Paris" className="pm-all" onPointerDown={stop} onClick={onAll}>All</button>
+        {badge && <button type="button" aria-label={`My Paris: ${badge.label} coffee shops stamped. Show only mine`} aria-pressed={badge.on} className={`pm-all pm-mine ${badge.on ? 'on' : ''}`} onPointerDown={stop} onClick={badge.onClick}>{badge.label}</button>}
       </div>
     </>
   )

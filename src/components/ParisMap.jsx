@@ -26,7 +26,7 @@ const DOODLES = {
   bastille: 'M-1.6 9V-9M1.6 9V-9M-4 9H4M0-9V-13M-2-11H2',
 }
 
-export default function ParisMap({ cafes, stamped, mode, selectedId, onSelect }) {
+export default function ParisMap({ cafes, stamped, mode, selectedId, onSelect, badge }) {
   const boxRef = useRef(null)
   const [size, setSize] = useState({ w: 0, h: 0 })
   const [view, setView] = useState({ k: 1, tx: 0, ty: 0 })
@@ -219,7 +219,7 @@ export default function ParisMap({ cafes, stamped, mode, selectedId, onSelect })
         onCluster={(members) => fitPins(members.map((m) => ({ x: m.mx, y: m.my })))}
         onSelect={(id, it) => select(id, it.mx, it.my)}
       />
-      <MapDecor onZoomIn={() => zoomAt(1.6, size.w / 2, size.h / 2)} onZoomOut={() => zoomAt(1 / 1.6, size.w / 2, size.h / 2)} onFit={fitCafes} onAll={showAll} />
+      <MapDecor onZoomIn={() => zoomAt(1.6, size.w / 2, size.h / 2)} onZoomOut={() => zoomAt(1 / 1.6, size.w / 2, size.h / 2)} onFit={fitCafes} onAll={showAll} badge={badge} />
     </div>
   )
 }

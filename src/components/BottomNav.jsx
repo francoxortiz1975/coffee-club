@@ -63,12 +63,12 @@ export default function BottomNav() {
               onClick={() => isFeaturePage && setExpanded(false)}
               className={`relative flex items-center justify-center transition-all duration-200 min-h-11 ${
                 expanded
-                  ? `flex-1 flex-col gap-0.5 text-xs font-sans font-medium ${isActive ? 'text-cafe-dark font-bold' : 'text-cafe-accent hover:text-cafe-dark'}`
+                  ? `flex-1 flex-col gap-0.5 text-xs font-sans font-medium rounded-xl mx-0.5 my-0.5 py-1.5 ${isActive ? 'bg-cafe-dark text-beige font-bold' : 'text-cafe-accent hover:text-cafe-dark'}`
                   : `gap-1.5 min-w-11 px-2.5 text-xs ${isActive ? 'text-amber-300 font-bold' : 'text-beige/70 hover:text-beige'}`
               }`}
             >
               <span className="relative">
-                <Icon size={expanded ? 22 : 18} className={isActive ? 'stroke-[2.2]' : 'stroke-[1.5]'} />
+                <Icon size={expanded ? 22 : 18} className={isActive ? 'stroke-[2]' : 'stroke-[1.5]'} />
                 {badge > 0 && (
                   <span className="absolute -top-1.5 -right-2.5 min-w-4 h-4 px-1 rounded-full bg-[#7a2e1d] text-beige text-[11px] font-bold flex items-center justify-center">{badge}</span>
                 )}

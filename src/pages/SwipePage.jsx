@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageFlip } from 'page-flip'
 import { useCityCafes } from '../lib/city'
-import { CoffeeCupIcon, PinIcon, ArrowLeftIcon } from '../components/Icons'
+import { CoffeeCupIcon, PinIcon, ArrowLeftIcon, HeartIcon } from '../components/Icons'
+import { useFavoritos } from '../context/FavoritosContext'
 import { toLines } from '../lib/textLines'
 import { OCASION_LABELS } from '../lib/ocasiones'
 
@@ -19,6 +20,10 @@ function safeInset(side) {
 export default function SwipePage() {
   const cafes = useCityCafes()
   const navigate = useNavigate()
+  const { favoritos, toggleFavorito } = useFavoritos()
+  const [seleccionados, setSeleccionados] = useState([])   // the ones hearted during this swipe
+  const seleccionadosRef = useRef(seleccionados)
+  useEffect(() => { seleccionadosRef.current = seleccionados }, [seleccionados])
   const [dimensions, setDimensions] = useState({ width: 390, height: 680 })
 
   const bookContainerRef = useRef(null)
@@ -67,11 +72,18 @@ export default function SwipePage() {
           flippingTime: 550,
           useMouseEvents: true,
           swipeDistance: 25,
-          clickEventForward: false,
+          clickEventForward: true,
           mobileScrollSupport: false,
         })
 
         pageFlip.loadFromHTML(pages)
+
+        // Reaching the last sheet opens the selection
+        pageFlip.on('flip', (e) => {
+          if (e.data >= cafes.length) {
+            setTimeout(() => navigate('/decidir/seleccionados', { state: { seleccionados: seleccionadosRef.current } }), 450)
+          }
+        })
 
         pageFlipRef.current = pageFlip
       } catch (err) {
@@ -85,7 +97,37 @@ export default function SwipePage() {
         try { pageFlipRef.current.destroy() } catch (e) { /* ignore */ }
       }
     }
-  }, [dimensions])
+  }, [dimensions, navigate, cafes.length])
+
+  // The heart saves the café to your favourites and adds it to this swipe's selection
+  function heart(cafe) {
+    const isFav = favoritos.includes(cafe.id)
+    toggleFavorito(cafe.id)
+    setSeleccionados((cur) => (isFav ? cur.filter((id) => id !== cafe.id) : cur.includes(cafe.id) ? cur : [...cur, cafe.id]))
+  }
+
+  // The book library swallows clicks inside its pages before React sees them, so the buttons on the pages are handled
+  // here, with one listener on the book that runs first.
+  const actionsRef = useRef({})
+  function verSeleccion() {
+    navigate('/decidir/seleccionados', { state: { seleccionados: seleccionadosRef.current } })
+  }
+
+  useEffect(() => { actionsRef.current = { heart, home: () => navigate('/'), picks: verSeleccion, restart: () => pageFlipRef.current?.flip(0) } })
+  useEffect(() => {
+    const box = bookContainerRef.current
+    if (!box) return undefined
+    const onClick = (e) => {
+      const el = e.target.closest?.('[data-action]')
+      if (!el) return
+      e.stopPropagation()
+      const act = el.dataset.action
+      if (act === 'heart') actionsRef.current.heart(cafes.find((c) => c.id === el.dataset.id))
+      else actionsRef.current[act]?.()
+    }
+    box.addEventListener('click', onClick, true)
+    return () => box.removeEventListener('click', onClick, true)
+  }, [cafes])
 
   return (
     <div
@@ -128,11 +170,20 @@ export default function SwipePage() {
                       )}
                       <button
                         type="button"
-                        onClick={(e) => { e.stopPropagation(); navigate('/') }}
+                        data-action="home"
                         aria-label="Back to Discover"
                         className="absolute left-3 top-3 w-11 h-11 rounded-full bg-white/85 backdrop-blur-sm text-[#3d2b1f] shadow flex items-center justify-center active:scale-95 transition-transform"
                       >
                         <ArrowLeftIcon size={18} />
+                      </button>
+                      <button
+                        type="button"
+                        data-action="heart" data-id={cafe.id}
+                        aria-label={favoritos.includes(cafe.id) ? 'Remove from favorites' : 'Save to favorites'}
+                        aria-pressed={favoritos.includes(cafe.id)}
+                        className={`absolute right-3 top-3 w-11 h-11 rounded-full bg-white/85 backdrop-blur-sm shadow flex items-center justify-center active:scale-90 transition-transform ${favoritos.includes(cafe.id) ? 'text-[#8a9d2e]' : 'text-[#6b4c3b]'}`}
+                      >
+                        <HeartIcon size={20} filled={favoritos.includes(cafe.id)} />
                       </button>
                       {cafe.precio && (
                         <span className="absolute bottom-2.5 right-2.5 bg-[#2a1a10]/85 backdrop-blur-md text-amber-200 text-xs font-sans px-3 py-1 rounded-full border border-amber-500/30 font-semibold">
@@ -191,10 +242,11 @@ export default function SwipePage() {
                     <CoffeeCupIcon size={40} />
                   </div>
                   <h2 className="text-2xl font-display font-bold text-[#3d2b1f]">That’s all of them</h2>
-                  <p className="text-sm font-sans text-[#6b4c3b]">Come back soon, more coffee shops are on the way.</p>
+                  <p className="text-sm font-sans text-[#6b4c3b]">You saved {seleccionados.length} {seleccionados.length === 1 ? 'coffee shop' : 'coffee shops'}.</p>
                   <div className="flex flex-col gap-3 mt-2 w-full max-w-[240px]">
-                    <button type="button" onClick={() => navigate('/')} className="bg-[#3d2b1f] text-beige font-sans text-sm font-semibold px-8 py-3.5 rounded-full shadow-md active:scale-95 transition-transform">Back to Discover</button>
-                    <button type="button" onClick={() => pageFlipRef.current?.flip(0)} className="min-h-11 text-[#6b4c3b] font-sans text-sm font-semibold underline underline-offset-4">Start again</button>
+                    <button type="button" data-action="picks" className="bg-[#3d2b1f] text-beige font-sans text-sm font-semibold px-8 py-3.5 rounded-full shadow-md active:scale-95 transition-transform">See my picks</button>
+                    <button type="button" data-action="home" className="min-h-11 text-[#6b4c3b] font-sans text-sm font-semibold underline underline-offset-4">Back to Discover</button>
+                    <button type="button" data-action="restart" className="min-h-11 text-[#6b4c3b] font-sans text-sm font-semibold underline underline-offset-4">Start again</button>
                   </div>
                 </div>
 

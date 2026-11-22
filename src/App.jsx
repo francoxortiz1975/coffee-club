@@ -15,6 +15,7 @@ import BottomNav from './components/BottomNav'
 import InstallPrompt from './components/InstallPrompt'
 import ScrollToTop from './components/ScrollToTop'
 import MigrationRunner from './components/MigrationRunner'
+import Seleccionados from './pages/Seleccionados'
 import Descubrir from './pages/Descubrir'
 import ShufflePage from './pages/ShufflePage'
 import SwipePage from './pages/SwipePage'
@@ -75,6 +76,7 @@ const BG_RULES = [
   { path: '/decidir',           bg: '/wood-bg.webp', overlay: 50 },
   { path: '/perfil',            bg: '/panama-bg.webp', overlay: 0  },
   { path: '/journey/:id',       bg: '/white-bg.webp', overlay: 40 },
+  { path: '/decidir/seleccionados', bg: '/wood-bg.webp', overlay: 50 },
   { path: '/journey',           bg: '/wood-bg.webp', overlay: 50 },
   { path: '/shelf/:id',         bg: '/wood-bg.webp', overlay: 50 },
   { path: '/map',               bg: '/wood-bg.webp', overlay: 50 },
@@ -122,6 +124,7 @@ function AppShell() {
           <Route path="/" element={<Descubrir />} />
           <Route path="/cafe/:id" element={<CafeDetalle />} />
           <Route path="/decidir" element={<Navigate to="/" replace />} />
+          <Route path="/decidir/seleccionados" element={<Seleccionados />} />
           <Route path="/decidir/aleatorio" element={<ShufflePage />} />
           <Route path="/decidir/swipe" element={<SwipePage />} />
           <Route path="/journey" element={<Navigate to="/" replace />} />

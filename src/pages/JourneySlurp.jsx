@@ -18,8 +18,6 @@ function toBubbles(slurp) {
   return out
 }
 
-const NOTES = { Technique: 'try this at home', Method: 'my favourite way', Recipe: 'taste as you go', Origin: 'a long way from here', Story: 'a good one', Tasting: 'slow down here', Paris: 'only in Paris', Tip: 'small, but it helps' }
-
 function Bubbles({ slurp, next, chapter }) {
   const lines = useState(() => toBubbles(slurp).slice(1))[0]
   const instant = useState(reduced)[0]
@@ -65,7 +63,6 @@ function Bubbles({ slurp, next, chapter }) {
       <p className="font-sans text-[22px] leading-tight tracking-tight mt-4">{chapter ? chapter.title : 'Coffee'}</p>
       <span className="tag-rule thin mt-3" />
       <h1 className="font-sans font-bold text-[40px] leading-[1.02] tracking-tight mt-5">{slurp.title}</h1>
-      <p className="tag-note mt-2 ml-1">{NOTES[slurp.kind] || 'read on'}<svg viewBox="0 0 160 10" className="block w-36 -mt-0.5" aria-hidden="true"><path d="M2 6 C30 1 60 9 90 4 S140 3 158 5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /></svg></p>
       <span className="tag-rule mt-6" />
 
       <div className="mt-5 flex flex-col gap-6" onClick={skip}>
@@ -73,7 +70,7 @@ function Bubbles({ slurp, next, chapter }) {
           if (!instant && i > li) return null
           const active = !instant && i === li
           return (
-            <p key={i} ref={active ? activeRef : null} aria-label={t} className="font-sans font-medium text-[18px] leading-snug border-l-[5px] border-[var(--ink)] pl-4">
+            <p key={i} ref={active ? activeRef : null} aria-label={t} className="font-sans font-medium text-[18px] leading-snug">
               <span aria-hidden="true">{active ? t.slice(0, n) : t}</span>
               {active && <span className="tag-caret" aria-hidden="true" />}
             </p>

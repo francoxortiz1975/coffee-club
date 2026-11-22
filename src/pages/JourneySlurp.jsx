@@ -3,7 +3,6 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { slurps, chapters } from '../data/journey'
 import { getRead, markRead } from '../lib/journeyProgress'
 import { ArrowLeftIcon } from '../components/Icons'
-import Barcode from '../components/Barcode'
 import '../components/slurpTag.css'
 
 const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
@@ -65,8 +64,7 @@ function Bubbles({ slurp, next, chapter, code }) {
 
       {finished && (
         <div className="tag-in mt-10">
-          <div className="flex items-end justify-between gap-3">
-            <Barcode seed={slurp.id} />
+          <div className="flex items-end justify-end gap-3">
             <div className="text-right font-sans font-bold leading-tight">
               <p className="text-[13px] tracking-wide">{(chapter?.title || '').toUpperCase()}</p>
               <p className="text-[26px]">{slurp.kind}</p>

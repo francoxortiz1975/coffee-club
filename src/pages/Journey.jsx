@@ -1,17 +1,18 @@
 import { useState } from 'react'
 import AppHeader from '../components/AppHeader'
 import DiscoverSwitch from '../components/DiscoverSwitch'
-import LessonCard from '../components/LessonCard'
-import { chapters, lessons } from '../data/journey'
+import SlurpCard from '../components/SlurpCard'
+import { chapters, slurps } from '../data/journey'
 import { getRead } from '../lib/journeyProgress'
 
-// Discover > Journey: short coffee lessons in chapters, with progress. It is a path, not just a feed.
+// Discover > Journey: short coffee slurps in chapters, with progress. It is a path, not just a feed.
 export default function Journey() {
   const [chapter, setChapter] = useState('all')
   const [read] = useState(getRead)
-  const list = chapter === 'all' ? lessons : lessons.filter((l) => l.chapter === chapter)
+  const list = chapter === 'all' ? slurps : slurps.filter((l) => l.chapter === chapter)
   const done = list.filter((l) => read.has(l.id)).length
-  const title = chapter === 'all' ? 'Your journey' : chapters.find((c) => c.id === chapter).title
+  const ci = chapters.findIndex((c) => c.id === chapter)
+  const title = chapter === 'all' ? 'Your journey' : `Chapter ${ci + 1} · ${chapters[ci].title}`
 
   return (
     <div className="pb-4">
@@ -40,15 +41,15 @@ export default function Journey() {
         </div>
 
         <div className="bg-[#fffaf0] rounded-2xl px-4 py-3 shadow-sm">
-          <p className="text-sm font-sans font-semibold text-cafe-dark">{title} · {done} of {list.length} read</p>
+          <p className="text-sm font-sans font-semibold text-cafe-dark">{title} · {done} of {list.length} slurped</p>
           <div className="h-1.5 rounded-full bg-cafe-accent/15 mt-2 overflow-hidden" aria-hidden="true">
             <div className="h-full bg-[#b8d04a] transition-all" style={{ width: `${list.length ? (done / list.length) * 100 : 0}%` }} />
           </div>
         </div>
 
-        {list.map((l) => <LessonCard key={l.id} lesson={l} read={read.has(l.id)} />)}
+        {list.map((l) => <SlurpCard key={l.id} slurp={l} read={read.has(l.id)} />)}
 
-        <p className="text-center text-sm text-cafe-accent/70 py-4">More lessons are on the way.</p>
+        <p className="text-center text-sm text-cafe-accent/70 py-4">More slurps are on the way.</p>
       </div>
     </div>
   )

@@ -1,10 +1,10 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import cafes from '../data/cafes.json'
-import { lessons } from '../data/journey'
+import { slurps, TEASER_IDS } from '../data/journey'
 import { buildShelves } from '../lib/shelves'
 import { useCafesDeCafeteros } from '../lib/useCafesDeCafeteros'
-import LessonCard from '../components/LessonCard'
+import SlurpCard from '../components/SlurpCard'
 import FilterBar from '../components/FilterBar'
 import AvatarButton from '../components/AvatarButton'
 import DiscoverSwitch from '../components/DiscoverSwitch'
@@ -143,7 +143,7 @@ export default function Descubrir() {
               <Link to="/journey" className="relative text-xs font-sans font-semibold text-cafe-accent before:absolute before:-inset-3 before:content-['']">Open ›</Link>
             </div>
             <div className="flex gap-3 overflow-x-auto -mx-4 px-4 scroll-pl-4 pb-2 snap-x snap-mandatory no-scrollbar">
-              {lessons.slice(0, 6).map((l) => <LessonCard key={l.id} lesson={l} variant="mini" />)}
+              {TEASER_IDS.map((id) => slurps.find((l) => l.id === id)).filter(Boolean).map((l) => <SlurpCard key={l.id} slurp={l} variant="mini" />)}
             </div>
           </section>
 

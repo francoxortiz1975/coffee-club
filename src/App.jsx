@@ -23,7 +23,7 @@ import Invite from './pages/Invite'
 import InviteNew from './pages/InviteNew'
 import MapTab from './pages/MapTab'
 import Journey from './pages/Journey'
-import JourneyLesson from './pages/JourneyLesson'
+import JourneySlurp from './pages/JourneySlurp'
 import Shelf from './pages/Shelf'
 import CafeDetalle from './pages/CafeDetalle'
 import InvitacionSetup from './pages/InvitacionSetup'
@@ -126,7 +126,7 @@ function AppShell() {
           <Route path="/decidir/swipe" element={<SwipePage />} />
           <Route path="/decidir/seleccionados" element={<Seleccionados />} />
           <Route path="/journey" element={<Journey />} />
-          <Route path="/journey/:id" element={<JourneyLesson />} />
+          <Route path="/journey/:id" element={<JourneySlurp />} />
           <Route path="/shelf/:id" element={<Shelf />} />
           <Route path="/map" element={<MapTab />} />
           <Route path="/collect" element={<Collect />} />

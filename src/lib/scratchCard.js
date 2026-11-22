@@ -5,11 +5,11 @@ import { startSteam } from './steam'
 
 /* The loyalty card demo on the landing: scratch today's box, the bean flies into the card, ten beans make a cup.
    Plain DOM + canvas on purpose (pointer events, WAAPI), mounted once by <ScratchCard />.
-   opts: { copy, startAt, onJoin }. Returns { destroy, setCopy }. */
+   opts: { copy, startAt, onJoin, single, onCollected } (single: one box, then onCollected instead of the next box). Returns { destroy, setCopy }. */
 export function mountScratchCard(root, opts = {}) {
   let copy = opts.copy
   const startAt = opts.startAt ?? 7
-  const host = root.closest('.sl') || document.body
+  const host = root.closest('.sl, .scx') || document.body
   const ac = new AbortController()
   const sig = { signal: ac.signal }
   let dead = false
@@ -223,7 +223,7 @@ export function mountScratchCard(root, opts = {}) {
     state.landing = i; state.marks[i] = spec; state.done++
     if (reduce) pad.remove()
     else pad.animate([{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(0.94)' }], { duration: 260, easing: 'ease-in', fill: 'forwards' })
-    const hold = state.done < 10
+    const hold = !opts.single && state.done < 10
     if (hold) setTimeout(() => { newPad(); state.busy = false }, reduce ? 0 : 320)   // the next box comes in while this bean travels
     if (!reduce) {
       const cupK = 1.44, cupShift = [-0.03, -0.05]   // the earned cup sits bigger than a bean
@@ -245,7 +245,11 @@ export function mountScratchCard(root, opts = {}) {
       const ic = [...slot.querySelectorAll('svg')].pop()
       if (ic) ic.animate([{ transform: 'scale(1.12, 0.88)' }, { transform: 'scale(0.96, 1.05)', offset: 0.5 }, { transform: 'none' }], { duration: 380, easing: 'ease-out' })
     }
-    if (!hold) { state.busy = false; newPad() }
+    if (!hold) {
+      state.busy = false
+      if (opts.single) { caption.textContent = ''; opts.onCollected?.(); return }
+      newPad()
+    }
   }
 
   /* ---------- play with the beans: hover (or tap) a collected bean and it turns 60 degrees and settles back ---------- */

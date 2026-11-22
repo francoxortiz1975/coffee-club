@@ -6,13 +6,14 @@ const loadFont = (f) => (document.fonts ? document.fonts.load(f).catch(() => {})
 
 // The playable loyalty card. React owns the static shell; lib/scratchCard.js draws and animates inside it.
 // It only starts when the section is near the viewport, so the canvas work never delays the first paint.
-export default function ScratchCard({ copy, onJoin }) {
+export default function ScratchCard({ copy, onJoin, startAt, single, onCollected }) {
   const rootRef = useRef(null)
   const ctlRef = useRef(null)
-  const latest = useRef({ copy, onJoin })
+  const latest = useRef({ copy, onJoin, onCollected })
 
   useEffect(() => {
     latest.current.onJoin = onJoin
+    latest.current.onCollected = onCollected
   })
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export default function ScratchCard({ copy, onJoin }) {
       if (cancelled || ctlRef.current) return
       Promise.all([loadFont('40px "Finger Paint"'), loadFont('36px Parisienne')]).then(() => {
         if (cancelled || ctlRef.current) return
-        ctlRef.current = mountScratchCard(root, { copy: latest.current.copy, onJoin: () => latest.current.onJoin?.() })
+        ctlRef.current = mountScratchCard(root, { copy: latest.current.copy, startAt, single, onJoin: () => latest.current.onJoin?.(), onCollected: () => latest.current.onCollected?.() })
       })
     }
     if ('IntersectionObserver' in window) {
@@ -45,6 +46,8 @@ export default function ScratchCard({ copy, onJoin }) {
       ctlRef.current?.destroy()
       ctlRef.current = null
     }
+    // mounted once on purpose: startAt and single are fixed for the life of the card
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

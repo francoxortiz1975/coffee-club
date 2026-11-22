@@ -4,7 +4,6 @@ import cafes from '../data/cafes.json'
 import { useCityCafes } from '../lib/city'
 import CitySwitch from '../components/CitySwitch'
 import AppHeader from '../components/AppHeader'
-import Segmented from '../components/Segmented'
 import LoyaltyCard from '../components/LoyaltyCard'
 import ParisPreview from '../components/ParisPreview'
 import ColeccionBarrio from '../components/ColeccionBarrio'
@@ -67,38 +66,31 @@ function Souvenirs() {
 export default function Collect() {
   const cityCafes = useCityCafes()
   const barrios = [...new Set(cityCafes.map((c) => c.barrio))]
-  const [view, setView] = useState('card')
   const { visitas } = useVisitas()
 
   return (
     <div className="pb-4">
-      <AppHeader title="Collect">
-        <Segmented
-          label="Collect view"
-          value={view}
-          onChange={setView}
-          options={[{ id: 'card', label: 'Card' }, { id: 'souvenirs', label: 'Souvenirs' }]}
-        />
-      </AppHeader>
+      <AppHeader title="Collect" />
 
-      <div className="px-4 mt-4 flex flex-col gap-5">
-        {view === 'card' ? (
-          <>
-            <LoyaltyCard total={visitas.length} />
-            <ParisPreview visited={visitas.length} />
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-lg font-display font-bold text-cafe-dark">By neighborhood</h2>
-                <CitySwitch />
-              </div>
-              <div className="flex flex-col gap-3">
-                {barrios.map((b) => <ColeccionBarrio key={b} barrio={b} />)}
-              </div>
-            </div>
-          </>
-        ) : (
+      <div className="px-4 mt-4 flex flex-col gap-6">
+        <LoyaltyCard total={visitas.length} />
+
+        <section>
+          <h2 className="text-lg font-display font-bold text-cafe-dark mb-3">Souvenirs</h2>
           <Souvenirs />
-        )}
+        </section>
+
+        <ParisPreview visited={visitas.length} />
+
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-display font-bold text-cafe-dark">By neighborhood</h2>
+            <CitySwitch />
+          </div>
+          <div className="flex flex-col gap-3">
+            {barrios.map((b) => <ColeccionBarrio key={b} barrio={b} />)}
+          </div>
+        </div>
       </div>
     </div>
   )

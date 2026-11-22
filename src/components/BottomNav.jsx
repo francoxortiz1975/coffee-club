@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { CompassIcon, MapIcon, CoffeeBeanIcon, InviteIcon } from './Icons'
+import { CompassIcon, MapIcon, CoffeeBeanOutlineIcon, InviteIcon } from './Icons'
 import { useInvitaciones } from '../context/InvitacionesContext'
 import { isUpcoming } from '../lib/plans'
 
@@ -8,7 +8,7 @@ import { isUpcoming } from '../lib/plans'
 const tabs = [
   { id: 'discover', to: '/', label: 'Discover', Icon: CompassIcon, match: (p) => p === '/' || p.startsWith('/decidir') || p.startsWith('/cafe/') || p.startsWith('/journey') || p.startsWith('/shelf/') },
   { id: 'map', to: '/map', label: 'Map', Icon: MapIcon, match: (p) => p.startsWith('/map') },
-  { id: 'collect', to: '/collect', label: 'Collect', Icon: CoffeeBeanIcon, match: (p) => p.startsWith('/collect') },
+  { id: 'collect', to: '/collect', label: 'Collect', Icon: CoffeeBeanOutlineIcon, match: (p) => p.startsWith('/collect') },
   { id: 'invite', to: '/invite', label: 'Invite', Icon: InviteIcon, match: (p) => p.startsWith('/invite') && !p.startsWith('/invitacion') },
 ]
 

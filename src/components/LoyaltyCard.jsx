@@ -37,12 +37,11 @@ export default function LoyaltyCard({ total, copy = loyaltyCopyEs }) {
   const shown = total <= 0 ? 0 : ((total - 1) % SLOTS) + 1 // 0..10: how much of the current card is filled
   const cups = Math.floor(total / SLOTS)
   const [intro, setIntro] = useState(true) // on first show the beans are dealt in one after another
-  const [spin, setSpin] = useState(-1)
-  const spinTimer = useRef(0)
+  const slotRefs = useRef([])
 
   useEffect(() => {
     const t = setTimeout(() => setIntro(false), 1600)
-    return () => { clearTimeout(t); clearTimeout(spinTimer.current) }
+    return () => clearTimeout(t)
   }, [])
 
   const faces = useMemo(
@@ -56,11 +55,19 @@ export default function LoyaltyCard({ total, copy = loyaltyCopyEs }) {
   const d = shown
   const text = d <= 0 ? copy.c0 : d === 1 ? copy.c1 : d === 9 ? copy.c9 : d >= 10 ? copy.c10 : copy.cN.replace('{n}', d).replace('{r}', 10 - d)
 
+  // Tap a bean: it turns 60 degrees and settles back. Tap the cup: it hops. Same moves as the landing card.
   function tap(i) {
-    if (i >= shown) return
-    setSpin(i)
-    clearTimeout(spinTimer.current)
-    spinTimer.current = setTimeout(() => setSpin(-1), 650)
+    if (i >= shown || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const slot = slotRefs.current[i]
+    const ic = slot?.querySelector('svg:not(.out)')
+    if (!ic || slot.dataset.busy) return
+    slot.dataset.busy = '1'
+    const cup = i === SLOTS - 1
+    const frames = cup
+      ? [{ transform: 'translateY(0) rotate(0)' }, { transform: 'translateY(-10px) rotate(-7deg)', offset: 0.35 }, { transform: 'translateY(0) rotate(4deg)', offset: 0.65 }, { transform: 'none' }]
+      : [{ transform: 'rotate(0deg) scale(1)' }, { transform: 'rotate(60deg) scale(1.16)', offset: 0.42 }, { transform: 'rotate(-7deg) scale(1.03)', offset: 0.74 }, { transform: 'rotate(0deg) scale(1)' }]
+    const done = () => { delete slot.dataset.busy }
+    ic.animate(frames, { duration: cup ? 560 : 640, easing: 'cubic-bezier(0.4, 0, 0.2, 1)' }).finished.then(done, done)
   }
 
   return (
@@ -78,7 +85,8 @@ export default function LoyaltyCard({ total, copy = loyaltyCopyEs }) {
               <button
                 type="button"
                 key={i}
-                className={`lc-slot ${i === SLOTS - 1 ? 'cup' : ''} ${on ? 'on' : ''} ${next ? 'next' : ''} ${spin === i ? 'spin' : ''}`}
+                ref={(el) => { slotRefs.current[i] = el }}
+                className={`lc-slot ${i === SLOTS - 1 ? 'cup' : ''} ${on ? 'on' : ''} ${next ? 'next' : ''} `}
                 style={{ '--gd': `${(i * 0.17).toFixed(2)}s`, '--td': `${((i * 1.37) % 7).toFixed(2)}s`, '--in': intro ? `${i * 90}ms` : '0ms' }}
                 onClick={() => tap(i)}
                 tabIndex={on ? 0 : -1}

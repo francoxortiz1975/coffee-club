@@ -42,6 +42,18 @@ export function BriefcaseIcon({ size = 16, className = '' }) {
 }
 
 let beanIdCounter = 0
+// Outline bean, same stroke style as the other tab icons.
+export function CoffeeBeanOutlineIcon({ size = 24, className = '' }) {
+  return (
+    <svg {...s({ width: size, height: size })} className={className} viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+      <g transform="rotate(-30 12 12)">
+        <ellipse cx="12" cy="12" rx="6.5" ry="9.5" />
+        <path d="M12 3.5 Q14.8 7.5 14.8 12 Q14.8 16.5 12 20.5" />
+      </g>
+    </svg>
+  )
+}
+
 export function CoffeeBeanIcon({ size = 16, className = '' }) {
   // Mask para cortar la ranura central (queda transparente, se ve el fondo)
   const maskId = `bean-mask-${beanIdCounter++}`

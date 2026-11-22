@@ -98,7 +98,9 @@
     "lat": 48.850815,
     "lng": 2.381645,
     "tipo": "Café & ceramic studio",
-    "ocasiones": [],
+    "ocasiones": [
+      "couple"
+    ],
     "especialidad": "Coffee and ceramic painting",
     "historia": "A café and a ceramic studio in one place, where you can paint your own piece over a coffee.",
     "descripcion": "A hybrid place: a café and a ceramic studio in one. Drop in whenever you like and paint your own ceramic piece, with all the materials ready for you. Never done it? No worries: when you arrive they show you how to paint on ceramic and share a few ideas and techniques anyone can try. You can also join guided workshops in ceramic decoration, modelling, wheel throwing or Kintsugi.",
@@ -121,7 +123,9 @@
     "lng": 2.3772,
     "coordsApprox": true,
     "tipo": "Coffee station",
-    "ocasiones": [],
+    "ocasiones": [
+      "work"
+    ],
     "especialidad": "Seasonal coffee, ceremonial matcha, homemade pastries",
     "historia": "A tiny 27 m² shop in the 9th that grew into a Paris coffee community: seasonal coffee, ceremonial matcha, daily homemade pastries.",
     "descripcion": "Born in Paris, adopted everywhere. Cuvée Noire started in 2023 in a tiny 27 m² space on Rue Saint-Lazare in the 9th and has been building a community around carefully chosen coffee ever since. The coffee is sourced season by season, the ceremonial matcha is imported directly, and the pastries are homemade every day. Made for the mornings that matter, the breaks that do you good, and the meetups you improvise. Nothing too much, just what is needed. Their motto: Do Not Disturb Unless It’s For A Coffee.",
@@ -144,7 +148,10 @@
     "lng": 2.3738,
     "coordsApprox": true,
     "tipo": "Bakery & specialty coffee",
-    "ocasiones": [],
+    "ocasiones": [
+      "couple",
+      "friends"
+    ],
     "especialidad": "Homemade bread, pastries and specialty coffee",
     "historia": "A Paris bakery founded in 2017 by two career changers: everything homemade, creative and open to all.",
     "descripcion": "Two people who never planned to be bakers. She was a lawyer at the Paris hospitals, he had just sold the company he founded. In 2015 each decided to start over, and their paths crossed at the Ferrandi culinary school. The first BO&MIE opened in 2017 on Rue de Turbigo, with everything made in-house from day one: the raspberry croissant, the praline bread and the vanilla flan are still on the menu. Since then it has grown from Paris to Seoul, but the promise is the same: homemade, creative and open to everyone. Bread, pastries and specialty coffee, made by their own teams.",

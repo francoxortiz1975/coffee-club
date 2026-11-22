@@ -16,3 +16,6 @@
 
 /* one human touch: a handwritten note */
 .tag-note{font-family:'Parisienne',cursive;font-size:26px;line-height:1;transform:rotate(-3deg);display:inline-block}
+.tag-reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.8,.3,1)}
+.tag-reveal.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.tag-reveal{opacity:1;transform:none;transition:none}}

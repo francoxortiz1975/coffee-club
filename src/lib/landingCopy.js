@@ -1,6 +1,6 @@
-export const LANGS = ['en', 'es']
+export const LANGS = ['en']
 
-// The playable loyalty card on the landing. English in both languages on purpose.
+// The playable loyalty card on the landing.
 const beansPlay = {
   stage: 'Today’s box',
   card: 'Loyalty card',
@@ -22,114 +22,6 @@ const beansPlay = {
 }
 
 export const copy = {
-  es: {
-    metaDescription: 'Descubre, decide e invita a las mejores cafeterías de Quito y París.',
-    skip: 'Saltar al contenido',
-    navCta: 'Únete al waitlist',
-    betaTag: 'Beta',
-
-    heroTitle: ['El club del buen café.', 'Ahora en París.'],
-    heroLead:
-      'Encuentra las mejores cafeterías de la ciudad, elige una en segundos y manda la invitación. Suma un bean en cada visita.',
-    heroCta: 'Únete al waitlist',
-    heroSecondary: 'Ver cómo funciona',
-    heroPhotoAlt: 'Un espresso frío en copa sobre una tabla de madera, junto a libros viejos y granos de café',
-    heroPhoneAlt: 'App de Sumay, pantalla Descubrir con cafeterías cercanas',
-
-    statement: {
-      a: 'Tu pana de confianza para ',
-      hl1: 'ubicar buenos cafés',
-      b: ', coleccionarlos y armar el próximo ',
-      hl2: 'cafecito',
-      c: ' sin pensarlo mucho.',
-    },
-
-    panels: {
-      discover: {
-        title: 'Descubre',
-        body: 'Cafeterías curadas por barrio, especialidad y ocasión. Filtros, favoritas y reseñas reales.',
-      },
-      decide: {
-        title: 'Decide',
-        body: 'Aleatorio para los que no se deciden, o un libro infinito para hojear y armar tu lista de cafeterías por visitar.',
-        alt: 'Animación de la app: el libro de cafeterías pasa de página con cada café que te interesa',
-      },
-      invite: {
-        title: 'Invita',
-        body: 'Genera una invitación bien elegante, con fecha y nombre. La mandas por WhatsApp ¡de una!',
-        alt: 'App de Sumay: rasca el sello de cera del sobre y sale la carta de invitación',
-        replay: 'Otra vez',
-      },
-    },
-
-    beans: {
-      title: 'Cada café es un bean. Diez beans hacen una taza.',
-      note: '¡Igual que una tarjeta de lealtad! Pero para todas las cafeterías de París.',
-      play: beansPlay,
-    },
-
-    cafes: {
-      bornIn: 'Nació en Quito.',
-      title: 'París se está armando ahora.',
-      body: 'Agrega tu cafetería favorita ahora:',
-      cta: 'Agregar una cafetería',
-      notes: {
-        'republica-del-cacao': 'Chocolate caliente de cacao fino de origen.',
-        'coffee-factory': 'Café de especialidad, calidad de exportación 100% ecuatoriano.',
-        'quito-deli': 'Croissants y pan recién horneado al estilo europeo.',
-      },
-      alts: {
-        'republica-del-cacao': 'República del Cacao: mostrador con pasteles y chocolates bajo lámparas colgantes',
-        'coffee-factory': 'Coffee Factory: mostrador de madera, pared de ladrillo y mesas',
-        'quito-deli': 'Quito Deli: salón luminoso con mesas de mármol y un mural',
-      },
-    },
-
-    invites: {
-      titleA: 'Se acabó el ',
-      titleEm: '“¿dónde nos vemos?”',
-      body: 'Elige el café, la fecha y la persona. Sumay arma una invitación animada y bien bonita. El otro la abre y ya sabe a dónde ir.',
-      facts: ['Café', 'Fecha y hora', 'Quién invita', 'Link único'],
-      alt: 'Animación de la app: un sobre se abre y revela la invitación de Franco a María en Coffee Factory',
-    },
-
-    waitlist: {
-      title: 'Reserva tu lugar en el club.',
-      sub: 'Deja tu email para el acceso anticipado a la app. Nada de spam.',
-      email: 'Email',
-      emailPlaceholder: 'tu@email.com',
-      city: 'Tu ciudad (opcional)',
-      cityNone: 'Elige una',
-      cities: { quito: 'Quito', paris: 'París', other: 'Otra ciudad' },
-      message: 'Mensaje (opcional)',
-      messageHelp: 'Recomiéndanos una cafetería, mándanos una nota o cuéntanos qué buscas.',
-      submit: 'Únete al waitlist',
-      submitting: 'Enviando…',
-      errorInvalid: 'Revisa tu email, parece incompleto.',
-      errorGeneric: 'Algo salió mal. Prueba de nuevo en un momento.',
-      successTitle: 'Estás dentro',
-      successBody: 'Te escribiremos pronto con tu acceso a la app.',
-      terms: 'Al sumarte aceptas recibir un único mail con el acceso.',
-    },
-
-    footer: {
-      made: 'Hecho con el shungo en Quito y París',
-      privacy: 'Privacidad',
-      contact: 'Contacto',
-      dark: 'Oscuro',
-      light: 'Claro',
-      theme: 'Tema',
-    },
-
-    inApp: {
-      title: 'Abre Sumay en tu navegador',
-      insideBefore: 'Estás dentro de ',
-      insideAfter: '. Toca los ',
-      topRight: ' arriba a la derecha → ',
-      openExternal: '“Abrir en navegador externo”',
-      openChrome: '“Abrir en Chrome”',
-    },
-  },
 
   en: {
     metaDescription: 'Discover, decide and invite to the best coffee shops in Quito and Paris.',

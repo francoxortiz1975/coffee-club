@@ -50,54 +50,5 @@ export const privacyCopy = {
     ],
   },
 
-  es: {
-    title: 'Privacidad',
-    docTitle: 'Privacidad | Sumay Coffee Club',
-    intro: 'Sumay es un proyecto pequeño. Esta página explica, en palabras simples, qué datos recogemos y para qué.',
-    updated: 'Última actualización: 9 de noviembre de 2026',
-    back: 'Volver al inicio',
-    sections: [
-      {
-        heading: 'Qué recogemos',
-        items: [
-          'En el waitlist: tu email y, si quieres, tu ciudad y un mensaje. Si haces el quiz de tu perfil cafetero, también guardamos tus respuestas (qué buscas, tu mood de cafetería, tu nivel de café, con qué frecuencia vas y tus barrios) y el nombre de tu perfil. También anotamos en qué idioma entraste, qué link te trajo y el tipo de navegador y dispositivo, para saber de dónde viene el interés.',
-          'En la app, si creas una cuenta: tu email (para entrar con un link de un solo uso), tu nombre y usuario, tu café y cafetería favoritos, una foto opcional y lo que creas ahí: favoritas, visitas, invitaciones, recuerdos con fotos y conexiones con otros miembros.',
-        ],
-      },
-      {
-        heading: 'Para qué lo usamos',
-        items: [
-          'Para mandarte un email cuando tu acceso esté listo, para que la app funcione y para decidir qué ciudades y cafeterías armar primero. No vendemos tus datos y no usamos cookies de publicidad ni de rastreo.',
-        ],
-      },
-      {
-        heading: 'Dónde se guardan',
-        items: [
-          'Tus datos se guardan con Supabase, nuestro proveedor de base de datos. El sitio lo sirve Vercel y carga algunas tipografías de Google Fonts, así que esos servicios pueden ver tu dirección IP cuando entras.',
-        ],
-      },
-      {
-        heading: 'En tu dispositivo',
-        items: [
-          'Guardamos tu idioma, tu tema y una copia de tu registro al waitlist en el almacenamiento local de tu navegador. La app también guarda ahí tus favoritas y visitas. Cuando compartes tu perfil cafetero, la imagen se crea en tu dispositivo. Puedes borrarlo todo desde los ajustes de tu navegador.',
-        ],
-      },
-      {
-        heading: 'Cuánto tiempo lo guardamos',
-        items: [
-          'Guardamos tu email del waitlist hasta que te enviemos el acceso o nos pidas borrarlo. Los datos de la app se quedan hasta que los borres o nos pidas eliminar tu cuenta.',
-        ],
-      },
-      {
-        heading: 'Tus opciones',
-        items: [
-          'Puedes pedirnos ver, corregir o borrar tus datos cuando quieras escribiendo a hola@sumayclub.app. Si estás en la Unión Europea, también puedes presentar una queja ante tu autoridad local de protección de datos.',
-        ],
-      },
-      {
-        heading: 'Cambios',
-        items: ['Si esto cambia de forma importante, actualizaremos esta página y la fecha de arriba.'],
-      },
-    ],
-  },
+
 }

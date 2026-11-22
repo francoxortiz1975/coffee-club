@@ -1,0 +1,20 @@
+.jscene{position:fixed;inset:0;max-width:28rem;margin:0 auto;z-index:0;pointer-events:none;overflow:hidden}
+.jscene-layer{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease}
+.jscene-layer.on{opacity:1}
+.jfx{position:absolute;display:block;border-radius:50%;opacity:0;background:rgba(255,255,255,.55);filter:blur(1.5px)}
+.jfx.steam{bottom:-20px;animation:j-rise linear infinite;filter:blur(6px);background:rgba(255,255,255,.4)}
+.jfx.mist{bottom:10%;animation:j-drift linear infinite;filter:blur(10px);background:rgba(255,255,255,.35);transform:scale(3)}
+.jfx.drops{top:-30px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:rgba(255,255,255,.5);animation:j-fall linear infinite}
+.jfx.sparkle{top:20%;animation:j-twinkle ease-in-out infinite;background:#fff;filter:none;transform:scale(.4)}
+.jhills{position:absolute;left:0;right:0;bottom:0;width:100%;height:22%}
+@keyframes j-rise{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:.7}100%{transform:translateY(-90vh) scale(1.6);opacity:0}}
+@keyframes j-drift{0%{transform:translateX(-20vw) scale(3);opacity:0}30%{opacity:.6}100%{transform:translateX(30vw) scale(3.4);opacity:0}}
+@keyframes j-fall{0%{transform:translateY(0);opacity:0}15%{opacity:.8}100%{transform:translateY(105vh);opacity:0}}
+@keyframes j-twinkle{0%,100%{opacity:0;transform:scale(.3)}50%{opacity:.9;transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.jfx{animation:none!important;opacity:.35}.jscene-layer{transition:none}}
+.j-in{animation:j-pop .35s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes j-pop{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+.j-typing i{width:7px;height:7px;border-radius:50%;background:#6b4c3b;animation:j-dot 1s infinite}
+.j-typing i:nth-child(2){animation-delay:.15s}.j-typing i:nth-child(3){animation-delay:.3s}
+@keyframes j-dot{0%,60%,100%{opacity:.3;transform:none}30%{opacity:1;transform:translateY(-3px)}}
+@media (prefers-reduced-motion:reduce){.j-in,.j-typing i{animation:none}}

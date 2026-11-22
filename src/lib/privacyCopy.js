@@ -10,7 +10,7 @@ export const privacyCopy = {
         heading: 'What we collect',
         items: [
           'On the waitlist: your email, and optionally your city and a message. If you take the coffee profile quiz, we also save your answers (what you are looking for, your coffee shop mood, your coffee level, how often you go, and your neighborhoods) and your profile name. We also note which language you used, which link brought you here, and your browser and device type, so we can see where interest is coming from.',
-          'In the app, if you create an account: your email (to sign you in with a one-time email link), your name and username, your favorite coffee and café, an optional photo, and what you create there: favorites, visits, invitations, memories with photos, and connections with other members.',
+          'In the app, if you create an account: your email (to sign you in with a one-time email link), your name and username, your favorite coffee and café, an optional photo, and what you create there: favorites, visits, invitations, souvenirs with photos, and connections with other members.',
         ],
       },
       {

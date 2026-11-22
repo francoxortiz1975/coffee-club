@@ -61,7 +61,7 @@ export default function RecuerdoModal({ cafe, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="px-5 pt-5 pb-2">
-          <p className="text-[11px] uppercase tracking-widest text-cafe-accent/50 mb-1">Memory</p>
+          <p className="text-[11px] uppercase tracking-widest text-cafe-accent/50 mb-1">Souvenir</p>
           <h3 className="text-xl font-display font-bold text-cafe-dark leading-tight">{cafe.nombre}</h3>
         </div>
 
@@ -138,14 +138,14 @@ export default function RecuerdoModal({ cafe, onClose }) {
             disabled={estado === 'guardando'}
             className="w-full bg-cafe-dark text-[#b8d04a] text-sm font-bold py-3.5 rounded-2xl ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform disabled:opacity-50"
           >
-            {estado === 'guardando' ? 'Saving…' : existente ? 'Update memory' : 'Save memory'}
+            {estado === 'guardando' ? 'Saving…' : existente ? 'Update souvenir' : 'Save souvenir'}
           </button>
           {existente && !confirmarBorrar && (
             <button
               onClick={() => setConfirmarBorrar(true)}
               className="text-xs font-semibold text-red-500/80 underline self-center"
             >
-              Delete memory
+              Delete souvenir
             </button>
           )}
           {confirmarBorrar && (

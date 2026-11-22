@@ -18,7 +18,7 @@ function toBubbles(slurp) {
   return out
 }
 
-function Bubbles({ slurp, next, chapter, code }) {
+function Bubbles({ slurp, next, chapter }) {
   const bubbles = useState(() => toBubbles(slurp))[0]
   const [shown, setShown] = useState(1)
   const [typing, setTyping] = useState(false)
@@ -40,7 +40,6 @@ function Bubbles({ slurp, next, chapter, code }) {
         <p className="text-[11px] font-sans font-semibold tracking-[0.12em] mt-1">{slurp.kind.toUpperCase()}</p>
         <div className="flex items-start gap-3">
           <span className="tag-stamp"><span className="block text-[15px] font-bold">{slurp.minutes}</span>min</span>
-          <p className="text-[11px] font-sans font-semibold tracking-[0.1em] mt-1">SL-{code}</p>
         </div>
       </div>
       <span className="tag-rule mt-4" />
@@ -107,7 +106,7 @@ export default function JourneySlurp() {
       <div className="sticky top-0 z-20 flex items-center px-2 tag-paper" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
         <button onClick={() => navigate(-1)} aria-label="Back" className="w-11 h-11 flex items-center justify-center active:scale-95 transition-transform"><ArrowLeftIcon size={22} /></button>
       </div>
-      <Bubbles key={slurp.id} slurp={slurp} next={next} chapter={chapter} code={String(i + 1).padStart(3, '0')} />
+      <Bubbles key={slurp.id} slurp={slurp} next={next} chapter={chapter} />
     </div>
   )
 }

@@ -62,7 +62,7 @@ function Bubbles({ slurp, next, chapter }) {
       <span className="tag-rule mt-4" />
       <p className="font-sans text-[22px] leading-tight tracking-tight mt-4">{chapter ? chapter.title : 'Coffee'}</p>
       <span className="tag-rule thin mt-3" />
-      <h1 className="font-sans font-bold text-[40px] leading-[1.02] tracking-tight mt-5">{slurp.title}</h1>
+      <h1 className="font-display font-bold text-[40px] leading-[1.02] mt-5">{slurp.title}</h1>
       <span className="tag-rule mt-6" />
 
       <div className="mt-5 flex flex-col gap-6" onClick={skip}>

@@ -105,7 +105,7 @@ export default function CafeDetalle() {
 
       <div className="relative z-10 px-5 py-5">
         <div className="flex items-start justify-between mb-1">
-          <h1 className="text-[34px] font-sans font-bold text-cafe-dark leading-[1.04] tracking-tight"><TypeText text={cafe.nombre} speed={30} /></h1>
+          <h1 className="text-[34px] font-display font-bold text-cafe-dark leading-[1.04]"><TypeText text={cafe.nombre} speed={30} /></h1>
           <span className="text-base text-cafe-accent font-semibold ml-3 shrink-0 mt-1">{cafe.precio}</span>
         </div>
 

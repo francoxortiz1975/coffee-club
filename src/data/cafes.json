@@ -83,11 +83,11 @@
     "direccion": "",
     "lat": 48.850815,
     "lng": 2.381645,
-    "tipo": "Coffee shop",
+    "tipo": "Café & ceramic studio",
     "ocasiones": [],
-    "especialidad": "",
-    "historia": "",
-    "descripcion": "",
+    "especialidad": "Coffee and ceramic painting",
+    "historia": "A café and a ceramic studio in one place, where you can paint your own piece over a coffee.",
+    "descripcion": "A hybrid place: a café and a ceramic studio in one. Drop in whenever you like and paint your own ceramic piece, with all the materials ready for you. Never done it? No worries: when you arrive they show you how to paint on ceramic and share a few ideas and techniques anyone can try. You can also join guided workshops in ceramic decoration, modelling, wheel throwing or Kintsugi.",
     "fotos": [
       "/images/ceramicafe-genevieve/cover.jpg"
     ],

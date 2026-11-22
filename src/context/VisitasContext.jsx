@@ -30,6 +30,8 @@ async function loadFromSupabase(userId) {
 export function VisitasProvider({ children }) {
   const { user, cargando: authCargando } = useAuth()
   const [visitas, setVisitas] = useState([])
+  // Set when a visit is added, so the scratch-to-collect moment can play once.
+  const [fresh, setFresh] = useState(null)
 
   useEffect(() => {
     if (authCargando) return
@@ -83,6 +85,7 @@ export function VisitasProvider({ children }) {
 
   async function toggleVisita(cafeId) {
     const yaVisitado = visitas.includes(cafeId)
+    if (!yaVisitado) setFresh({ cafeId, n: visitas.length + 1, key: Date.now() })
 
     if (!user) {
       // Anonymous → localStorage
@@ -118,7 +121,7 @@ export function VisitasProvider({ children }) {
   }
 
   return (
-    <VisitasContext.Provider value={{ visitas, toggleVisita }}>
+    <VisitasContext.Provider value={{ visitas, toggleVisita, fresh, clearFresh: () => setFresh(null) }}>
       {children}
     </VisitasContext.Provider>
   )

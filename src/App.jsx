@@ -8,6 +8,7 @@ import { UsuarioProvider } from './context/UsuarioContext'
 import { AuthProvider } from './context/AuthContext'
 import { CafeterosProvider } from './context/CafeterosContext'
 import { RecuerdosProvider } from './context/RecuerdosContext'
+import CollectReveal from './components/CollectReveal'
 import { CityProvider } from './context/CityContext'
 import BottomNav from './components/BottomNav'
 import InstallPrompt from './components/InstallPrompt'
@@ -103,6 +104,7 @@ function AppShell() {
 
   return (
     <div className="min-h-screen max-w-md mx-auto relative">
+      <CollectReveal />
       {bg && (
         <>
           {/* Fondo fijo al viewport: nunca se acaba con el scroll */}

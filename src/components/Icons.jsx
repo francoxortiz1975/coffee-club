@@ -285,3 +285,12 @@ export function SparkleIcon({ size = 28, className = '' }) {
     </svg>
   )
 }
+
+export function CompassIcon({ size = 24, className = '' }) {
+  return (
+    <svg {...s({ width: size, height: size })} className={className} viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9" />
+      <polygon points="15.5,8.5 13.4,13.4 8.5,15.5 10.6,10.6" />
+    </svg>
+  )
+}

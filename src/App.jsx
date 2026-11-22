@@ -18,6 +18,10 @@ import ShufflePage from './pages/ShufflePage'
 import SwipePage from './pages/SwipePage'
 import Seleccionados from './pages/Seleccionados'
 import Perfil from './pages/Perfil'
+import Collect from './pages/Collect'
+import Invite from './pages/Invite'
+import InviteNew from './pages/InviteNew'
+import MapTab from './pages/MapTab'
 import CafeDetalle from './pages/CafeDetalle'
 import InvitacionSetup from './pages/InvitacionSetup'
 import InvitacionPage from './pages/InvitacionPage'
@@ -66,8 +70,12 @@ const BG_RULES = [
   { path: '/decidir/aleatorio', bg: null,             overlay: 0  },
   { path: '/decidir/swipe',     bg: '/white-bg.webp', overlay: 40 },
   { path: '/decidir/seleccionados', bg: '/wood-bg.webp', overlay: 50 },
-  { path: '/decidir',           bg: '/texture-bg.webp', overlay: 0  },
+  { path: '/decidir',           bg: '/wood-bg.webp', overlay: 50 },
   { path: '/perfil',            bg: '/panama-bg.webp', overlay: 0  },
+  { path: '/map',               bg: '/wood-bg.webp', overlay: 50 },
+  { path: '/collect',           bg: '/panama-bg.webp', overlay: 0  },
+  { path: '/invite/new',        bg: '/wood-bg.webp', overlay: 50 },
+  { path: '/invite',            bg: '/wood-bg.webp', overlay: 50 },
   { path: '/cafe/:id',          bg: '/white-bg.webp', overlay: 40 },
   { path: '/invitacion/:id/setup', bg: '/wood-bg.webp', overlay: 50 },
   { path: '/invitacion/:id',    bg: '/wood-bg.webp', overlay: 50 },
@@ -111,6 +119,10 @@ function AppShell() {
           <Route path="/decidir/aleatorio" element={<ShufflePage />} />
           <Route path="/decidir/swipe" element={<SwipePage />} />
           <Route path="/decidir/seleccionados" element={<Seleccionados />} />
+          <Route path="/map" element={<MapTab />} />
+          <Route path="/collect" element={<Collect />} />
+          <Route path="/invite" element={<Invite />} />
+          <Route path="/invite/new" element={<InviteNew />} />
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/invitacion/:id/setup" element={<InvitacionSetup />} />
           <Route path="/invitacion/:id" element={<InvitacionPage />} />

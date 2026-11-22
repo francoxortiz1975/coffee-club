@@ -16,9 +16,10 @@ Product/marketing context lives in `docs/PRODUCT.md`. Read that first for the "w
 
 ## Layout
 - `src/App.jsx`: two worlds. Standalone pages `/landing`, `/quiz`, `/privacy` (own CSS, light/dark theme, no app shell) and `AppShell` for everything else (bottom nav, textured background per route).
-- App screens (`src/pages`): Descubrir (`/`), CafeDetalle, Decidir → ShufflePage / SwipePage (page-flip book) / Seleccionados, Perfil, Cafeteros, InvitacionSetup, InvitacionPage, Login.
+- App navigation is four tabs: **Discover** (`/` Browse, `/decidir` Swipe mode with the book at `/decidir/swipe` and random at `/decidir/aleatorio`), **Map** (`/map`, modes Explore and My Paris via `?mode=mine`; placeholder until the treasure map is built, style: parchment with X marks and a dotted route, wax stamps for visited cafés, no scratch fog), **Collect** (`/collect`: Card and Souvenirs, plus a My Paris preview and the by-neighborhood list) and **Invite** (`/invite`: next plan, New invitation → `/invite/new` → `/invitacion/:id/setup`, then Received / Sent / Past, unread badge on the tab). Profile (`/perfil`) is not a tab: it opens from the avatar top right on every screen.
+- Other screens (`src/pages`): CafeDetalle, Seleccionados, Cafeteros, InvitacionSetup, InvitacionPage (the receiver's scratch-the-stamp reveal), Login.
 - Data: `src/data/cafes.json` (3 cafés today), contexts in `src/context` (Visitas, Invitaciones, Usuario, Auth, Cafeteros, Recuerdos, Favoritos). Anonymous users use localStorage; signed-in users use Supabase.
-- Key components: `components/invitation/` (envelope reveal + landing demo), `components/LoyaltyCard.jsx` (+ `lib/beanArt.js` 3D bean/cup SVG), `components/ScratchCard.jsx` + `lib/scratchCard.js` (landing's playable card), `components/BottomNav.jsx`.
+- Key components: `components/invitation/` (envelope reveal + landing demo), `components/LoyaltyCard.jsx` (+ `lib/beanArt.js` 3D bean/cup SVG), `components/ScratchCard.jsx` + `lib/scratchCard.js` (landing's playable card), `components/BottomNav.jsx` (4 tabs), `components/AppHeader.jsx` + `AvatarButton.jsx` + `Segmented.jsx` (shared header, profile avatar, iOS-style switch), `lib/parisMap.js` (placeholder Paris outline), `lib/plans.js` (next plan / past helpers).
 
 ## Design system
 - Fonts (bundled via `@fontsource`, no CDN): Bricolage Grotesque = headings (`font-display`), Geist = body/UI (`font-sans`, default), Parisienne = rare handwritten note (`font-hand`). Scoped exceptions: Cormorant Garamond + Pinyon Script only inside the invitation letter, Finger Paint only on the landing card's crayon label. Do not add new families.
@@ -40,4 +41,4 @@ Product/marketing context lives in `docs/PRODUCT.md`. Read that first for the "w
 - Develop on the branch you are told to use; pushing to `main` deploys to production, so only do it when the owner says so.
 
 ## Open items
-Burlap photo texture; delete unused Spanish copy files; verify the quiz bean board; optional scratch-to-collect when marking a visit in Perfil; decide on translating the app to English.
+Map tab (treasure map, needs café coordinates and the real Paris outline); Parisian cafés in `cafes.json` (they need lat/lng); burlap photo texture; delete unused Spanish copy files; verify the quiz bean board; optional scratch-to-collect when marking a visit in Perfil; decide on translating the app to English.

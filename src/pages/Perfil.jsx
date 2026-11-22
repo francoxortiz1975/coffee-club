@@ -1,217 +1,21 @@
 import { useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import cafes from '../data/cafes.json'
-import { useVisitas } from '../context/VisitasContext'
-import { useInvitaciones } from '../context/InvitacionesContext'
 import { useUsuario, generarUsername, TIPOS_CAFE } from '../context/UsuarioContext'
 import { useAuth } from '../context/AuthContext'
 import { useCafeteros } from '../context/CafeterosContext'
-import { useRecuerdos } from '../context/RecuerdosContext'
-import RecuerdoModal from '../components/RecuerdoModal'
-import LoyaltyCard, { BeanRow } from '../components/LoyaltyCard'
-import {
-  CoffeeCupIcon, CoffeeBeanIcon, InviteIcon, PinIcon, UserIcon, CameraIcon,
-} from '../components/Icons'
-
-const barrios = [...new Set(cafes.map((c) => c.barrio))]
-
-function ColeccionBarrio({ barrio }) {
-  const [abierto, setAbierto] = useState(false)
-  const [recuerdoCafe, setRecuerdoCafe] = useState(null)
-  const [promptCafe, setPromptCafe] = useState(null) // café recién marcado → "¿agregar foto?"
-  const { visitas, toggleVisita } = useVisitas()
-  const { getRecuerdo } = useRecuerdos()
-  const cafesBarrio = cafes.filter((c) => c.barrio === barrio)
-  const visitados = cafesBarrio.filter((c) => visitas.includes(c.id)).length
-
-  // Tap en el bean del slot:
-  //  - si estaba visitado → desmarca directo, sin prompt
-  //  - si no estaba visitado y NO hay recuerdo → marca + abre prompt 'agregar recuerdo'
-  //  - si no estaba visitado y SÍ hay recuerdo guardado → solo marca, sin prompt
-  async function handleBeanTap(cafe, visitado, e) {
-    e.preventDefault()
-    e.stopPropagation()
-    if (visitado) {
-      await toggleVisita(cafe.id)
-      return
-    }
-    await toggleVisita(cafe.id)
-    if (!getRecuerdo(cafe.id)) {
-      setPromptCafe(cafe)
-    }
-  }
-
-  return (
-    <div className="bg-[#faf4ec] rounded-2xl overflow-hidden shadow-sm">
-      <button
-        onClick={() => setAbierto((v) => !v)}
-        className="w-full flex items-center justify-between px-4 py-3.5"
-      >
-        <div className="text-left">
-          <p className="text-sm font-sans font-bold text-cafe-dark">{barrio}</p>
-          <p className="text-xs text-cafe-accent/50 mt-0.5">{visitados} / {cafesBarrio.length} visited</p>
-        </div>
-        <span className={`text-cafe-accent/40 transition-transform text-xs ${abierto ? 'rotate-180' : ''}`}>▼</span>
-      </button>
-
-      {/* One small bean per café of the barrio: a 3D bean once visited, a stitched outline until then */}
-      <div className="px-4 pb-3">
-        <BeanRow items={cafesBarrio.map((c) => ({ id: c.id, visited: visitas.includes(c.id), title: c.nombre }))} />
-      </div>
-
-      {abierto && (
-        <div className="grid grid-cols-3 gap-3 p-4">
-          {cafesBarrio.map((cafe) => {
-            const visitado = visitas.includes(cafe.id)
-            const recuerdo = getRecuerdo(cafe.id)
-            const cafeFoto = cafe.fotos?.[0]
-            // Si está visitado y hay recuerdo + foto del café → crossfade
-            const conCrossfade = visitado && recuerdo?.foto_url && cafeFoto
-            return (
-              <Link key={cafe.id} to={`/cafe/${cafe.id}`} className="flex flex-col items-center gap-1.5">
-                <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-cafe-accent/10 flex items-center justify-center">
-                  {conCrossfade ? (
-                    <>
-                      {/* Capa de abajo: recuerdo (siempre visible) */}
-                      <img src={recuerdo.foto_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
-                      {/* Capa de arriba: foto del café — anima fade out/in */}
-                      <img src={cafeFoto} alt={cafe.nombre} className="absolute inset-0 w-full h-full object-cover recuerdo-fade" />
-                    </>
-                  ) : visitado && recuerdo?.foto_url ? (
-                    <img src={recuerdo.foto_url} alt={cafe.nombre} className="w-full h-full object-cover" />
-                  ) : cafeFoto ? (
-                    <img src={cafeFoto} alt={cafe.nombre} className="w-full h-full object-cover" />
-                  ) : (
-                    <CoffeeCupIcon size={24} className="text-cafe-accent/20" />
-                  )}
-                  {!visitado && (
-                    <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] pointer-events-none z-10" />
-                  )}
-                  <button
-                    type="button"
-                    onClick={(e) => handleBeanTap(cafe, visitado, e)}
-                    aria-label={visitado ? 'Mark as not visited' : 'Mark as visited'}
-                    className={`absolute bottom-1 right-1 w-8 h-8 rounded-full flex items-center justify-center shadow-md active:scale-90 transition-all ${
-                      visitado ? 'bg-beige' : 'bg-white/90 border border-cafe-dark/20'
-                    }`}
-                  >
-                    {visitado
-                      ? <CoffeeBeanIcon size={18} />
-                      : <CoffeeBeanIcon size={18} className="opacity-25" />}
-                  </button>
-                </div>
-                <p className="text-[10px] text-cafe-dark/70 text-center leading-tight line-clamp-2">{cafe.nombre}</p>
-              </Link>
-            )
-          })}
-        </div>
-      )}
-
-      {/* Prompt al recién marcar un café como visitado: ofrecemos guardar foto */}
-      {promptCafe && (
-        <div
-          className="fixed inset-0 z-50 bg-black/55 backdrop-blur-sm flex items-center justify-center p-6"
-          onClick={() => setPromptCafe(null)}
-        >
-          <div
-            className="bg-[#faf4ec] rounded-3xl p-6 max-w-xs w-full shadow-2xl text-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <CameraIcon size={36} className="text-cafe-dark/60 mx-auto mb-3" />
-            <h3 className="text-lg font-display font-bold text-cafe-dark mb-1">
-              {promptCafe.nombre}!
-            </h3>
-            <p className="text-sm text-cafe-accent/70 mb-5">
-              Want to save a photo and a note from your visit?
-            </p>
-            <div className="flex flex-col gap-2.5">
-              <button
-                onClick={() => { setRecuerdoCafe(promptCafe); setPromptCafe(null) }}
-                className="w-full bg-cafe-dark text-[#b8d04a] text-sm font-bold py-3 rounded-2xl ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform"
-              >
-                Add photo
-              </button>
-              <button
-                onClick={() => setPromptCafe(null)}
-                className="w-full text-sm font-semibold text-cafe-accent/70 py-2"
-              >
-                Not now
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {recuerdoCafe && (
-        <RecuerdoModal cafe={recuerdoCafe} onClose={() => setRecuerdoCafe(null)} />
-      )}
-    </div>
-  )
-}
-
-function InvitacionRow({ inv, tipo, onEliminar }) {
-  const cafe = cafes.find((c) => c.id === inv.cafeId)
-  if (!cafe) return null
-
-  const params = new URLSearchParams()
-  if (inv.nombre) params.set('nombre', inv.nombre)
-  if (inv.receptor) params.set('para', inv.receptor)
-  if (inv.fecha) params.set('fecha', inv.fecha)
-  if (inv.hora) params.set('hora', inv.hora)
-  const link = `/invitacion/${inv.cafeId}${params.toString() ? `?${params}` : ''}`
-
-  const detalle = inv.fecha
-    ? new Date(inv.fecha + 'T12:00:00').toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
-    : null
-
-  return (
-    <div className="flex items-center gap-3">
-      <Link to={link} className="flex-1 flex items-center gap-3 active:scale-[0.99] transition-transform">
-        <div className="w-12 h-12 rounded-xl bg-cafe-accent/10 overflow-hidden flex items-center justify-center shrink-0">
-          {cafe.fotos?.[0]
-            ? <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
-            : <CoffeeCupIcon size={20} className="text-cafe-accent/30" />}
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-sans font-bold text-cafe-dark truncate">{cafe.nombre}</p>
-          <p className="text-[11px] text-cafe-accent/60 flex items-center gap-1 truncate">
-            <PinIcon size={10} className="shrink-0" />
-            <span className="truncate">{cafe.barrio}</span>
-            {detalle && <span className="text-cafe-accent/40">· {detalle}{inv.hora ? ` ${inv.hora}` : ''}</span>}
-            {tipo === 'recibidas' && inv.nombre && <span className="text-cafe-accent/40">· from {inv.nombre}</span>}
-            {tipo === 'enviadas' && inv.receptor && <span className="text-cafe-accent/40">· for {inv.receptor}</span>}
-          </p>
-        </div>
-      </Link>
-      <button onClick={onEliminar} aria-label="Delete invitation" className="w-7 h-7 rounded-full text-cafe-accent/40 active:text-cafe-accent/80 shrink-0">
-        ×
-      </button>
-    </div>
-  )
-}
+import { UserIcon, ArrowLeftIcon, CoffeeCupIcon } from '../components/Icons'
 
 export default function Perfil() {
-  const { visitas } = useVisitas()
-  const { enviadas, recibidas, eliminar, invKey } = useInvitaciones()
+  const navigate = useNavigate()
   const { usuario, actualizar } = useUsuario()
   const { user, cerrarSesion } = useAuth()
   const { confirmados: cafeteros, pendientesRecibidas } = useCafeteros()
-  const [confirmando, setConfirmando] = useState(null)
   const [editandoPerfil, setEditandoPerfil] = useState(false)
   const [eligiendoFavorita, setEligiendoFavorita] = useState(false)
   const [eligiendoCafe, setEligiendoCafe] = useState(false)
 
   const cafeFavorito = cafes.find((c) => c.id === usuario.cafeteriaFavoritaId)
-
-  function pedirConfirmacion(tipo, inv) {
-    const cafe = cafes.find((c) => c.id === inv.cafeId)
-    setConfirmando({ tipo, key: invKey(inv), nombreCafe: cafe?.nombre ?? 'this invitation' })
-  }
-  function confirmarEliminar() {
-    if (!confirmando) return
-    eliminar(confirmando.tipo, confirmando.key)
-    setConfirmando(null)
-  }
 
   return (
     <div
@@ -219,7 +23,10 @@ export default function Perfil() {
       style={{ paddingTop: 'calc(16px + env(safe-area-inset-top))' }}
     >
       {/* Botón Entrar / Sign out — temporal arriba a la derecha */}
-      <div className="flex justify-end mb-2">
+      <div className="flex items-center justify-between mb-2">
+        <button onClick={() => navigate(-1)} aria-label="Back" className="-ml-2 w-11 h-11 flex items-center justify-center text-cafe-dark/70 active:scale-95 transition-transform">
+          <ArrowLeftIcon size={20} />
+        </button>
         {user ? (
           <button
             onClick={cerrarSesion}
@@ -291,81 +98,6 @@ export default function Perfil() {
           <p className="text-[10px] uppercase tracking-wider text-cafe-accent/70 mt-1 px-2 text-center leading-tight">Favorite coffee shop</p>
         </button>
       </div>
-
-      {/* Loyalty card: beans from the real visit count, a cup every ten */}
-      <div className="mb-6">
-        <LoyaltyCard total={visitas.length} />
-      </div>
-
-      {/* Invitaciones */}
-      {(recibidas.length > 0 || enviadas.length > 0) && (
-        <div className="bg-[#faf4ec] rounded-2xl px-4 py-3 shadow-sm mb-6">
-          <div className="flex items-center gap-2 mb-3">
-            <InviteIcon size={16} className="text-cafe-dark" />
-            <p className="text-sm font-sans font-bold text-cafe-dark">Invitations</p>
-          </div>
-
-          {recibidas.length > 0 && (
-            <>
-              <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-2">Received</p>
-              <div className="flex flex-col gap-2.5 mb-3">
-                {recibidas.map((inv) => (
-                  <InvitacionRow
-                    key={`r-${invKey(inv)}`}
-                    inv={inv}
-                    tipo="recibidas"
-                    onEliminar={() => pedirConfirmacion('recibidas', inv)}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-
-          {enviadas.length > 0 && (
-            <>
-              <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-2">Sent</p>
-              <div className="flex flex-col gap-2.5">
-                {enviadas.map((inv) => (
-                  <InvitacionRow
-                    key={`e-${invKey(inv)}`}
-                    inv={inv}
-                    tipo="enviadas"
-                    onEliminar={() => pedirConfirmacion('enviadas', inv)}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      )}
-
-      {/* My collection por barrio */}
-      <h2 className="text-lg font-display font-bold text-cafe-dark mb-3">My collection</h2>
-      <div className="flex flex-col gap-3">
-        {barrios.map((barrio) => (
-          <ColeccionBarrio key={barrio} barrio={barrio} />
-        ))}
-      </div>
-
-      {/* Modal confirmar eliminar invitación */}
-      {confirmando && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6" onClick={() => setConfirmando(null)}>
-          <div className="bg-[#faf4ec] rounded-2xl p-6 max-w-xs w-full shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-lg font-display font-bold text-cafe-dark mb-2">Delete invitation?</h3>
-            <p className="text-sm text-cafe-accent/70 mb-5">
-              You are about to delete the invitation to <span className="font-semibold text-cafe-dark">{confirmando.nombreCafe}</span> from your {confirmando.tipo === 'recibidas' ? 'received' : 'sent'} invitations. This cannot be undone.
-            </p>
-            <div className="flex gap-3">
-              <button onClick={() => setConfirmando(null)} className="flex-1 py-2.5 rounded-xl text-sm font-semibold border border-cafe-accent/25 text-cafe-accent active:scale-95 transition-transform">
-                Cancel
-              </button>
-              <button onClick={confirmarEliminar} className="flex-1 py-2.5 rounded-xl text-sm font-bold bg-cafe-dark text-beige active:scale-95 transition-transform">
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {editandoPerfil && (
         <EditarPerfilModal

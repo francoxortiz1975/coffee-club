@@ -2,6 +2,9 @@ import { useState, useMemo, useEffect } from 'react'
 import cafes from '../data/cafes.json'
 import historias from '../data/historias.js'
 import FilterBar from '../components/FilterBar'
+import AvatarButton from '../components/AvatarButton'
+import DiscoverSwitch from '../components/DiscoverSwitch'
+import NextPlan from '../components/NextPlan'
 import CafeCardSmall from '../components/CafeCardSmall'
 import CafeHistoriaCard from '../components/CafeHistoriaCard'
 import EspecialidadModal from '../components/EspecialidadModal'
@@ -98,8 +101,9 @@ export default function Descubrir() {
           paddingTop: 'calc(316px + env(safe-area-inset-top))',
         }}
       >
-        <div className="flex justify-center mb-3">
+        <div className="relative flex justify-center mb-3">
           <img src="/logo.png" alt="Sumay Coffee Club" className="h-20 w-auto object-contain" />
+          <div className="absolute right-0 top-0"><AvatarButton dark /></div>
         </div>
         <div className="relative">
           <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-beige/60">
@@ -114,6 +118,9 @@ export default function Descubrir() {
           />
         </div>
       </div>
+
+      <div className="px-4 mt-4"><DiscoverSwitch value="browse" /></div>
+      <div className="px-4 mt-3 empty:hidden"><NextPlan /></div>
 
       {/* Filtros */}
       <div className="px-4 mt-4">

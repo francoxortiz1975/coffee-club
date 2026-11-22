@@ -19,3 +19,7 @@
 .tag-reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.8,.3,1)}
 .tag-reveal.on{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.tag-reveal{opacity:1;transform:none;transition:none}}
+
+.tag-caret{display:inline-block;width:2px;height:1.05em;margin-left:2px;vertical-align:-0.15em;background:var(--ink);animation:tag-blink .9s steps(1) infinite}
+@keyframes tag-blink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.tag-caret{animation:none}}

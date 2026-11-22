@@ -1,7 +1,5 @@
-import cafes from '../data/cafes.json'
-
 // The curated rows on Discover > Browse. Each has an id so "See all" can open it.
-export function buildShelves({ favoritos = [], friendCafeIds = [] }) {
+export function buildShelves({ cafes, favoritos = [], friendCafeIds = [] }) {
   return [
     { id: 'near', title: 'Near you', cafes },
     { id: 'friends', title: 'Visited by your coffee friends', cafes: cafes.filter((c) => friendCafeIds.includes(c.id)) },

@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import cafes from '../data/cafes.json'
+import { useCityCafes } from '../lib/city'
+import CitySwitch from '../components/CitySwitch'
 import AppHeader from '../components/AppHeader'
 import Segmented from '../components/Segmented'
 import LoyaltyCard from '../components/LoyaltyCard'
@@ -11,8 +13,6 @@ import { useVisitas } from '../context/VisitasContext'
 import { useRecuerdos } from '../context/RecuerdosContext'
 import { useAuth } from '../context/AuthContext'
 import { CameraIcon } from '../components/Icons'
-
-const barrios = [...new Set(cafes.map((c) => c.barrio))]
 
 function Souvenirs() {
   const { recuerdos } = useRecuerdos()
@@ -65,6 +65,8 @@ function Souvenirs() {
 
 // Collect = what you have earned and kept: your card, your souvenirs, your Paris.
 export default function Collect() {
+  const cityCafes = useCityCafes()
+  const barrios = [...new Set(cityCafes.map((c) => c.barrio))]
   const [view, setView] = useState('card')
   const { visitas } = useVisitas()
 
@@ -85,7 +87,10 @@ export default function Collect() {
             <LoyaltyCard total={visitas.length} />
             <ParisPreview visited={visitas.length} />
             <div>
-              <h2 className="text-lg font-display font-bold text-cafe-dark mb-3">By neighborhood</h2>
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-lg font-display font-bold text-cafe-dark">By neighborhood</h2>
+                <CitySwitch />
+              </div>
               <div className="flex flex-col gap-3">
                 {barrios.map((b) => <ColeccionBarrio key={b} barrio={b} />)}
               </div>

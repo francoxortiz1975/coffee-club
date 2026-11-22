@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import cafes from '../data/cafes.json'
+import { useCityCafes } from '../lib/city'
+import CitySwitch from '../components/CitySwitch'
 import { slurps, TEASER_IDS } from '../data/journey'
 import { buildShelves } from '../lib/shelves'
 import { useCafesDeCafeteros } from '../lib/useCafesDeCafeteros'
@@ -14,8 +15,6 @@ import EspecialidadModal from '../components/EspecialidadModal'
 import InstallSteps from '../components/InstallSteps'
 import { SearchIcon, CoffeeCupIcon } from '../components/Icons'
 import { useFavoritos } from '../context/FavoritosContext'
-
-const especialidades = [...new Set(cafes.map((c) => c.especialidad).filter(Boolean))]
 
 // Carrusel horizontal de cafés. No renderiza si la lista está vacía.
 function CafesRow({ id, titulo, cafesList }) {
@@ -36,6 +35,8 @@ function CafesRow({ id, titulo, cafesList }) {
 }
 
 export default function Descubrir() {
+  const cafes = useCityCafes()
+  const especialidades = useMemo(() => [...new Set(cafes.map((c) => c.especialidad).filter(Boolean))], [cafes])
   const [busqueda, setBusqueda] = useState('')
   const [filtro, setFiltro] = useState('todos')
   const [especialidad, setEspecialidad] = useState(null)
@@ -54,9 +55,9 @@ export default function Descubrir() {
       const pasaEspecialidad = especialidad === null || c.especialidad === especialidad
       return pasaBusqueda && pasaOcasion && pasaEspecialidad
     })
-  }, [busqueda, filtro, especialidad])
+  }, [cafes, busqueda, filtro, especialidad])
 
-  const shelves = buildShelves({ favoritos, friendCafeIds: cafeIdsDeCafeteros })
+  const shelves = buildShelves({ cafes, favoritos, friendCafeIds: cafeIdsDeCafeteros })
 
   return (
     <div className="pb-4">
@@ -71,6 +72,7 @@ export default function Descubrir() {
       >
         <div className="relative flex justify-center mb-3">
           <img src="/logo.png" alt="Sumay Coffee Club" className="h-20 w-auto object-contain" />
+          <div className="absolute left-0 top-0"><CitySwitch dark /></div>
           <div className="absolute right-0 top-0"><AvatarButton dark /></div>
         </div>
         <div className="relative">

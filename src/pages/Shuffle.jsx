@@ -1,11 +1,12 @@
 import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import cafes from '../data/cafes.json'
+import { useCityCafes } from '../lib/city'
 import { useFavoritos } from '../context/FavoritosContext'
 import { CoffeeCupIcon, HeartIcon, XIcon, PinIcon } from '../components/Icons'
 
 // ─── Shuffle Mode ────────────────────────────────────────────────
 function ShuffleMode() {
+  const cafes = useCityCafes()
   const [cafe, setCafe] = useState(null)
   const [spinning, setSpinning] = useState(false)
 
@@ -82,6 +83,7 @@ function ShuffleCard({ cafe, onReshuffle }) {
 
 // ─── Swipe Mode ──────────────────────────────────────────────────
 function SwipeMode() {
+  const cafes = useCityCafes()
   const [index, setIndex] = useState(0)
   const [offsetX, setOffsetX] = useState(0)
   const [animating, setAnimating] = useState(false)

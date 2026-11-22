@@ -16,6 +16,7 @@ function hasWebGL() {
   } catch { return false }
 }
 import { useVisitas } from '../context/VisitasContext'
+import { useCity } from '../lib/city'
 import { CoffeeCupIcon, PinIcon } from '../components/Icons'
 
 // Map tab: Explore (every café as an X on the map) and My Paris (the ones you stamped).
@@ -26,6 +27,7 @@ export default function MapTab() {
   const useGl = webgl && params.get('engine') !== 'classic'
   const offline = params.get('offline') === '1'
   const { visitas, toggleVisita } = useVisitas()
+  const { city, setCity } = useCity()
   const [selectedId, setSelectedId] = useState(null)
 
   const cafes = useMemo(() => cafesData.filter((c) => c.ciudad === 'Paris' && c.lat != null && c.lng != null), [])
@@ -45,7 +47,12 @@ export default function MapTab() {
       </AppHeader>
 
       <div className="relative flex-1 min-h-0 mt-3">
-        {cafes.length === 0 ? (
+        {city !== 'Paris' ? (
+          <div className="absolute inset-x-4 top-0 bottom-2 rounded-3xl bg-[#faf4ec] flex flex-col items-center justify-center text-center gap-4 px-8">
+            <p className="text-sm text-cafe-accent/80">The treasure map is Paris only for now.</p>
+            <button onClick={() => setCity('Paris')} className="min-h-11 px-6 rounded-full bg-cafe-dark text-[#b8d04a] text-sm font-bold active:scale-95 transition-transform">Switch to Paris</button>
+          </div>
+        ) : cafes.length === 0 ? (
           <div className="absolute inset-x-4 top-0 bottom-2 rounded-3xl bg-[#faf4ec] flex items-center justify-center text-center px-8 text-cafe-accent/70 text-sm">
             No coffee shops on the map yet.
           </div>

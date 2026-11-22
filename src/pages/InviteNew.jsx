@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import cafes from '../data/cafes.json'
+import { useCityCafes } from '../lib/city'
 import { ArrowLeftIcon, CoffeeCupIcon, PinIcon } from '../components/Icons'
 
 // Step one of a new invitation: pick the café. Step two is the existing setup form (date, time, names).
 export default function InviteNew() {
   const navigate = useNavigate()
+  const cafes = useCityCafes()
   const [q, setQ] = useState('')
   const list = cafes.filter((c) => (c.nombre + ' ' + c.barrio).toLowerCase().includes(q.toLowerCase()))
 

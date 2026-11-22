@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageFlip } from 'page-flip'
-import cafes from '../data/cafes.json'
+import { useCityCafes } from '../lib/city'
 import { CoffeeCupIcon, PinIcon, ArrowLeftIcon } from '../components/Icons'
 
 // iPhones in standalone mode reserve space for the status bar and the home indicator; measure them once.
@@ -15,6 +15,7 @@ function safeInset(side) {
 }
 
 export default function SwipePage() {
+  const cafes = useCityCafes()
   const navigate = useNavigate()
   const [seleccionados, setSeleccionados] = useState([])
   const [currentCafeIndex, setCurrentCafeIndex] = useState(0)

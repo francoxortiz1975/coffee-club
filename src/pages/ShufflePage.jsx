@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import cafes from '../data/cafes.json'
+import { useCityCafes } from '../lib/city'
 import { useFavoritos } from '../context/FavoritosContext'
 import { ArrowLeftIcon, DiceIcon, HeartIcon, PinIcon, CoffeeCupIcon } from '../components/Icons'
 
 export default function ShufflePage() {
+  const cafes = useCityCafes()
   const navigate = useNavigate()
   const [cafe, setCafe] = useState(null)
   const [spinning, setSpinning] = useState(false)

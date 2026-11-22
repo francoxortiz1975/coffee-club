@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { buildShelves } from '../lib/shelves'
+import { useCityCafes } from '../lib/city'
 import { useCafesDeCafeteros } from '../lib/useCafesDeCafeteros'
 import { useFavoritos } from '../context/FavoritosContext'
 import CafeCardSmall from '../components/CafeCardSmall'
@@ -9,9 +10,10 @@ import { ArrowLeftIcon } from '../components/Icons'
 export default function Shelf() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const cafes = useCityCafes()
   const { favoritos } = useFavoritos()
   const friendCafeIds = useCafesDeCafeteros()
-  const shelf = buildShelves({ favoritos, friendCafeIds }).find((s) => s.id === id)
+  const shelf = buildShelves({ cafes, favoritos, friendCafeIds }).find((s) => s.id === id)
 
   return (
     <div className="px-4 pb-4" style={{ paddingTop: 'calc(10px + env(safe-area-inset-top))' }}>

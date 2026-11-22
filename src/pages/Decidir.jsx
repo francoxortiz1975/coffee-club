@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { DiceIcon } from '../components/Icons'
 import AppHeader from '../components/AppHeader'
 import DiscoverSwitch from '../components/DiscoverSwitch'
+import CitySwitch from '../components/CitySwitch'
 
 // Discover > Swipe: two ways to let the app help you choose.
 export default function Decidir() {
@@ -10,6 +11,7 @@ export default function Decidir() {
   return (
     <div className="flex flex-col h-[calc(100dvh-96px)] pb-3">
       <AppHeader title="Discover">
+        <div className="flex items-center justify-between mb-2"><CitySwitch /></div>
         <DiscoverSwitch value="swipe" />
       </AppHeader>
 

@@ -8,6 +8,7 @@ import { UsuarioProvider } from './context/UsuarioContext'
 import { AuthProvider } from './context/AuthContext'
 import { CafeterosProvider } from './context/CafeterosContext'
 import { RecuerdosProvider } from './context/RecuerdosContext'
+import { CityProvider } from './context/CityContext'
 import BottomNav from './components/BottomNav'
 import InstallPrompt from './components/InstallPrompt'
 import ScrollToTop from './components/ScrollToTop'
@@ -169,6 +170,7 @@ function Root() {
 export default function App() {
   return (
     <ErrorBoundary>
+      <CityProvider>
       <AuthProvider>
         <FavoritosProvider>
           <VisitasProvider>
@@ -186,6 +188,7 @@ export default function App() {
           </VisitasProvider>
         </FavoritosProvider>
       </AuthProvider>
+      </CityProvider>
     </ErrorBoundary>
   )
 }

@@ -22,6 +22,9 @@ import Collect from './pages/Collect'
 import Invite from './pages/Invite'
 import InviteNew from './pages/InviteNew'
 import MapTab from './pages/MapTab'
+import Journey from './pages/Journey'
+import JourneyLesson from './pages/JourneyLesson'
+import Shelf from './pages/Shelf'
 import CafeDetalle from './pages/CafeDetalle'
 import InvitacionSetup from './pages/InvitacionSetup'
 import InvitacionPage from './pages/InvitacionPage'
@@ -72,6 +75,9 @@ const BG_RULES = [
   { path: '/decidir/seleccionados', bg: '/wood-bg.webp', overlay: 50 },
   { path: '/decidir',           bg: '/wood-bg.webp', overlay: 50 },
   { path: '/perfil',            bg: '/panama-bg.webp', overlay: 0  },
+  { path: '/journey/:id',       bg: '/white-bg.webp', overlay: 40 },
+  { path: '/journey',           bg: '/wood-bg.webp', overlay: 50 },
+  { path: '/shelf/:id',         bg: '/wood-bg.webp', overlay: 50 },
   { path: '/map',               bg: '/wood-bg.webp', overlay: 50 },
   { path: '/collect',           bg: '/panama-bg.webp', overlay: 0  },
   { path: '/invite/new',        bg: '/wood-bg.webp', overlay: 50 },
@@ -119,6 +125,9 @@ function AppShell() {
           <Route path="/decidir/aleatorio" element={<ShufflePage />} />
           <Route path="/decidir/swipe" element={<SwipePage />} />
           <Route path="/decidir/seleccionados" element={<Seleccionados />} />
+          <Route path="/journey" element={<Journey />} />
+          <Route path="/journey/:id" element={<JourneyLesson />} />
+          <Route path="/shelf/:id" element={<Shelf />} />
           <Route path="/map" element={<MapTab />} />
           <Route path="/collect" element={<Collect />} />
           <Route path="/invite" element={<Invite />} />

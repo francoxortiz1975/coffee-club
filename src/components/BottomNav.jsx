@@ -6,7 +6,7 @@ import { isUpcoming } from '../lib/plans'
 
 // Four tabs. Profile is not a tab: it opens from the avatar on every screen.
 const tabs = [
-  { id: 'discover', to: '/', label: 'Discover', Icon: CompassIcon, match: (p) => p === '/' || p.startsWith('/decidir') || p.startsWith('/cafe/') },
+  { id: 'discover', to: '/', label: 'Discover', Icon: CompassIcon, match: (p) => p === '/' || p.startsWith('/decidir') || p.startsWith('/cafe/') || p.startsWith('/journey') || p.startsWith('/shelf/') },
   { id: 'map', to: '/map', label: 'Map', Icon: MapIcon, match: (p) => p.startsWith('/map') },
   { id: 'collect', to: '/collect', label: 'Collect', Icon: CoffeeBeanIcon, match: (p) => p.startsWith('/collect') },
   { id: 'invite', to: '/invite', label: 'Invite', Icon: InviteIcon, match: (p) => p.startsWith('/invite') && !p.startsWith('/invitacion') },

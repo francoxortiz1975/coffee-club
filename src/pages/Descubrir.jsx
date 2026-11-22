@@ -1,28 +1,31 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import cafes from '../data/cafes.json'
-import historias from '../data/historias.js'
+import { lessons } from '../data/journey'
+import { buildShelves } from '../lib/shelves'
+import { useCafesDeCafeteros } from '../lib/useCafesDeCafeteros'
+import LessonCard from '../components/LessonCard'
 import FilterBar from '../components/FilterBar'
 import AvatarButton from '../components/AvatarButton'
 import DiscoverSwitch from '../components/DiscoverSwitch'
 import NextPlan from '../components/NextPlan'
 import CafeCardSmall from '../components/CafeCardSmall'
-import CafeHistoriaCard from '../components/CafeHistoriaCard'
 import EspecialidadModal from '../components/EspecialidadModal'
 import InstallSteps from '../components/InstallSteps'
 import { SearchIcon, CoffeeCupIcon } from '../components/Icons'
 import { useFavoritos } from '../context/FavoritosContext'
-import { useAuth } from '../context/AuthContext'
-import { useCafeteros } from '../context/CafeterosContext'
-import { supabase } from '../lib/supabase'
 
 const especialidades = [...new Set(cafes.map((c) => c.especialidad))]
 
 // Carrusel horizontal de cafés. No renderiza si la lista está vacía.
-function CafesRow({ titulo, cafesList }) {
+function CafesRow({ id, titulo, cafesList }) {
   if (!cafesList || cafesList.length === 0) return null
   return (
     <section className="mt-8 px-4">
-      <h2 className="text-base font-display font-bold text-cafe-dark mb-3">{titulo}</h2>
+      <div className="flex items-baseline justify-between mb-3">
+        <h2 className="text-base font-display font-bold text-cafe-dark">{titulo}</h2>
+        <Link to={`/shelf/${id}`} className="relative text-xs font-sans font-semibold text-cafe-accent before:absolute before:-inset-3 before:content-['']">See all ›</Link>
+      </div>
       <div className="flex gap-3 overflow-x-auto -mx-4 px-4 scroll-pl-4 pb-2 snap-x snap-mandatory no-scrollbar">
         {cafesList.map((cafe) => (
           <CafeCardSmall key={cafe.id} cafe={cafe} />
@@ -30,36 +33,6 @@ function CafesRow({ titulo, cafesList }) {
       </div>
     </section>
   )
-}
-
-// Hook: trae los cafés que algún cafetero confirmado haya visitado.
-function useCafesDeCafeteros() {
-  const { user } = useAuth()
-  const { confirmados } = useCafeteros()
-  const [cafeIds, setCafeIds] = useState([])
-
-  useEffect(() => {
-    if (!user || confirmados.length === 0) {
-      setCafeIds([])
-      return
-    }
-
-    let activo = true
-    const ids = confirmados.map((c) => c.id)
-
-    async function load() {
-      const { data, error } = await supabase
-        .from('visitas')
-        .select('cafe_id')
-        .in('user_id', ids)
-      if (error) { console.error('cafeteros visitas error:', error); return }
-      if (activo) setCafeIds([...new Set(data.map((v) => v.cafe_id))])
-    }
-    load()
-    return () => { activo = false }
-  }, [user, confirmados])
-
-  return cafeIds
 }
 
 export default function Descubrir() {
@@ -83,12 +56,7 @@ export default function Descubrir() {
     })
   }, [busqueda, filtro, especialidad])
 
-  // Listas para cada row del modo discovery (sin filtros)
-  const cafesFavoritos     = cafes.filter((c) => favoritos.includes(c.id))
-  const cafesDeCafeteros   = cafes.filter((c) => cafeIdsDeCafeteros.includes(c.id))
-  const cafesParaTrabajar  = cafes.filter((c) => c.ocasiones.includes('work'))
-  const cafesRomantico     = cafes.filter((c) => c.ocasiones.includes('couple'))
-  const cafesTuristico     = cafes.filter((c) => c.ocasiones.includes('tourist'))
+  const shelves = buildShelves({ favoritos, friendCafeIds: cafeIdsDeCafeteros })
 
   return (
     <div className="pb-4">
@@ -166,20 +134,16 @@ export default function Descubrir() {
       ) : (
         /* ── MODO DISCOVERY ── rows curados ──────────────────── */
         <>
-          <CafesRow titulo="Near you" cafesList={cafes} />
-          <CafesRow titulo="Visited by your coffee friends" cafesList={cafesDeCafeteros} />
-          <CafesRow titulo="Favorites" cafesList={cafesFavoritos} />
-          <CafesRow titulo="Something romantic" cafesList={cafesRomantico} />
-          <CafesRow titulo="Good for working" cafesList={cafesParaTrabajar} />
-          <CafesRow titulo="For sightseeing" cafesList={cafesTuristico} />
+          {shelves.map((s) => <CafesRow key={s.id} id={s.id} titulo={s.title} cafesList={s.cafes} />)}
 
-          {/* About Ecuadorian coffee */}
+          {/* Teaser for the Journey mode */}
           <section className="mt-8 px-4">
-            <h2 className="text-base font-display font-bold text-cafe-dark mb-3">About Ecuadorian coffee</h2>
+            <div className="flex items-baseline justify-between mb-3">
+              <h2 className="text-base font-display font-bold text-cafe-dark">Coffee journey</h2>
+              <Link to="/journey" className="relative text-xs font-sans font-semibold text-cafe-accent before:absolute before:-inset-3 before:content-['']">Open ›</Link>
+            </div>
             <div className="flex gap-3 overflow-x-auto -mx-4 px-4 scroll-pl-4 pb-2 snap-x snap-mandatory no-scrollbar">
-              {historias.map((h) => (
-                <CafeHistoriaCard key={h.id} historia={h} />
-              ))}
+              {lessons.slice(0, 6).map((l) => <LessonCard key={l.id} lesson={l} variant="mini" />)}
             </div>
           </section>
 

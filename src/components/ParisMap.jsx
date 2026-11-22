@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { OUTLINE_D, SEINE_D, ISLANDS, LANDMARKS, WORLD, WORLD_VIEWBOX, project } from '../lib/parisMap'
+import MapPins from './MapPins'
+import MapDecor from './MapDecor'
 import './parisMap.css'
 
 /* The treasure map: Paris on parchment, ink outline, the Seine, a few landmarks, and an X for every café.
@@ -13,23 +15,6 @@ const K_MAX = 7
 const px = (x, y) => ({ x: (x - WORLD.minX) * PU, y: (y - WORLD.minY) * PU })
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v))
-
-function Stamp() {
-  return (
-    <svg width="26" height="26" viewBox="-13 -13 26 26" aria-hidden="true">
-      <circle r="11" fill="#626d27" stroke="#3a4316" strokeWidth="1.2" />
-      <circle r="7.6" fill="none" stroke="#c7d27a" strokeOpacity=".65" strokeWidth="1" />
-      <path d="M-3.6 2.6C-1.8-5.8 1.8 5.8 3.6-2.6" stroke="#eef5b8" strokeWidth="1.6" fill="none" strokeLinecap="round" />
-    </svg>
-  )
-}
-function XMark() {
-  return (
-    <svg width="24" height="24" viewBox="-12 -12 24 24" aria-hidden="true">
-      <g stroke="#8a2b1c" strokeWidth="3.4" strokeLinecap="round"><path d="M-6.5-6.5L6.5 6.5M6.5-6.5L-6.5 6.5" /></g>
-    </svg>
-  )
-}
 
 // A small ink doodle for each landmark, drawn around (0,0) in roughly +-10 units
 const DOODLES = {
@@ -159,17 +144,8 @@ export default function ParisMap({ cafes, stamped, mode, selectedId, onSelect })
   }
   const onPointerUp = (e) => { pointers.current.delete(e.pointerId); snapshot() }
 
-  // pins closer than ~34px on screen merge into one numbered badge (the selected café always stays on its own)
-  const clusters = useMemo(() => {
-    const out = []
-    pins.forEach((p, idx) => {
-      const item = { ...p, idx }
-      const near = p.c.id === selectedId ? null : out.find((g) => !g.solo && Math.hypot(g.x - p.x, g.y - p.y) * view.k < 34)
-      if (near) { near.members.push(item); near.x = near.members.reduce((a, m) => a + m.x, 0) / near.members.length; near.y = near.members.reduce((a, m) => a + m.y, 0) / near.members.length }
-      else out.push({ members: [item], x: p.x, y: p.y, solo: p.c.id === selectedId })
-    })
-    return out
-  }, [pins, view.k, selectedId])
+  // pin positions on screen
+  const items = useMemo(() => pins.map((p) => ({ c: p.c, x: view.tx + p.x * view.k, y: view.ty + p.y * view.k, mx: p.x, my: p.y })), [pins, view])
 
   // sizes that should stay the same on screen, converted to map units
   const u = 1 / (PU * view.k)
@@ -234,62 +210,16 @@ export default function ParisMap({ cafes, stamped, mode, selectedId, onSelect })
         </svg>
       </div>
 
-      {clusters.map((g) => {
-        if (g.members.length > 1) {
-          const allIn = g.members.every((m) => stamped.has(m.c.id))
-          return (
-            <button
-              key={g.members.map((m) => m.c.id).join('+')}
-              type="button"
-              className="pm-pin pm-cluster"
-              style={{ left: view.tx + g.x * view.k, top: view.ty + g.y * view.k }}
-              onPointerDown={(e) => e.stopPropagation()}
-              onClick={() => fitPins(g.members)}
-              aria-label={`${g.members.length} coffee shops here, zoom in`}
-            >
-              <span className={allIn ? 'pm-in' : ''}>{g.members.length}</span>
-            </button>
-          )
-        }
-        const { c, x, y, idx } = g.members[0]
-        const visited = stamped.has(c.id)
-        const dim = mode === 'mine' && !visited
-        const sel = c.id === selectedId
-        return (
-          <button
-            key={c.id}
-            type="button"
-            className={`pm-pin ${sel ? 'pm-sel' : ''} ${idx % 2 ? 'pm-up' : ''}`}
-            style={{ left: view.tx + x * view.k, top: view.ty + y * view.k, opacity: dim ? 0.38 : 1 }}
-            onPointerDown={(e) => e.stopPropagation()}
-            onClick={() => select(c.id, x, y)}
-            aria-label={`${c.nombre}${visited ? ', visited' : ''}`}
-            aria-pressed={sel}
-          >
-            {visited ? <Stamp /> : <XMark />}
-            {(showLabels || sel) && <span className="pm-label">{c.nombre}</span>}
-          </button>
-        )
-      })}
-
-      <div className="pm-burn" />
-      <svg className="pm-ribbon" viewBox="0 0 220 34" aria-hidden="true">
-        <path d="M2 4H218L208 17l10 13H2L12 17Z" fill="#e0bf82" stroke="#3b2410" strokeWidth="1.2" />
-        <text x="110" y="23" textAnchor="middle" fontFamily="Parisienne, cursive" fontSize="19" fill="#4a2410">Paris · Coffee Quest</text>
-      </svg>
-      <svg className="pm-compass" viewBox="-36 -40 72 76" aria-hidden="true">
-        <g stroke="#3b2410" fill="none">
-          <circle r="26" strokeWidth="1" /><circle r="21" strokeWidth=".5" strokeDasharray="1.5 2" />
-          <path d="M0-28L5 0 0 28-5 0Z" fill="#8a2b1c" strokeWidth=".8" /><path d="M-28 0L0-5 28 0 0 5Z" fill="#e9d19a" strokeWidth=".8" />
-          <text y="-31" textAnchor="middle" fontFamily="Parisienne, cursive" fontSize="14" fill="#3b2410" stroke="none">N</text>
-        </g>
-      </svg>
-      <div className="pm-zoom">
-        <button type="button" aria-label="Zoom in" onPointerDown={(e) => e.stopPropagation()} onClick={() => zoomAt(1.6, size.w / 2, size.h / 2)}>+</button>
-        <button type="button" aria-label="Zoom out" onPointerDown={(e) => e.stopPropagation()} onClick={() => zoomAt(1 / 1.6, size.w / 2, size.h / 2)}>−</button>
-        <button type="button" aria-label="Show the cafés" onPointerDown={(e) => e.stopPropagation()} onClick={fitCafes}>◎</button>
-        <button type="button" aria-label="Show all of Paris" className="pm-all" onPointerDown={(e) => e.stopPropagation()} onClick={showAll}>All</button>
-      </div>
+      <MapPins
+        items={items}
+        stamped={stamped}
+        mode={mode}
+        selectedId={selectedId}
+        showLabels={showLabels}
+        onCluster={(members) => fitPins(members.map((m) => ({ x: m.mx, y: m.my })))}
+        onSelect={(id, it) => select(id, it.mx, it.my)}
+      />
+      <MapDecor onZoomIn={() => zoomAt(1.6, size.w / 2, size.h / 2)} onZoomOut={() => zoomAt(1 / 1.6, size.w / 2, size.h / 2)} onFit={fitCafes} onAll={showAll} />
     </div>
   )
 }

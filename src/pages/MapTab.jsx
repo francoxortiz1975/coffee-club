@@ -1,9 +1,12 @@
-import { useMemo, useState } from 'react'
+import { lazy, Suspense, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import cafesData from '../data/cafes.json'
 import AppHeader from '../components/AppHeader'
 import Segmented from '../components/Segmented'
 import ParisMap from '../components/ParisMap'
+
+// The MapLibre version is a prototype (open /map?engine=gl) and loads only when asked for
+const MapLibreMap = lazy(() => import('../components/MapLibreMap'))
 import { useVisitas } from '../context/VisitasContext'
 import { CoffeeCupIcon, PinIcon } from '../components/Icons'
 
@@ -11,6 +14,8 @@ import { CoffeeCupIcon, PinIcon } from '../components/Icons'
 export default function MapTab() {
   const [params, setParams] = useSearchParams()
   const mode = params.get('mode') === 'mine' ? 'mine' : 'explore'
+  const useGl = params.get('engine') === 'gl'
+  const offline = params.get('offline') === '1'
   const { visitas, toggleVisita } = useVisitas()
   const [selectedId, setSelectedId] = useState(null)
 
@@ -25,7 +30,7 @@ export default function MapTab() {
         <Segmented
           label="Map mode"
           value={mode}
-          onChange={(m) => { setSelectedId(null); setParams(m === 'mine' ? { mode: 'mine' } : {}, { replace: true }) }}
+          onChange={(m) => { setSelectedId(null); setParams((p) => { const n = new URLSearchParams(p); if (m === 'mine') n.set('mode', 'mine'); else n.delete('mode'); return n }, { replace: true }) }}
           options={[{ id: 'explore', label: 'Explore' }, { id: 'mine', label: 'My Paris' }]}
         />
       </AppHeader>
@@ -38,7 +43,13 @@ export default function MapTab() {
         ) : (
           <>
             <div className="absolute inset-x-4 top-0 bottom-2">
-              <ParisMap cafes={cafes} stamped={stamped} mode={mode} selectedId={selectedId} onSelect={(id) => setSelectedId((cur) => (cur === id ? null : id))} />
+              {useGl ? (
+                <Suspense fallback={<div className="pm-box" />}>
+                  <MapLibreMap cafes={cafes} stamped={stamped} mode={mode} selectedId={selectedId} offline={offline} onSelect={(id) => setSelectedId((cur) => (cur === id ? null : id))} />
+                </Suspense>
+              ) : (
+                <ParisMap cafes={cafes} stamped={stamped} mode={mode} selectedId={selectedId} onSelect={(id) => setSelectedId((cur) => (cur === id ? null : id))} />
+              )}
             </div>
 
             <div className="absolute left-6 right-6 bottom-5 z-10">

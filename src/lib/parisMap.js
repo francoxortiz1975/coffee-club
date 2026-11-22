@@ -38,7 +38,7 @@ const outlinePts = PARIS_OUTLINE_LNGLAT.map(([lng, lat]) => {
 export const OUTLINE_D = 'M' + outlinePts.map((p) => `${r1(p[0])} ${r1(p[1])}`).join('L') + 'Z'
 
 // The Seine through Paris, east to west: [lat, lng]
-const SEINE_LATLNG = [
+export const SEINE_LATLNG = [
   [48.8200, 2.3860], [48.8310, 2.3835], [48.8372, 2.3772], [48.8433, 2.3682], [48.8500, 2.3622],
   [48.8531, 2.3535], [48.8553, 2.3470], [48.8576, 2.3395], [48.8605, 2.3272], [48.8628, 2.3182],
   [48.8640, 2.3012], [48.8610, 2.2930], [48.8558, 2.2877], [48.8512, 2.2815], [48.8462, 2.2740],

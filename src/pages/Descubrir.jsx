@@ -165,7 +165,7 @@ export default function Descubrir() {
           <InstallSteps />
 
           {/* The journey starts where the shelves end, and never stops */}
-          <div className="tag tag-paper rounded-t-[32px] mt-10 pt-10 pb-28 -mb-24">
+          <div className="mt-10 pb-28 text-cafe-dark">
             <JourneyFeed />
           </div>
         </>

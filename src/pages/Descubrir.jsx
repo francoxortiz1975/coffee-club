@@ -140,7 +140,7 @@ export default function Descubrir() {
           <section className="mt-8 px-4">
             <h2 className="text-base font-display font-bold text-cafe-dark mb-3">Can’t decide?</h2>
             <div className="grid grid-cols-2 gap-3">
-              <Link to="/decidir/swipe" className="aspect-[4/5] rounded-3xl overflow-hidden shadow-md active:scale-[0.98] transition-transform flex items-center justify-center p-3" style={{ background: "url('/texture-bg.webp') center/cover" }}>
+              <Link to="/decidir/swipe" className="aspect-[4/5] rounded-3xl overflow-hidden shadow-md active:scale-[0.98] transition-transform flex items-center justify-center p-3" style={{ background: "url('/wood-bg.webp') center/cover" }}>
                 <div className="flex flex-col items-center gap-3 bg-[#2a1510]/85 backdrop-blur-md rounded-2xl px-4 py-5 text-beige text-center">
                   <svg width="52" height="30" viewBox="0 0 64 36" fill="none" aria-hidden="true">
                     <path d="M22 6 L10 18 L22 30" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />

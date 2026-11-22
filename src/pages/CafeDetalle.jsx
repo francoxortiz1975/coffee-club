@@ -11,6 +11,7 @@ import RecuerdoModal from '../components/RecuerdoModal'
 import PhotoLightbox from '../components/PhotoLightbox'
 import ScrollLines from '../components/ScrollLines'
 import TypeText from '../components/TypeText'
+import { OCASION_LABELS } from '../lib/ocasiones'
 import { toLines } from '../lib/textLines'
 
 const PLACEHOLDER_FOTOS = [null, null, null]
@@ -117,9 +118,10 @@ export default function CafeDetalle() {
           {cafe.rating != null && <StarRating rating={cafe.rating} />}
         </div>
 
-        <span className="inline-block text-xs bg-beige border border-cafe-accent/30 text-cafe-accent rounded-full px-3 py-1 mb-4">
-          {cafe.tipo}
-        </span>
+        <div className="flex flex-wrap gap-1.5 mb-4">
+          <span className="inline-block text-xs bg-beige border border-cafe-accent/30 text-cafe-accent rounded-full px-3 py-1">{cafe.tipo}</span>
+          {cafe.ocasiones.map((o) => <span key={o} className="inline-block text-xs bg-cafe-dark text-beige rounded-full px-3 py-1">{OCASION_LABELS[o] ?? o}</span>)}
+        </div>
 
         {/* Visited toggle + Recuerdo — grid 2 columnas */}
         <div className="grid grid-cols-2 gap-2.5 mb-5">

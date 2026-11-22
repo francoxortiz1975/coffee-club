@@ -18,7 +18,6 @@ import MigrationRunner from './components/MigrationRunner'
 import Descubrir from './pages/Descubrir'
 import ShufflePage from './pages/ShufflePage'
 import SwipePage from './pages/SwipePage'
-import Seleccionados from './pages/Seleccionados'
 import Perfil from './pages/Perfil'
 import Collect from './pages/Collect'
 import Invite from './pages/Invite'
@@ -73,7 +72,6 @@ const NO_NAV_PATHS = ['/invitacion']
 const BG_RULES = [
   { path: '/decidir/aleatorio', bg: null,             overlay: 0  },
   { path: '/decidir/swipe',     bg: '/white-bg.webp', overlay: 40 },
-  { path: '/decidir/seleccionados', bg: '/wood-bg.webp', overlay: 50 },
   { path: '/decidir',           bg: '/wood-bg.webp', overlay: 50 },
   { path: '/perfil',            bg: '/panama-bg.webp', overlay: 0  },
   { path: '/journey/:id',       bg: '/white-bg.webp', overlay: 40 },
@@ -126,7 +124,6 @@ function AppShell() {
           <Route path="/decidir" element={<Navigate to="/" replace />} />
           <Route path="/decidir/aleatorio" element={<ShufflePage />} />
           <Route path="/decidir/swipe" element={<SwipePage />} />
-          <Route path="/decidir/seleccionados" element={<Seleccionados />} />
           <Route path="/journey" element={<Navigate to="/" replace />} />
           <Route path="/lab/tag" element={<TagLab />} />
           <Route path="/journey/:id" element={<JourneySlurp />} />

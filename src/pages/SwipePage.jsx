@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { PageFlip } from 'page-flip'
 import { useCityCafes } from '../lib/city'
 import { CoffeeCupIcon, PinIcon, ArrowLeftIcon } from '../components/Icons'
+import { toLines } from '../lib/textLines'
+import { OCASION_LABELS } from '../lib/ocasiones'
 
 // iPhones in standalone mode reserve space for the status bar and the home indicator; measure them once.
 function safeInset(side) {
@@ -17,18 +19,10 @@ function safeInset(side) {
 export default function SwipePage() {
   const cafes = useCityCafes()
   const navigate = useNavigate()
-  const [seleccionados, setSeleccionados] = useState([])
-  const [currentCafeIndex, setCurrentCafeIndex] = useState(0)
   const [dimensions, setDimensions] = useState({ width: 390, height: 680 })
 
   const bookContainerRef = useRef(null)
   const pageFlipRef = useRef(null)
-  const seleccionadosRef = useRef(seleccionados)
-
-  // Sincronizar seleccionadosRef
-  useEffect(() => {
-    seleccionadosRef.current = seleccionados
-  }, [seleccionados])
 
   // Calcular dimensiones ocupando el 100% exacto de la pantalla sin fondo café alrededor
   useEffect(() => {
@@ -79,18 +73,6 @@ export default function SwipePage() {
 
         pageFlip.loadFromHTML(pages)
 
-        pageFlip.on('flip', (e) => {
-          const pageIdx = e.data
-          setCurrentCafeIndex(Math.min(pageIdx, cafes.length))
-
-          // Al hojear hasta el final, redirigir automáticamente a Seleccionados
-          if (pageIdx >= cafes.length) {
-            setTimeout(() => {
-              navigate('/decidir/seleccionados', { state: { seleccionados: seleccionadosRef.current } })
-            }, 450)
-          }
-        })
-
         pageFlipRef.current = pageFlip
       } catch (err) {
         console.error('Error inicializando PageFlip:', err)
@@ -103,34 +85,7 @@ export default function SwipePage() {
         try { pageFlipRef.current.destroy() } catch (e) { /* ignore */ }
       }
     }
-  }, [dimensions, navigate])
-
-  function toggleChecklist(cafeId) {
-    const wasSelected = seleccionados.includes(cafeId)
-    const isLastCafe = cafeId === cafes[cafes.length - 1].id
-
-    if (!wasSelected) {
-      const updated = [...seleccionados, cafeId]
-      setSeleccionados(updated)
-      seleccionadosRef.current = updated
-
-      setTimeout(() => {
-        if (isLastCafe || currentCafeIndex >= cafes.length - 1) {
-          navigate('/decidir/seleccionados', { state: { seleccionados: updated } })
-        } else if (pageFlipRef.current) {
-          pageFlipRef.current.flipNext()
-        }
-      }, 400)
-    } else {
-      const updated = seleccionados.filter((id) => id !== cafeId)
-      setSeleccionados(updated)
-      seleccionadosRef.current = updated
-    }
-  }
-
-  function handleTerminar() {
-    navigate('/decidir/seleccionados', { state: { seleccionados: seleccionadosRef.current } })
-  }
+  }, [dimensions])
 
   return (
     <div
@@ -148,144 +103,52 @@ export default function SwipePage() {
             className="w-full h-full bg-[#fcf8f2] overflow-hidden"
             style={{ width: `${dimensions.width}px`, height: `${dimensions.height}px` }}
           >
-            {cafes.map((cafe, i) => {
-              const isSelected = seleccionados.includes(cafe.id)
+            {cafes.map((cafe) => {
+              // The same big first sentence as on the café page
+              const phrase = toLines(cafe.descripcion)[0] || cafe.historia
               return (
-                /* 1 HOJA POR CAFÉ: FRENTE E INVERSO EN FULL SCREEN */
+                /* 1 sheet per café: front and back */
                 <div
                   key={cafe.id}
                   className="st-page relative bg-[#fcf8f2] border-0 overflow-hidden preserve-3d"
                   style={{ backgroundColor: '#fcf8f2', opacity: 1 }}
                   data-density="soft"
                 >
-                  {/* A) CARA FRONTAL (Frente pergamino completo) */}
-                  <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-5 sm:p-6 flex flex-col justify-between overflow-hidden backface-hidden z-10">
-                    {/* Lomo sutil izquierdo */}
+                  {/* Front: photo, name, place, one sentence */}
+                  <div className="absolute inset-0 bg-[#fcf8f2] book-paper-texture p-4 flex flex-col gap-4 overflow-hidden backface-hidden z-10">
                     <div className="absolute inset-y-0 left-0 w-6 book-spine-gradient pointer-events-none z-20" />
 
-                    {/* ENCABEZADO INTEGRADO DENTRO DE LA HOJA DEL LIBRO */}
-                    <div className="relative z-20 flex justify-between items-center pb-2 border-b border-[#8b5a2b]/20">
-                      {/* Botón Volver */}
+                    <div className="relative flex-1 min-h-[150px] rounded-2xl bg-[#ebdccb] shadow-md overflow-hidden">
+                      {cafe.fotos?.[0] ? (
+                        <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center text-[#8b5a2b]/40 bg-[#f4ebe1]">
+                          <CoffeeCupIcon size={56} />
+                        </div>
+                      )}
                       <button
                         type="button"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          navigate('/')
-                        }}
-                        aria-label="Back to Decide"
-                        className="flex items-center gap-1 text-[#6b4c3b] hover:text-[#3d2b1f] font-sans transition-colors min-h-11 -ml-1 pr-3 pl-1 font-semibold"
+                        onClick={(e) => { e.stopPropagation(); navigate('/') }}
+                        aria-label="Back to Discover"
+                        className="absolute left-3 top-3 w-11 h-11 rounded-full bg-white/85 backdrop-blur-sm text-[#3d2b1f] shadow flex items-center justify-center active:scale-95 transition-transform"
                       >
-                        <ArrowLeftIcon size={17} />
-                        <span className="text-sm">Decide</span>
+                        <ArrowLeftIcon size={18} />
                       </button>
-
-                      {/* Título de la Guía y Folio */}
-                      <div className="text-center">
-                        <span className="font-bold text-[#3d2b1f] block leading-tight text-xs tracking-wider uppercase font-sans">
-                          Coffee Shop Book
-                        </span>
-                        <span className="text-[11px] text-[#8b5a2b]/70 block font-sans">
-                          Page {i + 1} of {cafes.length}
-                        </span>
-                      </div>
-
-                      {/* Ribbon Marcador de Seleccionados Integrado */}
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleTerminar()
-                        }}
-                        className="relative z-30 bg-[#7a2e1d] hover:bg-[#913723] text-beige text-xs font-sans font-semibold px-3 py-2.5 rounded-b-lg shadow-md border-t-0 border border-red-950/40 flex items-center gap-1 -mt-3 min-h-11 transition-transform active:translate-y-0.5"
-                      >
-                        <span>Picks</span>
-                        <span className="bg-amber-300 text-amber-950 text-[11px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                          {seleccionados.length}
-                        </span>
-                      </button>
-                    </div>
-
-                    {/* CONTENIDO PRINCIPAL: FOTO AMPLIADA + DETALLES */}
-                    <div className="relative z-10 my-3 flex-1 min-h-0 flex flex-col gap-4">
-                      {/* Foto marco vintage ocupando espacio amplio */}
-                      <div className="relative w-full flex-1 min-h-[150px] rounded-xl bg-[#ebdccb] border-4 border-white shadow-md overflow-hidden">
-                        {cafe.fotos?.[0] ? (
-                          <img
-                            src={cafe.fotos[0]}
-                            alt={cafe.nombre}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex flex-col items-center justify-center text-[#8b5a2b]/40 bg-[#f4ebe1]">
-                            <CoffeeCupIcon size={56} />
-                          </div>
-                        )}
+                      {cafe.precio && (
                         <span className="absolute bottom-2.5 right-2.5 bg-[#2a1a10]/85 backdrop-blur-md text-amber-200 text-xs font-sans px-3 py-1 rounded-full border border-amber-500/30 font-semibold">
                           {cafe.precio}
                         </span>
-                      </div>
-
-                      {/* Detalles del café */}
-                      <div className="shrink-0">
-                        <h2 className="text-3xl font-display font-bold text-[#3d2b1f] leading-tight">
-                          {cafe.nombre}
-                        </h2>
-                        <p className="text-sm text-[#6b4c3b] font-sans flex items-center gap-1 mt-1.5">
-                          <PinIcon size={12} className="text-[#8b5a2b]" /> {cafe.barrio}
-                        </p>
-                        <p className="text-sm font-medium text-[#5c3a21] mt-2 italic">
-                          ✨ {cafe.especialidad}
-                        </p>
-                        <p className="text-sm text-[#5c3a21] mt-2 line-clamp-3 leading-relaxed font-sans">
-                          {cafe.historia}
-                        </p>
-                      </div>
+                      )}
                     </div>
 
-                    {/* CHECKLIST MANUSCRITO RÚSTICO INTEGRADO AL PIE DE PÁGINA */}
-                    <div className="relative z-10 pt-3 border-t border-dashed border-[#8b5a2b]/30">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          toggleChecklist(cafe.id)
-                        }}
-                        aria-pressed={isSelected}
-                        className={`w-full text-left flex items-center gap-3 min-h-14 px-4 rounded-2xl border active:scale-[0.98] transition-all group ${
-                          isSelected ? 'bg-[#3d2b1f] border-[#3d2b1f]' : 'bg-white/60 border-[#6b4c3b]/30'
-                        }`}
-                      >
-                        {/* Casilla rústica */}
-                        <div
-                          className={`w-6 h-6 shrink-0 rounded border-2 flex items-center justify-center transition-all ${
-                            isSelected
-                              ? 'border-[#f5f0e8] bg-transparent'
-                              : 'border-[#6b4c3b]/60 bg-transparent group-hover:border-[#3d2b1f]'
-                          }`}
-                        >
-                          {isSelected ? (
-                            <svg
-                              className="w-5 h-5 text-[#f5f0e8] animate-ink-draw"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="3.2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                          ) : (
-                            <span className="text-[#8b5a2b]/40 text-xs">✓</span>
-                          )}
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                          <p className={`text-base font-semibold leading-none ${isSelected ? 'text-[#f5f0e8]' : 'text-[#3d2b1f]'}`}>
-                            I like this coffee shop
-                          </p>
-                        </div>
-                      </button>
+                    <div className="relative z-10 shrink-0 px-1 pb-1">
+                      <h2 className="text-[30px] font-display font-bold text-[#3d2b1f] leading-[1.05]">{cafe.nombre}</h2>
+                      <div className="flex items-center flex-wrap gap-x-3 gap-y-1.5 mt-2">
+                        <p className="text-xs text-[#6b4c3b]/70 font-sans flex items-center gap-1"><PinIcon size={12} />{cafe.barrio}</p>
+                        {cafe.tipo && <span className="inline-block text-xs font-sans bg-beige border border-[#6b4c3b]/30 text-[#6b4c3b] rounded-full px-3 py-1">{cafe.tipo}</span>}
+                        {cafe.ocasiones.map((o) => <span key={o} className="inline-block text-xs font-sans bg-[#3d2b1f] text-beige rounded-full px-3 py-1">{OCASION_LABELS[o] ?? o}</span>)}
+                      </div>
+                      <p className="text-[22px] font-sans font-extrabold tracking-tight leading-[1.12] text-[#3d2b1f] mt-4 line-clamp-4">{phrase}</p>
                     </div>
                   </div>
 
@@ -303,7 +166,7 @@ export default function SwipePage() {
                     </div>
 
                     <div className="text-[11px] font-sans text-[#6b4c3b]/40 tracking-wider">
-                      QUITO • COFFEE SHOP COLLECTION
+                      {cafe.ciudad.toUpperCase()} • COFFEE SHOPS
                     </div>
                   </div>
                 </div>
@@ -327,21 +190,16 @@ export default function SwipePage() {
                   <div className="w-20 h-20 rounded-full bg-[#ebdccb] flex items-center justify-center text-[#5c3a21] shadow-inner">
                     <CoffeeCupIcon size={40} />
                   </div>
-                  <h2 className="text-2xl font-display font-bold text-[#3d2b1f]">You have reached the end!</h2>
-                  <p className="font-hand text-3xl text-[#8b5a2b]">
-                    You saved {seleccionados.length} coffee shops
-                  </p>
-                  <button
-                    type="button"
-                    onClick={handleTerminar}
-                    className="mt-2 bg-[#3d2b1f] hover:bg-[#523b2c] text-beige font-sans text-sm font-semibold px-8 py-3.5 rounded-full shadow-md active:scale-95 transition-transform"
-                  >
-                    See my picked coffee shops
-                  </button>
+                  <h2 className="text-2xl font-display font-bold text-[#3d2b1f]">That’s all of them</h2>
+                  <p className="text-sm font-sans text-[#6b4c3b]">Come back soon, more coffee shops are on the way.</p>
+                  <div className="flex flex-col gap-3 mt-2 w-full max-w-[240px]">
+                    <button type="button" onClick={() => navigate('/')} className="bg-[#3d2b1f] text-beige font-sans text-sm font-semibold px-8 py-3.5 rounded-full shadow-md active:scale-95 transition-transform">Back to Discover</button>
+                    <button type="button" onClick={() => pageFlipRef.current?.flip(0)} className="min-h-11 text-[#6b4c3b] font-sans text-sm font-semibold underline underline-offset-4">Start again</button>
+                  </div>
                 </div>
 
                 <div className="text-[11px] font-sans text-[#6b4c3b]/40 tracking-wider">
-                  SUMAY COFFEE CLUB • QUITO
+                  SUMAY COFFEE CLUB
                 </div>
               </div>
             </div>

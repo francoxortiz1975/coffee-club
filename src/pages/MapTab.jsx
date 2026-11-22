@@ -5,8 +5,16 @@ import AppHeader from '../components/AppHeader'
 import Segmented from '../components/Segmented'
 import ParisMap from '../components/ParisMap'
 
-// The MapLibre version is a prototype (open /map?engine=gl) and loads only when asked for
+// The map is MapLibre (WebGL), loaded only when this tab opens. The hand-drawn SVG map stays as a fallback for
+// devices without WebGL, and can be forced with /map?engine=classic.
 const MapLibreMap = lazy(() => import('../components/MapLibreMap'))
+
+function hasWebGL() {
+  try {
+    const c = document.createElement('canvas')
+    return !!(c.getContext('webgl2') || c.getContext('webgl'))
+  } catch { return false }
+}
 import { useVisitas } from '../context/VisitasContext'
 import { CoffeeCupIcon, PinIcon } from '../components/Icons'
 
@@ -14,7 +22,8 @@ import { CoffeeCupIcon, PinIcon } from '../components/Icons'
 export default function MapTab() {
   const [params, setParams] = useSearchParams()
   const mode = params.get('mode') === 'mine' ? 'mine' : 'explore'
-  const useGl = params.get('engine') === 'gl'
+  const [webgl] = useState(hasWebGL)
+  const useGl = webgl && params.get('engine') !== 'classic'
   const offline = params.get('offline') === '1'
   const { visitas, toggleVisita } = useVisitas()
   const [selectedId, setSelectedId] = useState(null)

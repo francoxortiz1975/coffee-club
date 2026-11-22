@@ -22,7 +22,14 @@
     "instagram": "https://www.instagram.com/republicadelcacao?igsh=MWQzcmV3aDBoNjdhbw==",
     "precio": "$$",
     "rating": 4.7,
-    "ciudad": "Quito"
+    "ciudad": "Quito",
+    "origenes": [
+      {
+        "pais": "Ecuador",
+        "bandera": "🇪🇨",
+        "nota": "Fine-origin cacao, grown with local communities"
+      }
+    ]
   },
   {
     "id": "coffee-factory",
@@ -47,7 +54,14 @@
     "instagram": "https://www.instagram.com/coffeefactoryecuador/?hl=es",
     "precio": "$$$",
     "rating": 4.9,
-    "ciudad": "Quito"
+    "ciudad": "Quito",
+    "origenes": [
+      {
+        "pais": "Ecuador",
+        "bandera": "🇪🇨",
+        "nota": "100% Ecuadorian single-origin coffee"
+      }
+    ]
   },
   {
     "id": "quito-deli",
@@ -92,9 +106,10 @@
       "/images/ceramicafe-genevieve/cover.jpg"
     ],
     "googleMaps": "https://www.google.com/maps/place/Céramicafé+Geneviève+-+Paris+11/@48.8521349,2.3799442,17.16z",
-    "instagram": "",
+    "instagram": "https://www.instagram.com/ceramicafegenevieve/",
     "precio": "",
-    "rating": null
+    "rating": null,
+    "cultura": "Kintsugi is the Japanese art of mending broken ceramics with gold, so the cracks become the most beautiful part. You can learn it in their workshops."
   },
   {
     "id": "cuvee-noire",
@@ -114,9 +129,10 @@
       "/images/cuvee-noire/cover.jpg"
     ],
     "googleMaps": "https://www.google.com/maps?q=Cuv%C3%A9e+Noire+-+Faubourg+Saint-Antoine+-+Coffee+Shop,+106+Rue+du+Faubourg+Saint-Antoine,+75012+Paris&ftid=0x47e6734bb20c52b7:0xf9ceb124a5566101",
-    "instagram": "",
+    "instagram": "https://www.instagram.com/cuveenoire/",
     "precio": "",
-    "rating": null
+    "rating": null,
+    "cultura": "Ceremonial matcha is the finest grade of Japanese green tea: stone-ground into a fine powder and whisked into a bowl. Cuvée Noire imports theirs directly."
   },
   {
     "id": "bo-mie-bastille",
@@ -136,7 +152,7 @@
       "/images/bo-mie-bastille/cover.jpg"
     ],
     "googleMaps": "https://www.google.com/maps?q=BO%26MIE+Bastille,+47+Rue+du+Faubourg+Saint-Antoine,+75011+Paris&ftid=0x47e673481bffd9ef:0xceb5cf97fe6d9cb9",
-    "instagram": "",
+    "instagram": "https://www.instagram.com/boetmie/",
     "precio": "",
     "rating": null
   }

@@ -9,6 +9,8 @@ import { useRecuerdos } from '../context/RecuerdosContext'
 import { useAuth } from '../context/AuthContext'
 import RecuerdoModal from '../components/RecuerdoModal'
 import PhotoLightbox from '../components/PhotoLightbox'
+import ScrollLines from '../components/ScrollLines'
+import { toLines } from '../lib/textLines'
 
 const PLACEHOLDER_FOTOS = [null, null, null]
 
@@ -170,7 +172,29 @@ export default function CafeDetalle() {
           )}
         </div>
 
-        <p className="text-sm text-cafe-dark/75 leading-relaxed mb-6">{cafe.descripcion}</p>
+        {cafe.descripcion && <ScrollLines lines={toLines(cafe.descripcion)} className="text-cafe-dark my-8" />}
+
+        {cafe.cultura && (
+          <div className="rounded-2xl bg-cafe-dark text-beige p-5 mb-6">
+            <p className="text-[11px] font-sans font-semibold tracking-[0.14em] text-[#b8d04a]">CULTURE</p>
+            <p className="font-sans font-semibold text-[19px] leading-snug mt-2">{cafe.cultura}</p>
+          </div>
+        )}
+
+        {cafe.origenes?.length > 0 && (
+          <div className="mb-6">
+            <p className="text-[11px] font-sans font-semibold tracking-[0.14em] text-cafe-accent mb-3">ORIGINS</p>
+            <div className="flex gap-3 overflow-x-auto -mx-5 px-5 no-scrollbar snap-x">
+              {cafe.origenes.map((o) => (
+                <div key={o.pais} className="snap-start shrink-0 w-44 rounded-2xl bg-[#faf4ec] shadow-sm p-4">
+                  <p className="text-[52px] leading-none" aria-hidden="true">{o.bandera}</p>
+                  <p className="font-sans font-bold text-lg text-cafe-dark mt-2">{o.pais}</p>
+                  <p className="text-sm text-cafe-dark/70 mt-0.5 leading-snug">{o.nota}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Slide de fotos — tap abre lightbox fullscreen */}
         <h2 className="text-sm font-semibold text-cafe-dark mb-3">Photos</h2>

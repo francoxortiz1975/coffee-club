@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation, matchPath } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation, matchPath, Navigate } from 'react-router-dom'
 import { Component } from 'react'
 import { useAuth } from './context/AuthContext'
 import { FavoritosProvider } from './context/FavoritosContext'
@@ -16,7 +16,6 @@ import InstallPrompt from './components/InstallPrompt'
 import ScrollToTop from './components/ScrollToTop'
 import MigrationRunner from './components/MigrationRunner'
 import Descubrir from './pages/Descubrir'
-import Decidir from './pages/Decidir'
 import ShufflePage from './pages/ShufflePage'
 import SwipePage from './pages/SwipePage'
 import Seleccionados from './pages/Seleccionados'
@@ -25,7 +24,6 @@ import Collect from './pages/Collect'
 import Invite from './pages/Invite'
 import InviteNew from './pages/InviteNew'
 import MapTab from './pages/MapTab'
-import Journey from './pages/Journey'
 import JourneySlurp from './pages/JourneySlurp'
 import Shelf from './pages/Shelf'
 import CafeDetalle from './pages/CafeDetalle'
@@ -125,11 +123,11 @@ function AppShell() {
         <Routes>
           <Route path="/" element={<Descubrir />} />
           <Route path="/cafe/:id" element={<CafeDetalle />} />
-          <Route path="/decidir" element={<Decidir />} />
+          <Route path="/decidir" element={<Navigate to="/" replace />} />
           <Route path="/decidir/aleatorio" element={<ShufflePage />} />
           <Route path="/decidir/swipe" element={<SwipePage />} />
           <Route path="/decidir/seleccionados" element={<Seleccionados />} />
-          <Route path="/journey" element={<Journey />} />
+          <Route path="/journey" element={<Navigate to="/" replace />} />
           <Route path="/lab/tag" element={<TagLab />} />
           <Route path="/journey/:id" element={<JourneySlurp />} />
           <Route path="/shelf/:id" element={<Shelf />} />

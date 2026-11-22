@@ -54,7 +54,7 @@ function Bubbles({ slurp, next, chapter }) {
         <span className="tag-rule mt-3" />
         <div className="tag-perf mt-6 pt-5 flex flex-col gap-3">
           {next && <Link to={`/journey/${next.id}`} className="tag-btn solid flex items-center justify-between gap-3 py-3"><span className="text-[11px] tracking-[0.12em]">NEXT</span><span className="flex-1 text-left text-base leading-tight">{next.title}</span>›</Link>}
-          <Link to="/journey" className="tag-btn flex items-center justify-center">Back to the road</Link>
+          <Link to="/" className="tag-btn flex items-center justify-center">Back to Discover</Link>
         </div>
       </Line>
     </div>
@@ -89,7 +89,7 @@ export default function JourneySlurp() {
     return (
       <div className="px-4 pt-16 text-center">
         <p className="text-cafe-dark font-display font-bold">Slurp not found</p>
-        <Link to="/journey" className="inline-block mt-4 text-sm font-semibold text-cafe-accent underline">Back to the journey</Link>
+        <Link to="/" className="inline-block mt-4 text-sm font-semibold text-cafe-accent underline">Back to Discover</Link>
       </div>
     )
   }

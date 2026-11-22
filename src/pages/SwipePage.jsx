@@ -170,7 +170,7 @@ export default function SwipePage() {
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation()
-                          navigate('/decidir')
+                          navigate('/')
                         }}
                         aria-label="Back to Decide"
                         className="flex items-center gap-1 text-[#6b4c3b] hover:text-[#3d2b1f] font-sans transition-colors min-h-11 -ml-1 pr-3 pl-1 font-semibold"

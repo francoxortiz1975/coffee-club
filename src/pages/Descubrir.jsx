@@ -2,18 +2,17 @@ import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useCityCafes } from '../lib/city'
 import CitySwitch from '../components/CitySwitch'
-import { slurps, TEASER_IDS } from '../data/journey'
 import { buildShelves } from '../lib/shelves'
 import { useCafesDeCafeteros } from '../lib/useCafesDeCafeteros'
-import SlurpCard from '../components/SlurpCard'
+import JourneyFeed from '../components/JourneyFeed'
+import '../components/slurpTag.css'
 import FilterBar from '../components/FilterBar'
 import AvatarButton from '../components/AvatarButton'
-import DiscoverSwitch from '../components/DiscoverSwitch'
 import NextPlan from '../components/NextPlan'
 import CafeCardSmall from '../components/CafeCardSmall'
 import EspecialidadModal from '../components/EspecialidadModal'
 import InstallSteps from '../components/InstallSteps'
-import { SearchIcon, CoffeeCupIcon } from '../components/Icons'
+import { SearchIcon, CoffeeCupIcon, DiceIcon } from '../components/Icons'
 import { useFavoritos } from '../context/FavoritosContext'
 
 // Carrusel horizontal de cafés. No renderiza si la lista está vacía.
@@ -89,7 +88,6 @@ export default function Descubrir() {
         </div>
       </div>
 
-      <div className="px-4 mt-4"><DiscoverSwitch value="browse" /></div>
       <div className="px-4 mt-3 empty:hidden"><NextPlan /></div>
 
       {/* Filtros */}
@@ -138,18 +136,24 @@ export default function Descubrir() {
         <>
           {shelves.map((s) => <CafesRow key={s.id} id={s.id} titulo={s.title} cafesList={s.cafes} />)}
 
-          {/* Teaser for the Journey mode */}
+          {/* Can't decide? Two ways to let the app choose */}
           <section className="mt-8 px-4">
-            <div className="flex items-baseline justify-between mb-3">
-              <h2 className="text-base font-display font-bold text-cafe-dark">Coffee journey</h2>
-              <Link to="/journey" className="relative text-xs font-sans font-semibold text-cafe-accent before:absolute before:-inset-3 before:content-['']">Open ›</Link>
-            </div>
-            <div className="flex gap-3 overflow-x-auto -mx-4 px-4 scroll-pl-4 pb-2 snap-x snap-mandatory no-scrollbar">
-              {TEASER_IDS.map((id) => slurps.find((l) => l.id === id)).filter(Boolean).map((l) => <SlurpCard key={l.id} slurp={l} variant="mini" />)}
+            <div className="rounded-3xl p-4 text-beige shadow-md" style={{ background: 'linear-gradient(160deg, #4a2c1a 0%, #2a1510 60%, #1e0f0b 100%)' }}>
+              <p className="font-display font-bold text-xl">Can’t decide?</p>
+              <p className="text-sm text-beige/75 mt-0.5">Let the app pick a coffee shop for you.</p>
+              <div className="grid grid-cols-2 gap-3 mt-4">
+                <Link to="/decidir/swipe" className="min-h-14 rounded-2xl bg-[#b8d04a] text-[#1f1409] font-sans font-bold text-base flex items-center justify-center gap-2 active:scale-95 transition-transform">Swipe</Link>
+                <Link to="/decidir/aleatorio" className="min-h-14 rounded-2xl bg-white/10 border border-white/20 text-beige font-sans font-bold text-base flex items-center justify-center gap-2 active:scale-95 transition-transform"><DiceIcon size={20} />Random</Link>
+              </div>
             </div>
           </section>
 
           <InstallSteps />
+
+          {/* The journey starts where the shelves end, and never stops */}
+          <div className="tag tag-paper rounded-t-[32px] mt-10 pt-10 pb-28 -mb-24">
+            <JourneyFeed />
+          </div>
         </>
       )}
 

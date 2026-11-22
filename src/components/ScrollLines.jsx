@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import TypeText from './TypeText'
 
 const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
@@ -31,7 +32,7 @@ export default function ScrollLines({ lines, className = '' }) {
   return (
     <div className={`flex flex-col gap-5 ${className}`}>
       {lines.map((t, i) => (
-        <p key={i} ref={(el) => { refs.current[i] = el }} className={`will-change-transform transition-[opacity] duration-150 font-sans tracking-tight ${i === 0 ? 'text-[30px] leading-[1.08] font-extrabold' : 'text-[19px] leading-snug font-semibold'}`}>{t}</p>
+        <p key={i} ref={(el) => { refs.current[i] = el }} className={`will-change-transform transition-[opacity] duration-150 font-sans tracking-tight ${i === 0 ? 'text-[30px] leading-[1.08] font-extrabold' : 'text-[19px] leading-snug font-semibold'}`}><TypeText text={t} /></p>
       ))}
     </div>
   )

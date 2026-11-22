@@ -10,6 +10,7 @@ import { useAuth } from '../context/AuthContext'
 import RecuerdoModal from '../components/RecuerdoModal'
 import PhotoLightbox from '../components/PhotoLightbox'
 import ScrollLines from '../components/ScrollLines'
+import TypeText from '../components/TypeText'
 import { toLines } from '../lib/textLines'
 
 const PLACEHOLDER_FOTOS = [null, null, null]
@@ -104,7 +105,7 @@ export default function CafeDetalle() {
 
       <div className="relative z-10 px-5 py-5">
         <div className="flex items-start justify-between mb-1">
-          <h1 className="text-[34px] font-sans font-bold text-cafe-dark leading-[1.04] tracking-tight">{cafe.nombre}</h1>
+          <h1 className="text-[34px] font-sans font-bold text-cafe-dark leading-[1.04] tracking-tight"><TypeText text={cafe.nombre} speed={30} /></h1>
           <span className="text-base text-cafe-accent font-semibold ml-3 shrink-0 mt-1">{cafe.precio}</span>
         </div>
 
@@ -177,7 +178,7 @@ export default function CafeDetalle() {
         {cafe.cultura && (
           <div className="rounded-2xl bg-cafe-dark text-beige p-5 mb-6">
             <p className="text-[11px] font-sans font-semibold tracking-[0.14em] text-[#b8d04a]">CULTURE</p>
-            <p className="font-sans font-semibold text-[19px] leading-snug mt-2">{cafe.cultura}</p>
+            <p className="font-sans font-semibold text-[19px] leading-snug mt-2"><TypeText text={cafe.cultura} /></p>
           </div>
         )}
 

@@ -4,6 +4,7 @@ import AppHeader from '../components/AppHeader'
 import DiscoverSwitch from '../components/DiscoverSwitch'
 import JourneyScene from '../components/JourneyScene'
 import { chapters, slurps } from '../data/journey'
+import '../components/slurpTag.css'
 import { getRead } from '../lib/journeyProgress'
 
 // Discover > Journey: one road down the page. Each chapter is a stop; the scene behind the page changes as you travel.
@@ -57,10 +58,9 @@ export default function Journey() {
                   <p className="text-xs font-sans text-cafe-dark/70 mb-2">{done} of {list.length} slurped</p>
                   <div className="flex flex-col gap-2">
                     {list.map((l) => (
-                      <Link key={l.id} to={`/journey/${l.id}`} className="min-h-11 rounded-2xl bg-white/85 backdrop-blur px-3.5 py-2.5 flex items-center gap-3 shadow-sm active:scale-[0.98] transition-transform">
-                        <span className="text-lg" aria-hidden="true">{l.emoji || '☕'}</span>
-                        <span className="flex-1 text-sm font-sans font-medium text-cafe-dark leading-snug">{l.title}</span>
-                        <span className="text-xs text-cafe-dark/60 shrink-0">{read.has(l.id) ? '✓' : `${l.minutes} min`}</span>
+                      <Link key={l.id} to={`/journey/${l.id}`} className="tag tag-paper min-h-11 rounded-md border-l-[6px] border-[var(--ink)] px-3.5 py-2.5 flex items-center gap-3 shadow-sm active:scale-[0.98] transition-transform">
+                        <span className="flex-1 text-[15px] font-sans font-bold tracking-tight leading-snug">{l.title}</span>
+                        <span className="text-xs font-semibold shrink-0">{read.has(l.id) ? '✓' : `${l.minutes} MIN`}</span>
                       </Link>
                     ))}
                   </div>

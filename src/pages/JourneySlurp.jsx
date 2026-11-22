@@ -3,11 +3,12 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { slurps, chapters } from '../data/journey'
 import { getRead, markRead } from '../lib/journeyProgress'
 import { ArrowLeftIcon } from '../components/Icons'
-import JourneyScene from '../components/JourneyScene'
+import Barcode from '../components/Barcode'
+import '../components/slurpTag.css'
 
 const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
-// A slurp as a short conversation: Sumay says one thing at a time and you tap to carry on.
+// A slurp as a hang tag you read one line at a time: tap to carry on.
 // Paragraphs become bubbles; a "1. … 2. …" paragraph becomes one bubble per step.
 function toBubbles(slurp) {
   const out = [`Let’s talk about this: ${slurp.title}.`]
@@ -18,7 +19,7 @@ function toBubbles(slurp) {
   return out
 }
 
-function Bubbles({ slurp, next }) {
+function Bubbles({ slurp, next, chapter, code }) {
   const bubbles = useState(() => toBubbles(slurp))[0]
   const [shown, setShown] = useState(1)
   const [typing, setTyping] = useState(false)
@@ -31,35 +32,51 @@ function Bubbles({ slurp, next }) {
     if (typing || finished) return
     if (reduced()) { setShown((n) => n + 1); return }
     setTyping(true)
-    setTimeout(() => { setTyping(false); setShown((n) => n + 1) }, 650)
+    setTimeout(() => { setTyping(false); setShown((n) => n + 1) }, 600)
   }
 
   return (
-    <div className="px-4 pt-4 flex flex-col gap-3 pb-6">
-      {bubbles.slice(0, shown).map((t, i) => (
-        <div key={i} className="flex items-end gap-2 j-in">
-          <span className={`shrink-0 w-8 h-8 rounded-full bg-cafe-dark text-[#b8d04a] text-xs font-bold flex items-center justify-center ${i && bubbles.slice(0, shown)[i - 1] !== undefined ? 'opacity-0' : ''}`} aria-hidden="true">S</span>
-          <p className="max-w-[82%] bg-[#fffaf0] text-cafe-dark text-base leading-relaxed rounded-2xl rounded-bl-md px-4 py-3 shadow-sm">{t}</p>
+    <div className="px-5 pb-8">
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-[11px] font-sans font-semibold tracking-[0.12em] mt-1">{slurp.kind.toUpperCase()}</p>
+        <div className="flex items-start gap-3">
+          <span className="tag-stamp"><span className="block text-[15px] font-bold">{slurp.minutes}</span>min</span>
+          <p className="text-[11px] font-sans font-semibold tracking-[0.1em] mt-1">SL-{code}</p>
         </div>
-      ))}
-      {typing && (
-        <div className="flex items-end gap-2" aria-label="Sumay is typing">
-          <span className="shrink-0 w-8 h-8" />
-          <span className="bg-[#fffaf0] rounded-2xl rounded-bl-md px-4 py-3.5 shadow-sm flex gap-1.5 j-typing"><i /><i /><i /></span>
-        </div>
-      )}
+      </div>
+      <span className="tag-rule mt-4" />
+      <p className="font-sans text-[22px] leading-tight tracking-tight mt-4">{chapter ? chapter.title : 'Coffee'}</p>
+      <span className="tag-rule thin mt-3" />
+      <h1 className="font-sans font-bold text-[40px] leading-[1.02] tracking-tight mt-5">{slurp.title}</h1>
+      <span className="tag-rule mt-6" />
+
+      <div className="mt-5 flex flex-col gap-4">
+        {bubbles.slice(1, shown).map((t, i) => (
+          <p key={i} className="tag-in font-sans font-medium text-[18px] leading-snug border-l-[5px] border-[var(--ink)] pl-4">{t}</p>
+        ))}
+        {typing && <span className="tag-dots flex gap-1.5 pl-5 py-2" aria-label="Typing"><i /><i /><i /></span>}
+      </div>
+
       {!finished && !typing && (
-        <button onClick={more} className="self-end min-h-11 px-5 rounded-full bg-[#b8d04a] text-[#1f1409] text-sm font-bold rounded-br-md active:scale-95 transition-transform">
-          {shown === 1 ? 'Tell me' : 'Go on'}
-        </button>
+        <div className="flex justify-end mt-6">
+          <button onClick={more} className="tag-btn solid">{shown === 1 ? 'Start ›' : 'Go on ›'}</button>
+        </div>
       )}
+
       {finished && (
-        <div className="flex flex-col gap-2 mt-2 j-in">
-          <p className="text-center text-sm text-cafe-dark/80">That is this stop. </p>
-          {next ? (
-            <Link to={`/journey/${next.id}`} className="w-full min-h-12 rounded-full bg-cafe-dark text-[#b8d04a] text-sm font-bold flex items-center justify-center active:scale-[0.98] transition-transform">Next: {next.title} ›</Link>
-          ) : null}
-          <Link to="/journey" className="w-full min-h-12 rounded-full bg-white/85 text-cafe-dark text-sm font-bold flex items-center justify-center active:scale-[0.98] transition-transform">Back to the road</Link>
+        <div className="tag-in mt-10">
+          <div className="flex items-end justify-between gap-3">
+            <Barcode seed={slurp.id} />
+            <div className="text-right font-sans font-bold leading-tight">
+              <p className="text-[13px] tracking-wide">{(chapter?.title || '').toUpperCase()}</p>
+              <p className="text-[26px]">{slurp.kind}</p>
+            </div>
+          </div>
+          <span className="tag-rule mt-3" />
+          <div className="tag-perf mt-6 pt-5 flex flex-col gap-3">
+            {next && <Link to={`/journey/${next.id}`} className="tag-btn solid flex items-center justify-between gap-3 py-3"><span className="text-[11px] tracking-[0.12em]">NEXT</span><span className="flex-1 text-left text-base leading-tight">{next.title}</span>›</Link>}
+            <Link to="/journey" className="tag-btn flex items-center justify-center">Back to the road</Link>
+          </div>
         </div>
       )}
       <div ref={endRef} />
@@ -88,15 +105,11 @@ export default function JourneySlurp() {
   const chapter = chapters.find((c) => c.id === slurp.chapter)
 
   return (
-    <div className="min-h-screen pb-16">
-      <JourneyScene chapter={slurp.chapter} />
-      <div className="relative z-10">
-        <div className="sticky top-0 z-20 flex items-center gap-1 px-2 backdrop-blur bg-black/15" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
-          <button onClick={() => navigate(-1)} aria-label="Back" className="w-11 h-11 flex items-center justify-center text-cafe-dark active:scale-95 transition-transform"><ArrowLeftIcon size={20} /></button>
-          <p className="text-xs font-sans font-semibold tracking-widest text-cafe-dark/80">{chapter ? chapter.title.toUpperCase() : ''} · {slurp.minutes} MIN</p>
-        </div>
-        <Bubbles key={slurp.id} slurp={slurp} next={next} />
+    <div className="tag tag-paper min-h-screen pb-16 -mb-24">
+      <div className="sticky top-0 z-20 flex items-center px-2 tag-paper" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
+        <button onClick={() => navigate(-1)} aria-label="Back" className="w-11 h-11 flex items-center justify-center active:scale-95 transition-transform"><ArrowLeftIcon size={22} /></button>
       </div>
+      <Bubbles key={slurp.id} slurp={slurp} next={next} chapter={chapter} code={String(i + 1).padStart(3, '0')} />
     </div>
   )
 }

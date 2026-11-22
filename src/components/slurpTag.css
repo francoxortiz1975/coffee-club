@@ -1,9 +1,9 @@
 /* The slurp tag look: kraft hang-tag paper, one ink colour, heavy rules, a barcode. */
 .tag{--ink:#2a1a10;--paper:#e6dec7;color:var(--ink)}
 .tag-paper{background-color:var(--paper);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .36  0 0 0 0 .22  0 0 0 .22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
-.tag-rule{display:block;height:9px;background:var(--ink)}
+.tag-rule{display:block;height:9px;background:var(--ink);filter:url(#tag-rough)}
 .tag-rule.thin{height:3px}
-.tag-stamp{border:2px solid var(--ink);border-radius:14px 14px 14px 4px;padding:3px 9px;font-size:12px;font-weight:600;line-height:1.1;text-align:center;transform:rotate(-3deg)}
+.tag-stamp{filter:url(#tag-soft);border:2px solid var(--ink);border-radius:14px 14px 14px 4px;padding:3px 9px;font-size:12px;font-weight:600;line-height:1.1;text-align:center;transform:rotate(-3deg)}
 .tag-btn{border:2.5px solid var(--ink);color:var(--ink);font-weight:700;border-radius:6px;min-height:48px;padding:0 20px;background:transparent;transition:transform .15s,background .15s}
 .tag-btn:active{transform:scale(.97);background:rgba(42,26,16,.08)}
 .tag-btn.solid{background:var(--ink);color:#b8d04a}
@@ -13,3 +13,11 @@
 .tag-dots i{width:8px;height:8px;border-radius:50%;background:var(--ink);animation:j-dot 1s infinite}
 .tag-dots i:nth-child(2){animation-delay:.15s}.tag-dots i:nth-child(3){animation-delay:.3s}
 @media (prefers-reduced-motion:reduce){.tag-in,.tag-dots i{animation:none}}
+
+/* handmade touches */
+.tag-title{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-variation-settings:'opsz' 96;letter-spacing:-0.02em;text-shadow:2px 2px 0 rgba(150,105,60,.28);filter:url(#tag-ink)}
+.tag-bleed{text-shadow:0 0 .7px currentColor}
+.tag-hole{z-index:30;position:absolute;top:14px;right:26px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#cfc5a8,#9d9172);box-shadow:inset 1.5px 2px 3px rgba(0,0,0,.45),0 0 0 3px rgba(255,255,255,.18)}
+.tag-twine{z-index:30;position:absolute;top:0;right:30px;width:46px;height:44px;overflow:visible;pointer-events:none}
+.tag-note{font-family:'Parisienne',cursive;font-size:26px;line-height:1;transform:rotate(-4deg);display:inline-block}
+.tag-sheet{transform:rotate(-.35deg);box-shadow:0 10px 30px rgba(42,26,16,.18),0 1px 0 rgba(255,255,255,.35) inset}

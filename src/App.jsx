@@ -8,6 +8,7 @@ import { UsuarioProvider } from './context/UsuarioContext'
 import { AuthProvider } from './context/AuthContext'
 import { CafeterosProvider } from './context/CafeterosContext'
 import { RecuerdosProvider } from './context/RecuerdosContext'
+import TagLab from './pages/TagLab'
 import CollectReveal from './components/CollectReveal'
 import { CityProvider } from './context/CityContext'
 import BottomNav from './components/BottomNav'
@@ -129,6 +130,7 @@ function AppShell() {
           <Route path="/decidir/swipe" element={<SwipePage />} />
           <Route path="/decidir/seleccionados" element={<Seleccionados />} />
           <Route path="/journey" element={<Journey />} />
+          <Route path="/lab/tag" element={<TagLab />} />
           <Route path="/journey/:id" element={<JourneySlurp />} />
           <Route path="/shelf/:id" element={<Shelf />} />
           <Route path="/map" element={<MapTab />} />

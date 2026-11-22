@@ -127,11 +127,11 @@
     "lat": 48.8526,
     "lng": 2.3738,
     "coordsApprox": true,
-    "tipo": "Bakery & coffee",
+    "tipo": "Bakery & specialty coffee",
     "ocasiones": [],
-    "especialidad": "",
-    "historia": "",
-    "descripcion": "",
+    "especialidad": "Homemade bread, pastries and specialty coffee",
+    "historia": "A Paris bakery founded in 2017 by two career changers: everything homemade, creative and open to all.",
+    "descripcion": "Two people who never planned to be bakers. She was a lawyer at the Paris hospitals, he had just sold the company he founded. In 2015 each decided to start over, and their paths crossed at the Ferrandi culinary school. The first BO&MIE opened in 2017 on Rue de Turbigo, with everything made in-house from day one: the raspberry croissant, the praline bread and the vanilla flan are still on the menu. Since then it has grown from Paris to Seoul, but the promise is the same: homemade, creative and open to everyone. Bread, pastries and specialty coffee, made by their own teams.",
     "fotos": [
       "/images/bo-mie-bastille/cover.jpg"
     ],

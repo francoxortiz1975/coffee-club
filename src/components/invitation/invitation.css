@@ -81,7 +81,7 @@
 .iv-date b { font-weight: 500; font-size: 38px; line-height: 1; color: #f6e6b8; }
 .iv-time { margin-top: 12px; font-weight: 500; font-size: 22px; letter-spacing: .05em; color: #ead9b0; }
 .iv-time em { font-style: italic; color: #b99d62; font-size: 17px; }
-.iv-for { position: absolute; bottom: 30px; font-style: italic; font-size: 14px; letter-spacing: .06em; color: #b99d62; }
+.iv-for { position: absolute; left: 0; right: 0; bottom: 70px; padding: 0 44px; line-height: 1.2; font-style: italic; font-size: 14px; letter-spacing: .06em; color: #b99d62; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } /* sits above the small diamond, clear of the bottom chevron */
 
 @media (prefers-reduced-motion: reduce) {
   .iv-stampc, .iv-sheen { animation: none; }

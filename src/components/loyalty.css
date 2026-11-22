@@ -1,5 +1,4 @@
 /* Loyalty card board (burlap cloth, stitched empty boxes, 3D beans, the cup as the reward). */
-.lc { --lc-hand: var(--font-hand, 'Parisienne', cursive); }
 .lc svg { overflow: visible; }
 .lc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 4px 10px; }
 .lc-title { font: 600 0.72rem/1 var(--font-sans, system-ui); letter-spacing: 0.1em; text-transform: uppercase; color: rgba(107, 76, 59, 0.85); }
@@ -44,7 +43,7 @@
 .lc .glint { animation: lc-glint 4.4s ease-in-out infinite; animation-delay: var(--gd, 0s); }
 @keyframes lc-glint { 0% { transform: translateX(-170px); } 32%, 100% { transform: translateX(170px); } }
 
-.lc-count { margin: 10px 4px 0; min-height: 2.1rem; font-family: var(--lc-hand); font-size: 1.6rem; line-height: 1.2; color: #f7ecd2; text-shadow: 0 1px 0 rgba(40, 20, 4, 0.7), 0 2px 6px rgba(30, 14, 2, 0.5); text-align: center; }
+.lc-count { margin: 10px 4px 0; min-height: 2.1rem; font-family: var(--font-sans); font-weight: 600; letter-spacing: -0.01em; font-size: 1.15rem; line-height: 1.25; color: #f7ecd2; text-shadow: 0 1px 0 rgba(40, 20, 4, 0.7), 0 2px 6px rgba(30, 14, 2, 0.5); text-align: center; }
 
 /* mini row inside each barrio card */
 .lc-row { display: flex; flex-wrap: wrap; gap: 6px; }

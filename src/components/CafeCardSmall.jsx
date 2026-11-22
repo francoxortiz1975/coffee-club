@@ -46,7 +46,7 @@ export default function CafeCardSmall({ cafe, fullWidth = false }) {
 
       <div className="p-3">
         <div className="flex items-start justify-between mb-0.5">
-          <h3 className="text-sm font-sans font-bold text-cafe-dark leading-tight">{nombre}</h3>
+          <h3 className="text-[17px] font-sans font-bold text-cafe-dark leading-[1.1] tracking-tight">{nombre}</h3>
           <span className="text-xs text-cafe-accent font-semibold ml-2 shrink-0">{precio}</span>
         </div>
         <p className="text-[11px] text-cafe-accent/60 mb-2 flex items-center gap-1">

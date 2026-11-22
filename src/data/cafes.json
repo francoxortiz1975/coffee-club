@@ -4,10 +4,14 @@
     "nombre": "República del Cacao",
     "barrio": "Centro Histórico",
     "tipo": "Chocolate boutique & café",
-    "ocasiones": ["turístico", "pareja", "amigos"],
-    "especialidad": "Chocolate caliente de cacao fino de origen",
-    "historia": "Chocolate latinoamericano de origen fino, museo del cacao y boutique artesanal en el corazón del Centro Histórico.",
-    "descripcion": "Creamos el chocolate latinoamericano más auténtico de la mano de las comunidades locales, desarrollando la producción sostenible de cacao fino en su origen. Aquí encontrarás nuestro Museo del Cacao donde puedes aprender cómo se hace chocolate, nuestro Laboratorio de Chocolate donde se realizan todos nuestros postres y bombones, y nuestra Chocolate-Boutique que ofrece bebidas frías y calientes, productos horneados de alta calidad, nuestras famosas barras de chocolate y otros recuerdos.",
+    "ocasiones": [
+      "tourist",
+      "couple",
+      "friends"
+    ],
+    "especialidad": "Hot chocolate from fine-origin cacao",
+    "historia": "Fine-origin Latin American chocolate, a cacao museum and an artisan boutique in the heart of Centro Histórico.",
+    "descripcion": "We make the most authentic Latin American chocolate, hand in hand with local communities, developing sustainable production of fine cacao at its origin. Here you will find our Cacao Museum, where you can learn how chocolate is made, our Chocolate Laboratory, where all our desserts and bonbons are made, and our Chocolate Boutique, which offers cold and hot drinks, high-quality baked goods, our famous chocolate bars and other souvenirs.",
     "fotos": [
       "/images/republica-del-cacao/Cover.jpg",
       "/images/republica-del-cacao/place.jpg",
@@ -23,11 +27,15 @@
     "id": "coffee-factory",
     "nombre": "Coffee Factory",
     "barrio": "La Carolina",
-    "tipo": "Café de especialidad",
-    "ocasiones": ["pareja", "amigos", "turístico"],
-    "especialidad": "Café de especialidad calidad de exportación 100% ecuatoriano",
-    "historia": "Coffee Factory fue fundado en 2019 en Quito. El café que utilizan se produce en la Finca Vista Hermosa, ubicada en Nanegalito, Pichincha, a 1.850 msnm. Además, ofrecen productos únicos de sal y dulce elaborados de forma artesanal.",
-    "descripcion": "Local pequeño y acogedor donde el protagonista es el café ecuatoriano de origen. Sebastián te recibe con agua con gas y te guía en una experiencia sensorial: te explica el maridaje gastronómico, las notas de cada variedad y de dónde viene cada grano antes de prepararlo. En el menú encontrarás affogatos, golden coffee, matcha latte y postres artesanales como el cheesecake de café y la torta de choclo. Tiene parqueadero propio.",
+    "tipo": "Specialty coffee",
+    "ocasiones": [
+      "couple",
+      "friends",
+      "tourist"
+    ],
+    "especialidad": "100% Ecuadorian export-quality specialty coffee",
+    "historia": "Coffee Factory was founded in 2019 in Quito. Its coffee is grown at Finca Vista Hermosa in Nanegalito, Pichincha, at 1,850 meters above sea level. They also offer unique handmade sweet and savory products.",
+    "descripcion": "A small, cozy spot where Ecuadorian single-origin coffee is the star. Sebastián welcomes you with sparkling water and guides you through a sensory experience: he explains the food pairings, the notes of each variety and where each bean comes from before preparing it. The menu has affogatos, golden coffee, matcha latte and artisan desserts such as coffee cheesecake and corn cake. It has its own parking.",
     "fotos": [
       "/images/coffee-factory/cover.jpg",
       "/images/coffee-factory/place.jpg",
@@ -43,11 +51,16 @@
     "id": "quito-deli",
     "nombre": "Quito Deli",
     "barrio": "La Floresta",
-    "tipo": "Cafetería",
-    "ocasiones": ["pareja", "amigos", "work", "reunión"],
-    "especialidad": "Croissants y pan recién horneado al estilo europeo",
-    "historia": "Con más de 30 años de experiencia, Quito Deli mantiene el estilo tradicional europeo en panadería y pastelería de la ciudad. El olor del pan recién horneado es el toque especial que lo caracteriza, y también crea un ambiente único para pasar las mañanas o tardes disfrutando de un delicioso café y sus acompañantes.",
-    "descripcion": "En Quito Deli encuentras una gran selección de tortas, postres y panes recién horneados. Así como variedad de bocadillos, jugos naturales, galletas, café y una zona saludable. Quito Deli también ofrece almuerzos ligeros y cenas elaboradas para disfrutar con familiares y amigos.",
+    "tipo": "Café",
+    "ocasiones": [
+      "couple",
+      "friends",
+      "work",
+      "meeting"
+    ],
+    "especialidad": "Croissants and fresh bread, European style",
+    "historia": "With more than 30 years of experience, Quito Deli keeps the traditional European style of baking and pastry in the city. The smell of freshly baked bread is its signature touch, and it creates a unique atmosphere for mornings or afternoons with a good coffee and its companions.",
+    "descripcion": "At Quito Deli you will find a wide selection of cakes, desserts and freshly baked bread, plus sandwiches, fresh juices, cookies, coffee and a healthy corner. Quito Deli also serves light lunches and elaborate dinners to enjoy with family and friends.",
     "fotos": [
       "/images/quito-deli/cover.jpg",
       "/images/quito-deli/place.jpg",

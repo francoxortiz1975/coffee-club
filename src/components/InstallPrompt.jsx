@@ -106,15 +106,15 @@ export default function InstallPrompt() {
       <div className="fixed bottom-28 left-4 right-4 max-w-md mx-auto z-40 bg-cafe-dark text-beige rounded-2xl p-4 shadow-2xl flex items-center gap-3 animate-[fadeUp_0.5s_ease]">
         <img src="/icons/icon-180.png" alt="" className="w-12 h-12 rounded-xl shrink-0" />
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-sans font-bold">Instalar Sumay</p>
-          <p className="text-[11px] text-beige/60">Acceso rápido desde tu pantalla de inicio</p>
+          <p className="text-sm font-sans font-bold">Install Sumay</p>
+          <p className="text-[11px] text-beige/60">Quick access from your home screen</p>
         </div>
-        <button onClick={descartar} className="text-beige/40 px-2 py-1 text-sm" aria-label="Cerrar">×</button>
+        <button onClick={descartar} className="text-beige/40 px-2 py-1 text-sm" aria-label="Close">×</button>
         <button
           onClick={instalarAndroid}
           className="bg-[#b8d04a] text-cafe-dark text-xs font-bold px-3 py-2 rounded-xl active:scale-95 transition-transform shrink-0"
         >
-          Instalar
+          Install
         </button>
       </div>
     )
@@ -134,28 +134,28 @@ export default function InstallPrompt() {
           <img src="/icons/icon-180.png" alt="" className="w-16 h-16 rounded-2xl shadow" />
         </div>
         <h3 className="text-lg font-display font-bold text-cafe-dark text-center mb-1">
-          Instala Sumay en tu iPhone
+          Install Sumay on your iPhone
         </h3>
         <p className="text-xs text-cafe-accent/60 text-center mb-5">
-          Tenla siempre a un toque desde tu pantalla de inicio.
+          Keep it one tap away on your home screen.
         </p>
 
         <ol className="text-sm text-cafe-dark space-y-3 mb-5">
           <li className="flex items-start gap-3">
             <span className="w-6 h-6 rounded-full bg-cafe-dark text-beige text-xs font-bold flex items-center justify-center shrink-0">1</span>
             <span>
-              Toca el ícono de <span className="font-semibold">Compartir</span>
+              Tap the <span className="font-semibold">Share</span> icon
               <span className="inline-block ml-1 align-middle text-base">⎙</span>
-              {' '}en la barra de Safari.
+              {' '}in the Safari toolbar.
             </span>
           </li>
           <li className="flex items-start gap-3">
             <span className="w-6 h-6 rounded-full bg-cafe-dark text-beige text-xs font-bold flex items-center justify-center shrink-0">2</span>
-            <span>Desliza y elige <span className="font-semibold">"Añadir a pantalla de inicio"</span>.</span>
+            <span>Scroll down and choose <span className="font-semibold">"Add to Home Screen"</span>.</span>
           </li>
           <li className="flex items-start gap-3">
             <span className="w-6 h-6 rounded-full bg-cafe-dark text-beige text-xs font-bold flex items-center justify-center shrink-0">3</span>
-            <span>Toca <span className="font-semibold">Añadir</span>.</span>
+            <span>Tap <span className="font-semibold">Add</span>.</span>
           </li>
         </ol>
 
@@ -163,7 +163,7 @@ export default function InstallPrompt() {
           onClick={descartar}
           className="w-full py-3 rounded-2xl text-sm font-semibold border border-cafe-accent/25 text-cafe-accent active:scale-95 transition-transform"
         >
-          Ahora no
+          Not now
         </button>
       </div>
     </div>

@@ -15,8 +15,8 @@ export default function Decidir() {
       >
         <DiceIcon size={48} className="opacity-80" />
         <div className="text-center">
-          <p className="text-2xl font-display font-bold tracking-tight">Aleatorio</p>
-          <p className="text-sm text-beige/80 mt-1">Una cafetería al azar</p>
+          <p className="text-2xl font-display font-bold tracking-tight">Random</p>
+          <p className="text-sm text-beige/80 mt-1">A coffee shop at random</p>
         </div>
       </button>
 
@@ -37,7 +37,7 @@ export default function Decidir() {
           </svg>
           <div className="text-center">
             <p className="text-2xl font-display font-bold text-beige tracking-tight">Swipe</p>
-            <p className="text-sm text-beige/80 mt-1">Me interesa · No me interesa</p>
+            <p className="text-sm text-beige/80 mt-1">Interested · Not interested</p>
           </div>
         </div>
       </button>

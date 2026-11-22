@@ -3,10 +3,10 @@ import { CoffeeCupIcon, HeartIcon, PinIcon } from './Icons'
 import { useFavoritos } from '../context/FavoritosContext'
 
 const OCASION_LABELS = {
-  pareja: 'Pareja',
-  amigos: 'Amigos',
-  reunión: 'Reunión',
-  turístico: 'Turístico',
+  couple: 'Couple',
+  friends: 'Friends',
+  meeting: 'Meeting',
+  tourist: 'Tourist',
   work: 'Work',
 }
 
@@ -36,7 +36,7 @@ export default function CafeCardSmall({ cafe, fullWidth = false }) {
         )}
         <button
           onClick={handleHeart}
-          aria-label={esFavorito ? 'Quitar de favoritos' : 'Guardar en favoritos'}
+          aria-label={esFavorito ? 'Remove from favorites' : 'Save to favorites'}
           aria-pressed={esFavorito}
           className={`absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm transition-colors before:absolute before:-inset-2 before:content-[''] ${esFavorito ? 'text-[#b8d04a]' : 'text-cafe-accent/70'}`}
         >

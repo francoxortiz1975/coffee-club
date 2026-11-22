@@ -84,8 +84,8 @@ export default function Descubrir() {
   const cafesFavoritos     = cafes.filter((c) => favoritos.includes(c.id))
   const cafesDeCafeteros   = cafes.filter((c) => cafeIdsDeCafeteros.includes(c.id))
   const cafesParaTrabajar  = cafes.filter((c) => c.ocasiones.includes('work'))
-  const cafesRomantico     = cafes.filter((c) => c.ocasiones.includes('pareja'))
-  const cafesTuristico     = cafes.filter((c) => c.ocasiones.includes('turístico'))
+  const cafesRomantico     = cafes.filter((c) => c.ocasiones.includes('couple'))
+  const cafesTuristico     = cafes.filter((c) => c.ocasiones.includes('tourist'))
 
   return (
     <div className="pb-4">
@@ -109,7 +109,7 @@ export default function Descubrir() {
             type="text"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
-            placeholder="Buscar cafetería..."
+            placeholder="Search coffee shops..."
             className="w-full bg-white/10 text-beige placeholder-beige/60 rounded-2xl pl-10 pr-4 min-h-11 text-base outline-none focus:bg-white/15 transition-colors"
           />
         </div>
@@ -127,7 +127,7 @@ export default function Descubrir() {
             onClick={() => setEspecialidad(null)}
             className="mt-2 text-[11px] text-cafe-accent/70 underline"
           >
-            Quitar filtro: {especialidad} ✕
+            Clear filter: {especialidad} ✕
           </button>
         )}
       </div>
@@ -136,7 +136,7 @@ export default function Descubrir() {
         /* ── MODO FILTRO ── grid plano con los resultados ──────── */
         <section className="mt-6 px-4">
           <h2 className="text-base font-display font-bold text-cafe-dark mb-3">
-            Resultados {cafesFiltrados.length > 0 && `(${cafesFiltrados.length})`}
+            Results {cafesFiltrados.length > 0 && `(${cafesFiltrados.length})`}
           </h2>
           {cafesFiltrados.length > 0 ? (
             <div className="grid grid-cols-1 gap-3">
@@ -148,10 +148,10 @@ export default function Descubrir() {
             <div className="bg-[#faf4ec] rounded-2xl px-4 py-8 text-center">
               <CoffeeCupIcon size={32} className="text-cafe-accent/30 mx-auto mb-3" />
               <p className="text-sm font-sans font-bold text-cafe-dark mb-1">
-                Sin coincidencias
+                No matches
               </p>
               <p className="text-xs text-cafe-accent/60">
-                Probá con otra ocasión, especialidad, o un nombre distinto.
+                Try another occasion, specialty, or a different name.
               </p>
             </div>
           )}
@@ -159,16 +159,16 @@ export default function Descubrir() {
       ) : (
         /* ── MODO DISCOVERY ── rows curados ──────────────────── */
         <>
-          <CafesRow titulo="Cerca de ti" cafesList={cafes} />
-          <CafesRow titulo="Tus cafeteros visitaron" cafesList={cafesDeCafeteros} />
-          <CafesRow titulo="Favoritos" cafesList={cafesFavoritos} />
-          <CafesRow titulo="Algo romántico" cafesList={cafesRomantico} />
-          <CafesRow titulo="Pa trabajar" cafesList={cafesParaTrabajar} />
-          <CafesRow titulo="Para turistear" cafesList={cafesTuristico} />
+          <CafesRow titulo="Near you" cafesList={cafes} />
+          <CafesRow titulo="Visited by your coffee friends" cafesList={cafesDeCafeteros} />
+          <CafesRow titulo="Favorites" cafesList={cafesFavoritos} />
+          <CafesRow titulo="Something romantic" cafesList={cafesRomantico} />
+          <CafesRow titulo="Good for working" cafesList={cafesParaTrabajar} />
+          <CafesRow titulo="For sightseeing" cafesList={cafesTuristico} />
 
-          {/* Sobre el café ecuatoriano */}
+          {/* About Ecuadorian coffee */}
           <section className="mt-8 px-4">
-            <h2 className="text-base font-display font-bold text-cafe-dark mb-3">Sobre el café ecuatoriano</h2>
+            <h2 className="text-base font-display font-bold text-cafe-dark mb-3">About Ecuadorian coffee</h2>
             <div className="flex gap-3 overflow-x-auto -mx-4 px-4 scroll-pl-4 pb-2 snap-x snap-mandatory no-scrollbar">
               {historias.map((h) => (
                 <CafeHistoriaCard key={h.id} historia={h} />

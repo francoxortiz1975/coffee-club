@@ -73,7 +73,7 @@ export default function PhotoLightbox({ fotos, indexInicial = 0, onClose }) {
       {/* Botón cerrar */}
       <button
         onClick={(e) => { e.stopPropagation(); onClose() }}
-        aria-label="Cerrar"
+        aria-label="Close"
         className="absolute z-10 right-4 w-10 h-10 rounded-full bg-white/15 backdrop-blur-sm text-white flex items-center justify-center"
         style={{ top: 'calc(16px + env(safe-area-inset-top))' }}
       >
@@ -90,7 +90,7 @@ export default function PhotoLightbox({ fotos, indexInicial = 0, onClose }) {
       >
         <img
           src={fotos[index]}
-          alt={`Foto ${index + 1}`}
+          alt={`Photo ${index + 1}`}
           className="max-w-full max-h-full object-contain select-none pointer-events-none"
           style={{
             transform: `translateX(${offsetX}px)`,
@@ -103,7 +103,7 @@ export default function PhotoLightbox({ fotos, indexInicial = 0, onClose }) {
       {index > 0 && (
         <button
           onClick={(e) => { e.stopPropagation(); prev() }}
-          aria-label="Anterior"
+          aria-label="Previous"
           className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/15 backdrop-blur-sm text-white flex items-center justify-center hidden md:flex"
         >
           <ArrowLeftIcon size={20} />
@@ -112,7 +112,7 @@ export default function PhotoLightbox({ fotos, indexInicial = 0, onClose }) {
       {index < fotos.length - 1 && (
         <button
           onClick={(e) => { e.stopPropagation(); next() }}
-          aria-label="Siguiente"
+          aria-label="Next"
           className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/15 backdrop-blur-sm text-white flex items-center justify-center hidden md:flex"
         >
           <ArrowLeftIcon size={20} className="rotate-180" />

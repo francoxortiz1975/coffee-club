@@ -6,7 +6,7 @@ import { migrateLocalToSupabase, hasLocalDataToMigrate } from '../lib/migrate'
 // tenga en localStorage (favoritos, visitas, invitaciones, perfil) a Supabase.
 // Idempotente: corre una sola vez por device + cuenta.
 // UX:
-//  - Si hay data para migrar → overlay 'Guardando tus datos…' mientras corre
+//  - Si hay data para migrar → overlay 'Saving your data…' mientras corre
 //  - Al terminar → mensaje de éxito por 4s
 //  - Si no había nada → no muestra nada
 export default function MigrationRunner() {
@@ -18,7 +18,7 @@ export default function MigrationRunner() {
     if (!hasLocalDataToMigrate()) return
 
     let cancelado = false
-    setEstado({ tipo: 'cargando', mensaje: 'Guardando tus datos…' })
+    setEstado({ tipo: 'cargando', mensaje: 'Saving your data…' })
 
     migrateLocalToSupabase(user.id).then((reporte) => {
       if (cancelado) return
@@ -28,11 +28,11 @@ export default function MigrationRunner() {
         return
       }
       const partes = []
-      if (reporte.favoritos) partes.push(`${reporte.favoritos} favoritos`)
-      if (reporte.visitas) partes.push(`${reporte.visitas} visitas`)
-      if (reporte.invitaciones) partes.push(`${reporte.invitaciones} invitaciones`)
-      if (reporte.profile) partes.push('tus preferencias')
-      setEstado({ tipo: 'exito', mensaje: `Importamos ${partes.join(', ')} a tu cuenta` })
+      if (reporte.favoritos) partes.push(`${reporte.favoritos} favorites`)
+      if (reporte.visitas) partes.push(`${reporte.visitas} visits`)
+      if (reporte.invitaciones) partes.push(`${reporte.invitaciones} invitations`)
+      if (reporte.profile) partes.push('your preferences')
+      setEstado({ tipo: 'exito', mensaje: `We imported ${partes.join(', ')} to your account` })
       setTimeout(() => {
         if (!cancelado) setEstado({ tipo: 'oculto', mensaje: '' })
       }, 4500)
@@ -52,7 +52,7 @@ export default function MigrationRunner() {
             {estado.mensaje}
           </p>
           <p className="text-xs text-cafe-accent/60 text-center leading-relaxed">
-            Sincronizando con tu cuenta. Toma solo un momento.
+            Syncing with your account. Just a moment.
           </p>
         </div>
       </div>

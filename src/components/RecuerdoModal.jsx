@@ -31,14 +31,14 @@ export default function RecuerdoModal({ cafe, onClose }) {
 
   async function guardar() {
     if (!file && !existente?.foto_url) {
-      setError('Agrega una foto antes de guardar')
+      setError('Add a photo before saving')
       return
     }
     setEstado('guardando')
     setError('')
     const { error: err } = await guardarRecuerdo(cafe.id, { file, nota })
     if (err) {
-      setError('No se pudo guardar. Intenta de nuevo.')
+      setError("Couldn't save. Please try again.")
       setEstado('error')
       return
     }
@@ -61,7 +61,7 @@ export default function RecuerdoModal({ cafe, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="px-5 pt-5 pb-2">
-          <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-1">Recuerdo</p>
+          <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-1">Memory</p>
           <h3 className="text-xl font-display font-bold text-cafe-dark leading-tight">{cafe.nombre}</h3>
         </div>
 
@@ -79,8 +79,8 @@ export default function RecuerdoModal({ cafe, onClose }) {
               ) : (
                 <div className="text-center flex flex-col items-center">
                   <CameraIcon size={40} className="text-cafe-accent/60 mb-2" />
-                  <p className="text-sm text-cafe-accent/70 font-semibold">Agregar foto</p>
-                  <p className="text-[11px] text-cafe-accent/50 mt-1">Toca para elegir de tu galería</p>
+                  <p className="text-sm text-cafe-accent/70 font-semibold">Add photo</p>
+                  <p className="text-[11px] text-cafe-accent/50 mt-1">Tap to choose from your gallery</p>
                 </div>
               )}
               {preview && (
@@ -112,7 +112,7 @@ export default function RecuerdoModal({ cafe, onClose }) {
                     el.style.height = el.scrollHeight + 'px'
                   }
                 }}
-                placeholder='"Fui con María, pedí latte…"'
+                placeholder='"Went with Maria, had a latte…"'
                 rows={1}
                 maxLength={280}
                 className="w-full bg-transparent text-beige font-sans italic text-center text-sm leading-snug px-4 py-2 outline-none resize-none placeholder:text-beige/45 overflow-hidden"
@@ -138,38 +138,38 @@ export default function RecuerdoModal({ cafe, onClose }) {
             disabled={estado === 'guardando'}
             className="w-full bg-cafe-dark text-[#b8d04a] text-sm font-bold py-3.5 rounded-2xl ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform disabled:opacity-50"
           >
-            {estado === 'guardando' ? 'Guardando…' : existente ? 'Actualizar recuerdo' : 'Guardar recuerdo'}
+            {estado === 'guardando' ? 'Saving…' : existente ? 'Update memory' : 'Save memory'}
           </button>
           {existente && !confirmarBorrar && (
             <button
               onClick={() => setConfirmarBorrar(true)}
               className="text-xs font-semibold text-red-500/80 underline self-center"
             >
-              Eliminar recuerdo
+              Delete memory
             </button>
           )}
           {confirmarBorrar && (
             <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-center">
-              <p className="text-xs text-red-700 mb-2">¿Seguro? La foto y la nota se borran del todo.</p>
+              <p className="text-xs text-red-700 mb-2">Sure? The photo and note will be deleted for good.</p>
               <div className="flex gap-2">
                 <button
                   onClick={() => setConfirmarBorrar(false)}
                   className="flex-1 text-xs font-semibold border border-red-300 text-red-600 py-2 rounded-lg"
                 >
-                  Cancelar
+                  Cancel
                 </button>
                 <button
                   onClick={borrar}
                   disabled={estado === 'guardando'}
                   className="flex-1 text-xs font-bold bg-red-500 text-white py-2 rounded-lg disabled:opacity-50"
                 >
-                  Eliminar
+                  Delete
                 </button>
               </div>
             </div>
           )}
           <button onClick={onClose} className="text-xs font-semibold text-cafe-accent/60 self-center">
-            Cerrar
+            Close
           </button>
         </div>
       </div>

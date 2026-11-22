@@ -32,7 +32,7 @@ export default function ShufflePage() {
         <button onClick={() => navigate(-1)} className="text-beige/60 mr-4">
           <ArrowLeftIcon size={20} />
         </button>
-        <h1 className="text-xl font-display font-bold text-beige">Aleatorio</h1>
+        <h1 className="text-xl font-display font-bold text-beige">Random</h1>
       </div>
 
       <div className="flex-1 flex flex-col items-center px-5">
@@ -46,7 +46,7 @@ export default function ShufflePage() {
         </button>
 
         <p className="text-beige/40 text-sm mt-4 mb-8">
-          {spinning ? 'Escogiendo...' : cafe ? 'Toca para cambiar' : 'Toca para descubrir'}
+          {spinning ? 'Picking...' : cafe ? 'Tap to change' : 'Tap to discover'}
         </p>
 
         {/* Card resultado */}
@@ -76,7 +76,7 @@ export default function ShufflePage() {
                 to={`/cafe/${cafe.id}`}
                 className="block text-center text-sm font-semibold bg-cafe-dark text-beige py-2.5 rounded-xl"
               >
-                Ver más
+                See more
               </Link>
             </div>
           </div>

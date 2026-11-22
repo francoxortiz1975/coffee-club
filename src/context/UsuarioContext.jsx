@@ -6,25 +6,25 @@ const KEY = 'samay_usuario'
 const FOTO_KEY = 'samay_usuario_foto' // foto local-only (hasta que tengamos Storage)
 const UsuarioContext = createContext()
 
-const PREFIJOS = [
-  'amanteDel', 'reyDel', 'reinaDel', 'maestroDel', 'fanDel', 'adictoAl',
-  'cazadorDel', 'gurúDel', 'bohemioDel', 'magoDel', 'profeDel', 'baristaDel',
+const SUFIJOS = [
+  'Lover', 'King', 'Queen', 'Master', 'Fan', 'Addict',
+  'Hunter', 'Guru', 'Bohemian', 'Wizard', 'Prof', 'Barista',
 ]
 const CAFES = [
-  'Espresso', 'Cappuccino', 'Cortado', 'Latte', 'Mocha', 'Americano',
-  'Macchiato', 'Flatwhite', 'Frappe', 'Ristretto', 'Affogato', 'Turco',
-  'Doppio', 'Cubano', 'Bombón',
+  'espresso', 'cappuccino', 'cortado', 'latte', 'mocha', 'americano',
+  'macchiato', 'flatwhite', 'frappe', 'ristretto', 'affogato', 'turkish',
+  'doppio', 'cuban', 'bombon',
 ]
 const NOMBRES_DISPLAY = [
-  'Cafetero anónimo', 'Catador curioso', 'Bohemio del café',
-  'Buscador de cafés', 'Amante del aroma',
+  'Anonymous Sipper', 'Curious Taster', 'Coffee Bohemian',
+  'Coffee Seeker', 'Aroma Lover',
 ]
 
 export const TIPOS_CAFE = [
   'Espresso', 'Doppio', 'Ristretto', 'Americano',
   'Cappuccino', 'Latte', 'Flat white', 'Macchiato', 'Cortado',
   'Mocha', 'Affogato', 'Frappe',
-  'Turco', 'Cubano', 'Bombón',
+  'Turkish', 'Cuban', 'Bombón',
 ]
 
 function pick(arr) {
@@ -33,7 +33,7 @@ function pick(arr) {
 
 export function generarUsername() {
   const n = Math.floor(Math.random() * 90 + 10)
-  return `${pick(PREFIJOS)}${pick(CAFES)}${n}`
+  return `${pick(CAFES)}${pick(SUFIJOS)}${n}`
 }
 
 const USUARIO_VACIO = {

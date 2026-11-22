@@ -25,7 +25,7 @@ function ShuffleMode() {
         onClick={handleShuffle}
         className={`bg-cafe-dark text-beige text-base font-bold py-4 px-10 rounded-full shadow-lg active:scale-95 transition-all ${spinning ? 'animate-spin-once opacity-70' : ''}`}
       >
-        🎲 Sorpréndeme
+        🎲 Surprise me
       </button>
 
       <div className={`mt-8 w-full transition-all duration-300 ${cafe ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
@@ -66,7 +66,7 @@ function ShuffleCard({ cafe, onReshuffle }) {
             to={`/cafe/${cafe.id}`}
             className="flex-1 text-center text-sm font-semibold bg-cafe-dark text-beige py-2.5 rounded-xl"
           >
-            Ver más
+            See more
           </Link>
           <button
             onClick={onReshuffle}
@@ -124,13 +124,13 @@ function SwipeMode() {
     return (
       <div className="flex flex-col items-center justify-center flex-1 px-8 text-center gap-4">
         <span className="text-5xl">☕</span>
-        <p className="text-cafe-dark font-display font-bold text-lg">Ya viste todo el Centro Histórico</p>
-        <p className="text-cafe-accent/60 text-sm">Pronto habrá más cafeterías</p>
+        <p className="text-cafe-dark font-display font-bold text-lg">You have seen all of Centro Histórico</p>
+        <p className="text-cafe-accent/60 text-sm">More coffee shops soon</p>
         <button
           onClick={() => setIndex(0)}
           className="mt-2 bg-cafe-dark text-beige text-sm font-semibold px-6 py-2.5 rounded-full"
         >
-          Volver a empezar
+          Start over
         </button>
       </div>
     )
@@ -156,12 +156,12 @@ function SwipeMode() {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Badge SERÍA */}
+        {/* Badge WOULD GO */}
         <div
           className="absolute top-5 left-5 z-10 bg-green-500 text-white text-sm font-bold px-3 py-1 rounded-full rotate-[-15deg]"
           style={{ opacity: likeOpacity }}
         >
-          ❤️ SERÍA
+          ❤️ WOULD GO
         </div>
         {/* Badge PASO */}
         <div

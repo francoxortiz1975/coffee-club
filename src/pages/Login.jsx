@@ -21,14 +21,14 @@ export default function Login() {
     setError('')
     const limpio = email.trim().toLowerCase()
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(limpio)) {
-      setError('Email inválido')
+      setError('Invalid email')
       return
     }
     setEstado('enviando')
     const { error: err } = await enviarMagicLink(limpio)
     if (err) {
       console.error('magic link error:', err)
-      setError('No se pudo enviar el código. Prueba de nuevo.')
+      setError("Couldn't send the code. Please try again.")
       setEstado('pidiendoEmail')
       return
     }
@@ -40,14 +40,14 @@ export default function Login() {
     setError('')
     const limpio = codigo.replace(/\s/g, '')
     if (!/^\d{6,8}$/.test(limpio)) {
-      setError('Código inválido (6 dígitos)')
+      setError('Invalid code (6 digits)')
       return
     }
     setEstado('enviando')
     const { error: err } = await verificarCodigo(email.trim().toLowerCase(), limpio)
     if (err) {
       console.error('verifyOtp error:', err)
-      setError('Código incorrecto o expirado. Pide uno nuevo.')
+      setError('Wrong or expired code. Request a new one.')
       setEstado('verificandoCodigo')
       return
     }
@@ -64,13 +64,13 @@ export default function Login() {
         <ArrowLeftIcon size={20} />
       </button>
 
-      <h1 className="text-3xl font-display font-bold text-cafe-dark mb-2">Entrar a Sumay</h1>
+      <h1 className="text-3xl font-display font-bold text-cafe-dark mb-2">Sign in to Sumay</h1>
 
       {/* PASO 1 — Email */}
       {estado === 'pidiendoEmail' || (estado === 'enviando' && !codigo) ? (
         <>
           <p className="text-sm text-cafe-accent/70 mb-8 leading-relaxed">
-            Ingresa tu email. Te mandamos un código y un enlace para entrar sin contraseña.
+            Enter your email. We'll send you a code and a link to sign in without a password.
           </p>
           <form onSubmit={pedirCodigo} className="flex flex-col gap-3">
             <label className="text-lg font-display font-bold text-cafe-dark">Email</label>
@@ -78,7 +78,7 @@ export default function Login() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="tu@email.com"
+              placeholder="you@email.com"
               autoComplete="email"
               autoFocus
               className="w-full bg-transparent border border-cafe-accent/25 rounded-xl px-4 py-3 text-sm text-cafe-dark outline-none focus:border-cafe-accent/60"
@@ -89,7 +89,7 @@ export default function Login() {
               disabled={estado === 'enviando'}
               className="mt-4 bg-cafe-dark text-[#b8d04a] text-sm font-bold py-4 rounded-2xl shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform disabled:opacity-50"
             >
-              {estado === 'enviando' ? 'Enviando…' : 'Enviar código'}
+              {estado === 'enviando' ? 'Sending…' : 'Send code'}
             </button>
             {error && <p className="text-xs text-red-600 text-center mt-1">{error}</p>}
           </form>
@@ -100,15 +100,15 @@ export default function Login() {
       {(estado === 'verificandoCodigo' || estado === 'enviando' && codigo) || estado === 'exito' ? (
         <>
           <p className="text-sm text-cafe-accent/70 mb-2 leading-relaxed">
-            Te enviamos un email a <span className="font-semibold text-cafe-dark">{email}</span>.
-            Copia el código de 6 dígitos del mensaje y pégalo abajo.
+            We sent an email to <span className="font-semibold text-cafe-dark">{email}</span>.
+            Copy the 6-digit code from the message and paste it below.
           </p>
           <p className="text-xs text-cafe-accent/50 mb-8">
-            ¿Abres este email desde tu computadora? También puedes dar click al enlace.
+            Opening this email on your computer? You can also click the link.
           </p>
 
           <form onSubmit={verificar} className="flex flex-col gap-3">
-            <label className="text-lg font-display font-bold text-cafe-dark">Código</label>
+            <label className="text-lg font-display font-bold text-cafe-dark">Code</label>
             <input
               type="text"
               inputMode="numeric"
@@ -125,14 +125,14 @@ export default function Login() {
               disabled={estado === 'enviando' || estado === 'exito'}
               className="mt-4 bg-cafe-dark text-[#b8d04a] text-sm font-bold py-4 rounded-2xl shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform disabled:opacity-50"
             >
-              {estado === 'enviando' ? 'Verificando…' : estado === 'exito' ? '¡Entrando!' : 'Verificar código'}
+              {estado === 'enviando' ? 'Verifying…' : estado === 'exito' ? 'Signing in!' : 'Verify code'}
             </button>
             <button
               type="button"
               onClick={() => { setEstado('pidiendoEmail'); setCodigo(''); setError('') }}
               className="text-xs font-semibold text-cafe-accent/60 underline mt-2"
             >
-              Usar otro email
+              Use a different email
             </button>
             {error && <p className="text-xs text-red-600 text-center mt-1">{error}</p>}
           </form>
@@ -140,9 +140,9 @@ export default function Login() {
       ) : null}
 
       <p className="text-xs text-cafe-accent/50 mt-auto pt-8 text-center">
-        ¿Todavía no estás en el club?{' '}
+        Not in the club yet?{' '}
         <Link to="/landing" className="font-semibold text-cafe-dark underline">
-          Únete al waitlist
+          Join the waitlist
         </Link>
       </p>
     </div>

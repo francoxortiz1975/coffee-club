@@ -37,8 +37,8 @@ class ErrorBoundary extends Component {
     return (
       <div className="fixed inset-0 flex flex-col items-center justify-center bg-[#2a1510] gap-6 p-8 text-center">
         <img src="/logo.png" alt="Sumay" className="w-20 h-20 opacity-80" />
-        <p className="text-[#b8d04a] font-display text-lg font-bold">Algo salió mal</p>
-        <p className="text-white/60 text-sm">Toca para recargar la app.</p>
+        <p className="text-[#b8d04a] font-display text-lg font-bold">Something went wrong</p>
+        <p className="text-white/60 text-sm">Tap to reload the app.</p>
         <button
           onClick={() => window.location.reload()}
           className="mt-2 px-6 py-3 rounded-2xl bg-[#b8d04a] text-[#2a1510] font-bold text-sm"

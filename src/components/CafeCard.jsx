@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
 
 const OCASION_LABELS = {
-  pareja: '💑 Pareja',
-  amigos: '👯 Amigos',
-  reunión: '💼 Reunión',
-  turístico: '🗺️ Turístico',
+  couple: '💑 Couple',
+  friends: '👯 Friends',
+  meeting: '💼 Meeting',
+  tourist: '🗺️ Tourist',
   work: '💻 Work',
 }
 

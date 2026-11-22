@@ -49,7 +49,7 @@ function ColeccionBarrio({ barrio }) {
       >
         <div className="text-left">
           <p className="text-sm font-sans font-bold text-cafe-dark">{barrio}</p>
-          <p className="text-xs text-cafe-accent/50 mt-0.5">{visitados} / {cafesBarrio.length} visitadas</p>
+          <p className="text-xs text-cafe-accent/50 mt-0.5">{visitados} / {cafesBarrio.length} visited</p>
         </div>
         <span className={`text-cafe-accent/40 transition-transform text-xs ${abierto ? 'rotate-180' : ''}`}>▼</span>
       </button>
@@ -90,7 +90,7 @@ function ColeccionBarrio({ barrio }) {
                   <button
                     type="button"
                     onClick={(e) => handleBeanTap(cafe, visitado, e)}
-                    aria-label={visitado ? 'Marcar como no visitada' : 'Marcar como visitada'}
+                    aria-label={visitado ? 'Mark as not visited' : 'Mark as visited'}
                     className={`absolute bottom-1 right-1 w-8 h-8 rounded-full flex items-center justify-center shadow-md active:scale-90 transition-all ${
                       visitado ? 'bg-beige' : 'bg-white/90 border border-cafe-dark/20'
                     }`}
@@ -119,23 +119,23 @@ function ColeccionBarrio({ barrio }) {
           >
             <CameraIcon size={36} className="text-cafe-dark/60 mx-auto mb-3" />
             <h3 className="text-lg font-display font-bold text-cafe-dark mb-1">
-              ¡{promptCafe.nombre}!
+              {promptCafe.nombre}!
             </h3>
             <p className="text-sm text-cafe-accent/70 mb-5">
-              ¿Quieres guardar una foto y nota de tu visita?
+              Want to save a photo and a note from your visit?
             </p>
             <div className="flex flex-col gap-2.5">
               <button
                 onClick={() => { setRecuerdoCafe(promptCafe); setPromptCafe(null) }}
                 className="w-full bg-cafe-dark text-[#b8d04a] text-sm font-bold py-3 rounded-2xl ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform"
               >
-                Agregar foto
+                Add photo
               </button>
               <button
                 onClick={() => setPromptCafe(null)}
                 className="w-full text-sm font-semibold text-cafe-accent/70 py-2"
               >
-                Ahora no
+                Not now
               </button>
             </div>
           </div>
@@ -161,7 +161,7 @@ function InvitacionRow({ inv, tipo, onEliminar }) {
   const link = `/invitacion/${inv.cafeId}${params.toString() ? `?${params}` : ''}`
 
   const detalle = inv.fecha
-    ? new Date(inv.fecha + 'T12:00:00').toLocaleDateString('es-EC', { day: 'numeric', month: 'short' })
+    ? new Date(inv.fecha + 'T12:00:00').toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
     : null
 
   return (
@@ -178,12 +178,12 @@ function InvitacionRow({ inv, tipo, onEliminar }) {
             <PinIcon size={10} className="shrink-0" />
             <span className="truncate">{cafe.barrio}</span>
             {detalle && <span className="text-cafe-accent/40">· {detalle}{inv.hora ? ` ${inv.hora}` : ''}</span>}
-            {tipo === 'recibidas' && inv.nombre && <span className="text-cafe-accent/40">· de {inv.nombre}</span>}
-            {tipo === 'enviadas' && inv.receptor && <span className="text-cafe-accent/40">· para {inv.receptor}</span>}
+            {tipo === 'recibidas' && inv.nombre && <span className="text-cafe-accent/40">· from {inv.nombre}</span>}
+            {tipo === 'enviadas' && inv.receptor && <span className="text-cafe-accent/40">· for {inv.receptor}</span>}
           </p>
         </div>
       </Link>
-      <button onClick={onEliminar} aria-label="Eliminar invitación" className="w-7 h-7 rounded-full text-cafe-accent/40 active:text-cafe-accent/80 shrink-0">
+      <button onClick={onEliminar} aria-label="Delete invitation" className="w-7 h-7 rounded-full text-cafe-accent/40 active:text-cafe-accent/80 shrink-0">
         ×
       </button>
     </div>
@@ -205,7 +205,7 @@ export default function Perfil() {
 
   function pedirConfirmacion(tipo, inv) {
     const cafe = cafes.find((c) => c.id === inv.cafeId)
-    setConfirmando({ tipo, key: invKey(inv), nombreCafe: cafe?.nombre ?? 'esta invitación' })
+    setConfirmando({ tipo, key: invKey(inv), nombreCafe: cafe?.nombre ?? 'this invitation' })
   }
   function confirmarEliminar() {
     if (!confirmando) return
@@ -218,7 +218,7 @@ export default function Perfil() {
       className="min-h-screen px-4 pb-4"
       style={{ paddingTop: 'calc(16px + env(safe-area-inset-top))' }}
     >
-      {/* Botón Entrar / Salir — temporal arriba a la derecha */}
+      {/* Botón Entrar / Sign out — temporal arriba a la derecha */}
       <div className="flex justify-end mb-2">
         {user ? (
           <button
@@ -226,14 +226,14 @@ export default function Perfil() {
             className="text-[11px] font-semibold text-cafe-accent/70 border border-cafe-accent/25 px-3 py-1 rounded-full"
             title={user.email}
           >
-            Salir
+            Sign out
           </button>
         ) : (
           <Link
             to="/login"
             className="text-[11px] font-bold bg-cafe-dark text-[#b8d04a] px-3 py-1 rounded-full"
           >
-            Iniciar sesión
+            Sign in
           </Link>
         )}
       </div>
@@ -243,7 +243,7 @@ export default function Perfil() {
         <button
           onClick={() => setEditandoPerfil(true)}
           className="relative mb-3 active:scale-95 transition-transform"
-          aria-label="Editar perfil"
+          aria-label="Edit profile"
         >
           <div className="w-24 h-24 rounded-full bg-[#faf4ec] border-4 border-[#faf4ec] shadow-md overflow-hidden flex items-center justify-center">
             {usuario.foto
@@ -265,7 +265,7 @@ export default function Perfil() {
           className="flex-1 flex flex-col items-center justify-center py-3 active:bg-black/5 transition-colors relative"
         >
           <p className="text-base font-display font-bold text-cafe-dark tabular-nums">{cafeteros.length}</p>
-          <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mt-1">Cafeteros</p>
+          <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mt-1">Coffee friends</p>
           {pendientesRecibidas.length > 0 && (
             <span className="absolute top-2 right-2 bg-[#b8d04a] text-cafe-dark text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
               {pendientesRecibidas.length}
@@ -277,18 +277,18 @@ export default function Perfil() {
           className="flex-1 flex flex-col items-center justify-center py-3 active:bg-black/5 transition-colors"
         >
           <p className="text-sm font-sans font-bold text-cafe-dark line-clamp-1 px-2">
-            {usuario.cafeFavorito || 'Elegir'}
+            {usuario.cafeFavorito || 'Choose'}
           </p>
-          <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mt-1">Café favorito</p>
+          <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mt-1">Favorite coffee</p>
         </button>
         <button
           onClick={() => setEligiendoFavorita(true)}
           className="flex-1 flex flex-col items-center justify-center py-3 active:bg-black/5 transition-colors"
         >
           <p className="text-sm font-sans font-bold text-cafe-dark line-clamp-1 px-2">
-            {cafeFavorito ? cafeFavorito.nombre : 'Elegir'}
+            {cafeFavorito ? cafeFavorito.nombre : 'Choose'}
           </p>
-          <p className="text-[10px] uppercase tracking-wider text-cafe-accent/70 mt-1 px-2 text-center leading-tight">Cafetería favorita</p>
+          <p className="text-[10px] uppercase tracking-wider text-cafe-accent/70 mt-1 px-2 text-center leading-tight">Favorite coffee shop</p>
         </button>
       </div>
 
@@ -302,12 +302,12 @@ export default function Perfil() {
         <div className="bg-[#faf4ec] rounded-2xl px-4 py-3 shadow-sm mb-6">
           <div className="flex items-center gap-2 mb-3">
             <InviteIcon size={16} className="text-cafe-dark" />
-            <p className="text-sm font-sans font-bold text-cafe-dark">Invitaciones</p>
+            <p className="text-sm font-sans font-bold text-cafe-dark">Invitations</p>
           </div>
 
           {recibidas.length > 0 && (
             <>
-              <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-2">Recibidas</p>
+              <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-2">Received</p>
               <div className="flex flex-col gap-2.5 mb-3">
                 {recibidas.map((inv) => (
                   <InvitacionRow
@@ -323,7 +323,7 @@ export default function Perfil() {
 
           {enviadas.length > 0 && (
             <>
-              <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-2">Enviadas</p>
+              <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-2">Sent</p>
               <div className="flex flex-col gap-2.5">
                 {enviadas.map((inv) => (
                   <InvitacionRow
@@ -339,8 +339,8 @@ export default function Perfil() {
         </div>
       )}
 
-      {/* Mi colección por barrio */}
-      <h2 className="text-lg font-display font-bold text-cafe-dark mb-3">Mi colección</h2>
+      {/* My collection por barrio */}
+      <h2 className="text-lg font-display font-bold text-cafe-dark mb-3">My collection</h2>
       <div className="flex flex-col gap-3">
         {barrios.map((barrio) => (
           <ColeccionBarrio key={barrio} barrio={barrio} />
@@ -351,16 +351,16 @@ export default function Perfil() {
       {confirmando && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6" onClick={() => setConfirmando(null)}>
           <div className="bg-[#faf4ec] rounded-2xl p-6 max-w-xs w-full shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-lg font-display font-bold text-cafe-dark mb-2">¿Eliminar invitación?</h3>
+            <h3 className="text-lg font-display font-bold text-cafe-dark mb-2">Delete invitation?</h3>
             <p className="text-sm text-cafe-accent/70 mb-5">
-              Vas a eliminar la invitación a <span className="font-semibold text-cafe-dark">{confirmando.nombreCafe}</span> de tus {confirmando.tipo}. Esta acción no se puede deshacer.
+              You are about to delete the invitation to <span className="font-semibold text-cafe-dark">{confirmando.nombreCafe}</span> from your {confirmando.tipo === 'recibidas' ? 'received' : 'sent'} invitations. This cannot be undone.
             </p>
             <div className="flex gap-3">
               <button onClick={() => setConfirmando(null)} className="flex-1 py-2.5 rounded-xl text-sm font-semibold border border-cafe-accent/25 text-cafe-accent active:scale-95 transition-transform">
-                Cancelar
+                Cancel
               </button>
               <button onClick={confirmarEliminar} className="flex-1 py-2.5 rounded-xl text-sm font-bold bg-cafe-dark text-beige active:scale-95 transition-transform">
-                Eliminar
+                Delete
               </button>
             </div>
           </div>
@@ -401,14 +401,14 @@ function ElegirCafeModal({ actual, onSelect, onClose }) {
         className="bg-[#faf4ec] rounded-t-3xl sm:rounded-2xl p-5 max-w-sm w-full shadow-xl max-h-[80vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="text-lg font-display font-bold text-cafe-dark mb-4">¿Cuál es tu café?</h3>
+        <h3 className="text-lg font-display font-bold text-cafe-dark mb-4">What is your coffee?</h3>
         <div className="flex-1 overflow-y-auto -mx-5 px-5">
           {actual && (
             <button
               onClick={() => onSelect('')}
               className="w-full text-left text-xs text-cafe-accent/60 italic py-2 mb-1"
             >
-              Quitar selección
+              Clear selection
             </button>
           )}
           <div className="grid grid-cols-2 gap-2">
@@ -431,7 +431,7 @@ function ElegirCafeModal({ actual, onSelect, onClose }) {
           </div>
         </div>
         <button onClick={onClose} className="mt-4 w-full py-2.5 rounded-xl text-sm font-semibold border border-cafe-accent/25 text-cafe-accent active:scale-95 transition-transform">
-          Cerrar
+          Close
         </button>
       </div>
     </div>
@@ -455,7 +455,7 @@ function EditarPerfilModal({ usuario, onSave, onClose }) {
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6" onClick={onClose}>
       <div className="bg-[#faf4ec] rounded-2xl p-6 max-w-sm w-full shadow-xl" onClick={(e) => e.stopPropagation()}>
-        <h3 className="text-lg font-display font-bold text-cafe-dark mb-4">Editar perfil</h3>
+        <h3 className="text-lg font-display font-bold text-cafe-dark mb-4">Edit profile</h3>
 
         <div className="flex justify-center mb-5">
           <button
@@ -474,7 +474,7 @@ function EditarPerfilModal({ usuario, onSave, onClose }) {
           <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
         </div>
 
-        <label className="text-[11px] uppercase tracking-widest text-cafe-accent/50 block mb-1.5">Nombre</label>
+        <label className="text-[11px] uppercase tracking-widest text-cafe-accent/50 block mb-1.5">Name</label>
         <input
           type="text"
           value={nombre}
@@ -482,7 +482,7 @@ function EditarPerfilModal({ usuario, onSave, onClose }) {
           className="w-full bg-transparent border border-cafe-accent/25 rounded-xl px-4 py-2.5 text-sm text-cafe-dark outline-none focus:border-cafe-accent/60 mb-4"
         />
 
-        <label className="text-[11px] uppercase tracking-widest text-cafe-accent/50 block mb-1.5">Usuario</label>
+        <label className="text-[11px] uppercase tracking-widest text-cafe-accent/50 block mb-1.5">Username</label>
         <div className="flex gap-2 mb-5">
           <div className="flex-1 flex items-center bg-transparent border border-cafe-accent/25 rounded-xl px-3 focus-within:border-cafe-accent/60">
             <span className="text-cafe-accent/50 text-sm">@</span>
@@ -496,7 +496,7 @@ function EditarPerfilModal({ usuario, onSave, onClose }) {
           <button
             onClick={() => setUsername(generarUsername())}
             className="px-3 py-2.5 rounded-xl border border-cafe-accent/25 text-xs font-semibold text-cafe-accent active:scale-95 transition-transform"
-            title="Generar uno aleatorio"
+            title="Generate a random one"
           >
             🎲
           </button>
@@ -504,13 +504,13 @@ function EditarPerfilModal({ usuario, onSave, onClose }) {
 
         <div className="flex gap-3">
           <button onClick={onClose} className="flex-1 py-2.5 rounded-xl text-sm font-semibold border border-cafe-accent/25 text-cafe-accent active:scale-95 transition-transform">
-            Cancelar
+            Cancel
           </button>
           <button
             onClick={() => onSave({ nombre: nombre.trim() || usuario.nombre, username: username.trim() || usuario.username, foto })}
             className="flex-1 py-2.5 rounded-xl text-sm font-bold bg-cafe-dark text-beige active:scale-95 transition-transform"
           >
-            Guardar
+            Save
           </button>
         </div>
       </div>
@@ -528,12 +528,12 @@ function ElegirCafeteriaModal({ actualId, onSelect, onClose }) {
         className="bg-[#faf4ec] rounded-t-3xl sm:rounded-2xl p-5 max-w-sm w-full shadow-xl max-h-[80vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="text-lg font-display font-bold text-cafe-dark mb-3">Cafetería favorita</h3>
+        <h3 className="text-lg font-display font-bold text-cafe-dark mb-3">Favorite coffee shop</h3>
         <input
           type="text"
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
-          placeholder="Buscar..."
+          placeholder="Search..."
           className="w-full bg-transparent border border-cafe-accent/25 rounded-xl px-4 py-2.5 text-sm text-cafe-dark outline-none focus:border-cafe-accent/60 mb-3"
         />
         <div className="flex-1 overflow-y-auto -mx-5 px-5">
@@ -542,7 +542,7 @@ function ElegirCafeteriaModal({ actualId, onSelect, onClose }) {
               onClick={() => onSelect('')}
               className="w-full text-left text-xs text-cafe-accent/60 italic py-2 mb-1"
             >
-              Quitar selección
+              Clear selection
             </button>
           )}
           <div className="flex flex-col gap-1">
@@ -572,7 +572,7 @@ function ElegirCafeteriaModal({ actualId, onSelect, onClose }) {
           </div>
         </div>
         <button onClick={onClose} className="mt-4 w-full py-2.5 rounded-xl text-sm font-semibold border border-cafe-accent/25 text-cafe-accent active:scale-95 transition-transform">
-          Cerrar
+          Close
         </button>
       </div>
     </div>

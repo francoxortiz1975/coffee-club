@@ -63,7 +63,7 @@ function Buscar() {
   function botonPara(u) {
     const rel = relacionCon(u.id)
     if (rel === 'confirmado') {
-      return <span className="text-[10px] uppercase tracking-widest text-[#b8d04a] font-bold">cafetero</span>
+      return <span className="text-[10px] uppercase tracking-widest text-[#b8d04a] font-bold">coffee friend</span>
     }
     if (rel === 'enviada') {
       return (
@@ -71,19 +71,19 @@ function Buscar() {
           onClick={() => manejarBoton(u)}
           className="text-[11px] font-semibold border border-cafe-accent/30 text-cafe-accent px-3 py-1 rounded-full"
         >
-          Cancelar
+          Cancel
         </button>
       )
     }
     if (rel === 'recibida') {
-      return <span className="text-[10px] uppercase tracking-widest text-cafe-accent/60">te invitó</span>
+      return <span className="text-[10px] uppercase tracking-widest text-cafe-accent/60">invited you</span>
     }
     return (
       <button
         onClick={() => manejarBoton(u)}
         className="text-[11px] font-bold bg-cafe-dark text-[#b8d04a] px-3 py-1 rounded-full"
       >
-        Agregar
+        Add
       </button>
     )
   }
@@ -98,19 +98,19 @@ function Buscar() {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Buscar por @usuario"
+          placeholder="Search by @username"
           className="w-full bg-[#faf4ec] border border-cafe-accent/20 rounded-2xl pl-9 pr-4 py-2.5 text-sm text-cafe-dark outline-none focus:border-cafe-accent/50"
         />
       </div>
       {query.trim().length < 2 ? (
         <p className="text-xs text-cafe-accent/50 italic text-center py-4">
-          Escribe al menos 2 letras del @usuario que buscas
+          Type at least 2 letters of the @username
         </p>
       ) : buscando ? (
-        <p className="text-xs text-cafe-accent/50 italic text-center py-4">Buscando…</p>
+        <p className="text-xs text-cafe-accent/50 italic text-center py-4">Searching…</p>
       ) : resultados.length === 0 ? (
         <p className="text-xs text-cafe-accent/50 italic text-center py-4">
-          Nadie encontrado con ese nombre
+          No one found with that name
         </p>
       ) : (
         <div className="bg-[#faf4ec] rounded-2xl px-4 shadow-sm">
@@ -136,13 +136,13 @@ export default function Cafeteros() {
         style={{ paddingTop: 'calc(16px + env(safe-area-inset-top))' }}
       >
         <p className="text-cafe-dark font-display text-lg mb-4">
-          Inicia sesión para conectar con cafeteros
+          Sign in to connect with coffee friends
         </p>
         <Link
           to="/login"
           className="bg-cafe-dark text-[#b8d04a] text-sm font-bold px-6 py-3 rounded-2xl ring-2 ring-[#b8d04a]/40"
         >
-          Iniciar sesión
+          Sign in
         </Link>
       </div>
     )
@@ -157,7 +157,7 @@ export default function Cafeteros() {
         <button onClick={() => navigate(-1)} className="text-cafe-accent/60">
           <ArrowLeftIcon size={20} />
         </button>
-        <h1 className="text-2xl font-display font-bold text-cafe-dark">Cafeteros</h1>
+        <h1 className="text-2xl font-display font-bold text-cafe-dark">Coffee friends</h1>
       </div>
 
       {/* Solicitudes recibidas */}
@@ -177,13 +177,13 @@ export default function Cafeteros() {
                       onClick={() => responderSolicitud(u.id, 'rechazada')}
                       className="text-[11px] font-semibold border border-cafe-accent/30 text-cafe-accent px-3 py-1 rounded-full"
                     >
-                      Rechazar
+                      Decline
                     </button>
                     <button
                       onClick={() => responderSolicitud(u.id, 'aceptada')}
                       className="text-[11px] font-bold bg-cafe-dark text-[#b8d04a] px-3 py-1 rounded-full"
                     >
-                      Aceptar
+                      Accept
                     </button>
                   </div>
                 }
@@ -196,12 +196,12 @@ export default function Cafeteros() {
       {/* Mis cafeteros */}
       <div className="mb-6">
         <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-2">
-          Tus cafeteros ({confirmados.length})
+          Your coffee friends ({confirmados.length})
         </p>
         {confirmados.length === 0 ? (
           <div className="bg-[#faf4ec] rounded-2xl px-4 py-6 shadow-sm text-center">
             <p className="text-sm text-cafe-accent/70 italic">
-              Todavía no tienes cafeteros. Busca a alguien abajo.
+              No coffee friends yet. Search for someone below.
             </p>
           </div>
         ) : (
@@ -213,7 +213,7 @@ export default function Cafeteros() {
                 accion={
                   <button
                     onClick={() => setConfirmandoEliminar(u)}
-                    aria-label="Quitar cafetero"
+                    aria-label="Remove coffee friend"
                     className="text-cafe-accent/40 px-2"
                   >
                     ×
@@ -241,7 +241,7 @@ export default function Cafeteros() {
                     onClick={() => cancelarSolicitud(u.id)}
                     className="text-[11px] font-semibold border border-cafe-accent/30 text-cafe-accent px-3 py-1 rounded-full"
                   >
-                    Cancelar
+                    Cancel
                   </button>
                 }
               />
@@ -253,7 +253,7 @@ export default function Cafeteros() {
       {/* Buscar */}
       <div>
         <p className="text-[10px] uppercase tracking-widest text-cafe-accent/50 mb-2">
-          Encontrar cafeteros
+          Find coffee friends
         </p>
         <Buscar />
       </div>
@@ -265,17 +265,17 @@ export default function Cafeteros() {
           onClick={() => setConfirmandoEliminar(null)}
         >
           <div className="bg-[#faf4ec] rounded-2xl p-6 max-w-xs w-full shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-lg font-display font-bold text-cafe-dark mb-2">¿Quitar cafetero?</h3>
+            <h3 className="text-lg font-display font-bold text-cafe-dark mb-2">Remove coffee friend?</h3>
             <p className="text-sm text-cafe-accent/70 mb-5">
               Vas a quitar a <span className="font-semibold text-cafe-dark">{confirmandoEliminar.nombre}</span> de tus cafeteros.
-              Si después se reconectan, hay que mandar la solicitud de nuevo.
+              If you reconnect later, you will need to send a new request.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setConfirmandoEliminar(null)}
                 className="flex-1 py-2.5 rounded-xl text-sm font-semibold border border-cafe-accent/25 text-cafe-accent active:scale-95 transition-transform"
               >
-                Cancelar
+                Cancel
               </button>
               <button
                 onClick={async () => {
@@ -284,7 +284,7 @@ export default function Cafeteros() {
                 }}
                 className="flex-1 py-2.5 rounded-xl text-sm font-bold bg-cafe-dark text-beige active:scale-95 transition-transform"
               >
-                Quitar
+                Remove
               </button>
             </div>
           </div>

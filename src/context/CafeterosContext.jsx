@@ -129,7 +129,7 @@ export function CafeterosProvider({ children }) {
   }
 
   async function enviarSolicitud(destinatarioId) {
-    if (!user) return { error: 'No estás logueado' }
+    if (!user) return { error: 'You are not signed in' }
     const { error } = await supabase.from('cafeteros').insert({
       solicitante_id: user.id,
       destinatario_id: destinatarioId,
@@ -143,7 +143,7 @@ export function CafeterosProvider({ children }) {
   }
 
   async function responderSolicitud(solicitanteId, estado) {
-    if (!user) return { error: 'No estás logueado' }
+    if (!user) return { error: 'You are not signed in' }
     if (estado === 'rechazada') {
       // Rechazar = borrar la fila (limpia, sin estados rotos)
       const { error } = await supabase
@@ -165,7 +165,7 @@ export function CafeterosProvider({ children }) {
   }
 
   async function cancelarSolicitud(destinatarioId) {
-    if (!user) return { error: 'No estás logueado' }
+    if (!user) return { error: 'You are not signed in' }
     const { error } = await supabase
       .from('cafeteros')
       .delete()
@@ -176,7 +176,7 @@ export function CafeterosProvider({ children }) {
   }
 
   async function eliminarCafetero(otroId) {
-    if (!user) return { error: 'No estás logueado' }
+    if (!user) return { error: 'You are not signed in' }
     // El registro puede estar en cualquiera de las dos direcciones
     const { error } = await supabase
       .from('cafeteros')

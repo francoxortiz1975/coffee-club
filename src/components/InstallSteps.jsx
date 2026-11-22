@@ -16,20 +16,20 @@ const PASOS_IOS = [
   {
     n: 1,
     Icono: ShareIcon,
-    titulo: 'Toca Compartir',
-    texto: 'Abre Safari y toca el ícono de Compartir en la barra inferior.',
+    titulo: 'Tap Share',
+    texto: 'Open Safari and tap the Share icon in the bottom bar.',
   },
   {
     n: 2,
     Icono: ArrowUpIcon,
-    titulo: 'Añadir a inicio',
-    texto: 'Desliza hacia abajo y elige "Añadir a pantalla de inicio".',
+    titulo: 'Add to Home Screen',
+    texto: 'Scroll down and choose "Add to Home Screen".',
   },
   {
     n: 3,
     Icono: InviteIcon,
-    titulo: 'Listo',
-    texto: 'Toca Añadir y abre Sumay como una app desde tu pantalla principal.',
+    titulo: 'Done',
+    texto: 'Tap Add and open Sumay like an app from your home screen.',
   },
 ]
 
@@ -37,20 +37,20 @@ const PASOS_ANDROID = [
   {
     n: 1,
     Icono: ShareIcon,
-    titulo: 'Menú del navegador',
-    texto: 'Abre Chrome y toca los tres puntos arriba a la derecha.',
+    titulo: 'Browser menu',
+    texto: 'Open Chrome and tap the three dots at the top right.',
   },
   {
     n: 2,
     Icono: ArrowUpIcon,
-    titulo: 'Instalar app',
-    texto: 'Elige "Instalar aplicación" o "Añadir a pantalla principal".',
+    titulo: 'Install app',
+    texto: 'Choose "Install app" or "Add to Home screen".',
   },
   {
     n: 3,
     Icono: InviteIcon,
-    titulo: 'Listo',
-    texto: 'Confirma y abre Sumay desde tu cajón de apps.',
+    titulo: 'Done',
+    texto: 'Confirm, then open Sumay from your app drawer.',
   },
 ]
 
@@ -71,8 +71,8 @@ export default function InstallSteps() {
 
   return (
     <section className="mt-8 px-4">
-      <h2 className="text-base font-display font-bold text-cafe-dark mb-1">Llévala a tu pantalla</h2>
-      <p className="text-xs text-cafe-accent/60 mb-3">Instala Sumay como app y accede a un toque, sin abrir el navegador.</p>
+      <h2 className="text-base font-display font-bold text-cafe-dark mb-1">Put it on your home screen</h2>
+      <p className="text-xs text-cafe-accent/60 mb-3">Install Sumay as an app and open it in one tap, no browser needed.</p>
       <div className="flex gap-3 overflow-x-auto -mx-4 px-4 scroll-pl-4 pb-2 snap-x snap-mandatory no-scrollbar">
         {pasos.map(({ n, Icono, titulo, texto }) => (
           <div key={n} className="shrink-0 w-64 bg-[#faf4ec] rounded-2xl p-4 shadow-sm snap-start">

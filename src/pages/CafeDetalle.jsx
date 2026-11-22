@@ -37,7 +37,7 @@ export default function CafeDetalle() {
 
   async function handleShare() {
     const url = window.location.href
-    const text = `${cafe.nombre} — ${cafe.especialidad}. Lo encontré en Samay Coffee Club:`
+    const text = `${cafe.nombre} — ${cafe.especialidad}. Found it on Sumay Coffee Club:`
     if (navigator.share) {
       await navigator.share({ title: cafe.nombre, text, url })
     } else {
@@ -48,7 +48,7 @@ export default function CafeDetalle() {
   }
 
   if (!cafe) {
-    return <div className="p-8 text-center text-cafe-accent"><p>Cafetería no encontrada.</p></div>
+    return <div className="p-8 text-center text-cafe-accent"><p>Coffee shop not found.</p></div>
   }
 
   const fotos = cafe.fotos.length > 0 ? cafe.fotos : PLACEHOLDER_FOTOS
@@ -61,7 +61,7 @@ export default function CafeDetalle() {
           <button
             onClick={() => setLightboxIndex(0)}
             className="w-full h-full block active:opacity-90"
-            aria-label="Ver foto en grande"
+            aria-label="View photo larger"
           >
             <img src={cafe.fotos[0]} alt={cafe.nombre} className="w-full h-full object-cover" />
           </button>
@@ -94,7 +94,7 @@ export default function CafeDetalle() {
           to={`/invitacion/${cafe.id}/setup`}
           className="absolute right-4 bg-cafe-dark text-[#b8d04a] rounded-full w-10 h-10 flex items-center justify-center shadow-lg ring-2 ring-[#b8d04a]/40 active:scale-95 transition-transform"
           style={{ top: 'calc(64px + env(safe-area-inset-top))' }}
-          aria-label="Invitar"
+          aria-label="Invite"
         >
           <InviteIcon size={18} />
         </Link>
@@ -131,7 +131,7 @@ export default function CafeDetalle() {
           >
             <CoffeeBeanIcon size={26} className={yaVisitado ? '' : 'opacity-30'} />
             <span className="text-xs font-semibold leading-tight">
-              {yaVisitado ? 'Ya visité' : 'Me falta visitar'}
+              {yaVisitado ? 'Been here' : 'Still to visit'}
             </span>
           </button>
 
@@ -145,10 +145,10 @@ export default function CafeDetalle() {
                 <img src={recuerdo.foto_url} alt="" className="w-full h-full object-cover absolute inset-0" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 <div className="relative z-10 h-full flex flex-col justify-end p-3 text-left min-h-[100px]">
-                  <p className="text-[9px] uppercase tracking-widest text-white/70">Mi recuerdo</p>
+                  <p className="text-[9px] uppercase tracking-widest text-white/70">My memory</p>
                   {recuerdo.nota
                     ? <p className="text-xs text-white font-sans italic line-clamp-2 leading-tight mt-1">"{recuerdo.nota}"</p>
-                    : <p className="text-[10px] text-white/60 italic mt-1">Toca para editar</p>}
+                    : <p className="text-[10px] text-white/60 italic mt-1">Tap to edit</p>}
                 </div>
               </button>
             ) : (
@@ -157,14 +157,14 @@ export default function CafeDetalle() {
                 className="flex flex-col items-center justify-center gap-1.5 rounded-2xl py-4 px-2 bg-[#faf4ec] border border-dashed border-cafe-accent/30 active:scale-[0.98] transition-transform"
               >
                 <CameraIcon size={26} className="text-cafe-accent/70" />
-                <span className="text-xs font-semibold text-cafe-accent/80 leading-tight">Agregar recuerdo</span>
+                <span className="text-xs font-semibold text-cafe-accent/80 leading-tight">Add a memory</span>
               </button>
             )
           ) : (
             <div className="flex flex-col items-center justify-center gap-1.5 rounded-2xl py-4 px-2 bg-[#faf4ec]/40 border border-dashed border-cafe-accent/15 opacity-50">
               <CameraIcon size={26} className="text-cafe-accent/40" />
               <span className="text-[10px] text-cafe-accent/50 leading-tight text-center">
-                {user ? 'Marca como visitado primero' : 'Inicia sesión para guardar recuerdos'}
+                {user ? 'Mark as visited first' : 'Sign in to save memories'}
               </span>
             </div>
           )}
@@ -173,7 +173,7 @@ export default function CafeDetalle() {
         <p className="text-sm text-cafe-dark/75 leading-relaxed mb-6">{cafe.descripcion}</p>
 
         {/* Slide de fotos — tap abre lightbox fullscreen */}
-        <h2 className="text-sm font-semibold text-cafe-dark mb-3">Fotos</h2>
+        <h2 className="text-sm font-semibold text-cafe-dark mb-3">Photos</h2>
         <div className="flex gap-3 overflow-x-auto pb-3 -mx-5 px-5 snap-x snap-mandatory no-scrollbar">
           {fotos.map((foto, i) => (
             <button
@@ -194,7 +194,7 @@ export default function CafeDetalle() {
         {cafe.googleMaps && (
           <a href={cafe.googleMaps} target="_blank" rel="noopener noreferrer"
             className="mt-6 flex items-center justify-center gap-2 w-full bg-cafe-dark text-beige text-sm font-semibold py-3 rounded-2xl active:scale-95 transition-transform">
-            <PinIcon size={15} /> Cómo llegar y horarios
+            <PinIcon size={15} /> Directions & hours
           </a>
         )}
 

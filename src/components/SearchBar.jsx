@@ -10,7 +10,7 @@ export default function SearchBar({ value, onChange }) {
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Buscar cafetería..."
+        placeholder="Search coffee shops..."
         className="w-full bg-white rounded-2xl pl-9 pr-4 py-2.5 text-sm text-cafe-dark placeholder-cafe-accent/40 border border-cafe-accent/15 outline-none focus:border-cafe-accent/40"
       />
     </div>

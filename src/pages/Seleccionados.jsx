@@ -19,8 +19,8 @@ export default function Seleccionados() {
           <ArrowLeftIcon size={20} />
         </button>
         <div>
-          <h1 className="text-xl font-display font-bold text-cafe-dark">Tus seleccionados</h1>
-          <p className="text-xs text-cafe-accent/50">{cafesSeleccionados.length} cafeterías</p>
+          <h1 className="text-xl font-display font-bold text-cafe-dark">Your picks</h1>
+          <p className="text-xs text-cafe-accent/50">{cafesSeleccionados.length} coffee shops</p>
         </div>
       </div>
 
@@ -59,7 +59,7 @@ export default function Seleccionados() {
                       }`}
                     >
                       <HeartIcon size={13} filled={esFavorito} />
-                      {esFavorito ? 'Guardado' : 'Guardar'}
+                      {esFavorito ? 'Saved' : 'Save'}
                     </button>
                   </div>
                 </div>
@@ -69,13 +69,13 @@ export default function Seleccionados() {
         ) : (
           <div className="flex flex-col items-center text-center gap-3 pt-16">
             <CoffeeCupIcon size={44} className="text-cafe-accent/25" />
-            <p className="text-cafe-dark font-display font-bold">No seleccionaste ninguna</p>
-            <p className="text-cafe-accent/50 text-sm">Vuelve al swipe y marca las que te interesen</p>
+            <p className="text-cafe-dark font-display font-bold">You have not picked any yet</p>
+            <p className="text-cafe-accent/50 text-sm">Go back to the swipe and mark the ones you like</p>
             <button
               onClick={() => navigate('/decidir/swipe')}
               className="mt-3 bg-cafe-dark text-beige text-sm font-semibold px-6 py-2.5 rounded-full"
             >
-              Volver al swipe
+              Back to the swipe
             </button>
           </div>
         )}

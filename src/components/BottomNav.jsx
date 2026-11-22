@@ -3,9 +3,9 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { MapIcon, DiceIcon, CoffeeCupIcon } from './Icons'
 
 const tabs = [
-  { to: '/', label: 'Descubrir', Icon: MapIcon },
-  { to: '/decidir', label: 'Decidir', Icon: DiceIcon },
-  { to: '/perfil', label: 'Perfil', Icon: CoffeeCupIcon },
+  { to: '/', label: 'Discover', Icon: MapIcon },
+  { to: '/decidir', label: 'Decide', Icon: DiceIcon },
+  { to: '/perfil', label: 'Profile', Icon: CoffeeCupIcon },
 ]
 
 export default function BottomNav() {

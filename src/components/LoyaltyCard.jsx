@@ -25,7 +25,7 @@ export function BeanRow({ items }) {
           className={`lc-mini ${it.visited ? 'on' : ''}`}
           title={it.title}
           role="img"
-          aria-label={`${it.title}: ${it.visited ? 'visitada' : 'sin visitar'}`}
+          aria-label={`${it.title}: ${it.visited ? 'visited' : 'not visited'}`}
           dangerouslySetInnerHTML={{ __html: it.visited ? faces[i].on : faces[i].out }}
         />
       ))}
@@ -83,7 +83,7 @@ export default function LoyaltyCard({ total, copy = loyaltyCopyEs }) {
                 onClick={() => tap(i)}
                 tabIndex={on ? 0 : -1}
                 aria-hidden={on ? undefined : true}
-                aria-label={on ? (i === SLOTS - 1 ? 'Taza' : `Bean ${i + 1}`) : undefined}
+                aria-label={on ? (i === SLOTS - 1 ? 'Cup' : `Bean ${i + 1}`) : undefined}
               >
                 {/* key on `on` so a newly earned bean mounts fresh and plays its landing animation */}
                 <span key={on ? 'b' : 'o'} className={`lc-face ${on ? 'lc-land' : ''}`} dangerouslySetInnerHTML={{ __html: on ? f.on : f.out }} />

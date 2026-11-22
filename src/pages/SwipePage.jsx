@@ -171,20 +171,20 @@ export default function SwipePage() {
                           e.stopPropagation()
                           navigate('/decidir')
                         }}
-                        aria-label="Volver a Decidir"
+                        aria-label="Back to Decide"
                         className="flex items-center gap-1 text-[#6b4c3b] hover:text-[#3d2b1f] font-sans transition-colors min-h-11 -ml-1 pr-3 pl-1 font-semibold"
                       >
                         <ArrowLeftIcon size={17} />
-                        <span className="text-sm">Decidir</span>
+                        <span className="text-sm">Decide</span>
                       </button>
 
                       {/* Título de la Guía y Folio */}
                       <div className="text-center">
                         <span className="font-bold text-[#3d2b1f] block leading-tight text-xs tracking-wider uppercase font-sans">
-                          Libro de Cafeterías
+                          Coffee Shop Book
                         </span>
                         <span className="text-[10px] text-[#8b5a2b]/70 block font-sans">
-                          Pág. {i + 1} de {cafes.length}
+                          Page {i + 1} of {cafes.length}
                         </span>
                       </div>
 
@@ -197,7 +197,7 @@ export default function SwipePage() {
                         }}
                         className="relative z-30 bg-[#7a2e1d] hover:bg-[#913723] text-beige text-xs font-sans font-semibold px-3 py-2.5 rounded-b-lg shadow-md border-t-0 border border-red-950/40 flex items-center gap-1 -mt-3 min-h-11 transition-transform active:translate-y-0.5"
                       >
-                        <span>Seleccionados</span>
+                        <span>Picks</span>
                         <span className="bg-amber-300 text-amber-950 text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
                           {seleccionados.length}
                         </span>
@@ -281,7 +281,7 @@ export default function SwipePage() {
 
                         <div className="flex-1 min-w-0">
                           <p className={`text-base font-semibold leading-none ${isSelected ? 'text-[#f5f0e8]' : 'text-[#3d2b1f]'}`}>
-                            Me interesa este café
+                            I like this coffee shop
                           </p>
                         </div>
                       </button>
@@ -298,18 +298,18 @@ export default function SwipePage() {
 
                     <div className="flex flex-col items-center gap-3 my-auto opacity-35">
                       <CoffeeCupIcon size={48} className="text-[#8b5a2b]" />
-                      <span className="text-xs font-sans text-[#6b4c3b] tracking-widest uppercase">SUMAY GUÍA</span>
+                      <span className="text-xs font-sans text-[#6b4c3b] tracking-widest uppercase">SUMAY GUIDE</span>
                     </div>
 
                     <div className="text-[9px] font-sans text-[#6b4c3b]/40 tracking-wider">
-                      QUITO • COLECCIÓN DE CAFETERÍAS
+                      QUITO • COFFEE SHOP COLLECTION
                     </div>
                   </div>
                 </div>
               )
             })}
 
-            {/* HOJA FINAL DE PORTADA TRASERA */}
+            {/* HOJA FINAL DE BACK COVER */}
             <div
               className="st-page relative bg-[#fcf8f2] border-0 overflow-hidden preserve-3d"
               style={{ backgroundColor: '#fcf8f2', opacity: 1 }}
@@ -319,23 +319,23 @@ export default function SwipePage() {
                 <div className="absolute inset-y-0 left-0 w-6 book-spine-gradient pointer-events-none z-20" />
 
                 <div className="text-[9px] font-sans text-[#6b4c3b]/50 uppercase tracking-widest">
-                  PORTADA TRASERA
+                  BACK COVER
                 </div>
 
                 <div className="flex flex-col items-center gap-4 my-auto">
                   <div className="w-20 h-20 rounded-full bg-[#ebdccb] flex items-center justify-center text-[#5c3a21] shadow-inner">
                     <CoffeeCupIcon size={40} />
                   </div>
-                  <h2 className="text-2xl font-display font-bold text-[#3d2b1f]">¡Has llegado al final!</h2>
+                  <h2 className="text-2xl font-display font-bold text-[#3d2b1f]">You have reached the end!</h2>
                   <p className="font-hand text-3xl text-[#8b5a2b]">
-                    Guardaste {seleccionados.length} cafeterías
+                    You saved {seleccionados.length} coffee shops
                   </p>
                   <button
                     type="button"
                     onClick={handleTerminar}
                     className="mt-2 bg-[#3d2b1f] hover:bg-[#523b2c] text-beige font-sans text-sm font-semibold px-8 py-3.5 rounded-full shadow-md active:scale-95 transition-transform"
                   >
-                    Ver mis cafeterías seleccionadas
+                    See my picked coffee shops
                   </button>
                 </div>
 

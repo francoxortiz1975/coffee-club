@@ -1,12 +1,12 @@
 import { SparkleIcon, HeartIcon, LaptopIcon, UsersIcon, BriefcaseIcon, MapIcon } from './Icons'
 
 const FILTROS = [
-  { id: 'todos',     label: 'Para ti',   Icon: SparkleIcon },
-  { id: 'pareja',   label: 'Pareja',    Icon: HeartIcon },
-  { id: 'work',     label: 'Trabajar',  Icon: LaptopIcon },
-  { id: 'amigos',   label: 'Amigos',    Icon: UsersIcon },
-  { id: 'reunión',  label: 'Reunión',   Icon: BriefcaseIcon },
-  { id: 'turístico',label: 'Turístico', Icon: MapIcon },
+  { id: 'todos',     label: 'For you',   Icon: SparkleIcon },
+  { id: 'couple',   label: 'Couple',    Icon: HeartIcon },
+  { id: 'work',     label: 'Work',  Icon: LaptopIcon },
+  { id: 'friends',   label: 'Friends',    Icon: UsersIcon },
+  { id: 'meeting',  label: 'Meeting',   Icon: BriefcaseIcon },
+  { id: 'tourist',label: 'Tourist', Icon: MapIcon },
 ]
 
 export default function FilterBar({ activo, onChange, onEspecialidad }) {

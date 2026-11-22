@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import cafes from '../data/cafes.json'
 import StarRating from '../components/StarRating'
 import { useFavoritos } from '../context/FavoritosContext'
-import { ArrowLeftIcon, HeartIcon, ShareIcon, CoffeeCupIcon, CoffeeBeanIcon, CameraIcon, PinIcon, ExternalLinkIcon, InviteIcon } from '../components/Icons'
+import { ArrowLeftIcon, UsersIcon, HeartIcon, ShareIcon, CoffeeCupIcon, CoffeeBeanIcon, CameraIcon, PinIcon, ExternalLinkIcon, InviteIcon } from '../components/Icons'
 import { useVisitas } from '../context/VisitasContext'
 import { useRecuerdos } from '../context/RecuerdosContext'
 import { useAuth } from '../context/AuthContext'
@@ -177,7 +177,7 @@ export default function CafeDetalle() {
 
         {cafe.cultura && (
           <div className="rounded-2xl bg-cafe-dark text-beige p-5 mb-6">
-            <p className="text-[11px] font-sans font-semibold tracking-[0.14em] text-[#b8d04a]">CULTURE</p>
+            <p className="flex items-center gap-2 text-[11px] font-sans font-semibold tracking-[0.14em] text-[#b8d04a]"><UsersIcon size={18} />CULTURE</p>
             <p className="font-sans font-semibold text-[19px] leading-snug mt-2"><TypeText text={cafe.cultura} /></p>
           </div>
         )}

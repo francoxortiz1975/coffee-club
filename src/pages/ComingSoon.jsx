@@ -7,10 +7,13 @@ const OPENS = { date: '2026-11-24', label: '18:00 CET' }   // Paris time (CET in
 function parisToday() {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris' }).format(new Date()) // YYYY-MM-DD
 }
-function when() {
-  const days = Math.round((Date.parse(OPENS.date) - Date.parse(parisToday())) / 86400000)
-  const word = days === 1 ? 'Tomorrow' : days === 0 ? 'Today' : days < 0 ? null : new Date(`${OPENS.date}T12:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })
-  return word ? `${word} · ${OPENS.label}` : 'Now open'
+function days() { return Math.round((Date.parse(OPENS.date) - Date.parse(parisToday())) / 86400000) }
+// "Invitations from tomorrow, Tuesday 24 November." The first word follows the calendar, so it is never out of date.
+function inviteLine() {
+  const d = days()
+  if (d < 0) return 'Invitations are open.'
+  const day = new Date(`${OPENS.date}T12:00:00`).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
+  return `Invitations from ${d === 1 ? 'tomorrow, ' : d === 0 ? 'today, ' : ''}${day}.`
 }
 
 const clamp = (n) => Math.max(0, Math.min(1, n))
@@ -18,7 +21,7 @@ const stage = (p, a, b) => { const t = clamp((p - a) / (b - a)); return 1 - Math
 
 // A printed bar that draws itself from the left, like a rule being laid on a hang tag.
 function Bar({ t, thick = true, color = '#2a1a10' }) {
-  return <span className="block origin-left" style={{ height: thick ? 9 : 3, background: color, transform: `scaleX(${t})` }} />
+  return <span className="block origin-left" style={{ height: thick ? 'calc(var(--u) * 0.12)' : 'max(2px, calc(var(--u) * 0.03))', background: color, transform: `scaleX(${t})` }} />
 }
 // Text that comes up from behind an invisible edge, one line at a time.
 function Rise({ t, children, className = '' }) {
@@ -57,10 +60,10 @@ export default function ComingSoon() {
 
   return (
     <div ref={wrapRef} style={{ height: reduce ? '100dvh' : '340dvh', background: '#e3e3e0' }}>
-      <main className="sticky top-0 h-dvh overflow-hidden text-[#2a1a10]" style={{ fontFamily: "'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" }}>
+      <main className="sticky top-0 h-dvh overflow-hidden text-[#2a1a10]" style={{ fontFamily: "'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif", '--u': 'clamp(2.7rem, 12.5vw, 4.6rem)' }}>
         <section className="absolute inset-x-0 top-0 flex flex-col justify-end px-6 pb-8" style={{ height: `${100 - darkH}%`, background: '#e3e3e0' }}>
           <Bar t={stage(p, 0.04, 0.16)} />
-          <h1 className="mt-4 font-normal text-[clamp(2.7rem,12.5vw,4.6rem)] leading-[0.94] tracking-[-0.055em]">
+          <h1 className="mt-4 font-normal text-[length:var(--u)] leading-[0.94] tracking-[-0.055em]">
             <Rise t={stage(p, 0.12, 0.26)}>Sumay,</Rise>
             <Rise t={stage(p, 0.2, 0.34)}>the Coffee Club.</Rise>
           </h1>
@@ -73,7 +76,8 @@ export default function ComingSoon() {
           <div className="h-[40dvh] flex flex-col justify-between px-6 pt-6 pb-7">
             <div>
               <h2 className="font-normal text-[clamp(1.7rem,7.6vw,2.5rem)] leading-[0.98] tracking-[-0.05em]">
-                <Rise t={stage(p, 0.84, 0.95)}>{when()}</Rise>
+                <Rise t={stage(p, 0.84, 0.95)}>{inviteLine()}</Rise>
+                <Rise t={stage(p, 0.88, 0.98)} className="mt-2 text-[0.6em] text-[#f5f0e8]/70">{OPENS.label}</Rise>
               </h2>
             </div>
             <div>

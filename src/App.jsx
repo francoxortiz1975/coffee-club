@@ -96,6 +96,17 @@ function resolveBg(pathname) {
   return { bg: '/wood-bg.webp', overlay: 50 }
 }
 
+// sumayclub.app opens the landing page in a browser. The installed app (home screen, standalone) still opens straight
+// into Discover, and ?app=1 opens the app in a browser for testing.
+function isInstalledApp() {
+  return window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true
+}
+function HomeGate() {
+  const { search } = useLocation()
+  const open = isInstalledApp() || new URLSearchParams(search).get('app') === '1'
+  return open ? <Descubrir /> : <Navigate to="/landing" replace />
+}
+
 function AppShell() {
   const { pathname } = useLocation()
   const hideNav = NO_NAV_PATHS.some((p) => pathname.startsWith(p))
@@ -121,7 +132,7 @@ function AppShell() {
       )}
       <main className={`relative ${hideNav ? '' : 'pb-24'}`}>
         <Routes>
-          <Route path="/" element={<Descubrir />} />
+          <Route path="/" element={<HomeGate />} />
           <Route path="/cafe/:id" element={<CafeDetalle />} />
           <Route path="/decidir" element={<Navigate to="/" replace />} />
           <Route path="/decidir/seleccionados" element={<Seleccionados />} />

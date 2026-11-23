@@ -56,9 +56,9 @@ export default function ComingSoon() {
   const darkH = 40 * rise
 
   return (
-    <div ref={wrapRef} style={{ height: reduce ? '100dvh' : '340dvh', background: '#e6e6e5' }}>
+    <div ref={wrapRef} style={{ height: reduce ? '100dvh' : '340dvh', background: '#e3e3e0' }}>
       <main className="sticky top-0 h-dvh overflow-hidden text-[#2a1a10]" style={{ fontFamily: "'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" }}>
-        <section className="absolute inset-x-0 top-0 flex flex-col justify-end px-6 pb-8" style={{ height: `${100 - darkH}%`, background: `#e6e6e5 url('/landing/paper-grey.webp') center ${p * 60}%/cover` }}>
+        <section className="absolute inset-x-0 top-0 flex flex-col justify-end px-6 pb-8" style={{ height: `${100 - darkH}%`, background: '#e3e3e0' }}>
           <Bar t={stage(p, 0.04, 0.16)} />
           <h1 className="mt-4 font-normal text-[clamp(2.7rem,12.5vw,4.6rem)] leading-[0.94] tracking-[-0.055em]">
             <Rise t={stage(p, 0.12, 0.26)}>Sumay,</Rise>

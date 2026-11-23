@@ -73,10 +73,10 @@ const NO_NAV_PATHS = ['/invitacion']
 // pathname pattern → { bg, overlay opacity (0-100). null bg = sin imagen (la página pinta su fondo) }
 const BG_RULES = [
   { path: '/decidir/aleatorio', bg: null,             overlay: 0  },
-  { path: '/decidir/swipe',     bg: '/white-bg.webp', overlay: 40 },
+  { path: '/decidir/swipe',     bg: '#e3e3e0', overlay: 0 },
   { path: '/decidir',           bg: '/wood-bg.webp', overlay: 50 },
   { path: '/perfil',            bg: '/panama-bg.webp', overlay: 0  },
-  { path: '/journey/:id',       bg: '/white-bg.webp', overlay: 40 },
+  { path: '/journey/:id',       bg: '#e3e3e0', overlay: 0 },
   { path: '/decidir/seleccionados', bg: '/wood-bg.webp', overlay: 50 },
   { path: '/journey',           bg: '/wood-bg.webp', overlay: 50 },
   { path: '/shelf/:id',         bg: '/wood-bg.webp', overlay: 50 },
@@ -84,7 +84,7 @@ const BG_RULES = [
   { path: '/collect',           bg: '/panama-bg.webp', overlay: 0  },
   { path: '/invite/new',        bg: '/wood-bg.webp', overlay: 50 },
   { path: '/invite',            bg: '/wood-bg.webp', overlay: 50 },
-  { path: '/cafe/:id',          bg: '/white-bg.webp', overlay: 40 },
+  { path: '/cafe/:id',          bg: '#e3e3e0', overlay: 0 },
   { path: '/invitacion/:id/setup', bg: '/wood-bg.webp', overlay: 50 },
   { path: '/invitacion/:id',    bg: '/wood-bg.webp', overlay: 50 },
   { path: '/',                  bg: '/wood-bg.webp', overlay: 50 },
@@ -121,7 +121,7 @@ function AppShell() {
           {/* Fondo fijo al viewport: nunca se acaba con el scroll */}
           <div
             className="fixed inset-0 max-w-md mx-auto bg-cover bg-center bg-no-repeat pointer-events-none -z-10"
-            style={{ backgroundImage: `url('${bg}')` }}
+            style={bg.startsWith('#') ? { backgroundColor: bg } : { backgroundImage: `url('${bg}')` }}
           />
           {overlay > 0 && (
             <div

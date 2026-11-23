@@ -8,12 +8,12 @@ function parisToday() {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris' }).format(new Date()) // YYYY-MM-DD
 }
 function days() { return Math.round((Date.parse(OPENS.date) - Date.parse(parisToday())) / 86400000) }
-// "Invitations from tomorrow, Tuesday 24 November." The first word follows the calendar, so it is never out of date.
+// "Invitations open from tomorrow, Tuesday 24 November." The wording follows the calendar, so it is never out of date.
 function inviteLine() {
   const d = days()
   if (d < 0) return 'Invitations are open.'
   const day = new Date(`${OPENS.date}T12:00:00`).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
-  return `Invitations from ${d === 1 ? 'tomorrow, ' : d === 0 ? 'today, ' : ''}${day}.`
+  return `Invitations open from ${d === 1 ? 'tomorrow, ' : d === 0 ? 'today, ' : ''}${day}.`
 }
 
 const clamp = (n) => Math.max(0, Math.min(1, n))
@@ -55,8 +55,8 @@ export default function ComingSoon() {
     return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); cancelAnimationFrame(raf) }
   }, [reduce])
 
-  const rise = stage(p, 0.58, 0.86)
-  const darkH = 40 * rise
+  const rise = stage(p, 0.84, 0.98)
+  const darkH = 3.2 * rise   // the brown strip is only a sliver at the foot
 
   return (
     <div ref={wrapRef} style={{ height: reduce ? '100dvh' : '340dvh', background: '#e3e3e0' }}>
@@ -69,22 +69,15 @@ export default function ComingSoon() {
           </h1>
           <div className="mt-4"><Bar t={stage(p, 0.34, 0.44)} thick={false} /></div>
           <Rise t={stage(p, 0.4, 0.52)} className="mt-3 text-[clamp(1rem,4.2vw,1.3rem)] tracking-[-0.03em] text-[#4a342a]">Starting in Paris.</Rise>
+          <div className="mt-6 text-[clamp(1.3rem,5.6vw,1.9rem)] leading-[1.02] tracking-[-0.045em]">
+            <Rise t={stage(p, 0.6, 0.76)}>{inviteLine()}</Rise>
+            <Rise t={stage(p, 0.66, 0.82)} className="mt-1 text-[0.65em] text-[#4a342a]">{OPENS.label}</Rise>
+          </div>
           <p className="absolute left-0 right-0 top-6 text-center text-[11px] font-medium tracking-[0.22em] text-[#4a342a]" style={{ opacity: 1 - clamp(p / 0.06) }} aria-hidden="true">SCROLL</p>
         </section>
 
-        <section className="absolute inset-x-0 bottom-0 text-[#f5f0e8]" style={{ height: `${darkH}%`, background: 'linear-gradient(160deg, #3d2b27, #2a1d1b 70%, #261918)', overflow: 'hidden' }}>
-          <div className="h-[40dvh] flex flex-col justify-between px-6 pt-6 pb-7">
-            <div>
-              <h2 className="font-normal text-[clamp(1.7rem,7.6vw,2.5rem)] leading-[0.98] tracking-[-0.05em]">
-                <Rise t={stage(p, 0.84, 0.95)}>{inviteLine()}</Rise>
-                <Rise t={stage(p, 0.88, 0.98)} className="mt-2 text-[0.6em] text-[#f5f0e8]/70">{OPENS.label}</Rise>
-              </h2>
-            </div>
-            <div>
-              <Bar t={stage(p, 0.9, 1)} thick={false} color="#f5f0e8" />
-              <Rise t={stage(p, 0.93, 1)} className="mt-3 text-[12px] font-medium tracking-[0.2em] text-[#f5f0e8]/85">SUMAYCLUB.APP</Rise>
-            </div>
-          </div>
+        <section className="absolute inset-x-0 bottom-0 flex items-center justify-center text-[#f5f0e8]" style={{ height: `${darkH}%`, background: '#2a1a10', overflow: 'hidden' }}>
+          <p className="text-[11px] font-medium tracking-[0.22em] text-[#f5f0e8]/85" style={{ opacity: stage(p, 0.9, 1) }}>SUMAYCLUB.APP</p>
         </section>
       </main>
     </div>

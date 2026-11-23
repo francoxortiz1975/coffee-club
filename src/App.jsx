@@ -30,6 +30,7 @@ import CafeDetalle from './pages/CafeDetalle'
 import InvitacionSetup from './pages/InvitacionSetup'
 import InvitacionPage from './pages/InvitacionPage'
 import Landing from './pages/Landing'
+import ComingSoon from './pages/ComingSoon'
 import Privacy from './pages/Privacy'
 import Quiz from './pages/Quiz'
 import Login from './pages/Login'
@@ -169,7 +170,8 @@ function Root() {
       <MigrationRunner />
       <Routes>
         {/* Landing: full-width, sin Layout, sin BottomNav, sin bg images */}
-        <Route path="/landing" element={<Landing />} />
+        <Route path="/landing" element={<ComingSoon />} />
+        <Route path="/landing-full" element={<Landing />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/privacidad" element={<Privacy />} />

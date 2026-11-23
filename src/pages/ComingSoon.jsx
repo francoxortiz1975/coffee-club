@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-// All Arial, nothing else (a system font, so nothing to load).
+// All Geist, nothing else (already bundled for the app).
 // The public face of sumayclub.app for now: a very quiet "we open soon" screen. The full landing page lives on at /landing-full.
 const OPENS = { date: '2026-11-24', label: '18:00' }   // Paris time
 
@@ -16,7 +16,7 @@ function when() {
 export default function ComingSoon() {
   useEffect(() => { document.title = 'Sumay, the Coffee Club' }, [])
   return (
-    <main className="fixed inset-0 flex flex-col text-[#2a1a10]" style={{ background: '#2a1a10', fontFamily: "Arial, 'Helvetica Neue', Helvetica, sans-serif" }}>
+    <main className="fixed inset-0 flex flex-col text-[#2a1a10]" style={{ background: '#2a1a10', fontFamily: "'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" }}>
       <section className="relative basis-[58%] shrink-0 flex flex-col justify-end px-7 pb-9" style={{ background: "#efe6d4 url('/landing/paper.webp') center/cover" }}>
         <h1 className="font-bold tracking-tight leading-[0.98] text-[clamp(3rem,15vw,5.2rem)]">
           Sumay,<br />the Coffee Club.

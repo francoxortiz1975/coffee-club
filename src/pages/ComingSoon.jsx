@@ -66,15 +66,13 @@ export default function ComingSoon() {
           </h1>
           <div className="mt-4"><Bar t={stage(p, 0.34, 0.44)} thick={false} /></div>
           <Rise t={stage(p, 0.4, 0.52)} className="mt-3 text-[clamp(1rem,4.2vw,1.3rem)] tracking-[-0.03em] text-[#4a342a]">Starting in Paris.</Rise>
-          <div className="mt-3"><Bar t={stage(p, 0.48, 0.58)} /></div>
           <p className="absolute left-0 right-0 top-6 text-center text-[11px] font-medium tracking-[0.22em] text-[#4a342a]" style={{ opacity: 1 - clamp(p / 0.06) }} aria-hidden="true">SCROLL</p>
         </section>
 
         <section className="absolute inset-x-0 bottom-0 text-[#f5f0e8]" style={{ height: `${darkH}%`, background: 'linear-gradient(160deg, #3d2b27, #2a1d1b 70%, #261918)', overflow: 'hidden' }}>
           <div className="h-[40dvh] flex flex-col justify-between px-6 pt-6 pb-7">
             <div>
-              <Bar t={stage(p, 0.8, 0.9)} color="#f5f0e8" />
-              <h2 className="mt-3 font-normal text-[clamp(1.7rem,7.6vw,2.5rem)] leading-[0.98] tracking-[-0.05em]">
+              <h2 className="font-normal text-[clamp(1.7rem,7.6vw,2.5rem)] leading-[0.98] tracking-[-0.05em]">
                 <Rise t={stage(p, 0.84, 0.95)}>{when()}</Rise>
               </h2>
             </div>

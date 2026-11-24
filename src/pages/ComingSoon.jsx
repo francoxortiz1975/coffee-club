@@ -35,7 +35,7 @@ function RequestBox({ show }) {
   return (
     <div className="mt-5 border-2 border-[#2a1a10] p-3" style={{ opacity: show, pointerEvents: show > 0.6 ? 'auto' : 'none', transform: `translateY(${(1 - show) * 16}px)` }}>
       {state === 'done' ? (
-        <p className="text-[clamp(1rem,4.2vw,1.2rem)] leading-snug tracking-[-0.03em]">Thank you. We will send your invitation by email.</p>
+        <p className="text-[clamp(1.1rem,4.6vw,1.4rem)] leading-snug tracking-[-0.03em]">You’re on the list.<br />Soon you will have access.</p>
       ) : (
         <form onSubmit={submit} noValidate className="flex flex-col gap-2">
           <label htmlFor="inv-email" className="text-[11px] font-medium tracking-[0.2em] text-[#4a342a]">REQUEST AN INVITATION</label>

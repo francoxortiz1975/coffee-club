@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { joinWaitlist } from '../lib/waitlist'
 
 // All Geist, nothing else (already bundled for the app).
 // The public face of sumayclub.app for now: a very quiet "we open soon" screen. The full landing page lives on at /landing-full.
@@ -14,6 +15,45 @@ function inviteLine() {
   if (d < 0) return 'Invitations are open.'
   const day = new Date(`${OPENS.date}T12:00:00`).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
   return `Invitations open from ${d === 1 ? 'tomorrow, ' : d === 0 ? 'today, ' : ''}${day}.`
+}
+
+// The request box: an email and one button. It writes to the same waitlist table as the quiz, with the ?ref= channel.
+function RequestBox({ show }) {
+  const [email, setEmail] = useState('')
+  const [state, setState] = useState('idle')   // idle | sending | done | invalid | error
+
+  async function submit(e) {
+    e.preventDefault()
+    const clean = email.trim().toLowerCase()
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean)) { setState('invalid'); return }
+    setState('sending')
+    const { ok, error } = await joinWaitlist({ email: clean, lang: 'en', kind: 'landing' })
+    if (!ok) console.error('waitlist insert error:', error)
+    setState(ok ? 'done' : 'error')
+  }
+
+  return (
+    <div className="mt-5 border-2 border-[#2a1a10] p-3" style={{ opacity: show, pointerEvents: show > 0.6 ? 'auto' : 'none', transform: `translateY(${(1 - show) * 16}px)` }}>
+      {state === 'done' ? (
+        <p className="text-[clamp(1rem,4.2vw,1.2rem)] leading-snug tracking-[-0.03em]">Thank you. We will send your invitation by email.</p>
+      ) : (
+        <form onSubmit={submit} noValidate className="flex flex-col gap-2">
+          <label htmlFor="inv-email" className="text-[11px] font-medium tracking-[0.2em] text-[#4a342a]">REQUEST AN INVITATION</label>
+          <input
+            id="inv-email" type="email" inputMode="email" autoComplete="email" placeholder="Your email" value={email}
+            onChange={(e) => { setEmail(e.target.value); if (state !== 'sending') setState('idle') }}
+            className="w-full min-h-12 bg-transparent border-b-2 border-[#2a1a10] px-0 text-base tracking-[-0.02em] placeholder:text-[#4a342a]/60 outline-none focus-visible:border-b-4"
+          />
+          <button type="submit" disabled={state === 'sending'} className="min-h-12 bg-[#2a1a10] text-[#f5f0e8] text-[15px] font-medium tracking-[-0.01em] active:opacity-80 disabled:opacity-60 transition-opacity">
+            {state === 'sending' ? 'Sending…' : 'Request an invitation'}
+          </button>
+          <p className="min-h-[1.1em] text-[13px] text-[#7a2e1d]" role="alert" aria-live="polite">
+            {state === 'invalid' ? 'Please enter a valid email.' : state === 'error' ? 'Something went wrong. Please try again.' : ''}
+          </p>
+        </form>
+      )}
+    </div>
+  )
 }
 
 const clamp = (n) => Math.max(0, Math.min(1, n))
@@ -73,6 +113,7 @@ export default function ComingSoon() {
             <Rise t={stage(p, 0.6, 0.76)}>{inviteLine()}</Rise>
             <Rise t={stage(p, 0.66, 0.82)} className="mt-1 text-[0.65em] text-[#4a342a]">{OPENS.label}</Rise>
           </div>
+          <RequestBox show={stage(p, 0.78, 0.92)} />
           <p className="absolute left-0 right-0 top-6 text-center text-[11px] font-medium tracking-[0.22em] text-[#4a342a]" style={{ opacity: 1 - clamp(p / 0.06) }} aria-hidden="true">SCROLL</p>
         </section>
 

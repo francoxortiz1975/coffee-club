@@ -49,8 +49,8 @@ const STEPS_SHORT = [
 function Statement() {
   const [ref, seen] = useSeen()
   return (
-    <section ref={ref} className="px-6 pt-0 pb-20 max-w-3xl">
-      <p className="text-[clamp(1.6rem,6.4vw,2.7rem)] leading-[1.04] tracking-[-0.045em]">
+    <section ref={ref} className="px-6 pt-0 pb-20 mx-auto w-full max-w-4xl">
+      <p className="max-w-3xl text-[clamp(1.6rem,6.4vw,2.7rem)] leading-[1.04] tracking-[-0.045em]">
         <Up seen={seen}>Dive into the world of coffee as you go: the secrets behind each café, its origins, tastes and culture.</Up>
       </p>
     </section>
@@ -60,7 +60,7 @@ function Statement() {
 export function Steps({ short = false }) {
   const [ref, seen] = useSeen()
   return (
-    <section ref={ref} className="px-6 pb-24 max-w-3xl">
+    <section ref={ref} className="px-6 pb-24 mx-auto w-full max-w-4xl">
       <p className="text-[11px] font-medium tracking-[0.22em] text-[#4a342a]">HOW IT WORKS</p>
       <div className="mt-3 grid gap-x-10 gap-y-9 md:grid-cols-3">
         {(short ? STEPS_SHORT : STEPS).map(([n, title, body], i) => (
@@ -94,7 +94,7 @@ export function Cafes() {
   const [ref, seen] = useSeen()
   const list = cafes.filter((c) => c.ciudad === 'Paris' && c.fotos?.[0])
   return (
-    <section ref={ref} className="px-6 py-24 max-w-5xl">
+    <section ref={ref} className="px-6 py-24 mx-auto w-full max-w-4xl">
       <Bar seen={seen} />
       <h2 className="mt-4 text-[clamp(1.9rem,7.4vw,3.2rem)] leading-[1.02] tracking-[-0.05em]"><Up seen={seen}>The first cafés in Paris.</Up></h2>
       <div className="mt-10 -mx-6 px-6 scroll-pl-6 flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar md:mx-0 md:px-0 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible">
@@ -117,11 +117,13 @@ export function Cafes() {
 export function Join({ title = 'Save your spot in the club.', sub = 'Drop your email and we will let you in when your invitation is ready.' }) {
   const [ref, seen] = useSeen()
   return (
-    <section ref={ref} id="request" className="px-6 pt-8 pb-24 max-w-md">
+    <section ref={ref} id="request" className="px-6 pt-8 pb-24 mx-auto w-full max-w-4xl">
+      <div className="max-w-md">
       <Bar seen={seen} />
       <h2 className="mt-4 text-[clamp(1.9rem,7.4vw,3rem)] leading-[1.02] tracking-[-0.05em]"><Up seen={seen}>{title}</Up></h2>
       <p className="mt-3 text-[17px] leading-snug tracking-[-0.02em] text-[#3d2b1f]">{sub}</p>
       <RequestBox id="inv-email-bottom" />
+      </div>
     </section>
   )
 }

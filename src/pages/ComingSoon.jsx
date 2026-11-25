@@ -68,7 +68,7 @@ export default function ComingSoon() {
     <div ref={wrapRef} style={{ height: reduce ? '100dvh' : '340dvh', background: '#e3e3e0' }}>
       <main className="sticky top-0 h-dvh overflow-hidden text-[#2a1a10]" style={{ fontFamily: "'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif", '--u': 'clamp(2.7rem, 12.5vw, 4.6rem)' }}>
         <section className="absolute inset-x-0 top-0 flex flex-col justify-start px-6 pt-[13dvh] pb-8" style={{ height: '100%', background: '#e3e3e0' }}>
-          <div ref={textRef}>
+          <div ref={textRef} className="mx-auto w-full max-w-4xl">
           <Bar t={stage(p, 0.04, 0.16)} />
           <h1 className="mt-4 font-normal text-[length:var(--u)] leading-[0.94] tracking-[-0.055em]">
             <Rise t={stage(p, 0.12, 0.26)}>Sumay</Rise>

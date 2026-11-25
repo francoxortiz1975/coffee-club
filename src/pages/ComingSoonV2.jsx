@@ -63,6 +63,7 @@ export default function ComingSoonV2() {
           {/* scene one: just the name */}
           {!still && (
             <section className="absolute inset-x-0 top-0 px-6 pt-[13dvh]" style={{ opacity: 1 - out, transform: `translateY(${-out * 70}px)` }}>
+              <div className="mx-auto w-full max-w-4xl">
               <Bar t={stage(p, 0.02, 0.1)} />
               <h1 className="mt-4 font-normal text-[length:var(--u)] leading-[0.94] tracking-[-0.055em]">
                 <Rise t={stage(p, 0.06, 0.16)}>Sumay</Rise>
@@ -70,11 +71,12 @@ export default function ComingSoonV2() {
               </h1>
               <div className="mt-4"><Bar t={stage(p, 0.2, 0.28)} thick={false} /></div>
               <Rise t={stage(p, 0.25, 0.34)} className="mt-3 text-[clamp(1rem,4.2vw,1.3rem)] tracking-[-0.03em] text-[#4a342a]">Starting in Paris.</Rise>
+              </div>
             </section>
           )}
           {/* scene two: the pitch, alone */}
           <section className="absolute inset-x-0 top-0 px-6 pt-[13dvh]">
-            <div ref={textRef}>
+            <div ref={textRef} className="mx-auto w-full max-w-4xl">
               <Bar t={still ? 1 : stage(p, 0.5, 0.58)} />
               <p className="mt-4 text-[clamp(1.9rem,7.4vw,3.4rem)] leading-[1.02] tracking-[-0.05em] max-w-3xl">
                 <Rise t={still ? 1 : stage(p, 0.54, 0.72)}>Dive into the world of coffee as you go: the secrets behind each café, its origins, tastes and culture.</Rise>

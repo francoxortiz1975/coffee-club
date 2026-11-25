@@ -21,13 +21,13 @@ function Rise({ t, children, className = '' }) {
 }
 
 // Scroll to reveal: plain plaster first. Scrolling lays the bars and brings the name up line by line, then the dark half
-// rises with the date. With reduced motion everything is simply there.
+// is told. With reduced motion everything is simply there.
 export default function ComingSoon() {
   const wrapRef = useRef(null)
   const reduce = useState(() => !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)[0]
   const [p, setP] = useState(reduce ? 1 : 0)
 
-  useEffect(() => { document.title = 'Sumay Coffee Club' }, [])
+  useEffect(() => { document.title = 'Sumay, the Coffee Club' }, [])
   useEffect(() => {
     if (reduce) return undefined
     let raf = 0
@@ -43,29 +43,23 @@ export default function ComingSoon() {
     return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); cancelAnimationFrame(raf) }
   }, [reduce])
 
-  const rise = stage(p, 0.84, 0.98)
-  const darkH = 3.2 * rise   // the brown strip is only a sliver at the foot
 
   return (
     <>
     <div ref={wrapRef} style={{ height: reduce ? '100dvh' : '340dvh', background: '#e3e3e0' }}>
       <main className="sticky top-0 h-dvh overflow-hidden text-[#2a1a10]" style={{ fontFamily: "'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif", '--u': 'clamp(2.7rem, 12.5vw, 4.6rem)' }}>
-        <section className="absolute inset-x-0 top-0 flex flex-col justify-end px-6 pb-8" style={{ height: `${100 - darkH}%`, background: '#e3e3e0' }}>
+        <section className="absolute inset-x-0 top-0 flex flex-col justify-end px-6 pb-8" style={{ height: '100%', background: '#e3e3e0' }}>
           <Bar t={stage(p, 0.04, 0.16)} />
           <h1 className="mt-4 font-normal text-[length:var(--u)] leading-[0.94] tracking-[-0.055em]">
-            <Rise t={stage(p, 0.12, 0.26)}>Sumay</Rise>
-            <Rise t={stage(p, 0.2, 0.34)}>Coffee Club.</Rise>
+            <Rise t={stage(p, 0.12, 0.26)}>Sumay,</Rise>
+            <Rise t={stage(p, 0.2, 0.34)}>the Coffee Club.</Rise>
           </h1>
           <div className="mt-4"><Bar t={stage(p, 0.34, 0.44)} thick={false} /></div>
           <Rise t={stage(p, 0.4, 0.52)} className="mt-3 text-[clamp(1rem,4.2vw,1.3rem)] tracking-[-0.03em] text-[#4a342a]">Starting in Paris.</Rise>
-          <Rise t={stage(p, 0.5, 0.68)} className="mt-5 text-[clamp(1.02rem,4.2vw,1.3rem)] leading-[1.16] tracking-[-0.03em]">Dive into the world of coffee as you go: the secrets behind each café, its origins, tastes and culture. Places hand-picked for you. Invite friends, collect beans and make souvenirs.</Rise>
-          <Rise t={stage(p, 0.64, 0.8)} className="mt-5 text-[clamp(1.3rem,5.6vw,1.9rem)] leading-[1.02] tracking-[-0.045em]">Invitations open for the app.</Rise>
+          <Rise t={stage(p, 0.5, 0.68)} className="mt-5 text-[clamp(1.3rem,5.6vw,1.9rem)] leading-[1.02] tracking-[-0.045em]">Invitations open for the app.</Rise>
           <p className="absolute left-0 right-0 top-6 text-center text-[11px] font-medium tracking-[0.22em] text-[#4a342a]" style={{ opacity: 1 - clamp(p / 0.06) }} aria-hidden="true">SCROLL</p>
         </section>
 
-        <section className="absolute inset-x-0 bottom-0 flex items-center justify-center text-[#f5f0e8]" style={{ height: `${darkH}%`, background: '#2a1a10', overflow: 'hidden' }}>
-          <p className="text-[11px] font-medium tracking-[0.22em] text-[#f5f0e8]/85" style={{ opacity: stage(p, 0.9, 1) }}>SUMAYCLUB.APP</p>
-        </section>
       </main>
     </div>
     <Sections />

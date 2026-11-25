@@ -42,12 +42,10 @@ const STEPS = [
 
 function Statement() {
   const [ref, seen] = useSeen()
-  const s = copy.en.statement
   return (
     <section ref={ref} className="px-6 pt-24 pb-20 mx-auto max-w-3xl">
-      <Bar seen={seen} />
-      <p className="mt-5 text-[clamp(1.9rem,7.4vw,3.2rem)] leading-[1.02] tracking-[-0.05em]">
-        <Up seen={seen}>{s.a}{s.hl1}{s.b}{s.hl2}{s.c}</Up>
+      <p className="text-[clamp(1.6rem,6.4vw,2.7rem)] leading-[1.04] tracking-[-0.045em]">
+        <Up seen={seen}>Dive into the world of coffee as you go: the secrets behind each café, its origins, tastes and culture. Places hand-picked for you. Invite friends, collect beans and make souvenirs.</Up>
       </p>
     </section>
   )
@@ -135,6 +133,7 @@ export default function Sections() {
           <p className="tracking-[-0.01em]">Made with shungo in Quito &amp; Paris</p>
           <p className="flex gap-5"><Link to="/privacy" className="underline underline-offset-4">Privacy</Link><a href="mailto:hola@sumayclub.app" className="underline underline-offset-4">Contact</a></p>
         </div>
+        <p className="mt-6 text-center text-[11px] font-medium tracking-[0.22em] text-[#f5f0e8]/85">SUMAYCLUB.APP</p>
       </footer>
     </div>
   )

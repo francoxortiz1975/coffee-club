@@ -2,20 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import Sections from './ComingSoonSections'
 
 // All Geist, nothing else (already bundled for the app).
-// The public face of sumayclub.app for now: a very quiet "we open soon" screen. The full landing page lives on at /landing-full.
-const OPENS = { date: '2026-11-24', label: '18:00 CET' }   // Paris time (CET in winter)
-
-function parisToday() {
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris' }).format(new Date()) // YYYY-MM-DD
-}
-function days() { return Math.round((Date.parse(OPENS.date) - Date.parse(parisToday())) / 86400000) }
-// "Invitations open from tomorrow, Tuesday 24 November." The wording follows the calendar, so it is never out of date.
-function inviteLine() {
-  const d = days()
-  if (d < 0) return 'Invitations are open.'
-  const day = new Date(`${OPENS.date}T12:00:00`).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
-  return `Invitations open from ${d === 1 ? 'tomorrow, ' : d === 0 ? 'today, ' : ''}${day}.`
-}
+// The public face of sumayclub.app. The full landing page of before lives on at /landing-full.
 
 const clamp = (n) => Math.max(0, Math.min(1, n))
 const stage = (p, a, b) => { const t = clamp((p - a) / (b - a)); return 1 - Math.pow(1 - t, 4) }   // 0..1, a long soft landing
@@ -40,7 +27,7 @@ export default function ComingSoon() {
   const reduce = useState(() => !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)[0]
   const [p, setP] = useState(reduce ? 1 : 0)
 
-  useEffect(() => { document.title = 'Sumay, the Coffee Club' }, [])
+  useEffect(() => { document.title = 'Sumay Coffee Club' }, [])
   useEffect(() => {
     if (reduce) return undefined
     let raf = 0
@@ -66,15 +53,13 @@ export default function ComingSoon() {
         <section className="absolute inset-x-0 top-0 flex flex-col justify-end px-6 pb-8" style={{ height: `${100 - darkH}%`, background: '#e3e3e0' }}>
           <Bar t={stage(p, 0.04, 0.16)} />
           <h1 className="mt-4 font-normal text-[length:var(--u)] leading-[0.94] tracking-[-0.055em]">
-            <Rise t={stage(p, 0.12, 0.26)}>Sumay,</Rise>
-            <Rise t={stage(p, 0.2, 0.34)}>the Coffee Club.</Rise>
+            <Rise t={stage(p, 0.12, 0.26)}>Sumay</Rise>
+            <Rise t={stage(p, 0.2, 0.34)}>Coffee Club.</Rise>
           </h1>
           <div className="mt-4"><Bar t={stage(p, 0.34, 0.44)} thick={false} /></div>
           <Rise t={stage(p, 0.4, 0.52)} className="mt-3 text-[clamp(1rem,4.2vw,1.3rem)] tracking-[-0.03em] text-[#4a342a]">Starting in Paris.</Rise>
-          <div className="mt-6 text-[clamp(1.3rem,5.6vw,1.9rem)] leading-[1.02] tracking-[-0.045em]">
-            <Rise t={stage(p, 0.6, 0.76)}>{inviteLine()}</Rise>
-            {days() >= 0 && <Rise t={stage(p, 0.66, 0.82)} className="mt-1 text-[0.65em] text-[#4a342a]">{OPENS.label}</Rise>}
-          </div>
+          <Rise t={stage(p, 0.5, 0.68)} className="mt-5 text-[clamp(1.02rem,4.2vw,1.3rem)] leading-[1.16] tracking-[-0.03em]">Dive into the world of coffee as you go: the secrets behind each café, its origins, tastes and culture. Places hand-picked for you. Invite friends, collect beans and make souvenirs.</Rise>
+          <Rise t={stage(p, 0.64, 0.8)} className="mt-5 text-[clamp(1.3rem,5.6vw,1.9rem)] leading-[1.02] tracking-[-0.045em]">Invitations open for the app.</Rise>
           <p className="absolute left-0 right-0 top-6 text-center text-[11px] font-medium tracking-[0.22em] text-[#4a342a]" style={{ opacity: 1 - clamp(p / 0.06) }} aria-hidden="true">SCROLL</p>
         </section>
 

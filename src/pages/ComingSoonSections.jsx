@@ -45,7 +45,7 @@ function Statement() {
   return (
     <section ref={ref} className="px-6 pt-24 pb-20 mx-auto max-w-3xl">
       <p className="text-[clamp(1.6rem,6.4vw,2.7rem)] leading-[1.04] tracking-[-0.045em]">
-        <Up seen={seen}>Dive into the world of coffee as you go: the secrets behind each café, its origins, tastes and culture. Places hand-picked for you. Invite friends, collect beans and make souvenirs.</Up>
+        <Up seen={seen}>Dive into the world of coffee as you go: the secrets behind each café, its origins, tastes and culture.</Up>
       </p>
     </section>
   )

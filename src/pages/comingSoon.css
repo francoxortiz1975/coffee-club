@@ -1,0 +1,4 @@
+/* The little line under SCROLL breathes, so the opening screen never looks finished. */
+.cs-cue{animation:cs-cue 2.2s cubic-bezier(.65,0,.35,1) infinite}
+@keyframes cs-cue{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@media (prefers-reduced-motion:reduce){.cs-cue{animation:none}}

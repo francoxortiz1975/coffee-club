@@ -36,7 +36,7 @@ function Up({ seen, delay = 0, children, className = '' }) {
 
 const STEPS = [
   ['01', copy.en.panels.discover.title, copy.en.panels.discover.body],
-  ['02', copy.en.panels.invite.title, copy.en.panels.invite.body],
+  ['02', copy.en.panels.invite.title, 'Create a beautiful invitation with a date and a name. Send it in one tap.'],
   ['03', 'Collect', 'Save souvenirs of each café and collect beans.'],
 ]
 

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import RequestBox from '../components/RequestBox'
 import Sections from './ComingSoonSections'
 
 // All Geist, nothing else (already bundled for the app).
@@ -76,7 +75,6 @@ export default function ComingSoon() {
             <Rise t={stage(p, 0.6, 0.76)}>{inviteLine()}</Rise>
             {days() >= 0 && <Rise t={stage(p, 0.66, 0.82)} className="mt-1 text-[0.65em] text-[#4a342a]">{OPENS.label}</Rise>}
           </div>
-          <RequestBox show={stage(p, 0.78, 0.92)} />
           <p className="absolute left-0 right-0 top-6 text-center text-[11px] font-medium tracking-[0.22em] text-[#4a342a]" style={{ opacity: 1 - clamp(p / 0.06) }} aria-hidden="true">SCROLL</p>
         </section>
 

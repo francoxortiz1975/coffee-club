@@ -129,8 +129,7 @@ export default function Sections() {
       <Cafes />
       <Join />
       <footer className="bg-[#2a1a10] text-[#f5f0e8]/80 px-6 py-8 text-[13px]">
-        <div className="mx-auto max-w-5xl flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
-          <p className="tracking-[-0.01em]">Made with shungo in Quito &amp; Paris</p>
+        <div className="mx-auto max-w-5xl flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
           <p className="flex gap-5"><Link to="/privacy" className="underline underline-offset-4">Privacy</Link><a href="mailto:hola@sumayclub.app" className="underline underline-offset-4">Contact</a></p>
         </div>
         <p className="mt-6 text-center text-[11px] font-medium tracking-[0.22em] text-[#f5f0e8]/85">SUMAYCLUB.APP</p>

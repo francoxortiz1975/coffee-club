@@ -31,6 +31,7 @@ import InvitacionSetup from './pages/InvitacionSetup'
 import InvitacionPage from './pages/InvitacionPage'
 import Landing from './pages/Landing'
 import ComingSoon from './pages/ComingSoon'
+import ComingSoonV2 from './pages/ComingSoonV2'
 import Members from './pages/Members'
 import Privacy from './pages/Privacy'
 import Quiz from './pages/Quiz'
@@ -174,6 +175,7 @@ function Root() {
         <Route path="/landing" element={<ComingSoon />} />
         <Route path="/landing-full" element={<Landing />} />
         <Route path="/members" element={<Members />} />
+        <Route path="/landing-v2" element={<ComingSoonV2 />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/privacidad" element={<Privacy />} />

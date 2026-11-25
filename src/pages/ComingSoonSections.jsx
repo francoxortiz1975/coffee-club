@@ -40,6 +40,12 @@ const STEPS = [
   ['03', 'Collect', 'Save souvenirs of each café and collect beans.'],
 ]
 
+const STEPS_SHORT = [
+  ['01', 'Discover', 'Hand-picked cafés.'],
+  ['02', 'Invite', 'A beautiful invitation, in one tap.'],
+  ['03', 'Collect', 'Souvenirs and beans.'],
+]
+
 function Statement() {
   const [ref, seen] = useSeen()
   return (
@@ -51,13 +57,13 @@ function Statement() {
   )
 }
 
-function Steps() {
+export function Steps({ short = false }) {
   const [ref, seen] = useSeen()
   return (
     <section ref={ref} className="px-6 pb-24 max-w-3xl">
       <p className="text-[11px] font-medium tracking-[0.22em] text-[#4a342a]">HOW IT WORKS</p>
       <div className="mt-3 grid gap-x-10 gap-y-9 md:grid-cols-3">
-        {STEPS.map(([n, title, body], i) => (
+        {(short ? STEPS_SHORT : STEPS).map(([n, title, body], i) => (
           <div key={n}>
             <Bar seen={seen} delay={i * 120} />
             <div className="mt-3 flex items-baseline gap-3">
@@ -73,7 +79,7 @@ function Steps() {
 }
 
 // The café screen, in a phone, on a dark band: this is what you get inside the app.
-function Screen() {
+export function Screen() {
   const [ref, seen] = useSeen()
   return (
     <section ref={ref} className="px-6 py-24 bg-[#2a1a10]">
@@ -84,16 +90,16 @@ function Screen() {
   )
 }
 
-function Cafes() {
+export function Cafes() {
   const [ref, seen] = useSeen()
   const list = cafes.filter((c) => c.ciudad === 'Paris' && c.fotos?.[0])
   return (
     <section ref={ref} className="px-6 py-24 max-w-5xl">
       <Bar seen={seen} />
       <h2 className="mt-4 text-[clamp(1.9rem,7.4vw,3.2rem)] leading-[1.02] tracking-[-0.05em]"><Up seen={seen}>The first cafés in Paris.</Up></h2>
-      <div className="mt-10 grid gap-8 md:grid-cols-3">
+      <div className="mt-10 -mx-6 px-6 scroll-pl-6 flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar md:mx-0 md:px-0 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible">
         {list.map((c, i) => (
-          <article key={c.id}>
+          <article key={c.id} className="shrink-0 w-[76%] snap-start md:w-auto">
             <div className="aspect-[4/5] overflow-hidden bg-[#2a1a10]/10">
               <img src={c.fotos[0]} alt={c.nombre} loading="lazy" className="w-full h-full object-cover" style={{ transform: `scale(${seen ? 1 : 1.12})`, transition: `transform 1.4s ${EASE} ${i * 150}ms` }} />
             </div>
@@ -108,15 +114,26 @@ function Cafes() {
   )
 }
 
-function Join() {
+export function Join({ title = 'Save your spot in the club.', sub = 'Drop your email and we will let you in when your invitation is ready.' }) {
   const [ref, seen] = useSeen()
   return (
     <section ref={ref} id="request" className="px-6 pt-8 pb-24 max-w-md">
       <Bar seen={seen} />
-      <h2 className="mt-4 text-[clamp(1.9rem,7.4vw,3rem)] leading-[1.02] tracking-[-0.05em]"><Up seen={seen}>Save your spot in the club.</Up></h2>
-      <p className="mt-3 text-[17px] leading-snug tracking-[-0.02em] text-[#3d2b1f]">Drop your email and we will let you in when your invitation is ready.</p>
+      <h2 className="mt-4 text-[clamp(1.9rem,7.4vw,3rem)] leading-[1.02] tracking-[-0.05em]"><Up seen={seen}>{title}</Up></h2>
+      <p className="mt-3 text-[17px] leading-snug tracking-[-0.02em] text-[#3d2b1f]">{sub}</p>
       <RequestBox id="inv-email-bottom" />
     </section>
+  )
+}
+
+export function Footer() {
+  return (
+    <footer className="bg-[#2a1a10] text-[#f5f0e8]/80 px-6 py-8 text-[13px]">
+        <div className="mx-auto max-w-5xl flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+          <p className="flex gap-5"><Link to="/privacy" className="underline underline-offset-4">Privacy</Link><a href="mailto:hola@sumayclub.app" className="underline underline-offset-4">Contact</a></p>
+        </div>
+        <p className="mt-6 text-center text-[11px] font-medium tracking-[0.22em] text-[#f5f0e8]/85">SUMAYCLUB.APP</p>
+    </footer>
   )
 }
 
@@ -128,12 +145,7 @@ export default function Sections({ pull = 0 }) {
       <Screen />
       <Cafes />
       <Join />
-      <footer className="bg-[#2a1a10] text-[#f5f0e8]/80 px-6 py-8 text-[13px]">
-        <div className="mx-auto max-w-5xl flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-          <p className="flex gap-5"><Link to="/privacy" className="underline underline-offset-4">Privacy</Link><a href="mailto:hola@sumayclub.app" className="underline underline-offset-4">Contact</a></p>
-        </div>
-        <p className="mt-6 text-center text-[11px] font-medium tracking-[0.22em] text-[#f5f0e8]/85">SUMAYCLUB.APP</p>
-      </footer>
+      <Footer />
     </div>
   )
 }

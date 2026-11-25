@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom'
 import cafes from '../data/cafes.json'
 import { copy } from '../lib/landingCopy'
 import { toLines } from '../lib/textLines'
-import ScratchCard from '../components/ScratchCard'
+import CafeScreenMock from '../components/CafeScreenMock'
 import RequestBox from '../components/RequestBox'
-import '../components/scratchCollect.css'
 
 // Everything below the opening screen, in the same hang-tag language: grey paper, brown ink, heavy bars that lay
 // themselves, text that comes up from behind an edge. Each piece plays once when it scrolls into view.
@@ -37,9 +36,8 @@ function Up({ seen, delay = 0, children, className = '' }) {
 
 const STEPS = [
   ['01', copy.en.panels.discover.title, copy.en.panels.discover.body],
-  ['02', copy.en.panels.decide.title, copy.en.panels.decide.body],
-  ['03', copy.en.panels.invite.title, copy.en.panels.invite.body],
-  ['04', 'Collect', 'Every coffee is a bean on your card. Ten beans make a cup.'],
+  ['02', copy.en.panels.invite.title, copy.en.panels.invite.body],
+  ['03', 'Collect', 'Save souvenirs of each café and collect beans.'],
 ]
 
 function Statement() {
@@ -60,7 +58,7 @@ function Steps() {
   return (
     <section ref={ref} className="px-6 pb-24 mx-auto max-w-3xl">
       <p className="text-[11px] font-medium tracking-[0.22em] text-[#4a342a]">HOW IT WORKS</p>
-      <div className="mt-3 grid gap-x-10 gap-y-9 md:grid-cols-2">
+      <div className="mt-3 grid gap-x-10 gap-y-9 md:grid-cols-3">
         {STEPS.map(([n, title, body], i) => (
           <div key={n}>
             <Bar seen={seen} delay={i * 120} />
@@ -76,16 +74,13 @@ function Steps() {
   )
 }
 
-function Beans({ onJoin }) {
+// The café screen, in a phone, on a dark band: this is what you get inside the app.
+function Screen() {
   const [ref, seen] = useSeen()
-  const b = copy.en.beans
   return (
-    <section ref={ref} className="scx px-6 py-20 bg-[#2a1a10] text-[#f5f0e8]">
-      <div className="mx-auto max-w-md">
-        <Bar seen={seen} color="#f5f0e8" />
-        <h2 className="mt-4 text-[clamp(1.7rem,7vw,2.4rem)] leading-[1.02] tracking-[-0.05em]"><Up seen={seen}>{b.title}</Up></h2>
-        <p className="mt-3 text-[17px] leading-snug tracking-[-0.02em] text-[#f5f0e8]/75">{b.note}</p>
-        <div className="mt-10"><ScratchCard copy={b.play} onJoin={onJoin} /></div>
+    <section ref={ref} className="px-6 py-24 bg-[#2a1a10]">
+      <div style={{ transform: `translateY(${seen ? 0 : 70}px)`, opacity: seen ? 1 : 0, transition: `transform 1.2s ${EASE}, opacity 1s ease` }}>
+        {seen ? <CafeScreenMock /> : <div className="mx-auto w-[300px] h-[560px]" />}
       </div>
     </section>
   )
@@ -128,12 +123,11 @@ function Join() {
 }
 
 export default function Sections() {
-  const onJoin = () => document.getElementById('request')?.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'center' })
   return (
     <div className="bg-[#e3e3e0] text-[#2a1a10]" style={{ fontFamily: "'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" }}>
       <Statement />
       <Steps />
-      <Beans onJoin={onJoin} />
+      <Screen />
       <Cafes />
       <Join />
       <footer className="bg-[#2a1a10] text-[#f5f0e8]/80 px-6 py-8 text-[13px]">

@@ -43,7 +43,7 @@ const STEPS = [
 function Statement() {
   const [ref, seen] = useSeen()
   return (
-    <section ref={ref} className="px-6 pt-24 pb-20 mx-auto max-w-3xl">
+    <section ref={ref} className="px-6 pt-0 pb-20 max-w-3xl">
       <p className="text-[clamp(1.6rem,6.4vw,2.7rem)] leading-[1.04] tracking-[-0.045em]">
         <Up seen={seen}>Dive into the world of coffee as you go: the secrets behind each café, its origins, tastes and culture.</Up>
       </p>
@@ -54,7 +54,7 @@ function Statement() {
 function Steps() {
   const [ref, seen] = useSeen()
   return (
-    <section ref={ref} className="px-6 pb-24 mx-auto max-w-3xl">
+    <section ref={ref} className="px-6 pb-24 max-w-3xl">
       <p className="text-[11px] font-medium tracking-[0.22em] text-[#4a342a]">HOW IT WORKS</p>
       <div className="mt-3 grid gap-x-10 gap-y-9 md:grid-cols-3">
         {STEPS.map(([n, title, body], i) => (
@@ -88,7 +88,7 @@ function Cafes() {
   const [ref, seen] = useSeen()
   const list = cafes.filter((c) => c.ciudad === 'Paris' && c.fotos?.[0])
   return (
-    <section ref={ref} className="px-6 py-24 mx-auto max-w-5xl">
+    <section ref={ref} className="px-6 py-24 max-w-5xl">
       <Bar seen={seen} />
       <h2 className="mt-4 text-[clamp(1.9rem,7.4vw,3.2rem)] leading-[1.02] tracking-[-0.05em]"><Up seen={seen}>The first cafés in Paris.</Up></h2>
       <div className="mt-10 grid gap-8 md:grid-cols-3">
@@ -111,7 +111,7 @@ function Cafes() {
 function Join() {
   const [ref, seen] = useSeen()
   return (
-    <section ref={ref} id="request" className="px-6 pt-8 pb-24 mx-auto max-w-md">
+    <section ref={ref} id="request" className="px-6 pt-8 pb-24 max-w-md">
       <Bar seen={seen} />
       <h2 className="mt-4 text-[clamp(1.9rem,7.4vw,3rem)] leading-[1.02] tracking-[-0.05em]"><Up seen={seen}>Save your spot in the club.</Up></h2>
       <p className="mt-3 text-[17px] leading-snug tracking-[-0.02em] text-[#3d2b1f]">Drop your email and we will let you in when your invitation is ready.</p>
@@ -120,9 +120,9 @@ function Join() {
   )
 }
 
-export default function Sections() {
+export default function Sections({ pull = 0 }) {
   return (
-    <div className="bg-[#e3e3e0] text-[#2a1a10]" style={{ fontFamily: "'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" }}>
+    <div className="relative z-10 bg-[#e3e3e0] text-[#2a1a10]" style={{ marginTop: -pull, fontFamily: "'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" }}>
       <Statement />
       <Steps />
       <Screen />

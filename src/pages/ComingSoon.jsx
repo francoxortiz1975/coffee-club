@@ -111,7 +111,7 @@ export default function ComingSoon() {
           <Rise t={stage(p, 0.4, 0.52)} className="mt-3 text-[clamp(1rem,4.2vw,1.3rem)] tracking-[-0.03em] text-[#4a342a]">Starting in Paris.</Rise>
           <div className="mt-6 text-[clamp(1.3rem,5.6vw,1.9rem)] leading-[1.02] tracking-[-0.045em]">
             <Rise t={stage(p, 0.6, 0.76)}>{inviteLine()}</Rise>
-            <Rise t={stage(p, 0.66, 0.82)} className="mt-1 text-[0.65em] text-[#4a342a]">{OPENS.label}</Rise>
+            {days() >= 0 && <Rise t={stage(p, 0.66, 0.82)} className="mt-1 text-[0.65em] text-[#4a342a]">{OPENS.label}</Rise>}
           </div>
           <RequestBox show={stage(p, 0.78, 0.92)} />
           <p className="absolute left-0 right-0 top-6 text-center text-[11px] font-medium tracking-[0.22em] text-[#4a342a]" style={{ opacity: 1 - clamp(p / 0.06) }} aria-hidden="true">SCROLL</p>

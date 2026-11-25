@@ -27,7 +27,7 @@ export default function ComingSoon() {
   const reduce = useState(() => !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)[0]
   const [p, setP] = useState(reduce ? 1 : 0)
 
-  useEffect(() => { document.title = 'Sumay, the Coffee Club' }, [])
+  useEffect(() => { document.title = 'Sumay Coffee Club' }, [])
   useEffect(() => {
     if (reduce) return undefined
     let raf = 0
@@ -51,8 +51,8 @@ export default function ComingSoon() {
         <section className="absolute inset-x-0 top-0 flex flex-col justify-end px-6 pb-8" style={{ height: '100%', background: '#e3e3e0' }}>
           <Bar t={stage(p, 0.04, 0.16)} />
           <h1 className="mt-4 font-normal text-[length:var(--u)] leading-[0.94] tracking-[-0.055em]">
-            <Rise t={stage(p, 0.12, 0.26)}>Sumay,</Rise>
-            <Rise t={stage(p, 0.2, 0.34)}>the Coffee Club.</Rise>
+            <Rise t={stage(p, 0.12, 0.26)}>Sumay</Rise>
+            <Rise t={stage(p, 0.2, 0.34)}>Coffee Club.</Rise>
           </h1>
           <div className="mt-4"><Bar t={stage(p, 0.34, 0.44)} thick={false} /></div>
           <Rise t={stage(p, 0.4, 0.52)} className="mt-3 text-[clamp(1rem,4.2vw,1.3rem)] tracking-[-0.03em] text-[#4a342a]">Starting in Paris.</Rise>
